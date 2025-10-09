@@ -1,0 +1,31 @@
+<template>
+  <div class="navigation-group group w-full justify-between rounded-2xl border p-2" :class="disabled ? 'line-through opacity-50 cursor-not-allowed' : ''">
+    <label :for="id" class="text-caption">{{ label }}</label>
+
+    <div class="hover:scale-sm flex flex-row items-center gap-2 transition-all">
+      <span class="text-caption">{{ value }}</span>
+      <input
+        :id="id" type="color"
+        :value="value" :disabled="disabled"
+        @input="$emit('update:value', ($event.target as HTMLInputElement)?.value)"
+      >
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+defineProps({
+  id: String,
+  label: String,
+  value: {
+    type: String,
+    default: "#000000",
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+})
+
+defineEmits(["update:value"])
+</script>

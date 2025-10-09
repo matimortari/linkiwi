@@ -1,0 +1,41 @@
+<template>
+  <div class="section-container flex flex-col gap-4">
+    <header class="my-2 flex flex-col gap-1">
+      <h3>
+        Delete Account
+      </h3>
+      <p class="text-warning">
+        This action is irreversible. All data will be lost.
+      </p>
+    </header>
+
+    <div class="navigation-group justify-end md:justify-start">
+      <button title="Delete Account" class="btn-danger" aria-label="Delete Account" @click="handleDeleteUser">
+        <icon name="mdi:user-remove" size="20" />
+        <span>Delete Account</span>
+      </button>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+const userStore = useUserStore()
+const { clear } = useUserSession()
+const router = useRouter()
+
+async function handleDeleteUser() {
+  userStore.errors.deleteUser = null
+  if (!confirm("Are you sure you want to delete your account? This action cannot be undone."))
+    return
+
+  try {
+    await userStore.deleteUser()
+    clear()
+    await router.push("/")
+  }
+  catch (err: any) {
+    console.error("Failed to delete account:", err)
+    userStore.errors.deleteUser = err.message
+  }
+}
+</script>

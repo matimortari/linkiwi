@@ -1,0 +1,40 @@
+<template>
+  <div class="flex w-full flex-col gap-4 md:flex-row">
+    <div
+      v-motion class="card flex-1"
+      :initial="{ opacity: 0, x: -20 }" :visible="{ opacity: 1, x: 0 }"
+      :duration="800"
+    >
+      <header class="space-y-2 border-b py-2">
+        <h2 v-motion :initial="{ opacity: 0 }" :enter="{ opacity: 1 }" :duration="800">
+          Preferences
+        </h2>
+        <p class="text-caption">
+          Manage your profile.
+        </p>
+      </header>
+
+      <div class="flex flex-col gap-4 p-2">
+        <PreferencesAppearance />
+        <PreferencesDeleteAccount />
+      </div>
+    </div>
+
+    <div class="flex w-full justify-center md:w-1/3">
+      <Preview />
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+useHead({
+  title: "Preferences",
+  link: [{ rel: "canonical", href: "https://linknest.vercel.app/admin/preferences" }],
+  meta: [{ name: "description", content: "LinkNest preferences page." }],
+})
+
+definePageMeta({
+  layout: "admin",
+  middleware: auth,
+})
+</script>

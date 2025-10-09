@@ -1,0 +1,51 @@
+{
+  "name": "linknest",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "postinstall": "nuxt prepare",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio"
+  },
+  "dependencies": {
+    "@nuxt/content": "3.7.1",
+    "@nuxt/fonts": "0.11.4",
+    "@nuxt/icon": "2.1.0",
+    "@nuxt/image": "1.11.0",
+    "@nuxtjs/color-mode": "3.5.2",
+    "@pinia/nuxt": "0.11.2",
+    "@prisma/client": "6.18.0",
+    "@tailwindcss/vite": "4.1.16",
+    "@vercel/analytics": "1.5.0",
+    "@vercel/blob": "2.0.0",
+    "@vueuse/motion": "3.0.3",
+    "better-sqlite3": "12.4.1",
+    "chart.js": "4.5.1",
+    "nuxt": "4.2.0",
+    "nuxt-auth-utils": "0.5.25",
+    "qrcode.vue": "3.6.0",
+    "tailwindcss": "4.1.16",
+    "vue": "3.5.22",
+    "vue-chartjs": "5.3.2",
+    "vue-router": "4.6.3",
+    "zod": "4.1.12"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "6.1.0",
+    "@iconify-json/material-symbols": "1.2.42",
+    "@iconify-json/simple-icons": "1.2.55",
+    "@nuxt/devtools": "2.6.5",
+    "@types/eslint-plugin-tailwindcss": "3.17.0",
+    "@types/node": "24.9.1",
+    "eslint": "9.38.0",
+    "eslint-plugin-format": "1.0.2",
+    "eslint-plugin-tailwindcss": "4.0.0-beta.0",
+    "prisma": "6.18.0",
+    "typescript": "5.9.3"
+  }
+}

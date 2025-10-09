@@ -1,0 +1,95 @@
+<template>
+  <div v-if="preset" class="my-16 -mb-24 flex w-full items-center justify-center select-none md:w-1/2 md:justify-end">
+    <transition name="carousel-3d" mode="out-in">
+      <div :key="preset.slug" class="relative flex h-[550px] w-full flex-col overflow-hidden rounded-[2.5rem] border-4 !border-black shadow-lg shadow-black md:w-[330px]">
+        <div class="from-primary to-accent absolute -top-1 z-10 w-full rounded-t-[2.5rem] bg-gradient-to-r pb-1">
+          <div class="flex flex-row items-center justify-between rounded-t-[2.5rem] bg-[#111016] p-4 pb-2">
+            <div class="flex flex-row items-center gap-2">
+              <div v-for="i in 3" :key="i" class="size-2.5 rounded-full bg-[#3b3b41]" />
+            </div>
+            <span class="rounded-xl bg-[#3b3b41] p-1 font-mono text-xs text-[#ebe8e8]">
+              @{{ preset.slug }}
+            </span>
+          </div>
+        </div>
+
+        <div class="scroll-hide flex flex-1 flex-col items-center gap-2 overflow-y-auto px-4 py-24 text-center" :style="backgroundStyle">
+          <img :src="getPresetImage(preset.image || '') as string" :alt="preset.slug" :style="profilePictureStyle" class="size-24">
+          <p :style="slugStyle">
+            @{{ preset.slug }}
+          </p>
+          <p :style="descriptionStyle">
+            {{ preset.description }}
+          </p>
+
+          <ul class="my-2 flex flex-row items-center justify-center gap-2">
+            <li
+              v-for="icon in preset.icons" :key="icon.id"
+              class="flex size-10 items-center justify-center rounded-full" :style="iconStyle(iconHover[icon.id] ?? false)"
+              @mouseenter="iconHover[icon.id] = true" @mouseleave="iconHover[icon.id] = false"
+            >
+              <icon :name="icon.logo" size="20" :style="iconInnerStyle" />
+            </li>
+          </ul>
+
+          <ul class="flex flex-col items-center space-y-4 p-4">
+            <li
+              v-for="link in preset.links" :key="link.id"
+              class="flex w-full max-w-72 min-w-32 justify-center" :style="linkStyle(linkHover[link.id] ?? false)"
+              @mouseenter="linkHover[link.id] = true" @mouseleave="linkHover[link.id] = false"
+            >
+              <span :style="linkInnerStyle">{{ link.title }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </transition>
+  </div>
+</template>
+
+<script setup lang="ts">
+const iconHover = reactive<Record<string, boolean>>({})
+const linkHover = reactive<Record<string, boolean>>({})
+
+const preset = getCarouselPreset(CAROUSEL_PRESETS, 3000)
+const { backgroundStyle, profilePictureStyle, slugStyle, descriptionStyle, iconStyle, iconInnerStyle, linkStyle, linkInnerStyle } = useDynamicStyles(preset.value?.preferences)
+
+const images = import.meta.glob("/assets/presets/*", { eager: true, import: "default" })
+
+function getPresetImage(filename: string) {
+  return images[`/assets/presets/${filename}`]
+}
+
+function getCarouselPreset(presets: typeof CAROUSEL_PRESETS, interval = 3000) {
+  const { currentIndex } = useCarousel(presets.length, interval)
+  return computed(() => presets[currentIndex.value])
+}
+</script>
+
+<style scoped>
+.carousel-3d-enter-active,
+.carousel-3d-leave-active {
+  transition:
+    transform 0.4s ease,
+    opacity 0.4s ease;
+  transform-style: preserve-3d;
+}
+
+.carousel-3d-enter-from {
+  transform: rotateY(90deg) scale(0.8);
+  opacity: 0;
+}
+.carousel-3d-enter-to {
+  transform: rotateY(0deg) scale(1);
+  opacity: 1;
+}
+
+.carousel-3d-leave-from {
+  transform: rotateY(0deg) scale(1);
+  opacity: 1;
+}
+.carousel-3d-leave-to {
+  transform: rotateY(-90deg) scale(0.95);
+  opacity: 0;
+}
+</style>

@@ -1,0 +1,138 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum BackgroundType {
+  FLAT
+  GRADIENT
+}
+
+enum SupportBanner {
+  NONE
+  LGBTQ_RIGHTS
+  ANTI_RACISM
+  MENTAL_HEALTH
+  CLIMATE_ACTION
+}
+
+model User {
+  id          String           @id @default(cuid())
+  email       String           @unique
+  name        String
+  image       String?
+  slug        String           @unique
+  description String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  accounts    Account[]
+  links       UserLink[]
+  icons       UserIcon[]
+  preferences UserPreferences?
+  views       PageView[]
+}
+
+model Account {
+  id                String   @id @default(cuid())
+  userId            String
+  provider          String
+  providerAccountId String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model UserPreferences {
+  userId                    String         @id
+  backgroundType            BackgroundType @default(FLAT)
+  backgroundColor           String         @default("#f9f5f2")
+  backgroundGradientStart   String         @default("#000000")
+  backgroundGradientEnd     String         @default("#000000")
+  profilePictureRadius      String         @default("0.5rem")
+  profilePictureBorderColor String         @default("#cecfd1")
+  profilePictureBorderWidth String         @default("2px")
+  slugTextColor             String         @default("#111827")
+  slugTextWeight            String         @default("400")
+  slugTextSize              String         @default("1rem")
+  slugFontFamily            String         @default("Roboto, sans-serif")
+  headerTextColor           String         @default("#1f2937")
+  headerTextWeight          String         @default("400")
+  headerTextSize            String         @default("1.1rem")
+  headerFontFamily          String         @default("Roboto, sans-serif")
+  linkBackgroundColor       String         @default("#cecfd1")
+  linkTextColor             String         @default("#374151")
+  linkTextWeight            String         @default("400")
+  linkTextSize              String         @default("0.9rem")
+  linkFontFamily            String         @default("Roboto, sans-serif")
+  isLinkShadow              Boolean        @default(false)
+  linkShadowColor           String         @default("#9ca3af")
+  linkShadowWeight          String         @default("medium")
+  linkHoverBackgroundColor  String         @default("#9ca3af")
+  linkBorderRadius          String         @default("0.5rem")
+  linkPadding               String         @default("0.5rem")
+  showLinkCopyButton        Boolean        @default(true)
+  iconBackgroundColor       String         @default("#cecfd1")
+  isIconShadow              Boolean        @default(false)
+  iconShadowColor           String         @default("#9ca3af")
+  iconShadowWeight          String         @default("medium")
+  iconLogoColor             String         @default("#374151")
+  iconHoverBackgroundColor  String         @default("#9ca3af")
+  supportBanner             SupportBanner  @default(NONE)
+  user                      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserLink {
+  id         String      @id @default(cuid())
+  userId     String
+  url        String
+  title      String
+  clicks     Int         @default(0)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  linkClicks LinkClick[]
+}
+
+model UserIcon {
+  id         String      @id @default(cuid())
+  userId     String
+  url        String
+  platform   String
+  logo       String
+  clicks     Int         @default(0)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  iconClicks IconClick[]
+}
+
+model PageView {
+  id     String   @id @default(cuid())
+  userId String
+  date   DateTime @default(now())
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model LinkClick {
+  userLinkId String
+  date       DateTime @default(now())
+  userLink   UserLink @relation(fields: [userLinkId], references: [id], onDelete: Cascade)
+
+  @@id([userLinkId, date])
+  @@index([date])
+}
+
+model IconClick {
+  userIconId String
+  date       DateTime @default(now())
+  userIcon   UserIcon @relation(fields: [userIconId], references: [id], onDelete: Cascade)
+
+  @@id([userIconId, date])
+  @@index([date])
+}
