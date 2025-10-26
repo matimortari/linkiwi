@@ -67,7 +67,7 @@ const footerSections = [
     links: [
       { label: "Privacy Policy", href: "/legal/privacy" },
       { label: "Terms of Service", href: "/legal/terms" },
-      { label: "Brand and Assets", href: "/branding" },
+      { label: "Brand & Assets", href: "/brand" },
     ],
   },
 ]
