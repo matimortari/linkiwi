@@ -1,6 +1,6 @@
 <template>
   <transition name="banner-slide-up">
-    <div v-if="showBanner" class="fixed bottom-0 z-50 flex w-screen flex-col items-center justify-between gap-4 p-6 text-[#ebe8e8] md:flex-row md:gap-2" :class="banner.class" >
+    <div v-if="showBanner" class="fixed bottom-0 z-50 flex w-screen flex-col items-center justify-between gap-4 p-6 text-[#ebe8e8] md:flex-row md:gap-2" :class="banner.class">
       <div class="flex flex-row items-center gap-2 md:flex-col md:items-start">
         <div class="flex flex-col gap-2 text-start">
           <div class="flex flex-row items-center gap-2">
@@ -23,11 +23,11 @@
 </template>
 
 <script setup lang="ts">
-import { BANNER_DESCRIPTIONS, BANNER_ICONS, BANNER_LINKS, BANNER_MESSAGES, BANNER_STYLES } from "#shared/config/banner-options"
+import { BANNER_DESCRIPTIONS, BANNER_ICONS, BANNER_LINKS, BANNER_MESSAGES, BANNER_STYLES } from "#shared/config/appearance-options"
 
-const props = defineProps<{ 
-    type: keyof typeof BANNER_MESSAGES
- }>()
+const props = defineProps<{
+  type: keyof typeof BANNER_MESSAGES
+}>()
 
 const banner = computed(() => ({
   message: BANNER_MESSAGES[props.type],

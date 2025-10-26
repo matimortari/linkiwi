@@ -46,5 +46,5 @@ export const SOCIAL_ICONS = {
   "Youtube": "simple-icons:youtube",
 } as const
 
-export type SocialPlatformType = keyof typeof SOCIAL_ICONS
-export type SocialIconValueType = (typeof SOCIAL_ICONS)[SocialPlatformType]
+export type SocialPlatform = keyof typeof SOCIAL_ICONS
+export type SocialIconValue = (typeof SOCIAL_ICONS)[SocialPlatform]

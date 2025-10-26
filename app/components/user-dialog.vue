@@ -4,11 +4,11 @@
       <div class="flex flex-col items-center border-b pb-4">
         <div class="relative size-24">
           <img v-if="form.image" :src="form.image" alt="Profile preview" class="size-full rounded-full border object-cover">
-          <!-- <input
+          <input
             id="image" type="file"
             accept="image/*" class="absolute top-0 left-0 size-full opacity-0"
-            @change="handleImageChange"
-          > -->
+            @change="handleUpdateImage"
+          >
           <label class="btn absolute -bottom-2 -left-2" for="image">
             <icon name="mdi:upload" size="20" />
           </label>
@@ -77,30 +77,30 @@ watch(() => props.isOpen, (open) => {
   }
 }, { immediate: true })
 
-/* async function handleImageChange(event: Event) {
-  userStore.error = null
+// async function handleUpdateImage(event: Event) {
+//   userStore.errors.updateUserImage = null
 
-  const input = event.target as HTMLInputElement
-  if (!input.files || input.files.length === 0)
-    return
+//   const input = event.target as HTMLInputElement
+//   if (!input.files || input.files.length === 0)
+//     return
 
-  const file = input.files[0]
-  if (!file)
-    return
+//   const file = input.files[0]
+//   if (!file)
+//     return
 
-  const formData = new FormData()
-  formData.append("file", file, file.name)
-  formData.append("type", "avatar")
+//   const formData = new FormData()
+//   formData.append("file", file, file.name)
+//   formData.append("type", "avatar")
 
-  try {
-    const response = await userStore.updateUserImage(formData)
-    form.value.image = response.imageUrl
-  }
-  catch (err: any) {
-    console.error("Failed to upload image:", err)
-    userStore.errors = err.message
-  }
-} */
+//   try {
+//     const response = await userStore.updateUserImage(formData)
+//     form.value.image = response.imageUrl
+//   }
+//   catch (err: any) {
+//     console.error("Failed to upload image:", err)
+//     userStore.errors.updateUserImage = err.message
+//   }
+// }
 
 async function handleSubmit() {
   userStore.errors.updateUser = null

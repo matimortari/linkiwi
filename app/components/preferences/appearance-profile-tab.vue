@@ -21,8 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { BORDER_WIDTHS, FONT_FAMILIES, FONT_SIZES, FONT_WEIGHTS, RADIUS_SIZES } from "#shared/config/appearance-options"
-import { BANNER_OPTIONS } from "#shared/config/banner-options"
+import { BANNER_OPTIONS, BORDER_WIDTHS, FONT_FAMILIES, FONT_SIZES, FONT_WEIGHTS, RADIUS_SIZES } from "#shared/config/appearance-options"
 
 const props = defineProps<{
   preferences: UserPreferences

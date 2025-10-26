@@ -1,15 +1,18 @@
 <template>
-  <div class="card !bg-muted mt-2 flex max-w-lg flex-row justify-between shadow-xl">
+  <div class="section-container bg-muted! my-2 flex max-w-lg flex-row! justify-between shadow-lg">
     <header class="flex max-w-[80%] flex-col gap-2 whitespace-nowrap">
-      <h4>
-        Share your Page:
-      </h4>
+      <div class="flex flex-row items-center justify-between gap-4">
+        <h4>
+          Share your Page:
+        </h4>
+        <p class="text-success">
+          {{ copySuccess || '' }}
+        </p>
+      </div>
+
       <nuxt-link :to="`/${user?.slug}`" :title="pageUrl" class="text-muted-foreground truncate text-sm hover:underline">
         @{{ user?.slug }}
       </nuxt-link>
-      <p class="text-success">
-        {{ copySuccess || '' }}
-      </p>
     </header>
 
     <div ref="dropdownRef" class="navigation-group relative">
@@ -61,7 +64,7 @@ const isDialogOpen = ref(false)
 const isDropdownOpen = ref(false)
 const dropdownRef = ref<HTMLElement | null>(null)
 const copySuccess = ref<string | null>(null)
-const pageUrl = `https://linknest.vercel.app/${user.value?.slug}`
+const pageUrl = `${BASE_URL}/${user.value?.slug}`
 
 function handleClickOutside(e: MouseEvent) {
   const target = e.target as Node

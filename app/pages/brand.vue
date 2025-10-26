@@ -1,9 +1,6 @@
 <template>
   <nav class="flex w-full items-center justify-between border-b px-4 py-2 md:px-8">
-    <nuxt-link to="/" class="flex flex-row items-center gap-2">
-      <img src="/assets/logo.png" alt="Logo" width="30">
-      <img :src="themeTitle" alt="Wordmark" width="100">
-    </nuxt-link>
+    <logo />
     <button class="btn" aria-label="Toggle Theme" @click="toggleTheme">
       <icon :name="themeIcon" size="25" />
     </button>
@@ -20,7 +17,7 @@
     </header>
 
     <div class="grid grid-cols-1 gap-4 border-b py-4 md:grid-cols-3">
-      <div v-for="logo in logos" :key="logo.name" class="flex flex-col items-center rounded-xl border-2" :class="logo.bgClass">
+      <div v-for="logo in LOGOS" :key="logo.name" class="flex flex-col items-center rounded-xl border-2" :class="logo.bgClass">
         <div class="my-4 flex h-16 w-36 items-center justify-center">
           <img :src="logo.image" :alt="logo.name" class="size-full object-contain">
         </div>
@@ -45,7 +42,7 @@
       </div>
 
       <div class="my-4 grid w-full grid-cols-1 gap-2 md:grid-cols-3 lg:grid-cols-6">
-        <div v-for="color in brandColors" :key="color.name" class="flex flex-col items-center">
+        <div v-for="color in BRAND_COLORS" :key="color.name" class="flex flex-col items-center">
           <div class="h-20 w-full rounded-lg border-2" :style="{ backgroundColor: `var(${color.var})` }" />
 
           <p class="flex w-full flex-col items-start p-1 text-start">
@@ -63,15 +60,15 @@ import logoImage from "~/assets/logo.png"
 import logoDark from "~/assets/wordmark-dark.png"
 import logoLight from "~/assets/wordmark-light.png"
 
-const { toggleTheme, themeIcon, themeTitle } = useTheme()
+const { toggleTheme, themeIcon } = useTheme()
 
-const logos = [
+const LOGOS = [
   { name: "Logo", image: logoImage, bgClass: "bg-background" },
   { name: "Wordmark (light)", image: logoLight, bgClass: "bg-[#040308]" },
   { name: "Wordmark (dark)", image: logoDark, bgClass: "bg-[#e0dddd]" },
 ]
 
-const brandColors = [
+const BRAND_COLORS = [
   { name: "Background", var: "--background" },
   { name: "Foreground", var: "--foreground" },
   { name: "Card", var: "--card" },
@@ -96,7 +93,7 @@ const colorValues = ref<Record<string, string>>({})
 
 function updateColors() {
   const styles = getComputedStyle(document.documentElement)
-  for (const color of brandColors) {
+  for (const color of BRAND_COLORS) {
     const value = styles.getPropertyValue(color.var).trim()
     colorValues.value[color.var] = value || "—"
   }

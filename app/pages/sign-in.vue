@@ -10,11 +10,9 @@
       <p class="text-muted-foreground text-lg font-semibold">
         Choose a provider to continue.
       </p>
+
       <div class="flex flex-row items-center gap-4">
-        <button
-          v-for="provider in providers" :key="provider.name"
-          class="btn" @click="navigateTo(`/api/auth/${provider.name}`, { external: true })"
-        >
+        <button v-for="provider in OAUTH_PROVIDERS" :key="provider.name" class="btn" @click="signIn(provider.name)">
           <icon :name="provider.icon" size="25" />
           <span>{{ provider.label }}</span>
         </button>
@@ -24,10 +22,9 @@
 </template>
 
 <script setup lang="ts">
-const providers = [
-  { name: "github", label: "Sign In With Github", icon: "simple-icons:github" },
-  { name: "google", label: "Sign In With Google", icon: "simple-icons:google" },
-]
+function signIn(provider: string) {
+  navigateTo(`/api/auth/${provider}`, { external: true })
+}
 
 useHead({
   title: "Sign In",

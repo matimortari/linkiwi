@@ -7,7 +7,7 @@
         :class="{ 'opacity-60': selectedTheme !== theme.title }" :style="getThemeBackgroundStyle(theme.preferences)"
         @click="handleThemeSelection(theme.title)"
       >
-        <p v-for="i in 3" :key="i" class="line-clamp-1 min-h-[2rem] w-full truncate p-2 text-center text-sm select-none" :style="getThemeLinkStyle(theme.preferences)">
+        <p v-for="i in 3" :key="i" class="line-clamp-1 min-h-8 w-full truncate p-2 text-center text-sm select-none" :style="getThemeLinkStyle(theme.preferences)">
           {{ '' }}
         </p>
       </button>

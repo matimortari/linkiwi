@@ -1,9 +1,6 @@
 <template>
   <nav class="flex w-full items-center justify-between border-b px-4 py-2 md:px-8">
-    <nuxt-link to="/" class="flex flex-row items-center gap-2">
-      <img src="/assets/logo.png" alt="Logo" width="30">
-      <img :src="themeTitle" alt="Wordmark" width="100">
-    </nuxt-link>
+    <logo />
     <button class="btn" aria-label="Toggle Theme" @click="toggleTheme">
       <icon :name="themeIcon" size="25" />
     </button>
@@ -24,9 +21,11 @@
       </div>
     </main>
 
-    <aside class="scroll-area sticky top-12 hidden h-[calc(100vh-6rem)] flex-shrink-0 overflow-auto pr-4 md:block md:w-64">
+    <aside class="scroll-area sticky top-12 hidden h-[calc(100vh-6rem)] shrink-0 overflow-auto pr-4 md:block md:w-64">
       <nav class="space-y-2">
-        <h3>On This Page</h3>
+        <h3>
+          On This Page
+        </h3>
         <ul class="space-y-1">
           <li
             v-for="header in headers" :key="header.id"
@@ -46,7 +45,7 @@
 const pageContent = await queryCollection("content").path("/privacy-policy").first()
 
 const { activeSection } = useActiveHeading()
-const { toggleTheme, themeIcon, themeTitle } = useTheme()
+const { toggleTheme, themeIcon } = useTheme()
 
 const headers = ref<{ id: string, text: string, level: number }[]>([])
 const isLoading = ref(true)

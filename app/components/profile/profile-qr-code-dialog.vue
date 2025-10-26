@@ -5,7 +5,7 @@
         Scan this QR code to visit your profile:
       </p>
 
-      <QrcodeVue :value="props.slug" :size="150" level="M" class="!border-muted rounded-lg border bg-white p-2" />
+      <QrcodeVue :value="props.slug" :size="150" level="M" class="rounded-lg border bg-white p-2" />
 
       <button class="hover:underline" aria-label="Copy Profile Link" @click="copyPageUrl(pageUrl)">
         @{{ props.slug }}
@@ -35,7 +35,7 @@ const props = defineProps({
 const emit = defineEmits(["close", "update:isOpen"])
 
 const copySuccess = ref<string | null>(null)
-const pageUrl = `https://linknest.vercel.app/${props.slug}`
+const pageUrl = `${BASE_URL}/${props.slug}`
 
 function copyPageUrl(text: string) {
   navigator.clipboard.writeText(text).then(() => {

@@ -12,7 +12,7 @@
     <div class="flex flex-col justify-between gap-4 py-2 md:flex-row">
       <div class="flex flex-row flex-wrap items-center gap-1 md:flex-nowrap">
         <button
-          v-for="t in tabs" :key="t.value"
+          v-for="t in APPEARANCE_TABS" :key="t.value"
           class="btn" :class="{ ' brightness-50': activeTab === t.value }"
           @click="activeTab = t.value"
         >
@@ -25,6 +25,7 @@
           <icon name="mdi:content-save-check" size="20" />
           <span>{{ status === 'saved' ? 'Saved!' : status === 'reset' ? 'Reset!' : 'Save Changes' }}</span>
         </button>
+
         <button class="btn-danger" @click="handleResetPreferences">
           <icon name="mdi:close" size="20" />
           <span>Reset</span>
@@ -46,14 +47,6 @@ const userStore = useUserStore()
 const preferences = ref(userStore.user?.preferences ?? null)
 const activeTab = ref("background")
 const status = ref<"idle" | "saved" | "reset">("idle")
-
-const tabs = [
-  { label: "Background", value: "background" },
-  { label: "User Info", value: "user" },
-  { label: "Links", value: "links" },
-  { label: "Social Icons", value: "icons" },
-  { label: "Themes", value: "themes" },
-]
 
 function handleApplyTheme(newPreferences: UserPreferences) {
   preferences.value = newPreferences

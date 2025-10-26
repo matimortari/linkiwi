@@ -1,14 +1,12 @@
 <template>
   <nav class="absolute top-4 right-0 left-0 z-50 flex items-center justify-between p-4 md:top-0">
-    <div class="flex flex-row items-center gap-4">
-      <img src="/assets/logo.png" alt="Logo" width="30">
-      <img :src="themeTitle" alt="Wordmark" width="100">
-    </div>
+    <logo />
 
     <div class="flex flex-row items-center gap-4" aria-label="User Actions">
       <button aria-label="Toggle Theme" @click="toggleTheme()">
         <icon :name="themeIcon" size="25" />
       </button>
+
       <nuxt-link to="/sign-in" class="hidden flex-row items-center gap-2 text-sm font-semibold whitespace-nowrap hover:underline md:flex">
         <icon name="ph:sign-in-bold" size="25" />
         <span>Sign In</span>
@@ -42,19 +40,19 @@
   </section>
 
   <section id="features" class="relative flex flex-col items-center justify-center gap-12 p-12 text-center md:p-20">
-    <h2 class="!font-display">
+    <h2 class="font-display!">
       Why Choose LinkNest?
     </h2>
 
     <div class="container mx-auto grid w-full grid-cols-1 gap-4 md:grid-cols-4">
       <div
-        v-for="(feature, index) in features" :key="index"
+        v-for="(feature, index) in FEATURES" :key="index"
         v-motion :initial="{ opacity: 0, y: 20 }"
         :visible="{ opacity: 1, y: 0 }" :duration="800"
         :delay="200 * index" class="card flex flex-col gap-2 text-start"
       >
         <div class="flex flex-row items-center gap-2">
-          <span class="from-primary to-secondary flex size-10 items-center justify-center rounded-full bg-gradient-to-br p-2">
+          <span class="from-primary to-secondary flex size-10 items-center justify-center rounded-full bg-linear-to-br p-2">
             <icon :name="feature.icon" size="25" class="text-[#ebe8e8]" />
           </span>
           <h5>
@@ -69,20 +67,18 @@
   </section>
 
   <section id="cta" class="bg-card relative z-10 flex min-h-[50vh] flex-col items-center justify-center gap-12 border-y p-12 text-center md:p-20">
-    <div class="cta-grid" />
-    <div
-      v-motion :initial="{ opacity: 0 }"
-      :visible="{ opacity: 1 }" :duration="800"
-      class="cta-vignette"
-    />
+    <div class="cta-wrapper-grid" />
+    <div class="cta-wrapper-vignette" />
 
     <div class="flex flex-col items-center gap-4">
-      <h2 class="!font-display">
+      <h2 class="font-display!">
         Ready to Try?
       </h2>
+
       <p class="text-lg font-semibold">
         Create an account and build your page today!
       </p>
+
       <nuxt-link to="/sign-in" class="btn-secondary">
         <span>Get Started</span>
         <icon name="mdi:arrow-right" size="20" />
@@ -100,7 +96,7 @@
 </template>
 
 <script setup lang="ts">
-const { toggleTheme, themeIcon, themeTitle } = useTheme()
+const { toggleTheme, themeIcon } = useTheme()
 
 const randomQuote = ref<{
   quote: string
@@ -111,31 +107,8 @@ onMounted(() => {
   randomQuote.value = QUOTES[Math.floor(Math.random() * QUOTES.length)]
 })
 
-const features = [
-  {
-    title: "Unlimited Links",
-    description: "Add as many links or social icons as you want.",
-    icon: "mdi:account-details-outline",
-  },
-  {
-    title: "Fully Customizable",
-    description: "Customize the colors, layouts and more for your page.",
-    icon: "mdi:palette-outline",
-  },
-  {
-    title: "Detailed Analytics",
-    description: "Track your page views, clicks, and more with analytics.",
-    icon: "mdi:chart-bell-curve-cumulative",
-  },
-  {
-    title: "Free to Use!",
-    description: "LinkNest is completely free to use, with no hidden fees.",
-    icon: "mdi:tag-remove-outline",
-  },
-]
-
 useHead({
-  title: "LinkNest - Your Link-in-Bio Page!",
+  title: "Your Link-in-Bio Page!",
   link: [{ rel: "canonical", href: "https://linknest.vercel.app" }],
   meta: [{ name: "description", content: "Create your own landing page for sharing links to your social media profiles, websites, and more!" }],
 })

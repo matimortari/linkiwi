@@ -25,6 +25,7 @@
   font-family: var(--font-default);
   overflow-x: hidden;
   scroll-behavior: smooth;
+  outline: none;
   margin: 0;
   padding: 0;
 }
@@ -355,7 +356,7 @@ html.light {
 html.dark {
   --vignette: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 100%);
 }
-.cta-grid {
+.cta-wrapper-grid {
   position: absolute;
   inset: 0;
   z-index: -10;
@@ -367,7 +368,7 @@ html.dark {
   opacity: 50%;
   gap: 1rem;
 }
-.cta-vignette {
+.cta-wrapper-vignette {
   position: absolute;
   inset: 0;
   pointer-events: none;

@@ -9,7 +9,7 @@
             © {{ new Date().getFullYear() }} LinkNest. All rights reserved.
           </p>
 
-          <nuxt-link to="https://github.com/matimorta/linknest" target="_blank" aria-label="GitHub Repository">
+          <nuxt-link to="https://github.com/matimortari/linknest" target="_blank" aria-label="GitHub Repository">
             <icon name="simple-icons:github" size="25" class="text-muted-foreground hover:scale-md hover:text-accent transition-all" />
           </nuxt-link>
         </div>

@@ -1,7 +1,7 @@
 <template>
   <div class="flex min-h-screen flex-col items-center justify-center gap-4">
     <div class="bg-muted relative w-1/4 rounded-full">
-      <div class="progress-bar from-primary to-secondary h-full w-1/4 rounded-full bg-gradient-to-r" />
+      <div class="progress-bar from-primary to-secondary h-full w-1/4 rounded-full bg-linear-to-r" />
     </div>
 
     <p class="text-muted-foreground font-semibold">

@@ -1,10 +1,10 @@
 <template>
   <!-- Mobile menu buttons -->
-  <button v-if="!isMobileNavOpen" class="btn fixed top-2 right-2 z-50 md:!hidden" aria-label="Open menu" @click="isMobileNavOpen = true">
+  <button v-if="!isMobileNavOpen" class="btn fixed top-2 right-2 z-50 md:hidden!" aria-label="Open menu" @click="isMobileNavOpen = true">
     <icon name="mdi:menu" size="30" />
   </button>
 
-  <button v-if="isMobileNavOpen" class="btn fixed top-2 right-2 z-50 md:!hidden" aria-label="Close menu" @click="isMobileNavOpen = false">
+  <button v-if="isMobileNavOpen" class="btn fixed top-2 right-2 z-50 md:hidden!" aria-label="Close menu" @click="isMobileNavOpen = false">
     <icon name="mdi:close" size="30" class="text-muted-foreground" />
   </button>
 
@@ -14,26 +14,23 @@
   <transition name="slide">
     <aside v-if="user" class="fixed top-0 left-0 z-40 size-full px-4 py-16 transition-transform md:static md:w-56 md:translate-x-0 md:py-4" :class="isMobileNavOpen ? 'translate-x-0 bg-card' : '-translate-x-full'">
       <div class="flex h-full flex-col gap-12 px-12 md:px-0">
-        <nuxt-link to="/" class="hover:scale-sm hidden flex-row items-center gap-2 transition-all select-none md:flex">
-          <img src="/assets/logo.png" alt="Logo" width="30">
-          <img :src="themeTitle" alt="Wordmark" width="100">
-        </nuxt-link>
+        <logo />
 
-        <div class="navigation-group w-full !gap-4">
+        <div class="navigation-group w-full gap-4!">
           <div class="relative size-12 shrink-0">
             <img v-if="user.image" :src="user.image" :alt="user.slug" class="size-full rounded-full border object-cover select-none">
 
-            <button title="Edit Profile Information" class="btn-primary absolute -right-2 -bottom-2 !p-1" aria-label="Edit Profile Information" @click="isDialogOpen = true">
+            <button title="Edit Profile Information" class="btn-primary absolute -right-2 -bottom-2 p-1!" aria-label="Edit Profile Information" @click="isDialogOpen = true">
               <icon name="mdi:square-edit-outline" size="20" class="transition-all hover:scale-110" />
             </button>
           </div>
 
           <div class="flex w-full min-w-0 flex-col overflow-x-hidden">
-            <span class="text-sm font-semibold break-words">
+            <span class="text-sm font-semibold wrap-break-word">
               {{ user.name }}
             </span>
 
-            <nuxt-link :to="`/${user.slug}`" :title="`linknest.vercel.app/${user.slug}`" class="text-muted-foreground text-sm break-words hover:underline">
+            <nuxt-link :to="`/${user.slug}`" :title="`${BASE_URL}/${user.slug}`" class="text-muted-foreground text-sm wrap-break-word hover:underline">
               @{{ user.slug }}
             </nuxt-link>
           </div>
@@ -46,7 +43,7 @@
 
           <nav class="flex flex-col gap-2" aria-label="Main Navigation">
             <nuxt-link
-              v-for="link in navLinks" :key="link.url"
+              v-for="link in SIDEBAR_NAV_LINKS" :key="link.url"
               :to="link.url" class="hover:scale-sm flex w-full flex-row items-center justify-start gap-4 font-semibold transition-all"
               aria-label="Navigate to {{ link.label }}" @click="isMobileNavOpen = false"
             >
@@ -70,10 +67,9 @@
         </nav>
       </div>
 
-      <nuxt-link to="/" class="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-row items-center gap-2 transition-all select-none md:hidden">
-        <img src="/assets/logo.png" alt="Logo" width="30">
-        <img :src="themeTitle" alt="Wordmark" width="100">
-      </nuxt-link>
+      <div class="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-row items-center gap-2 transition-all select-none md:hidden">
+        <logo />
+      </div>
     </aside>
   </transition>
 
@@ -85,7 +81,7 @@
 </template>
 
 <script setup lang="ts">
-const { toggleTheme, themeIcon, themeTitle } = useTheme()
+const { toggleTheme, themeIcon } = useTheme()
 const { clear } = useUserSession()
 const router = useRouter()
 const userStore = useUserStore()
@@ -98,12 +94,6 @@ function signOut() {
   clear()
   router.push("/")
 }
-
-const navLinks = [
-  { url: "/admin/profile", icon: "material-symbols:location-home-outline", label: "Profile" },
-  { url: "/admin/preferences", icon: "material-symbols:settings-applications-outline", label: "Preferences" },
-  { url: "/admin/analytics", icon: "material-symbols:chart-data-outline", label: "Analytics" },
-]
 </script>
 
 <style scoped>
