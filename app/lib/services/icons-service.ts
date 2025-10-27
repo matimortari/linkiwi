@@ -1,16 +1,15 @@
 import type { CreateUserIconInput } from "#shared/schemas/icons"
 
-const API_BASE = "/api/icons"
-
 export const iconsService = {
   /**
    * Fetch all user icons
    */
   getIcons: async () => {
-    const response = await $fetch(`${API_BASE}`, {
+    const response = await $fetch(`${API_URL}/icons`, {
       method: "GET",
       credentials: "include",
     })
+
     return response
   },
 
@@ -19,11 +18,12 @@ export const iconsService = {
    * @param data Icon data with url, platform, and logo
    */
   createIcon: async (data: CreateUserIconInput) => {
-    const response = await $fetch(`${API_BASE}`, {
+    const response = await $fetch(`${API_URL}/icons`, {
       method: "POST",
       body: data,
       credentials: "include",
     })
+
     return response
   },
 
@@ -32,10 +32,11 @@ export const iconsService = {
    * @param id Icon ID
    */
   deleteIcon: async (id: string) => {
-    const response = await $fetch(`${API_BASE}/${id}`, {
+    const response = await $fetch(`${API_URL}/icons/${id}`, {
       method: "DELETE",
       credentials: "include",
     })
+
     return response
   },
 }

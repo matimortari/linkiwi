@@ -2,10 +2,10 @@ import db from "#server/lib/db"
 import { getUserFromSession } from "#server/lib/utils"
 
 export default defineEventHandler(async (event) => {
-  const sessionUser = await getUserFromSession(event)
+  const user = await getUserFromSession(event)
 
   const links = await db.userLink.findMany({
-    where: { userId: sessionUser.id },
+    where: { userId: user.id },
     select: {
       id: true,
       url: true,

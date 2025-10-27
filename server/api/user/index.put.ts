@@ -3,18 +3,9 @@ import { getUserFromSession } from "#server/lib/utils"
 import { updateUserSchema } from "#shared/schemas/user"
 
 export default defineEventHandler(async (event) => {
-  const sessionUser = await getUserFromSession(event)
-
-  const user = await db.user.findUnique({
-    where: { id: sessionUser.id },
-    select: { id: true, email: true, slug: true },
-  })
-  if (!user) {
-    throw createError({ statusCode: 404, message: "User not found" })
-  }
+  const user = await getUserFromSession(event)
 
   const body = await readBody(event)
-
   const { email, name, slug, description } = updateUserSchema.parse(body)
   if (email && email !== user.email) {
     const existingUser = await db.user.findUnique({

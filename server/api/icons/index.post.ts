@@ -3,15 +3,14 @@ import { getUserFromSession } from "#server/lib/utils"
 import { createUserIconSchema } from "#shared/schemas/icons"
 
 export default defineEventHandler(async (event) => {
-  const sessionUser = await getUserFromSession(event)
+  const user = await getUserFromSession(event)
 
   const body = await readBody(event)
-
   const { url, platform, logo } = createUserIconSchema.parse(body)
 
   const existingIcon = await db.userIcon.findFirst({
     where: {
-      userId: sessionUser.id,
+      userId: user.id,
       platform,
     },
   })
@@ -21,7 +20,7 @@ export default defineEventHandler(async (event) => {
 
   const newIcon = await db.userIcon.create({
     data: {
-      userId: sessionUser.id,
+      userId: user.id,
       url,
       platform,
       logo,

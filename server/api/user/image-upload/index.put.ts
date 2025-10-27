@@ -3,18 +3,11 @@ import { getUserFromSession } from "#server/lib/utils"
 import { del, put } from "@vercel/blob"
 
 export default defineEventHandler(async (event) => {
-  const sessionUser = await getUserFromSession(event)
+  const user = await getUserFromSession(event)
   const form = await readFormData(event)
   const file = form.get("file")
   if (!file || !(file instanceof File)) {
     throw createError({ statusCode: 400, statusMessage: "No file uploaded" })
-  }
-
-  const user = await db.user.findUnique({
-    where: { id: sessionUser.id },
-  })
-  if (!user) {
-    throw createError({ statusCode: 404, statusMessage: "User not found" })
   }
 
   // Validate file type

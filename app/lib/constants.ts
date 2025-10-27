@@ -1,5 +1,7 @@
 export const BASE_URL = "https://linknest.vercel.app"
 
+export const API_URL = "/api"
+
 export const FEATURES = [
   {
     title: "Unlimited Links",

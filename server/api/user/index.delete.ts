@@ -2,10 +2,8 @@ import db from "#server/lib/db"
 import { getUserFromSession } from "#server/lib/utils"
 
 export default defineEventHandler(async (event) => {
-  const sessionUser = await getUserFromSession(event)
-
   const user = await db.user.findUnique({
-    where: { id: sessionUser.id },
+    where: { id: (await getUserFromSession(event))?.id },
     select: { id: true, name: true },
   })
   if (!user) {

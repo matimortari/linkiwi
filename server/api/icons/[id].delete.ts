@@ -2,7 +2,7 @@ import db from "#server/lib/db"
 import { getUserFromSession } from "#server/lib/utils"
 
 export default defineEventHandler(async (event) => {
-  const sessionUser = await getUserFromSession(event)
+  const user = await getUserFromSession(event)
 
   const iconId = getRouterParam(event, "id")
   if (!iconId) {
@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
   if (!icon) {
     throw createError({ statusCode: 404, message: "Icon not found" })
   }
-  if (icon.userId !== sessionUser.id) {
+  if (icon.userId !== user.id) {
     throw createError({ statusCode: 403, message: "You don't have permission to delete this social icon" })
   }
 

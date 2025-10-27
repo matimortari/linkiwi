@@ -3,7 +3,7 @@ import { getUserFromSession } from "#server/lib/utils"
 import { updateUserLinkSchema } from "#shared/schemas/links"
 
 export default defineEventHandler(async (event) => {
-  const sessionUser = await getUserFromSession(event)
+  const user = await getUserFromSession(event)
 
   const linkId = getRouterParam(event, "id")
   if (!linkId) {
@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
   if (!link) {
     throw createError({ statusCode: 404, message: "Link not found" })
   }
-  if (link.userId !== sessionUser.id) {
+  if (link.userId !== user.id) {
     throw createError({ statusCode: 403, message: "You don't have permission to update this link" })
   }
 

@@ -3,7 +3,7 @@ import { getUserFromSession } from "#server/lib/utils"
 import { updateUserPreferencesSchema } from "#shared/schemas/user"
 
 export default defineEventHandler(async (event) => {
-  const sessionUser = await getUserFromSession(event)
+  const user = await getUserFromSession(event)
 
   const body = await readBody(event)
   const { userId, ...preferencesBody } = body
@@ -11,21 +11,21 @@ export default defineEventHandler(async (event) => {
   const preferencesData = updateUserPreferencesSchema.parse(preferencesBody)
 
   const existingPreferences = await db.userPreferences.findUnique({
-    where: { userId: sessionUser.id },
+    where: { userId: user.id },
   })
 
   let updatedPreferences
   if (!existingPreferences) {
     updatedPreferences = await db.userPreferences.create({
       data: {
-        userId: sessionUser.id,
+        userId: user.id,
         ...preferencesData,
       },
     })
   }
   else {
     updatedPreferences = await db.userPreferences.update({
-      where: { userId: sessionUser.id },
+      where: { userId: user.id },
       data: preferencesData,
     })
   }

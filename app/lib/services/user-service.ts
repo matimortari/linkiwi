@@ -1,16 +1,15 @@
 import type { UpdateUserInput, UpdateUserPreferencesInput } from "#shared/schemas/user"
 
-const API_BASE = "/api/user"
-
 export const userService = {
   /**
    * Fetch current authenticated user
    */
   getUser: async () => {
-    const response = await $fetch(`${API_BASE}`, {
+    const response = await $fetch(`${API_URL}/user`, {
       method: "GET",
       credentials: "include",
     })
+
     return response
   },
 
@@ -19,9 +18,10 @@ export const userService = {
    * @param slug User slug to fetch
    */
   getUserBySlug: async (slug: string) => {
-    const response = await $fetch(`${API_BASE}/${slug}`, {
+    const response = await $fetch(`${API_URL}/user/${slug}`, {
       method: "GET",
     })
+
     return response
   },
 
@@ -30,11 +30,12 @@ export const userService = {
    * @param data Partial object with name/email
    */
   updateUser: async (data: UpdateUserInput) => {
-    const response = await $fetch(`${API_BASE}`, {
+    const response = await $fetch(`${API_URL}/user`, {
       method: "PUT",
       body: data,
       credentials: "include",
     })
+
     return response
   },
 
@@ -43,11 +44,12 @@ export const userService = {
    * @param data Partial object with preference settings
    */
   updatePreferences: async (data: UpdateUserPreferencesInput) => {
-    const response = await $fetch(`${API_BASE}/preferences`, {
+    const response = await $fetch(`${API_URL}/user/preferences`, {
       method: "PUT",
       body: data,
       credentials: "include",
     })
+
     return response
   },
 
@@ -59,11 +61,12 @@ export const userService = {
     const formData = new FormData()
     formData.append("file", file)
 
-    const response = await $fetch<{ imageUrl: string }>(`${API_BASE}/image-upload`, {
+    const response = await $fetch<{ imageUrl: string }>(`${API_URL}/user/image-upload`, {
       method: "PUT",
       body: formData,
       credentials: "include",
     })
+
     return response
   },
 
@@ -71,10 +74,11 @@ export const userService = {
    * Delete current user
    */
   deleteUser: async () => {
-    const response = await $fetch(`${API_BASE}`, {
+    const response = await $fetch(`${API_URL}/user`, {
       method: "DELETE",
       credentials: "include",
     })
+
     return response
   },
 }
