@@ -74,6 +74,12 @@ async function handleSubmit() {
     return
   }
 
+  const alreadyExists = iconStore.icons.some(icon => icon.platform === form.value.platform)
+  if (alreadyExists) {
+    iconStore.errors.createIcon = "You have already added this platform."
+    return
+  }
+
   isLoading.value = true
   iconStore.errors.createIcon = null
 
@@ -91,11 +97,7 @@ async function handleSubmit() {
 
 watch(() => props.isOpen, (open) => {
   if (open) {
-    resetForm({
-      platform: "" as keyof typeof SOCIAL_ICONS,
-      logo: "" as typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS],
-      url: "",
-    })
+    resetForm({ platform: "" as keyof typeof SOCIAL_ICONS, logo: "" as typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS], url: "" })
     iconStore.errors.createIcon = null
   }
 }, { immediate: true })

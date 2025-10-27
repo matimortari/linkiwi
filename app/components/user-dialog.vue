@@ -77,32 +77,28 @@ watch(() => props.isOpen, (open) => {
   }
 }, { immediate: true })
 
-// async function handleUpdateImage(event: Event) {
-//   userStore.errors.updateUserImage = null
+async function handleUpdateImage(event: Event) {
+  userStore.errors.updateUserImage = null
+  const input = event.target as HTMLInputElement
+  const file = input?.files?.[0]
+  if (!file)
+    return
 
-//   const input = event.target as HTMLInputElement
-//   if (!input.files || input.files.length === 0)
-//     return
-
-//   const file = input.files[0]
-//   if (!file)
-//     return
-
-//   const formData = new FormData()
-//   formData.append("file", file, file.name)
-//   formData.append("type", "avatar")
-
-//   try {
-//     const res = await userStore.updateUserImage(formData)
-//     form.value.image = res.imageUrl
-//   }
-//   catch (err: any) {
-//     userStore.errors.updateUserImage = err.message
-//   }
-// }
+  try {
+    const res = await userStore.updateUserImage(file)
+    if (res?.imageUrl && userStore.user) {
+      userStore.user.image = res.imageUrl
+      form.value.image = res.imageUrl
+    }
+  }
+  catch (err: any) {
+    userStore.errors.updateUserImage = err.message
+  }
+}
 
 async function handleSubmit() {
   userStore.errors.updateUser = null
+
   if (!userStore.user?.id)
     return
   if (!userStore.user?.name) {
@@ -116,6 +112,7 @@ async function handleSubmit() {
       slug: form.value.slug,
       description: form.value.description,
     })
+
     await userStore.getUser()
     emit("close")
   }

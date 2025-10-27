@@ -29,6 +29,9 @@ const props = defineProps<{
   type: keyof typeof BANNER_MESSAGES
 }>()
 
+const showBanner = ref(true)
+let lastScrollY = window.scrollY
+
 const banner = computed(() => ({
   message: BANNER_MESSAGES[props.type],
   description: BANNER_DESCRIPTIONS[props.type],
@@ -36,9 +39,6 @@ const banner = computed(() => ({
   link: BANNER_LINKS[props.type],
   class: BANNER_STYLES[props.type],
 }))
-
-const showBanner = ref(true)
-let lastScrollY = window.scrollY
 
 function handleScroll() {
   const current = window.scrollY

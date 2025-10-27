@@ -18,6 +18,7 @@ tmp
 .DS_Store
 .fleet
 .idea
+*.db
 *.tmp
 *.log
 *.com

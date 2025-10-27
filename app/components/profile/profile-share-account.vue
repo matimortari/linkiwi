@@ -67,9 +67,7 @@ const copySuccess = ref<string | null>(null)
 const pageUrl = `${BASE_URL}/${user.value?.slug}`
 
 function handleClickOutside(e: MouseEvent) {
-  const target = e.target as Node
-
-  const clickedOutsideDropdown = dropdownRef.value && !dropdownRef.value.contains(target)
+  const clickedOutsideDropdown = dropdownRef.value && !dropdownRef.value.contains(e.target as Node)
   const clickedInsideQrDialog = isDialogOpen.value
   if (isDropdownOpen.value && clickedOutsideDropdown && !clickedInsideQrDialog) {
     isDropdownOpen.value = false
@@ -86,10 +84,8 @@ async function copyPageUrl() {
 }
 
 function handleShareTwitter() {
-  const tweet = `🚀 Check out my #inkNest profile! 🌟\n\n🔗 ${pageUrl}`
-  const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-    tweet,
-  )}`
+  const tweet = `🚀 Check out my LinkNest profile! 🌟\n\n🔗 ${pageUrl}`
+  const twitterUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(tweet)}`
   window.open(twitterUrl, "_blank")
   isDropdownOpen.value = false
 }

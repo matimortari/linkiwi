@@ -16,6 +16,12 @@ export default defineNuxtConfig({
     fallback: "light",
     storageKey: "nuxt-color-mode",
   },
+  content: {
+    _localDatabase: {
+      type: "sqlite",
+      filename: "content/local.db",
+    },
+  },
   fonts: {
     processCSSVariables: true,
     families: [
