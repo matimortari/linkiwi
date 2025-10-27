@@ -5,12 +5,12 @@ export const iconsService = {
    * Fetch all user icons
    */
   getIcons: async () => {
-    const response = await $fetch(`${API_URL}/icons`, {
+    const res = await $fetch(`${API_URL}/icons`, {
       method: "GET",
       credentials: "include",
     })
 
-    return response
+    return res
   },
 
   /**
@@ -18,13 +18,13 @@ export const iconsService = {
    * @param data Icon data with url, platform, and logo
    */
   createIcon: async (data: CreateUserIconInput) => {
-    const response = await $fetch(`${API_URL}/icons`, {
+    const res = await $fetch(`${API_URL}/icons`, {
       method: "POST",
       body: data,
       credentials: "include",
     })
 
-    return response
+    return res
   },
 
   /**
@@ -32,11 +32,11 @@ export const iconsService = {
    * @param id Icon ID
    */
   deleteIcon: async (id: string) => {
-    const response = await $fetch(`${API_URL}/icons/${id}`, {
+    const res = await $fetch(`${API_URL}/icons/${id}`, {
       method: "DELETE",
       credentials: "include",
     })
 
-    return response
+    return res
   },
 }

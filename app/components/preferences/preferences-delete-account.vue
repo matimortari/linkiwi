@@ -34,7 +34,6 @@ async function handleDeleteUser() {
     await router.push("/")
   }
   catch (err: any) {
-    console.error("Failed to delete account:", err)
     userStore.errors.deleteUser = err.message
   }
 }

@@ -2,7 +2,7 @@
   <Loading v-if="isLoading" />
 
   <div v-show="!isLoading" class="min-h-screen">
-    <div class="flex flex-col !items-start gap-4 p-4 md:flex-row">
+    <div class="flex flex-col items-start gap-4 p-4 md:flex-row">
       <Sidebar />
 
       <main class="relative min-h-[200px] flex-1 overflow-x-hidden">
@@ -29,8 +29,7 @@ async function getUserData() {
       iconStore.getIcons(),
     ])
   }
-  catch (err: any) {
-    console.error("Failed to load user data:", err)
+  catch {
     await navigateTo("/sign-in")
   }
   finally {

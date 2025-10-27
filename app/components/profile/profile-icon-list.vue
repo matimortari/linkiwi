@@ -9,7 +9,7 @@
       </p>
     </header>
 
-    <Spinner v-if="iconStore.loading" />
+    <Spinner v-if="loading" />
     <p v-else-if="!icons.length" class="text-lead m-8 text-center">
       Pin social icons to your profile so visitors can easily connect. Add your first social icon!
     </p>
@@ -38,6 +38,6 @@
 <script setup lang="ts">
 const iconStore = useIconsStore()
 
-const { icons } = storeToRefs(iconStore)
+const { icons, loading } = storeToRefs(iconStore)
 const isDialogOpen = ref(false)
 </script>

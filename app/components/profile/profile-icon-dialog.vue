@@ -29,9 +29,14 @@
           {{ iconStore.errors.createIcon || '' }}
         </p>
 
-        <button class="btn-primary" type="submit" aria-label="Save Link" :disabled="!isFormValid">
-          Add Social Icon
-        </button>
+        <div class="flex flex-row items-center gap-2">
+          <button class="btn-secondary" aria-label="Cancel" :disabled="isLoading" @click="emit('close')">
+            Cancel
+          </button>
+          <button class="btn-primary" type="submit" aria-label="Add Social Icon" :disabled="!isFormValid">
+            Add Social Icon
+          </button>
+        </div>
       </footer>
     </form>
   </Dialog>
@@ -51,8 +56,7 @@ const emit = defineEmits<{
 }>()
 
 const iconStore = useIconsStore()
-
-const { form, isFormValid, resetForm, validateForm } = useFormValidation<CreateUserIconInput>({
+const { form, isLoading, isFormValid, resetForm, validateForm } = useFormValidation<CreateUserIconInput>({
   platform: "" as keyof typeof SOCIAL_ICONS,
   logo: "" as typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS],
   url: "",
@@ -70,13 +74,18 @@ async function handleSubmit() {
     return
   }
 
+  isLoading.value = true
+  iconStore.errors.createIcon = null
+
   try {
     await iconStore.createIcon(form.value)
     emit("close")
   }
   catch (err: any) {
-    console.error("Failed to save social icon:", err)
-    iconStore.errors.createIcon = err.message || "Failed to save social icon"
+    iconStore.errors.createIcon = err.message || "Failed to add social icon"
+  }
+  finally {
+    isLoading.value = false
   }
 }
 

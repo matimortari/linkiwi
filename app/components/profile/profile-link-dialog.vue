@@ -24,7 +24,7 @@
           {{ isUpdateMode ? linkStore.errors.updateLink || '' : linkStore.errors.createLink || '' }}
         </p>
 
-        <div class="flex gap-2">
+        <div class="flex flex-row items-center gap-2">
           <button class="btn-secondary" aria-label="Cancel" :disabled="isLoading" @click="emit('close')">
             Cancel
           </button>
@@ -51,15 +51,12 @@ const emit = defineEmits<{
 }>()
 
 const linkStore = useLinksStore()
-
 const { form, isLoading, isFormValid, resetForm, validateForm, hasFormChanged } = useFormValidation<CreateUserLinkInput | UpdateUserLinkInput>({
   title: "",
   url: "",
 })
 
-const isUpdateMode = computed(() => {
-  return !!(props.selectedLink?.id)
-})
+const isUpdateMode = computed(() => !!(props.selectedLink?.id))
 
 async function handleSubmit() {
   if (!isFormValid.value) {
@@ -85,7 +82,6 @@ async function handleSubmit() {
     }
   }
   catch (err: any) {
-    console.error("Failed to save link:", err)
     isUpdateMode.value ? linkStore.errors.updateLink = err.message || "Failed to save link" : linkStore.errors.createLink = err.message || "Failed to save link"
   }
   finally {

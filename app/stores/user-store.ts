@@ -25,7 +25,6 @@ export const useUserStore = defineStore("user", () => {
     catch (err: any) {
       errors.value.getUser = err?.message || "Failed to get user"
       console.error("getUser error:", err)
-      throw err
     }
     finally {
       loading.value = false
@@ -45,7 +44,6 @@ export const useUserStore = defineStore("user", () => {
       errors.value.getUserBySlug = err?.message || "Failed to get user by slug"
       console.error("getUserBySlug error:", err)
       user.value = null
-      throw err
     }
     finally {
       loading.value = false
@@ -63,7 +61,6 @@ export const useUserStore = defineStore("user", () => {
     catch (err: any) {
       errors.value.updateUser = err?.message || "Failed to update user"
       console.error("updateUser error:", err)
-      throw err
     }
     finally {
       loading.value = false
@@ -84,7 +81,6 @@ export const useUserStore = defineStore("user", () => {
     catch (err: any) {
       errors.value.updateUserImage = err?.message || "Failed to update user image"
       console.error("updateUserImage error:", err)
-      throw err
     }
     finally {
       loading.value = false
@@ -104,7 +100,6 @@ export const useUserStore = defineStore("user", () => {
     catch (err: any) {
       errors.value.updatePreferences = err?.message || "Failed to update preferences"
       console.error("updatePreferences error:", err)
-      throw err
     }
     finally {
       loading.value = false
@@ -122,7 +117,6 @@ export const useUserStore = defineStore("user", () => {
     catch (err: any) {
       errors.value.deleteUser = err?.message || "Failed to delete user"
       console.error("deleteUser error:", err)
-      throw err
     }
     finally {
       loading.value = false

@@ -15,15 +15,12 @@ export const useLinksStore = defineStore("links", () => {
     errors.value.getLinks = null
 
     try {
-      const res = await linksService.getLinks() as unknown as {
-        links: Link[]
-      }
+      const res = await linksService.getLinks()
       links.value = res.links
     }
     catch (err: any) {
       errors.value.getLinks = err?.message || "Failed to get links"
       console.error("getLinks error:", err)
-      throw err
     }
     finally {
       loading.value = false
@@ -43,7 +40,6 @@ export const useLinksStore = defineStore("links", () => {
     catch (err: any) {
       errors.value.createLink = err?.message || "Failed to create link"
       console.error("createLink error:", err)
-      throw err
     }
     finally {
       loading.value = false
@@ -66,7 +62,6 @@ export const useLinksStore = defineStore("links", () => {
     catch (err: any) {
       errors.value.updateLink = err?.message || "Failed to update link"
       console.error("updateLink error:", err)
-      throw err
     }
     finally {
       loading.value = false
@@ -84,7 +79,6 @@ export const useLinksStore = defineStore("links", () => {
     catch (err: any) {
       errors.value.deleteLink = err?.message || "Failed to delete link"
       console.error("deleteLink error:", err)
-      throw err
     }
     finally {
       loading.value = false

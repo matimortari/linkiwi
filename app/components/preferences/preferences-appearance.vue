@@ -60,7 +60,6 @@ async function handleUpdatePreferences() {
     status.value = "saved"
   }
   catch (err: any) {
-    console.error("Failed to update preferences:", err)
     userStore.errors.updatePreferences = err.message
   }
 }
@@ -111,7 +110,6 @@ async function handleResetPreferences() {
     status.value = "reset"
   }
   catch (err: any) {
-    console.error("Failed to reset preferences:", err)
     userStore.errors.updatePreferences = err.message
   }
 }

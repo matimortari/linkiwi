@@ -9,7 +9,7 @@
       </p>
     </header>
 
-    <Spinner v-if="linkStore.loading" />
+    <Spinner v-if="loading" />
     <p v-else-if="!links.length" class="text-lead m-8 text-center">
       Your links help visitors discover more about you. Add your first link!
     </p>
@@ -51,7 +51,7 @@
 <script setup lang="ts">
 const linkStore = useLinksStore()
 
-const { links } = storeToRefs(linkStore)
+const { links, loading } = storeToRefs(linkStore)
 const isDialogOpen = ref(false)
 const selectedLink = ref<Link | null>(null)
 

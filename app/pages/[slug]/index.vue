@@ -3,10 +3,9 @@
     <img src="/assets/logo.png" alt="Logo" width="30">
   </nuxt-link>
 
-  <div v-if="userStore.loading || !user" class="flex min-h-screen flex-col items-center justify-center gap-4 p-12 text-center">
-    <Spinner v-if="userStore.loading" />
-
-    <p v-else class="text-lead">
+  <div v-if="loading || !user" class="flex min-h-screen flex-col items-center justify-center gap-4 p-12 text-center">
+    <Spinner v-if="loading" />
+    <p v-else-if="!user" class="text-lead">
       User {{ slug }} not found.
     </p>
   </div>
@@ -52,36 +51,22 @@
 </template>
 
 <script setup lang="ts">
-import { analyticsService } from "~/lib/services/analytics-service"
-
 const userStore = useUserStore()
 const route = useRoute()
 const slug = route.params.slug as string
-const { user } = storeToRefs(userStore)
+const { user, loading } = storeToRefs(userStore)
 const preferences = computed(() => user.value?.preferences ?? null)
 const { backgroundStyle, profilePictureStyle, slugStyle, descriptionStyle } = useDynamicStyles(preferences)
 
 async function handleLinkClick(linkId: string) {
-  if (!user.value?.id)
-    return
-
-  try {
+  if (user.value?.id) {
     await analyticsService.recordLinkClick(user.value.id, linkId)
-  }
-  catch (err: any) {
-    console.error("Failed to track link click:", err)
   }
 }
 
 async function handleIconClick(iconId: string) {
-  if (!user.value?.id)
-    return
-
-  try {
+  if (user.value?.id) {
     await analyticsService.recordIconClick(user.value.id, iconId)
-  }
-  catch (err: any) {
-    console.error("Failed to track icon click:", err)
   }
 }
 
@@ -89,22 +74,16 @@ watch(() => route.params.slug, async (newSlug) => {
   if (!newSlug)
     return
 
-  try {
-    await userStore.getUserBySlug(newSlug as string)
+  await userStore.getUserBySlug(newSlug as string)
+  const currentUser = userStore.user
+  if (currentUser?.id) {
+    await analyticsService.recordPageView(currentUser.id)
 
-    const currentUser = userStore.user
-    if (currentUser?.id) {
-      await analyticsService.recordPageView(currentUser.id)
-
-      useHead({
-        title: `@${currentUser.slug}`,
-        link: [{ rel: "canonical", href: `https://linknest.vercel.app/${currentUser.slug}` }],
-        meta: [{ name: "description", content: `@${currentUser.slug} profile on LinkNest.` }],
-      })
-    }
-  }
-  catch (error) {
-    console.error("Failed to load user profile:", error)
+    useHead({
+      title: `@${currentUser.slug}`,
+      link: [{ rel: "canonical", href: `https://linknest.vercel.app/${currentUser.slug}` }],
+      meta: [{ name: "description", content: `@${currentUser.slug} profile on LinkNest.` }],
+    })
   }
 }, { immediate: true })
 

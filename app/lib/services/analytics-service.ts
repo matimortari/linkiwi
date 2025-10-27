@@ -5,12 +5,12 @@ export const analyticsService = {
    * Fetch analytics data for the current user
    */
   getAnalytics: async () => {
-    const response = await $fetch(`${API_URL}/analytics`, {
+    const res = await $fetch(`${API_URL}/analytics`, {
       method: "GET",
       credentials: "include",
     })
 
-    return response
+    return res
   },
 
   /**
@@ -18,7 +18,7 @@ export const analyticsService = {
    * @param userId User ID to record the page view for
    */
   recordPageView: async (userId: string) => {
-    const response = await $fetch(`${API_URL}/analytics`, {
+    const res = await $fetch(`${API_URL}/analytics`, {
       method: "POST",
       body: {
         type: "pageView",
@@ -27,7 +27,7 @@ export const analyticsService = {
       credentials: "include",
     })
 
-    return response
+    return res
   },
 
   /**
@@ -36,7 +36,7 @@ export const analyticsService = {
    * @param linkId Link ID that was clicked
    */
   recordLinkClick: async (userId: string, linkId: string) => {
-    const response = await $fetch(`${API_URL}/analytics`, {
+    const res = await $fetch(`${API_URL}/analytics`, {
       method: "POST",
       body: {
         type: "link",
@@ -46,7 +46,7 @@ export const analyticsService = {
       credentials: "include",
     })
 
-    return response
+    return res
   },
 
   /**
@@ -55,7 +55,7 @@ export const analyticsService = {
    * @param iconId Icon ID that was clicked
    */
   recordIconClick: async (userId: string, iconId: string) => {
-    const response = await $fetch(`${API_URL}/analytics`, {
+    const res = await $fetch(`${API_URL}/analytics`, {
       method: "POST",
       body: {
         type: "icon",
@@ -65,7 +65,7 @@ export const analyticsService = {
       credentials: "include",
     })
 
-    return response
+    return res
   },
 
   /**
@@ -86,11 +86,11 @@ export const analyticsService = {
     if (options?.dateTo) {
       params.append("dateTo", options.dateTo)
     }
-    const response = await $fetch<{ success: boolean, message: string, deletedCount: number }>(params.toString() ? `${API_URL}/analytics?${params.toString()}` : `${API_URL}/analytics`, {
+    const res = await $fetch<{ success: boolean, message: string, deletedCount: number }>(params.toString() ? `${API_URL}/analytics?${params.toString()}` : `${API_URL}/analytics`, {
       method: "DELETE",
       credentials: "include",
     })
 
-    return response
+    return res
   },
 }

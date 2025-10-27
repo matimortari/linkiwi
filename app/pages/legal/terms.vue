@@ -67,9 +67,6 @@ onMounted(async () => {
       }
     })
   }
-  else {
-    console.warn("Markdown container not found")
-  }
 
   isLoading.value = false
 })

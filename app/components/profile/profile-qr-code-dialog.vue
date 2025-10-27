@@ -43,12 +43,6 @@ function copyPageUrl(text: string) {
     setTimeout(() => {
       copySuccess.value = null
     }, 2000)
-  }).catch((err) => {
-    console.error("Failed to copy text: ", err)
-    copySuccess.value = "Failed to copy profile link."
-    setTimeout(() => {
-      copySuccess.value = null
-    }, 2000)
   })
 }
 </script>

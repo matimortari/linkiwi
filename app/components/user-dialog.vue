@@ -93,11 +93,10 @@ watch(() => props.isOpen, (open) => {
 //   formData.append("type", "avatar")
 
 //   try {
-//     const response = await userStore.updateUserImage(formData)
-//     form.value.image = response.imageUrl
+//     const res = await userStore.updateUserImage(formData)
+//     form.value.image = res.imageUrl
 //   }
 //   catch (err: any) {
-//     console.error("Failed to upload image:", err)
 //     userStore.errors.updateUserImage = err.message
 //   }
 // }
@@ -121,7 +120,6 @@ async function handleSubmit() {
     emit("close")
   }
   catch (err: any) {
-    console.error("Failed to update user data:", err)
     userStore.errors.updateUser = err.message
   }
 }
