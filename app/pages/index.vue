@@ -1,6 +1,6 @@
 <template>
   <nav class="absolute top-4 right-0 left-0 z-50 flex items-center justify-between p-4 md:top-0">
-    <logo />
+    <Logo />
 
     <div class="flex flex-row items-center gap-4" aria-label="User Actions">
       <button aria-label="Toggle Theme" @click="toggleTheme()">

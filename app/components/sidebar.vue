@@ -14,7 +14,7 @@
   <transition name="slide">
     <aside v-if="user" class="fixed top-0 left-0 z-40 size-full px-4 py-16 transition-transform md:static md:w-56 md:translate-x-0 md:py-4" :class="isMobileNavOpen ? 'translate-x-0 bg-card' : '-translate-x-full'">
       <div class="flex h-full flex-col gap-12 px-12 md:px-0">
-        <logo />
+        <Logo />
 
         <div class="navigation-group w-full gap-4!">
           <div class="relative size-12 shrink-0">
@@ -68,7 +68,7 @@
       </div>
 
       <div class="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-row items-center gap-2 transition-all select-none md:hidden">
-        <logo />
+        <Logo />
       </div>
     </aside>
   </transition>

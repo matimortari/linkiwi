@@ -2,35 +2,15 @@
 
 This document provides documentation for the LinkNest API.
 
-## Authentication
+## Overview
 
-Most endpoints require authentication via session cookies. Authentication is handled through OAuth providers.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum. Cras venenatis euismod malesuada.
 
-#### GET `/api/auth/google`
-
-Initiates Google OAuth authentication flow.
-
-**Response:**
-
-- Redirects to Google OAuth consent screen
-- On success, redirects to application with session cookie
-
-#### GET `/api/auth/github`
-
-Initiates GitHub OAuth authentication flow.
-
-**Response:**
-
-- Redirects to GitHub OAuth consent screen
-- On success, redirects to application with session cookie
-
----
-
-## Response Format
+### Response Format
 
 All responses follow a consistent JSON format:
 
-### Success Response
+#### Success Response
 
 ```json
 {
@@ -38,7 +18,7 @@ All responses follow a consistent JSON format:
 }
 ```
 
-### Error Response
+#### Error Response
 
 ```json
 {
@@ -47,9 +27,7 @@ All responses follow a consistent JSON format:
 }
 ```
 
----
-
-## Error Codes
+### Error Codes
 
 - **400 Bad Request**: Invalid request data or validation errors
 - **401 Unauthorized**: Authentication required
@@ -62,13 +40,41 @@ All responses follow a consistent JSON format:
 
 ## Endpoints
 
+### Authentication
+
+Most endpoints require authentication via session cookies. Authentication is handled through OAuth providers.
+
+#### Google OAuth Authentication
+
+**GET** `/auth/google`
+
+Initiates Google OAuth authentication flow.
+
+**Response:**
+
+- Redirects to Google OAuth consent screen
+- On success, redirects to application with session cookie
+
+#### GitHub OAuth Authentication
+
+**GET** `/auth/github`
+
+Initiates GitHub OAuth authentication flow.
+
+**Response:**
+
+- Redirects to GitHub OAuth consent screen
+- On success, redirects to application with session cookie
+
+---
+
 ### User Endpoints
 
-#### GET `/user`
+#### Get User Profile
+
+**GET** `/user`
 
 Retrieves the authenticated user's profile information.
-
-**Authentication:** Required
 
 **Response:**
 
@@ -120,11 +126,11 @@ Retrieves the authenticated user's profile information.
 }
 ```
 
-#### PUT `/user`
+#### Update User Profile
+
+**PUT** `/user`
 
 Updates the authenticated user's profile information.
-
-**Authentication:** Required
 
 **Request Body:**
 
@@ -153,11 +159,11 @@ Updates the authenticated user's profile information.
 }
 ```
 
-#### DELETE `/user`
+#### Delete User Account
+
+**DELETE** `/user`
 
 Permanently deletes the authenticated user's account and all associated data.
-
-**Authentication:** Required
 
 **Response:**
 
@@ -167,7 +173,9 @@ Permanently deletes the authenticated user's account and all associated data.
 }
 ```
 
-#### GET `/user/{slug}`
+#### Get User Profile by Slug
+
+**GET** `/user/{slug}`
 
 Retrieves a user's public profile by slug, including links, icons, and preferences.
 
@@ -209,11 +217,11 @@ Retrieves a user's public profile by slug, including links, icons, and preferenc
 }
 ```
 
-#### PUT `/user/preferences`
+#### Update User Preferences
 
-Updates the authenticated user's appearance preferences.
+**PUT** `/user/preferences`
 
-**Authentication:** Required
+Updates the authenticated user's preferences.
 
 **Request Body:** All fields are optional
 
@@ -270,11 +278,11 @@ Updates the authenticated user's appearance preferences.
 
 ### Links Endpoints
 
-#### GET `/links`
+#### Get User Links
+
+**GET** `/links`
 
 Retrieves all links for the authenticated user.
-
-**Authentication:** Required
 
 **Response:**
 
@@ -292,11 +300,11 @@ Retrieves all links for the authenticated user.
 }
 ```
 
-#### POST `/links`
+#### Create New Link
+
+**POST** `/links`
 
 Creates a new link for the authenticated user.
-
-**Authentication:** Required
 
 **Request Body:**
 
@@ -321,11 +329,11 @@ Creates a new link for the authenticated user.
 }
 ```
 
-#### PUT `/links/{id}`
+#### Update Link by ID
+
+**PUT** `/links/{id}`
 
 Updates an existing link for the authenticated user.
-
-**Authentication:** Required
 
 **Parameters:**
 
@@ -354,11 +362,11 @@ Updates an existing link for the authenticated user.
 }
 ```
 
-#### DELETE `/links/{id}`
+#### Delete Link by ID
+
+**DELETE** `/links/{id}`
 
 Deletes a link for the authenticated user.
-
-**Authentication:** Required
 
 **Parameters:**
 
@@ -374,13 +382,13 @@ Deletes a link for the authenticated user.
 
 ---
 
-### Icons Endpoints
+### Social Icons Endpoints
 
-#### GET `/icons`
+#### Get User Social Icons
+
+**GET** `/icons`
 
 Retrieves all social media icons for the authenticated user.
-
-**Authentication:** Required
 
 **Response:**
 
@@ -399,11 +407,11 @@ Retrieves all social media icons for the authenticated user.
 }
 ```
 
-#### POST `/icons`
+#### Create New Social Icon
+
+**POST** `/icons`
 
 Creates a new social media icon for the authenticated user.
-
-**Authentication:** Required
 
 **Request Body:**
 
@@ -417,7 +425,7 @@ Creates a new social media icon for the authenticated user.
 
 **Supported Platforms:**
 
-- Airbnb, Amazon, App Store, Apple Music, Apple Podcasts, Bandcamp, Behance, Bluesky, CodePen, Discord, Dribbble, Etsy, Facebook, GitHub, Gmail, Goodreads, Google Maps, Google Play, Instagram, Kickstarter, LinkedIn, Mastodon, Medium, Notion, Patreon, Pinterest, Reddit, ResearchGate, Shopify, Signal, Slack, Snapchat, SoundCloud, Spotify, Stack Overflow, Telegram, Tiktok, Tripadvisor, Trello, Twitch, Vimeo, Whatsapp, X, Yelp, Youtube
+- Airbnb, Amazon, App Store, Apple Music, Apple Podcasts, Bandcamp, Behance, Bluesky, CodePen, Discord, Dribbble, Etsy, Facebook, GitHub, Gmail, Goodreads, Google Maps, Google Play, Instagram, Kickstarter, LinkedIn, Mastodon, Medium, Notion, Patreon, Pinterest, Reddit, ResearchGate, Shopify, Signal, Slack, Snapchat, SoundCloud, Spotify, Stack Overflow, Telegram, TikTok, Tripadvisor, Trello, Twitch, Vimeo, Whatsapp, X, Yelp, Youtube
 
 **Response:**
 
@@ -434,11 +442,11 @@ Creates a new social media icon for the authenticated user.
 }
 ```
 
-#### DELETE `/icons/{id}`
+#### Delete Social Icon by ID
+
+**DELETE** `/icons/{id}`
 
 Deletes a social media icon for the authenticated user.
-
-**Authentication:** Required
 
 **Parameters:**
 
@@ -456,7 +464,9 @@ Deletes a social media icon for the authenticated user.
 
 ### Analytics Endpoints
 
-#### POST `/analytics`
+#### Record Analytics Event
+
+**POST** `/analytics`
 
 Records analytics data for page views, link clicks, or icon clicks.
 
@@ -478,11 +488,11 @@ Records analytics data for page views, link clicks, or icon clicks.
 }
 ```
 
-#### DELETE `/analytics`
+#### Delete All User Analytics
+
+**DELETE** `/analytics`
 
 Deletes all analytics data for the authenticated user.
-
-**Authentication:** Required
 
 **Response:**
 

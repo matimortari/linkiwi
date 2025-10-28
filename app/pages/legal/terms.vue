@@ -1,14 +1,9 @@
 <template>
-  <nav class="flex w-full items-center justify-between border-b px-4 py-2 md:px-8">
-    <logo />
-    <button class="btn" aria-label="Toggle Theme" @click="toggleTheme">
-      <icon :name="themeIcon" size="25" />
-    </button>
-  </nav>
+  <Navbar />
 
   <Loading v-if="isLoading" />
 
-  <div v-show="!isLoading" class="flex flex-col gap-8 p-4 md:flex-row">
+  <div v-show="!isLoading" class="flex flex-col gap-8 p-12 px-4 md:flex-row">
     <main class="flex-1">
       <div
         v-motion :initial="{ opacity: 0, y: 10 }"
@@ -21,17 +16,15 @@
       </div>
     </main>
 
-    <aside class="scroll-area sticky top-12 hidden h-[calc(100vh-6rem)] shrink-0 overflow-auto pr-4 md:block md:w-64">
+    <aside class="bg-card scroll-area sticky top-20 hidden h-[calc(100vh-6rem)] shrink-0 overflow-auto rounded-xl p-4! md:block">
       <nav class="space-y-2">
-        <h3>
+        <h4 class="text-end">
           On This Page
-        </h3>
-        <ul class="space-y-1">
-          <li
-            v-for="header in headers" :key="header.id"
-            :class="[header.level === 3 ? 'ml-2' : header.level === 4 ? 'ml-4' : '', activeSection === header.id ? 'text-primary font-semibold' : '']"
-          >
-            <a :href="`#${header.id}`" class="flex items-center gap-2">
+        </h4>
+
+        <ul class="space-y-1 border-t py-2">
+          <li v-for="header in headers" :key="header.id" :class="headerClasses(header)">
+            <a :href="`#${header.id}`" class="flex items-center justify-end gap-2 text-sm">
               {{ header.text }}
             </a>
           </li>
@@ -44,30 +37,15 @@
 <script setup lang="ts">
 const pageContent = await queryCollection("content").path("/terms-of-service").first()
 
-const { activeSection } = useActiveHeading()
-const { toggleTheme, themeIcon } = useTheme()
-
-const headers = ref<{ id: string, text: string, level: number }[]>([])
 const isLoading = ref(true)
+
+const { headers, headerClasses } = useActiveHeading({
+  selector: ".markdown article",
+  parseMethod: true,
+})
 
 onMounted(async () => {
   await nextTick()
-
-  const container = document.querySelector(".markdown article")
-  if (container) {
-    const hElements = container.querySelectorAll("h2, h3, h4")
-    headers.value = Array.from(hElements).map((el) => {
-      const text = el.textContent?.trim() || ""
-      const id = text.toLowerCase().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-")
-      el.id = id
-      return {
-        id,
-        text,
-        level: Number.parseInt(el.tagName.replace("H", "")),
-      }
-    })
-  }
-
   isLoading.value = false
 })
 

@@ -1,12 +1,7 @@
 <template>
-  <nav class="flex w-full items-center justify-between border-b px-4 py-2 md:px-8">
-    <logo />
-    <button class="btn" aria-label="Toggle Theme" @click="toggleTheme">
-      <icon :name="themeIcon" size="25" />
-    </button>
-  </nav>
+  <Navbar />
 
-  <div class="container mx-auto max-w-7xl p-4 md:p-8">
+  <div class="container mx-auto max-w-7xl px-4 py-16">
     <header class="flex flex-col items-center gap-2 border-b p-4 text-center md:items-start md:text-start">
       <h2>
         Brand & Assets
@@ -60,7 +55,7 @@ import logoImage from "~/assets/logo.png"
 import logoDark from "~/assets/wordmark-dark.png"
 import logoLight from "~/assets/wordmark-light.png"
 
-const { toggleTheme, themeIcon } = useTheme()
+const { themeIcon } = useTheme()
 
 const LOGOS = [
   { name: "Logo", image: logoImage, bgClass: "bg-background" },
