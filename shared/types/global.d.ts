@@ -1,6 +1,6 @@
-declare global {
-  import type { BackgroundOption, BannerOption, BorderWidth, FontFamily, FontSize, FontWeight, LinkFontSize, LinkPaddingSize, RadiusSize, ShadowWeight } from "#shared/lib/constants"
+import type { BackgroundOption, BannerOption, BorderWidth, FontFamily, FontSize, FontWeight, LinkFontSize, LinkPaddingSize, RadiusSize, ShadowWeight } from "#shared/lib/constants"
 
+declare global {
   interface User {
     id?: string
     name?: string
@@ -69,15 +69,29 @@ declare global {
     iconHoverBackgroundColor: string
     iconLogoColor: string
     isIconShadow: boolean
-    iconShadowColor?: ShadowWeight
+    iconShadowColor?: string
     iconShadowWeight?: ShadowWeight
     supportBanner?: BannerOption
+  }
+
+  interface ThemePreset {
+    title: string
+    preferences: UserPreferences
   }
 
   interface PageView {
     id: string
     userId: string
     date: Date | string
+  }
+
+  interface CarouselPreset {
+    slug: string
+    description: string
+    image: string
+    icons: (Omit<Pick<Icon, "id" | "logo">, "id"> & { id: string | number })[]
+    links: (Omit<Pick<Link, "id" | "title">, "id"> & { id: string | number })[]
+    preferences: UserPreferences
   }
 }
 
