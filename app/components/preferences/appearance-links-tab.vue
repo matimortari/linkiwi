@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { FONT_FAMILIES, FONT_WEIGHTS, LINK_FONT_SIZES, LINK_PADDING_SIZES, RADIUS_SIZES, SHADOW_WEIGHTS } from "#shared/config/appearance-options"
+import { FONT_FAMILIES, FONT_WEIGHTS, LINK_FONT_SIZES, LINK_PADDING_SIZES, RADIUS_SIZES, SHADOW_WEIGHTS } from "#shared/lib/constants"
 
 const props = defineProps<{
   preferences: UserPreferences

@@ -43,9 +43,9 @@
 </template>
 
 <script setup lang="ts">
-import type { CreateUserIconInput } from "#shared/schemas/icons"
-import { SOCIAL_ICONS } from "#shared/config/social-icons"
-import { createUserIconSchema } from "#shared/schemas/icons"
+import type { CreateUserIconInput } from "#shared/lib/schemas/icons"
+import { SOCIAL_ICONS } from "#shared/lib/constants"
+import { createUserIconSchema } from "#shared/lib/schemas/icons"
 
 const props = defineProps<{
   isOpen: boolean

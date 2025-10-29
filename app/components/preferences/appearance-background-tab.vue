@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { BACKGROUND_TYPES } from "#shared/config/appearance-options"
+import { BACKGROUND_TYPES } from "#shared/lib/constants"
 
 const props = defineProps<{
   preferences: UserPreferences

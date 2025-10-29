@@ -38,8 +38,8 @@
 </template>
 
 <script setup lang="ts">
-import type { CreateUserLinkInput, UpdateUserLinkInput } from "#shared/schemas/links"
-import { createUserLinkSchema, updateUserLinkSchema } from "#shared/schemas/links"
+import type { CreateUserLinkInput, UpdateUserLinkInput } from "#shared/lib/schemas/links"
+import { createUserLinkSchema, updateUserLinkSchema } from "#shared/lib/schemas/links"
 
 const props = defineProps<{
   isOpen: boolean

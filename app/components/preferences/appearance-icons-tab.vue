@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { SHADOW_WEIGHTS } from "#shared/config/appearance-options"
+import { SHADOW_WEIGHTS } from "#shared/lib/constants"
 
 const props = defineProps<{
   preferences: UserPreferences

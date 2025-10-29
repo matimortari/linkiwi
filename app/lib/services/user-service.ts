@@ -1,4 +1,4 @@
-import type { UpdateUserInput, UpdateUserPreferencesInput } from "#shared/schemas/user"
+import type { UpdateUserInput, UpdateUserPreferencesInput } from "#shared/lib/schemas/user"
 
 export const userService = {
   /**

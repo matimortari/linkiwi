@@ -1,4 +1,4 @@
-import type { CreateUserIconInput } from "#shared/schemas/icons"
+import type { CreateUserIconInput } from "#shared/lib/schemas/icons"
 
 export const iconsService = {
   /**

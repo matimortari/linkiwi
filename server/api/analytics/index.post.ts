@@ -1,5 +1,5 @@
 import db from "#server/lib/db"
-import { analyticsRecordSchema } from "#shared/schemas/analytics"
+import { analyticsRecordSchema } from "#shared/lib/schemas/analytics"
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
