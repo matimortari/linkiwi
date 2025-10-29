@@ -8,7 +8,7 @@
       <div
         v-motion :initial="{ opacity: 0, y: 10 }"
         :enter="{ opacity: 1, y: 0 }" :duration="600"
-        class="markdown bg-background w-full p-4 md:px-8"
+        class="markdown w-full p-4 md:px-8"
       >
         <article v-if="apiSpec">
           <ContentRenderer :value="apiSpec" />
@@ -16,7 +16,7 @@
       </div>
     </main>
 
-    <aside class="bg-card scroll-area sticky top-20 hidden h-[calc(100vh-6rem)] shrink-0 overflow-auto rounded-xl p-4! md:block">
+    <aside id="table-of-contents" class="bg-card scroll-area sticky top-20 hidden h-[calc(100vh-6rem)] shrink-0 overflow-auto rounded-xl p-4! md:block">
       <nav class="space-y-2">
         <h4 class="text-end">
           On This Page
@@ -60,7 +60,8 @@ useHead({
 </script>
 
 <style scoped>
-::v-deep(.markdown) * {
+::v-deep(.markdown) *,
+#table-of-contents a span {
   font-family: "Roboto", sans-serif !important;
 }
 
