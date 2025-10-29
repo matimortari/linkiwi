@@ -38,6 +38,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "6.1.0",
     "@iconify-json/material-symbols": "1.2.42",
+    "@iconify-json/mdi": "1.2.3",
     "@iconify-json/simple-icons": "1.2.55",
     "@nuxt/devtools": "2.6.5",
     "@types/eslint-plugin-tailwindcss": "3.17.0",

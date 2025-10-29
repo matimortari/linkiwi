@@ -1,12 +1,13 @@
 <template>
-  <div v-if="preset" class="my-16 -mb-24 flex w-full items-center justify-center select-none md:w-1/2 md:justify-end">
+  <div v-if="preset" class="my-16 -mb-36 flex w-full items-center justify-center select-none md:w-1/2 md:justify-end">
     <transition name="carousel-3d" mode="out-in">
       <div :key="preset.slug" class="relative flex h-[550px] w-full flex-col overflow-hidden rounded-[2.5rem] border-4 border-black! shadow-lg shadow-black md:w-[330px]">
         <div class="from-primary to-accent absolute -top-1 z-10 w-full rounded-t-[2.5rem] bg-linear-to-r pb-1">
           <div class="flex flex-row items-center justify-between rounded-t-[2.5rem] bg-[#111016] p-4 pb-2">
             <div class="flex flex-row items-center gap-2">
-              <div v-for="i in 3" :key="i" class="size-2.5 rounded-full bg-[#3b3b41]" />
+              <span v-for="i in 3" :key="i" class="size-2.5 rounded-full bg-[#3b3b41]" />
             </div>
+
             <span class="rounded-xl bg-[#3b3b41] p-1 font-mono text-xs text-[#ebe8e8]">
               @{{ preset.slug }}
             </span>
@@ -18,6 +19,7 @@
           <p :style="slugStyle">
             @{{ preset.slug }}
           </p>
+
           <p :style="descriptionStyle">
             {{ preset.description }}
           </p>
@@ -52,7 +54,8 @@ const iconHover = reactive<Record<string, boolean>>({})
 const linkHover = reactive<Record<string, boolean>>({})
 
 const preset = getCarouselPreset(CAROUSEL_PRESETS, 3000)
-const { backgroundStyle, profilePictureStyle, slugStyle, descriptionStyle, iconStyle, iconInnerStyle, linkStyle, linkInnerStyle } = useDynamicStyles(preset.value?.preferences)
+const preferences = computed(() => preset.value?.preferences)
+const { backgroundStyle, profilePictureStyle, slugStyle, descriptionStyle, iconStyle, iconInnerStyle, linkStyle, linkInnerStyle } = useDynamicStyles(preferences)
 
 const images = import.meta.glob("/assets/presets/*", { eager: true, import: "default" })
 
