@@ -1,12 +1,12 @@
 <template>
   <div v-if="user" class="my-6 flex-col items-center justify-center select-none md:h-[520px] md:min-w-[330px]">
-    <!-- Mobile Preview Toggle -->
+    <!-- Mobile toggle -->
     <button class="btn fixed bottom-4 left-1/2 z-30 -translate-x-1/2 md:hidden!" aria-label="Toggle Mobile Preview" @click="isMobilePreviewOpen = !isMobilePreviewOpen">
       <icon :name="isMobilePreviewOpen ? 'mdi:eye-off' : 'mdi:eye'" size="25" />
       <span>{{ isMobilePreviewOpen ? 'Close Preview' : 'Preview' }}</span>
     </button>
 
-    <!-- Mobile Preview -->
+    <!-- Mobile full-screen preview -->
     <transition name="slide">
       <div v-if="isMobilePreviewOpen" class="fixed top-0 left-0 z-20 size-full overflow-y-auto p-12 md:hidden" :style="backgroundStyle">
         <div class="flex flex-col items-center justify-center gap-4 text-center md:my-6">
@@ -42,7 +42,7 @@
       </div>
     </transition>
 
-    <!-- Desktop Preview -->
+    <!-- Desktop preview -->
     <div
       v-motion :initial="{ opacity: 0, x: 20 }"
       :visible="{ opacity: 1, x: 0 }" :duration="800"

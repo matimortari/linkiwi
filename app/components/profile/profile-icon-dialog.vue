@@ -73,10 +73,8 @@ async function handleSubmit() {
     iconStore.errors.createIcon = "Platform and URL are required."
     return
   }
-
-  const alreadyExists = iconStore.icons.some(icon => icon.platform === form.value.platform)
-  if (alreadyExists) {
-    iconStore.errors.createIcon = "You have already added this platform."
+  if (iconStore.icons.some(icon => icon.platform === form.value.platform)) {
+    iconStore.errors.createIcon = "You have already a social icon for this platform."
     return
   }
 

@@ -3,14 +3,7 @@
     <img src="/assets/logo.png" alt="Logo" width="30">
   </nuxt-link>
 
-  <div v-if="loading || !user" class="flex min-h-screen flex-col items-center justify-center gap-4 p-12 text-center">
-    <Spinner v-if="loading" />
-    <p v-else-if="!user" class="text-lead">
-      User {{ slug }} not found.
-    </p>
-  </div>
-
-  <div v-else class="min-h-screen p-12 pb-28" :style="backgroundStyle">
+  <div v-if="user && !loading" class="min-h-screen p-12 pb-28" :style="backgroundStyle">
     <div class="flex flex-col items-center justify-center gap-4 text-center">
       <SupportBanner v-if="user.preferences?.supportBanner && user.preferences.supportBanner !== 'NONE'" :type="user.preferences.supportBanner" />
 
@@ -47,6 +40,14 @@
         No links yet.
       </p>
     </div>
+  </div>
+
+  <div v-else class="flex min-h-screen flex-col items-center justify-center gap-4 p-12 text-center">
+    <Spinner v-if="loading" />
+
+    <p v-else class="text-lead">
+      User {{ slug }} not found.
+    </p>
   </div>
 </template>
 

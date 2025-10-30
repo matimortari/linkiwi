@@ -49,14 +49,12 @@
 <script setup lang="ts">
 const props = defineProps<{
   isOpen: boolean
-  slug?: string
-  description?: string
-  image?: string
 }>()
 
 const emit = defineEmits<(e: "close") => void>()
 
 const userStore = useUserStore()
+const { user } = storeToRefs(userStore)
 
 const form = ref({
   slug: "",
@@ -65,11 +63,11 @@ const form = ref({
 })
 
 watch(() => props.isOpen, (open) => {
-  if (open) {
+  if (open && user.value) {
     form.value = {
-      slug: props.slug ?? "",
-      description: props.description ?? "",
-      image: props.image ?? "",
+      slug: user.value.slug ?? "",
+      description: user.value.description ?? "",
+      image: user.value.image ?? "",
     }
   }
   else {

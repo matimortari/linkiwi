@@ -1,11 +1,7 @@
 <template>
-  <!-- Mobile menu buttons -->
-  <button v-if="!isMobileNavOpen" class="btn fixed top-2 right-2 z-50 md:hidden!" aria-label="Open menu" @click="isMobileNavOpen = true">
-    <icon name="mdi:menu" size="30" />
-  </button>
-
-  <button v-if="isMobileNavOpen" class="btn fixed top-2 right-2 z-50 md:hidden!" aria-label="Close menu" @click="isMobileNavOpen = false">
-    <icon name="mdi:close" size="30" class="text-muted-foreground" />
+  <!-- Mobile toggle -->
+  <button class="btn fixed top-4 right-4 z-50 md:hidden!" :aria-label="isMobileNavOpen ? 'Close menu' : 'Open menu'" @click="isMobileNavOpen = !isMobileNavOpen">
+    <icon :name="isMobileNavOpen ? 'mdi:close' : 'mdi:menu'" size="30" :class="isMobileNavOpen ? 'text-muted-foreground' : ''" />
   </button>
 
   <!-- Mobile overlay -->
@@ -29,33 +25,34 @@
             <span class="text-sm font-semibold wrap-break-word">
               {{ user.name }}
             </span>
-
             <nuxt-link :to="`/${user.slug}`" :title="`${BASE_URL}/${user.slug}`" class="text-muted-foreground text-sm wrap-break-word hover:underline">
               @{{ user.slug }}
             </nuxt-link>
           </div>
         </div>
 
-        <div class="flex flex-col gap-4">
-          <p class="text-muted-foreground text-sm font-semibold uppercase">
+        <nav class="flex flex-col gap-4" aria-label="Main Navigation">
+          <p class="text-caption uppercase">
             My Account
           </p>
 
-          <nav class="flex flex-col gap-2" aria-label="Main Navigation">
-            <nuxt-link
-              v-for="link in SIDEBAR_NAV_LINKS" :key="link.url"
-              :to="link.url" class="hover:scale-sm flex w-full flex-row items-center justify-start gap-4 font-semibold transition-all"
-              aria-label="Navigate to {{ link.label }}" @click="isMobileNavOpen = false"
-            >
-              <icon :name="link.icon" size="25" />
-              <span>{{ link.label }}</span>
-            </nuxt-link>
-          </nav>
-        </div>
+          <nuxt-link
+            v-for="link in SIDEBAR_NAV_LINKS" :key="link.url"
+            :to="link.url" class="hover:scale-sm flex w-full flex-row items-center justify-start gap-4 font-semibold transition-all"
+            aria-label="Navigate to {{ link.label }}" @click="isMobileNavOpen = false"
+          >
+            <icon :name="link.icon" size="25" />
+            <span>{{ link.label }}</span>
+          </nuxt-link>
+        </nav>
 
         <div class="border-t md:flex-1" />
 
-        <nav class="flex flex-col gap-2" aria-label="Mobile Navigation Actions">
+        <nav class="flex flex-col gap-4" aria-label="Mobile Navigation Actions">
+          <p class="text-caption uppercase">
+            Actions
+          </p>
+
           <button class="hover:scale-sm flex w-full flex-row items-center justify-start gap-4 font-semibold transition-all" aria-label="Toggle Theme" @click="toggleTheme">
             <icon :name="themeIcon" size="25" />
             <span>Toggle Theme</span>
@@ -73,17 +70,12 @@
     </aside>
   </transition>
 
-  <UserDialog
-    v-if="user" :is-open="isDialogOpen"
-    :slug="user.slug ?? undefined" :description="user.description ?? undefined"
-    :image="user.image ?? undefined" @close=" isDialogOpen = false"
-  />
+  <UserDialog :is-open="isDialogOpen" @close=" isDialogOpen = false" />
 </template>
 
 <script setup lang="ts">
 const { toggleTheme, themeIcon } = useTheme()
 const { clear } = useUserSession()
-const router = useRouter()
 const userStore = useUserStore()
 
 const { user } = storeToRefs(userStore)
@@ -92,7 +84,7 @@ const isDialogOpen = ref(false)
 
 function signOut() {
   clear()
-  router.push("/")
+  navigateTo("/")
 }
 </script>
 

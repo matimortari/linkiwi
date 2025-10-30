@@ -1,5 +1,5 @@
 <template>
-  <div class="flex w-full flex-col gap-4 md:flex-row">
+  <div v-if="user" class="flex w-full flex-col gap-4 md:flex-row">
     <div
       v-motion class="card flex-1"
       :initial="{ opacity: 0, x: -20 }" :visible="{ opacity: 1, x: 0 }"
@@ -10,7 +10,7 @@
           Profile
         </h2>
         <p class="text-caption">
-          Welcome back, <span class="text-accent font-semibold">{{ user?.slug }}</span>!
+          Welcome back, <span class="text-accent font-semibold">{{ user.slug }}</span>!
         </p>
       </header>
 
@@ -25,12 +25,18 @@
       <Preview />
     </div>
   </div>
+
+  <div v-else class="flex h-[calc(100vh-8rem)] w-full items-center justify-center">
+    <Spinner v-if="loading" />
+    <p class="text-caption text-center" :class="{ 'text-destructive-foreground': errors.getUser || errors.getUserBySlug }">
+      {{ errors.getUser || errors.getUserBySlug || 'User not found.' }}
+    </p>
+  </div>
 </template>
 
 <script setup lang="ts">
 const userStore = useUserStore()
-
-const { user } = storeToRefs(userStore)
+const { user, loading, errors } = storeToRefs(userStore)
 
 useHead({
   title: "Profile",

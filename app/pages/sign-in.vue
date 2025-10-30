@@ -1,5 +1,5 @@
 <template>
-  <div class="relative flex min-h-screen">
+  <div class="relative flex min-h-screen flex-1">
     <div class="z-10 flex w-full flex-col items-center justify-center px-6 py-12 md:w-1/2">
       <div class="w-full max-w-md">
         <header class="my-4 flex flex-col items-center gap-2 text-center">

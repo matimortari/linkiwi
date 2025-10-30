@@ -17,7 +17,7 @@
 
         <div class="bg-card flex w-full flex-row items-center justify-between rounded-b-lg px-2 py-1">
           <span class="text-sm font-semibold">{{ logo.name }}</span>
-          <nuxt-link :href="logo.image" download :title="`Download ${logo.name}`">
+          <nuxt-link :to="logo.image" download :title="`Download ${logo.name}`">
             <icon name="mdi:download" size="35" class="hover:bg-muted hover:scale-md rounded-full p-1 transition-all" />
           </nuxt-link>
         </div>

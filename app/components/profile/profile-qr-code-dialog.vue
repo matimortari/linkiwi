@@ -1,14 +1,14 @@
 <template>
   <Dialog :is-open="isOpen" title="My QR Code" @update:is-open="emit('close')">
     <div class="flex flex-col items-center gap-4">
-      <p class="text-muted-foreground text-sm">
+      <p class="text-caption">
         Scan this QR code to visit your profile:
       </p>
 
-      <QrcodeVue :value="props.slug" :size="150" level="M" class="rounded-lg border bg-white p-2" />
+      <QrcodeVue :value="user?.slug" :size="150" level="M" class="rounded-lg border bg-white p-2" />
 
       <button class="hover:underline" aria-label="Copy Profile Link" @click="copyPageUrl(pageUrl)">
-        @{{ props.slug }}
+        @{{ user?.slug }}
       </button>
     </div>
 
@@ -27,15 +27,17 @@
 <script setup lang="ts">
 import QrcodeVue from "qrcode.vue"
 
-const props = defineProps({
+defineProps({
   isOpen: Boolean,
-  slug: String,
 })
 
 const emit = defineEmits(["close", "update:isOpen"])
 
+const userStore = useUserStore()
+const { user } = storeToRefs(userStore)
+
 const copySuccess = ref<string | null>(null)
-const pageUrl = `${BASE_URL}/${props.slug}`
+const pageUrl = `${BASE_URL}/${user.value?.slug}`
 
 function copyPageUrl(text: string) {
   navigator.clipboard.writeText(text).then(() => {

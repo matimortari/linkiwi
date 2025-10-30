@@ -60,8 +60,7 @@ const isUpdateMode = computed(() => !!(props.selectedLink?.id))
 
 async function handleSubmit() {
   if (!isFormValid.value) {
-    const errorKey = isUpdateMode.value ? "updateLink" : "createLink"
-    linkStore.errors[errorKey] = "Title and URL are required."
+    linkStore.errors[isUpdateMode.value ? "updateLink" : "createLink"] = "Title and URL are required."
     return
   }
   if (isUpdateMode.value && !hasFormChanged(props.selectedLink || undefined)) {

@@ -1,5 +1,5 @@
 <template>
-  <div class="section-container bg-muted! my-2 flex max-w-lg flex-row! justify-between shadow-lg">
+  <div v-if="user" class="section-container bg-muted! my-2 flex max-w-lg flex-row! justify-between shadow-lg">
     <header class="flex max-w-[80%] flex-col gap-2 whitespace-nowrap">
       <div class="flex flex-row items-center justify-between gap-4">
         <h4>
@@ -10,8 +10,8 @@
         </p>
       </div>
 
-      <nuxt-link :to="`/${user?.slug}`" :title="pageUrl" class="text-muted-foreground truncate text-sm hover:underline">
-        @{{ user?.slug }}
+      <nuxt-link :to="`/${user.slug}`" :title="pageUrl" class="text-muted-foreground truncate text-sm hover:underline">
+        @{{ user.slug }}
       </nuxt-link>
     </header>
 
@@ -53,7 +53,7 @@
     </div>
   </div>
 
-  <ProfileQrCodeDialog :is-open="isDialogOpen" :slug="user?.slug ?? ''" @close=" isDialogOpen = false" />
+  <ProfileQrCodeDialog :is-open="isDialogOpen" @close=" isDialogOpen = false" />
 </template>
 
 <script setup lang="ts">
@@ -64,7 +64,7 @@ const isDialogOpen = ref(false)
 const isDropdownOpen = ref(false)
 const dropdownRef = ref<HTMLElement | null>(null)
 const copySuccess = ref<string | null>(null)
-const pageUrl = `${BASE_URL}/${user.value?.slug}`
+const pageUrl = ``
 
 function handleClickOutside(e: MouseEvent) {
   const clickedOutsideDropdown = dropdownRef.value && !dropdownRef.value.contains(e.target as Node)

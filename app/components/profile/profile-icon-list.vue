@@ -14,7 +14,7 @@
       Pin social icons to your profile so visitors can easily connect. Add your first social icon!
     </p>
 
-    <ul v-else class="flex flex-row gap-2">
+    <ul v-else class="flex flex-row items-center gap-2">
       <li v-for="icon in icons" :key="icon.id" class="card relative flex size-20 items-center justify-center">
         <nuxt-link :to="icon.url">
           <icon :name="icon.logo" :size="30" />
