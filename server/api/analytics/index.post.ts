@@ -3,10 +3,9 @@ import { analyticsRecordSchema } from "#shared/lib/schemas/analytics"
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
-
   const analyticsData = analyticsRecordSchema.safeParse(body)
   if (!analyticsData.success) {
-    throw createError({ statusCode: 400, statusMessage: analyticsData.error.issues[0]?.message || "Invalid request data" })
+    throw createError({ statusCode: 400, statusMessage: analyticsData.error.issues[0]?.message })
   }
 
   const { type, userId, id } = analyticsData.data

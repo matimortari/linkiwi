@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
   const slug = getRouterParam(event, "slug")
 
   const user = await db.user.findUnique({
-    where: { slug: slug as string },
+    where: { slug },
     include: {
       links: true,
       icons: true,
@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
     },
   })
   if (!user) {
-    throw createError({ statusCode: 404, message: "User not found" })
+    throw createError({ statusCode: 404, message: `User with slug '${slug}' not found` })
   }
 
   return user

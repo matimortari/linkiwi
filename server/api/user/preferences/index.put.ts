@@ -6,29 +6,16 @@ export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
 
   const body = await readBody(event)
-  const { userId, ...preferencesBody } = body
+  const preferencesData = updateUserPreferencesSchema.parse({ userId: user.id, ...body })
 
-  const preferencesData = updateUserPreferencesSchema.parse(preferencesBody)
-
-  const existingPreferences = await db.userPreferences.findUnique({
+  await db.userPreferences.findUnique({
     where: { userId: user.id },
   })
 
-  let updatedPreferences
-  if (!existingPreferences) {
-    updatedPreferences = await db.userPreferences.create({
-      data: {
-        userId: user.id,
-        ...preferencesData,
-      },
-    })
-  }
-  else {
-    updatedPreferences = await db.userPreferences.update({
-      where: { userId: user.id },
-      data: preferencesData,
-    })
-  }
+  const updatedPreferences = await db.userPreferences.update({
+    where: { userId: user.id },
+    data: preferencesData,
+  })
 
   return { preferences: updatedPreferences }
 })

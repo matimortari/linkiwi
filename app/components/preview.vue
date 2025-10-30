@@ -10,7 +10,11 @@
     <transition name="slide">
       <div v-if="isMobilePreviewOpen" class="fixed top-0 left-0 z-20 size-full overflow-y-auto p-12 md:hidden" :style="backgroundStyle">
         <div class="flex flex-col items-center justify-center gap-4 text-center md:my-6">
-          <img :src="user.image ?? undefined" alt="Avatar" class="size-28 object-cover" :style="profilePictureStyle">
+          <img
+            v-if="user.image" :src="user.image"
+            alt="Avatar" class="size-24 object-cover"
+            :style="profilePictureStyle"
+          >
 
           <p class="line-clamp-3 max-w-sm truncate whitespace-break-spaces" :style="slugStyle">
             @{{ user.slug }}
@@ -55,7 +59,11 @@
       </div>
 
       <div class="flex flex-col items-center justify-start gap-4 overflow-y-auto p-4 text-center">
-        <img :src="user.image ?? undefined" alt="Avatar" class="size-24 object-cover" :style="profilePictureStyle">
+        <img
+          v-if="user.image" :src="user.image"
+          alt="Avatar" class="size-24 object-cover"
+          :style="profilePictureStyle"
+        >
 
         <p class="line-clamp-3 max-w-sm truncate whitespace-break-spaces" :style="slugStyle">
           @{{ user.slug }}
