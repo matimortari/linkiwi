@@ -86,10 +86,10 @@ export const OAUTH_PROVIDERS = [
 ]
 
 export const REST_METHOD_COLORS = {
-  GET: "bg-green-100 text-green-800",
-  POST: "bg-blue-100 text-blue-800",
-  PUT: "bg-yellow-100 text-yellow-800",
-  DELETE: "bg-red-100 text-red-800",
+  GET: "bg-[#123733] border-[#0ec187] text-[#0ec187]",
+  POST: "bg-[#202f46] border-[#74a2e7] text-[#74a2e7]",
+  PUT: "bg-[#37413b] border-[#cef1a7] text-[#cef1a7]",
+  DELETE: "bg-[#3b3138] border-[#e99795] text-[#e99795]",
 }
 
 export const SIDEBAR_NAV_LINKS = [

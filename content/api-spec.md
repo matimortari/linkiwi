@@ -27,7 +27,7 @@ All responses follow a consistent JSON format:
 }
 ```
 
-### Error Codes
+#### Error Codes
 
 - **400 Bad Request**: Invalid request data or validation errors
 - **401 Unauthorized**: Authentication required
@@ -44,7 +44,7 @@ All responses follow a consistent JSON format:
 
 Most endpoints require authentication via session cookies. Authentication is handled through OAuth providers.
 
-#### Google OAuth Authentication
+#### Sign In With Google
 
 **GET** `/auth/google`
 
@@ -55,7 +55,7 @@ Initiates Google OAuth authentication flow.
 - Redirects to Google OAuth consent screen
 - On success, redirects to application with session cookie
 
-#### GitHub OAuth Authentication
+#### Sign In With GitHub
 
 **GET** `/auth/github`
 

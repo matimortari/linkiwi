@@ -90,6 +90,6 @@ watch(() => route.params.slug, async (newSlug) => {
 }, { immediate: true })
 
 definePageMeta({
-  layout: "fullscreen",
+  layout: "user",
 })
 </script>

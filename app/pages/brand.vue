@@ -1,6 +1,4 @@
 <template>
-  <Navbar />
-
   <div class="container mx-auto max-w-7xl px-4 py-16">
     <header class="flex flex-col items-center gap-2 border-b p-4 text-center md:items-start md:text-start">
       <h2>
@@ -12,7 +10,7 @@
     </header>
 
     <div class="grid grid-cols-1 gap-4 border-b py-4 md:grid-cols-3">
-      <div v-for="logo in LOGOS" :key="logo.name" class="flex flex-col items-center rounded-xl border-2" :class="logo.bgClass">
+      <div v-for="logo in logos" :key="logo.name" class="flex flex-col items-center rounded-xl border-2" :class="logo.bgClass">
         <div class="my-4 flex h-16 w-36 items-center justify-center">
           <img :src="logo.image" :alt="logo.name" class="size-full object-contain">
         </div>
@@ -37,8 +35,12 @@
       </div>
 
       <div class="my-4 grid w-full grid-cols-1 gap-2 md:grid-cols-3 lg:grid-cols-6">
-        <div v-for="color in BRAND_COLORS" :key="color.name" class="flex flex-col items-center">
-          <div class="h-20 w-full rounded-lg border-2" :style="{ backgroundColor: `var(${color.var})` }" />
+        <div v-for="color in brandColors" :key="color.name" class="flex flex-col items-center">
+          <div class="group relative h-20 w-full cursor-pointer rounded-lg border-2 transition" :style="{ backgroundColor: `var(${color.var})` }" @click="handleCopyColor(color.var)">
+            <div class="absolute inset-0 flex items-center justify-center rounded-md bg-black/60 opacity-0 transition-opacity group-hover:opacity-100">
+              <span class="text-sm font-semibold"> {{ copiedColor === color.var ? 'Copied!' : 'Copy color' }} </span>
+            </div>
+          </div>
 
           <p class="flex w-full flex-col items-start p-1 text-start">
             <span class="text-sm font-semibold">{{ color.name }}</span>
@@ -57,13 +59,13 @@ import logoLight from "~/assets/wordmark-light.png"
 
 const { themeIcon } = useTheme()
 
-const LOGOS = [
+const logos = [
   { name: "Logo", image: logoImage, bgClass: "bg-background" },
   { name: "Wordmark (light)", image: logoLight, bgClass: "bg-[#040308]" },
   { name: "Wordmark (dark)", image: logoDark, bgClass: "bg-[#e0dddd]" },
 ]
 
-const BRAND_COLORS = [
+const brandColors = [
   { name: "Background", var: "--background" },
   { name: "Foreground", var: "--foreground" },
   { name: "Card", var: "--card" },
@@ -85,10 +87,24 @@ const BRAND_COLORS = [
 ]
 
 const colorValues = ref<Record<string, string>>({})
+const copiedColor = ref<string | null>(null)
+
+async function handleCopyColor(colorVar: string) {
+  const value = colorValues.value[colorVar]
+  if (!value || value === "—")
+    return
+
+  await navigator.clipboard.writeText(value)
+  copiedColor.value = colorVar
+
+  setTimeout(() => {
+    copiedColor.value = null
+  }, 1000)
+}
 
 function updateColors() {
   const styles = getComputedStyle(document.documentElement)
-  for (const color of BRAND_COLORS) {
+  for (const color of brandColors) {
     const value = styles.getPropertyValue(color.var).trim()
     colorValues.value[color.var] = value || "—"
   }
@@ -106,5 +122,9 @@ useHead({
   title: "Brand Assets",
   link: [{ rel: "canonical", href: "https://linknest.vercel.app/brand" }],
   meta: [{ name: "description", content: "LinkNest Brand Assets." }],
+})
+
+definePageMeta({
+  layout: "fullscreen",
 })
 </script>
