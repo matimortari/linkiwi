@@ -16,7 +16,7 @@
 
       <div class="flex flex-col gap-4 p-2">
         <AnalyticsSummary />
-        <AnalyticsClicksByLink />
+        <AnalyticsClicksByItem />
       </div>
     </div>
   </div>
