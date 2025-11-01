@@ -72,8 +72,8 @@ const footerSections = [
   },
 ]
 
-function signOut() {
-  clear()
-  navigateTo("/")
+async function signOut() {
+  await clear()
+  return navigateTo("/")
 }
 </script>

@@ -82,9 +82,9 @@ const { user } = storeToRefs(userStore)
 const isMobileNavOpen = ref(false)
 const isDialogOpen = ref(false)
 
-function signOut() {
-  clear()
-  navigateTo("/")
+async function signOut() {
+  await clear()
+  return navigateTo("/")
 }
 </script>
 

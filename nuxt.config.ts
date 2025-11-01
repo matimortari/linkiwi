@@ -19,7 +19,7 @@ export default defineNuxtConfig({
   content: {
     _localDatabase: {
       type: "sqlite",
-      filename: "content/local.db",
+      filename: ".nuxt/local.db",
     },
   },
   fonts: {
