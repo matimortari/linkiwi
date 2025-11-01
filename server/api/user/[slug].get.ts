@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
     },
   })
   if (!user) {
-    throw createError({ statusCode: 404, message: `User with slug '${slug}' not found` })
+    throw createError({ statusCode: 404, message: `User '${slug}' not found` })
   }
 
   return user
