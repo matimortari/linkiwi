@@ -1,4 +1,4 @@
-import type { CreateUserLinkInput, UpdateUserLinkInput } from "#shared/lib/schemas/links"
+import type { CreateUserLinkInput, UpdateUserLinkInput } from "#shared/lib/schemas/link-schema"
 
 export function useLinkActions() {
   const linksStore = useLinksStore()

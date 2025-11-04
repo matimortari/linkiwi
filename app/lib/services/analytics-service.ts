@@ -1,4 +1,4 @@
-import type { AnalyticsRecordSchema } from "#shared/lib/schemas/analytics"
+import type { AnalyticsRecordSchema } from "#shared/lib/schemas/analytics-schema"
 
 export const analyticsService = {
   /**

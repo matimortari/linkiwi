@@ -92,7 +92,7 @@
 </template>
 
 <script setup lang="ts">
-import type { AnalyticsRecordSchema } from "#shared/lib/schemas/analytics"
+import type { AnalyticsRecordSchema } from "#shared/lib/schemas/analytics-schema"
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)

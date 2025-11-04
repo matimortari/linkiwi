@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import type { AnalyticsRecordSchema } from "#shared/lib/schemas/analytics"
+import type { AnalyticsRecordSchema } from "#shared/lib/schemas/analytics-schema"
 
 const items = ref<Array<any>>([])
 const clicksMap = ref<Record<string, number>>({})

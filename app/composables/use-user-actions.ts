@@ -1,4 +1,4 @@
-import type { UpdateUserInput, UpdateUserPreferencesInput } from "#shared/lib/schemas/user"
+import type { UpdateUserInput, UpdateUserPreferencesInput } from "#shared/lib/schemas/user-schema"
 
 export function useUserActions() {
   const userStore = useUserStore()

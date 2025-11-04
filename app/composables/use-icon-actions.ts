@@ -1,4 +1,4 @@
-import type { CreateUserIconInput } from "#shared/lib/schemas/icons"
+import type { CreateUserIconInput } from "#shared/lib/schemas/icon-schema"
 
 export function useIconActions() {
   const iconsStore = useIconsStore()

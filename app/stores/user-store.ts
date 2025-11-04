@@ -1,4 +1,4 @@
-import type { UpdateUserInput, UpdateUserPreferencesInput } from "#shared/lib/schemas/user"
+import type { UpdateUserInput, UpdateUserPreferencesInput } from "#shared/lib/schemas/user-schema"
 
 export const useUserStore = defineStore("user", () => {
   const user = ref<User | null>(null)
@@ -94,7 +94,7 @@ export const useUserStore = defineStore("user", () => {
     try {
       const res = await userService.updatePreferences(data)
       if (user.value && res.preferences) {
-        user.value.preferences = res.preferences
+        user.value.preferences = res.preferences as typeof user.value.preferences
       }
     }
     catch (err: any) {
