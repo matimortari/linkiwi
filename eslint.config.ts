@@ -2,12 +2,22 @@ import antfu from "@antfu/eslint-config"
 import pluginTailwindCSS from "eslint-plugin-tailwindcss"
 
 export default antfu({
-  plugins: { tailwindcss: pluginTailwindCSS },
   vue: true,
   typescript: true,
   jsonc: true,
-  formatters: { css: true, html: true, markdown: true },
-  stylistic: { indent: 2, quotes: "double", semi: false },
+  plugins: {
+    tailwindcss: pluginTailwindCSS,
+  },
+  formatters: {
+    css: true,
+    html: true,
+    markdown: true,
+  },
+  stylistic: {
+    indent: 2,
+    quotes: "double",
+    semi: false,
+  },
   rules: {
     "no-new": "off",
     "no-undef": "off",
@@ -43,10 +53,7 @@ export default antfu({
     "vue/html-closing-bracket-newline": ["error", {
       singleline: "never",
       multiline: "always",
-      selfClosingTag: {
-        singleline: "never",
-        multiline: "always",
-      },
+      selfClosingTag: { singleline: "never", multiline: "always" },
     }],
     "vue/max-attributes-per-line": ["warn", {
       singleline: { max: 4 },

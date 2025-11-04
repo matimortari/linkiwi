@@ -2,14 +2,29 @@ import { fileURLToPath } from "node:url"
 import tailwindcss from "@tailwindcss/vite"
 
 export default defineNuxtConfig({
-  modules: ["@nuxt/content", "@nuxt/fonts", "@nuxt/icon", "@nuxt/image", "@nuxtjs/color-mode", "@pinia/nuxt", "@vueuse/motion/nuxt", "nuxt-auth-utils"],
-  imports: { dirs: ["lib/**"] },
+  modules: [
+    "@nuxt/content",
+    "@nuxt/fonts",
+    "@nuxt/icon",
+    "@nuxt/image",
+    "@nuxtjs/color-mode",
+    "@pinia/nuxt",
+    "@vueuse/motion/nuxt",
+    "nuxt-auth-utils",
+  ],
+  imports: {
+    dirs: ["lib/**"],
+  },
   alias: {
     "#server": fileURLToPath(new URL("./server", import.meta.url)),
   },
-  devtools: { enabled: true },
-  vite: { plugins: [tailwindcss()] },
+  vite: {
+    plugins: [tailwindcss()],
+  },
   css: ["~/assets/styles.css"],
+  devtools: {
+    enabled: true,
+  },
   colorMode: {
     classSuffix: "",
     preference: "system",
@@ -19,7 +34,7 @@ export default defineNuxtConfig({
   content: {
     _localDatabase: {
       type: "sqlite",
-      filename: ".nuxt/local.db",
+      filename: ".nuxt/content/local.db",
     },
   },
   fonts: {
@@ -45,6 +60,8 @@ export default defineNuxtConfig({
   },
   icon: {
     mode: "svg",
-    clientBundle: { scan: true },
+    clientBundle: {
+      scan: true,
+    },
   },
 })
