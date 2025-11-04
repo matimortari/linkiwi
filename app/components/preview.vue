@@ -101,13 +101,9 @@
 </template>
 
 <script setup lang="ts">
-const userStore = useUserStore()
-const linkStore = useLinksStore()
-const iconStore = useIconsStore()
-
-const { user } = storeToRefs(userStore)
-const { links } = storeToRefs(linkStore)
-const { icons } = storeToRefs(iconStore)
+const { user } = useUserActions()
+const { links } = useLinkActions()
+const { icons } = useIconActions()
 const isMobilePreviewOpen = ref(false)
 
 const preferences = computed(() => user.value?.preferences ?? null)

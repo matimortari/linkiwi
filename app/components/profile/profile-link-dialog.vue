@@ -21,7 +21,7 @@
 
       <footer class="flex flex-row items-center justify-between">
         <p class="text-warning">
-          {{ isUpdateMode ? linkStore.errors.updateLink || '' : linkStore.errors.createLink || '' }}
+          {{ isUpdateMode ? errors.updateLink || '' : errors.createLink || '' }}
         </p>
 
         <div class="flex flex-row items-center gap-2">
@@ -50,7 +50,7 @@ const emit = defineEmits<{
   (e: "close"): void
 }>()
 
-const linkStore = useLinksStore()
+const { errors, createLink, updateLink } = useLinkActions()
 const { form, isLoading, isFormValid, resetForm, validateForm, hasFormChanged } = useFormValidation<CreateUserLinkInput | UpdateUserLinkInput>({
   title: "",
   url: "",
@@ -60,7 +60,7 @@ const isUpdateMode = computed(() => !!(props.selectedLink?.id))
 
 async function handleSubmit() {
   if (!isFormValid.value) {
-    linkStore.errors[isUpdateMode.value ? "updateLink" : "createLink"] = "Title and URL are required."
+    errors.value[isUpdateMode.value ? "updateLink" : "createLink"] = "Title and URL are required."
     return
   }
   if (isUpdateMode.value && !hasFormChanged(props.selectedLink || undefined)) {
@@ -69,8 +69,8 @@ async function handleSubmit() {
   }
 
   isLoading.value = true
-  linkStore.errors.createLink = null
-  linkStore.errors.updateLink = null
+  errors.value.createLink = null
+  errors.value.updateLink = null
 
   try {
     if (isUpdateMode.value) {
@@ -81,7 +81,7 @@ async function handleSubmit() {
     }
   }
   catch (err: any) {
-    isUpdateMode.value ? linkStore.errors.updateLink = err.message || "Failed to save link" : linkStore.errors.createLink = err.message || "Failed to save link"
+    isUpdateMode.value ? errors.value.updateLink = err.message || "Failed to save link" : errors.value.createLink = err.message || "Failed to save link"
   }
   finally {
     isLoading.value = false
@@ -90,19 +90,19 @@ async function handleSubmit() {
 
 async function handleCreateLink() {
   if (!validateForm(createUserLinkSchema)) {
-    linkStore.errors.createLink = "Please check your input and try again."
+    errors.value.createLink = "Please check your input and try again."
     return
   }
 
   const createData = form.value as CreateUserLinkInput
-  await linkStore.createLink(createData)
+  await createLink(createData)
 
   emit("close")
 }
 
 async function handleUpdateLink() {
   if (!props.selectedLink?.id) {
-    linkStore.errors.updateLink = "Link ID is required for updates."
+    errors.value.updateLink = "Link ID is required for updates."
     return
   }
 
@@ -120,11 +120,11 @@ async function handleUpdateLink() {
 
   const validation = updateUserLinkSchema.safeParse(updateData)
   if (!validation.success) {
-    linkStore.errors.updateLink = "Please check your input and try again."
+    errors.value.updateLink = "Please check your input and try again."
     return
   }
 
-  await linkStore.updateLink(props.selectedLink.id, validation.data)
+  await updateLink(props.selectedLink.id, validation.data)
 
   emit("close")
 }
@@ -132,16 +132,16 @@ async function handleUpdateLink() {
 watch(() => props.isOpen, (open) => {
   if (open) {
     resetForm(props.selectedLink ? { ...props.selectedLink } : { title: "", url: "" })
-    linkStore.errors.createLink = null
-    linkStore.errors.updateLink = null
+    errors.value.createLink = null
+    errors.value.updateLink = null
   }
 }, { immediate: true })
 
 watch(() => props.selectedLink, () => {
   if (props.isOpen) {
     resetForm(props.selectedLink ? { ...props.selectedLink } : { title: "", url: "" })
-    linkStore.errors.createLink = null
-    linkStore.errors.updateLink = null
+    errors.value.createLink = null
+    errors.value.updateLink = null
   }
 }, { deep: true })
 </script>

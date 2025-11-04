@@ -33,8 +33,7 @@ defineProps({
 
 const emit = defineEmits(["close", "update:isOpen"])
 
-const userStore = useUserStore()
-const { user } = storeToRefs(userStore)
+const { user } = useUserActions()
 
 const copySuccess = ref<string | null>(null)
 const pageUrl = `${BASE_URL}/${user.value?.slug}`

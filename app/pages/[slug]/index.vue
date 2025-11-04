@@ -52,10 +52,9 @@
 </template>
 
 <script setup lang="ts">
-const userStore = useUserStore()
 const route = useRoute()
 const slug = route.params.slug as string
-const { user, loading } = storeToRefs(userStore)
+const { user, loading, fetchUserBySlug } = useUserActions()
 const preferences = computed(() => user.value?.preferences ?? null)
 const { backgroundStyle, profilePictureStyle, slugStyle, descriptionStyle } = useDynamicStyles(preferences)
 
@@ -76,8 +75,8 @@ watch(() => route.params.slug, async (newSlug) => {
   if (!newSlug || newSlug === lastRecordedSlug)
     return
 
-  await userStore.getUserBySlug(newSlug as string)
-  const currentUser = userStore.user
+  await fetchUserBySlug(newSlug as string)
+  const currentUser = user.value
   if (currentUser?.id) {
     await analyticsService.recordPageView(currentUser.id)
     lastRecordedSlug = typeof newSlug === "string" ? newSlug : Array.isArray(newSlug) ? newSlug[0] ?? null : null

@@ -19,22 +19,12 @@
 </template>
 
 <script setup lang="ts">
-const userStore = useUserStore()
-const { clear } = useUserSession()
-const router = useRouter()
+const { deleteAccount } = useUserActions()
 
 async function handleDeleteUser() {
-  userStore.errors.deleteUser = null
   if (!confirm("Are you sure you want to delete your account? This action cannot be undone."))
     return
 
-  try {
-    await userStore.deleteUser()
-    clear()
-    await router.push("/")
-  }
-  catch (err: any) {
-    userStore.errors.deleteUser = err.message
-  }
+  await deleteAccount()
 }
 </script>

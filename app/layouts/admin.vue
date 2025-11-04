@@ -15,18 +15,18 @@
 </template>
 
 <script setup lang="ts">
-const userStore = useUserStore()
-const linkStore = useLinksStore()
-const iconStore = useIconsStore()
+const { fetchUser } = useUserActions()
+const { fetchLinks } = useLinkActions()
+const { fetchIcons } = useIconActions()
 
 const isLoading = ref(true)
 
 async function getUserData() {
   try {
     await Promise.all([
-      userStore.getUser(),
-      linkStore.getLinks(),
-      iconStore.getIcons(),
+      await fetchUser(),
+      await fetchLinks(),
+      await fetchIcons(),
     ])
   }
   catch {

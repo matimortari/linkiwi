@@ -26,7 +26,7 @@
 
       <footer class="flex flex-row items-center justify-between">
         <p class="text-warning">
-          {{ iconStore.errors.createIcon || '' }}
+          {{ errors.createIcon || '' }}
         </p>
 
         <div class="flex flex-row items-center gap-2">
@@ -55,7 +55,7 @@ const emit = defineEmits<{
   (e: "close"): void
 }>()
 
-const iconStore = useIconsStore()
+const { icons, errors, createIcon } = useIconActions()
 const { form, isLoading, isFormValid, resetForm, validateForm } = useFormValidation<CreateUserIconInput>({
   platform: "" as keyof typeof SOCIAL_ICONS,
   logo: "" as typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS],
@@ -65,28 +65,28 @@ const { form, isLoading, isFormValid, resetForm, validateForm } = useFormValidat
 function selectIcon(label: keyof typeof SOCIAL_ICONS, iconName: typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS]) {
   form.value.platform = label
   form.value.logo = iconName
-  iconStore.errors.createIcon = null
+  errors.value.createIcon = null
 }
 
 async function handleSubmit() {
   if (!validateForm(createUserIconSchema)) {
-    iconStore.errors.createIcon = "Platform and URL are required."
+    errors.value.createIcon = "Platform and URL are required."
     return
   }
-  if (iconStore.icons.some(icon => icon.platform === form.value.platform)) {
-    iconStore.errors.createIcon = "You have already a social icon for this platform."
+  if (icons.value.some(icon => icon.platform === form.value.platform)) {
+    errors.value.createIcon = "You have already a social icon for this platform."
     return
   }
 
   isLoading.value = true
-  iconStore.errors.createIcon = null
+  errors.value.createIcon = null
 
   try {
-    await iconStore.createIcon(form.value)
+    await createIcon(form.value)
     emit("close")
   }
   catch (err: any) {
-    iconStore.errors.createIcon = err.message || "Failed to add social icon"
+    errors.value.createIcon = err.message || "Failed to add social icon"
   }
   finally {
     isLoading.value = false
@@ -96,7 +96,7 @@ async function handleSubmit() {
 watch(() => props.isOpen, (open) => {
   if (open) {
     resetForm({ platform: "" as keyof typeof SOCIAL_ICONS, logo: "" as typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS], url: "" })
-    iconStore.errors.createIcon = null
+    errors.value.createIcon = null
   }
 }, { immediate: true })
 </script>

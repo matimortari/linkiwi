@@ -47,23 +47,23 @@ const clicksMap = ref<Record<string, number>>({})
 const loading = ref(true)
 
 onMounted(async () => {
-  const linkStore = useLinksStore()
-  const iconStore = useIconsStore()
+  const { fetchLinks, links } = useLinkActions()
+  const { fetchIcons, icons } = useIconActions()
 
   loading.value = true
 
-  await linkStore.getLinks?.()
-  await iconStore.getIcons?.()
+  await fetchLinks()
+  await fetchIcons()
 
   // Merge links and icons with a type marker
   items.value = [
-    ...linkStore.links.map(l => ({
+    ...links.value.map(l => ({
       id: l.id!,
       type: "link",
       title: l.title,
       url: l.url,
     })),
-    ...iconStore.icons.map(i => ({
+    ...icons.value.map(i => ({
       id: i.id!,
       type: "icon",
       logo: i.logo,

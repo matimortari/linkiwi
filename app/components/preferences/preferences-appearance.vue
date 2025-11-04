@@ -42,9 +42,8 @@
 </template>
 
 <script setup lang="ts">
-const userStore = useUserStore()
-
-const preferences = ref(userStore.user?.preferences ?? null)
+const { user, errors, updatePreferences } = useUserActions()
+const preferences = ref(user.value?.preferences ?? null)
 const activeTab = ref("background")
 const status = ref<"idle" | "saved" | "reset">("idle")
 
@@ -53,19 +52,19 @@ function handleApplyTheme(newPreferences: UserPreferences) {
 }
 
 async function handleUpdatePreferences() {
-  userStore.errors.updatePreferences = null
+  errors.value.updatePreferences = null
 
   try {
-    await userStore.updatePreferences(preferences.value!)
+    await updatePreferences(preferences.value!)
     status.value = "saved"
   }
   catch (err: any) {
-    userStore.errors.updatePreferences = err.message
+    errors.value.updatePreferences = err.message
   }
 }
 
 async function handleResetPreferences() {
-  userStore.errors.updatePreferences = null
+  errors.value.updatePreferences = null
 
   try {
     const defaultPreferences = {
@@ -73,44 +72,44 @@ async function handleResetPreferences() {
       backgroundColor: "#f9f5f2",
       backgroundGradientStart: "#000000",
       backgroundGradientEnd: "#000000",
-      profilePictureRadius: "0.5rem",
+      profilePictureRadius: "0.5rem" as const,
       profilePictureBorderColor: "#cecfd1",
-      profilePictureBorderWidth: "2px",
+      profilePictureBorderWidth: "2px" as const,
       slugTextColor: "#111827",
-      slugTextWeight: "400",
-      slugTextSize: "1rem",
-      slugFontFamily: "Roboto, sans-serif",
+      slugTextWeight: "400" as const,
+      slugTextSize: "1rem" as const,
+      slugFontFamily: "'Roboto', sans-serif" as const,
       headerTextColor: "#1f2937",
-      headerTextWeight: "400",
-      headerTextSize: "1.1rem",
-      headerFontFamily: "Roboto, sans-serif",
+      headerTextWeight: "400" as const,
+      headerTextSize: "1.1rem" as const,
+      headerFontFamily: "'Roboto', sans-serif" as const,
       linkBackgroundColor: "#cecfd1",
       linkTextColor: "#374151",
-      linkTextWeight: "400",
-      linkTextSize: "0.9rem",
-      linkFontFamily: "Roboto, sans-serif",
+      linkTextWeight: "400" as const,
+      linkTextSize: "0.9rem" as const,
+      linkFontFamily: "'Roboto', sans-serif" as const,
       isLinkShadow: false,
       linkShadowColor: "#9ca3af",
-      linkShadowWeight: "medium",
+      linkShadowWeight: "medium" as const,
       linkHoverBackgroundColor: "#9ca3af",
-      linkBorderRadius: "0.5rem",
-      linkPadding: "0.5rem",
+      linkBorderRadius: "0.5rem" as const,
+      linkPadding: "0.5rem" as const,
       showLinkCopyButton: true,
       iconBackgroundColor: "#cecfd1",
       isIconShadow: false,
       iconShadowColor: "#9ca3af",
-      iconShadowWeight: "medium",
+      iconShadowWeight: "medium" as const,
       iconLogoColor: "#374151",
       iconHoverBackgroundColor: "#9ca3af",
       supportBanner: "NONE" as const,
     }
 
-    await userStore.updatePreferences(defaultPreferences)
+    await updatePreferences(defaultPreferences)
     preferences.value = { ...defaultPreferences }
     status.value = "reset"
   }
   catch (err: any) {
-    userStore.errors.updatePreferences = err.message
+    errors.value.updatePreferences = err.message
   }
 }
 
@@ -123,7 +122,7 @@ watch(status, (newStatus, _, onInvalidate) => {
   }
 })
 
-watch(() => userStore.user?.preferences, (newPreferences) => {
+watch(() => user.value?.preferences, (newPreferences) => {
   if (newPreferences) {
     preferences.value = { ...newPreferences }
   }

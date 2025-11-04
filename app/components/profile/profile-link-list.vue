@@ -26,7 +26,7 @@
               <button aria-label="Update Link" class="flex items-center" @click="handleUpdateLink(link)">
                 <icon name="mdi:circle-edit-outline" size="25" class="hover:scale-md text-primary transition-all" />
               </button>
-              <button aria-label="Delete Link" class="flex items-center" @click="linkStore.deleteLink(link.id!)">
+              <button aria-label="Delete Link" class="flex items-center" @click="deleteLink(link.id!)">
                 <icon name="mdi:remove-circle-outline" size="25" class="hover:scale-md text-danger-foreground transition-all" />
               </button>
             </div>
@@ -49,9 +49,7 @@
 </template>
 
 <script setup lang="ts">
-const linkStore = useLinksStore()
-
-const { links, loading } = storeToRefs(linkStore)
+const { links, loading, deleteLink } = useLinkActions()
 const isDialogOpen = ref(false)
 const selectedLink = ref<Link | null>(null)
 

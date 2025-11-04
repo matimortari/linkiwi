@@ -94,8 +94,7 @@
 <script setup lang="ts">
 import type { AnalyticsRecordSchema } from "#shared/lib/schemas/analytics-schema"
 
-const userStore = useUserStore()
-const { user } = storeToRefs(userStore)
+const { user } = useUserActions()
 
 const analyticsData = ref<AnalyticsRecordSchema[]>([])
 

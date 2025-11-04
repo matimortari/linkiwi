@@ -35,7 +35,7 @@
 
       <footer class="flex flex-row items-center justify-between">
         <p class="text-warning">
-          {{ userStore.errors.updateUser || '' }}
+          {{ errors.updateUser || '' }}
         </p>
 
         <button class="btn-primary" type="submit" aria-label="Save Link">
@@ -53,8 +53,7 @@ const props = defineProps<{
 
 const emit = defineEmits<(e: "close") => void>()
 
-const userStore = useUserStore()
-const { user } = storeToRefs(userStore)
+const { user, errors, fetchUser, updateProfile, updateProfileImage } = useUserActions()
 
 const form = ref({
   slug: "",
@@ -76,46 +75,46 @@ watch(() => props.isOpen, (open) => {
 }, { immediate: true })
 
 async function handleUpdateImage(event: Event) {
-  userStore.errors.updateUserImage = null
+  errors.value.updateUserImage = null
   const input = event.target as HTMLInputElement
   const file = input?.files?.[0]
   if (!file)
     return
 
   try {
-    const res = await userStore.updateUserImage(file)
-    if (res?.imageUrl && userStore.user) {
-      userStore.user.image = res.imageUrl
+    const res = await updateProfileImage(file)
+    if (res?.imageUrl && user.value) {
+      user.value.image = res.imageUrl
       form.value.image = res.imageUrl
     }
   }
   catch (err: any) {
-    userStore.errors.updateUserImage = err.message
+    errors.value.updateUserImage = err.message
   }
 }
 
 async function handleSubmit() {
-  userStore.errors.updateUser = null
+  errors.value.updateUser = null
 
-  if (!userStore.user?.id)
+  if (!user.value?.id)
     return
-  if (!userStore.user?.name) {
-    userStore.errors.updateUser = "User name cannot be empty."
+  if (!user?.value?.name) {
+    errors.value.updateUser = "User name cannot be empty."
     return
   }
 
   try {
-    await userStore.updateUser({
-      name: userStore.user.name,
+    await updateProfile({
+      name: user.value.name,
       slug: form.value.slug,
       description: form.value.description,
     })
 
-    await userStore.getUser()
+    await fetchUser()
     emit("close")
   }
   catch (err: any) {
-    userStore.errors.updateUser = err.message
+    errors.value.updateUser = err.message
   }
 }
 </script>
