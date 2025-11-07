@@ -85,11 +85,11 @@ export const OAUTH_PROVIDERS = [
   { name: "google", label: "Sign In With Google", icon: "simple-icons:google" },
 ]
 
-export const REST_METHOD_COLORS = {
-  GET: "bg-[#123733] border-[#0ec187] text-[#0ec187]",
-  POST: "bg-[#202f46] border-[#74a2e7] text-[#74a2e7]",
-  PUT: "bg-[#37413b] border-[#cef1a7] text-[#cef1a7]",
-  DELETE: "bg-[#3b3138] border-[#e99795] text-[#e99795]",
+export const REST_METHOD_LABELS = {
+  GET: "text-xs font-semibold text-[#0ec187]",
+  POST: "text-xs font-semibold text-[#74a2e7]",
+  PUT: "text-xs font-semibold text-[#cef1a7]",
+  DELETE: "text-xs font-semibold text-[#e99795]",
 }
 
 export const SIDEBAR_NAV_LINKS = [

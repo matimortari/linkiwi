@@ -1,10 +1,11 @@
 export function useContent(options: { selector?: string, parseMethod?: boolean } = {}) {
   const { selector = "article", parseMethod = false } = options
+  const route = useRoute()
   const activeSection = ref<string | null>(null)
   const headers = ref<any[]>([])
   let observer: IntersectionObserver | null = null
 
-  onMounted(async () => {
+  async function extractHeaders() {
     await nextTick()
 
     const container = document.querySelector(selector)
@@ -25,18 +26,14 @@ export function useContent(options: { selector?: string, parseMethod?: boolean }
         }
       }
 
-      // Generate unique ID
-      let id = text.toLowerCase().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-")
-      let counter = 1
-      while (document.getElementById(id)) {
-        id = `${id}-${counter++}`
-      }
+      const id = text.toLowerCase().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-")
       el.id = id
 
       return { id, text, level: Number(el.tagName.replace("H", "")), method }
     })
 
-    // IntersectionObserver for active heading
+    // Clean up and re-init observer
+    observer?.disconnect()
     observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting)
@@ -45,18 +42,24 @@ export function useContent(options: { selector?: string, parseMethod?: boolean }
     }, { root: null, rootMargin: "0px 0px -70% 0px", threshold: 0 })
 
     hElements.forEach(heading => observer!.observe(heading))
-  })
+  }
 
+  onMounted(extractHeaders)
   onBeforeUnmount(() => observer?.disconnect())
 
+  watch(() => route.fullPath, async () => {
+    observer?.disconnect()
+    await extractHeaders()
+  })
+
   function headerClasses(header: any) {
-    const classes = []
+    const classes: string[] = []
     if (header.level === 2)
       classes.push("ml-0 my-2 text-base font-semibold")
     if (header.level === 3)
-      classes.push("ml-4 my-2 text-sm font-semibold")
+      classes.push("ml-2 my-2 text-sm font-semibold")
     if (header.level === 4)
-      classes.push("ml-8 text-xs")
+      classes.push("ml-4 text-xs")
     if (activeSection.value === header.id)
       classes.push("text-primary font-semibold")
     return classes.join(" ")

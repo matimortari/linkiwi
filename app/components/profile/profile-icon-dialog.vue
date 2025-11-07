@@ -5,7 +5,7 @@
 
       <div class="scroll-area grid max-h-48 grid-cols-3 gap-1 overflow-y-auto pr-2 md:grid-cols-5 2xl:grid-cols-9">
         <button
-          v-for="[label, iconName] in Object.entries(SOCIAL_ICONS) as [keyof typeof SOCIAL_ICONS, typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS]][]" :key="label"
+          v-for="[label, iconName] in socialIconEntries" :key="label"
           type="button" aria-label="Select Social Icon"
           class="hover:bg-muted active:bg-accent flex flex-col items-center justify-center gap-1 rounded-lg border p-2 transition-all"
           :class="{ 'bg-accent': form.platform === label }" @click="selectIcon(label, iconName)"
@@ -61,6 +61,10 @@ const { form, isLoading, isFormValid, resetForm, validateForm } = useFormValidat
   logo: "" as typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS],
   url: "",
 })
+
+const socialIconEntries = computed(() =>
+  Object.entries(SOCIAL_ICONS) as [keyof typeof SOCIAL_ICONS, (typeof SOCIAL_ICONS)[keyof typeof SOCIAL_ICONS]][],
+)
 
 function selectIcon(label: keyof typeof SOCIAL_ICONS, iconName: typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS]) {
   form.value.platform = label
