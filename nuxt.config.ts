@@ -39,22 +39,23 @@ export default defineNuxtConfig({
   fonts: {
     processCSSVariables: true,
     families: [
-      { name: "Lato", provider: "google" },
-      { name: "Caprasimo", provider: "google" },
-      { name: "JetBrains Mono", provider: "google" },
+      // Base fonts (default, display, mono)
+      { name: "Lato", provider: "google", weights: ["300 800"] },
+      { name: "Caprasimo", provider: "google", weights: ["400"] },
+      { name: "JetBrains Mono", provider: "google", weights: ["400"] },
 
       // Dynamic fonts for user preferences
-      { name: "Roboto", provider: "google", global: true },
-      { name: "Noto Sans", provider: "google", global: true },
-      { name: "Montserrat", provider: "google", global: true },
-      { name: "Playfair Display", provider: "google", global: true },
-      { name: "Lora", provider: "google", global: true },
-      { name: "Amarante", provider: "google", global: true },
-      { name: "Righteous", provider: "google", global: true },
-      { name: "Ribeye", provider: "google", global: true },
-      { name: "Ribeye Marrow", provider: "google", global: true },
-      { name: "Audiowide", provider: "google", global: true },
-      { name: "Ubuntu Mono", provider: "google", global: true },
+      { name: "Roboto", provider: "google", global: true, weights: ["300 800"] },
+      { name: "Noto Sans", provider: "google", global: true, weights: ["300 800"] },
+      { name: "Montserrat", provider: "google", global: true, weights: ["300 800"] },
+      { name: "Playfair Display", provider: "google", global: true, weights: ["400 800"] },
+      { name: "Lora", provider: "google", global: true, weights: ["400 700"] },
+      { name: "Amarante", provider: "google", global: true, weights: ["400"] },
+      { name: "Righteous", provider: "google", global: true, weights: ["400"] },
+      { name: "Ribeye", provider: "google", global: true, weights: ["400"] },
+      { name: "Ribeye Marrow", provider: "google", global: true, weights: ["400"] },
+      { name: "Audiowide", provider: "google", global: true, weights: ["400"] },
+      { name: "Ubuntu Mono", provider: "google", global: true, weights: ["400"] },
     ],
   },
   icon: {
