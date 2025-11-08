@@ -4,7 +4,7 @@
       <h2>
         Brand & Assets
       </h2>
-      <p class="text-muted-foreground">
+      <p class="text-caption">
         Download LinkNest logos and explore our design colors.
       </p>
     </header>
@@ -17,8 +17,8 @@
 
         <div class="bg-card flex w-full flex-row items-center justify-between rounded-b-lg px-2 py-1">
           <span class="text-sm font-semibold">{{ logo.name }}</span>
-          <nuxt-link :to="logo.image" download :title="`Download ${logo.name}`">
-            <icon name="mdi:download" size="35" class="hover:bg-muted hover:scale-md rounded-full p-1 transition-all" />
+          <nuxt-link :href="logo.image" download :title="`Download ${logo.name}`">
+            <icon name="mdi:download" size="35" class="rounded-full p-1" />
           </nuxt-link>
         </div>
       </div>
@@ -29,15 +29,15 @@
         <h3>
           Brand Colors
         </h3>
-        <p class="text-muted-foreground flex items-center gap-2 text-sm">
+        <p class="text-caption">
           Tip: Switch between light and dark themes to explore the full palette.
         </p>
       </div>
 
       <div class="my-4 grid w-full grid-cols-1 gap-2 md:grid-cols-3 lg:grid-cols-6">
         <div v-for="color in brandColors" :key="color.name" class="flex flex-col items-center">
-          <div class="group relative h-20 w-full cursor-pointer rounded-lg border-2 transition" :style="{ backgroundColor: `var(${color.var})` }" @click="handleCopyColor(color.var)">
-            <div class="absolute inset-0 flex items-center justify-center rounded-md bg-black/60 opacity-0 transition-opacity group-hover:opacity-100">
+          <div class="relative h-20 w-full cursor-pointer rounded-lg border-2 transition" :style="{ backgroundColor: `var(${color.var})` }" @click="handleCopyColor(color.var)">
+            <div class="absolute inset-0 flex items-center justify-center rounded-md bg-black/60 opacity-0 transition-opacity">
               <span class="text-sm font-semibold"> {{ copiedColor === color.var ? 'Copied!' : 'Copy color' }} </span>
             </div>
           </div>
@@ -70,8 +70,8 @@ const brandColors = [
   { name: "Foreground", var: "--foreground" },
   { name: "Card", var: "--card" },
   { name: "Card Foreground", var: "--card-foreground" },
-  { name: "Popover", var: "--popover" },
-  { name: "Popover Foreground", var: "--popover-foreground" },
+  { name: "Overlay", var: "--overlay" },
+  { name: "Overlay Foreground", var: "--overlay-foreground" },
   { name: "Primary", var: "--primary" },
   { name: "Primary Foreground", var: "--primary-foreground" },
   { name: "Secondary", var: "--secondary" },
@@ -122,9 +122,5 @@ useHead({
   title: "Brand Assets",
   link: [{ rel: "canonical", href: "https://linknest.vercel.app/brand" }],
   meta: [{ name: "description", content: "LinkNest Brand Assets." }],
-})
-
-definePageMeta({
-  layout: "fullscreen",
 })
 </script>

@@ -52,8 +52,4 @@ useHead({
   title: "Sign In",
   meta: [{ name: "description", content: "LinkNest Sign In page" }],
 })
-
-definePageMeta({
-  layout: "fullscreen",
-})
 </script>
