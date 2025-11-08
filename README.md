@@ -9,36 +9,33 @@
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat&colorA=0d1117)](https://opensource.org/licenses/MIT)
 [![Follow on GitHub](https://img.shields.io/github/followers/matimortari?label=Follow&style=social)](https://github.com/matimortari)
 
-Create your own landing page for sharing links to your social media profiles, websites, and more! **LinkNest** is a link aggregator website, inspired by [Linktree](https://linktr.ee), that makes it very easy for users or businesses to quickly set up a **customizable and convenient** page for all their links and **share** it with others.
-
-[**Check it out!** 🔍](https://linknest.vercel.app)
+[**LinkNest**](https://linknest.vercel.app) is a link aggregation platform that lets users and businesses create a customizable landing page for sharing their links and information in one place.
 
 </div>
 
-## 📦 Key Features
+## Features
 
-- **User Authentication:** Sign in with Google or GitHub accounts.
-- **Admin Page:** Manage your links and profile preferences from a dedicated admin page.
-- **Custom User Page:** Create a personalized landing page with your important links and information. You can customize the theming, colors, layout, and more to match your style, or use one of the pre-defined themes.
-- **Link Management:** Add, edit, and delete links to your social media profiles, websites, or any other URLs you want to share. Use social icons for quick access and better visibility for your links.
-- **Analytics Tracking:** Check metrics such as the number of clicks on your links or your profile page views.
-- **Theme Toggle:** Switch between light and dark modes to suit your preference.
+- **User Authentication:** Sign in using your Google or GitHub account.
+- **Admin Dashboard:** Manage your links, profile settings, and customization options from the dedicated admin interface.
+- **Custom Profile Page:** Design your landing page with your key links and information. Pick from many themes, and feel free to customize colors, fonts, and layouts to match your style.
+- **Link Management:** Add, edit, and organize links to your social profiles, websites, and other online resources. You can pin social icons to enhance visibility for your most important platforms.
+- **Analytics Dashboard:** Monitor insights for your profile page, such as total views and clicks on individual links.
 
-## 🛠️ Stack
+## Stack
 
 - **Nuxt.js** with **Vue** composition API and **Nitro** server engine.
-- **OAuth** authentication with Google and GitHub via **nuxt-auth-utils**.
+- **OAuth** authentication with Google or GitHub.
 - **Prisma** for **PostgreSQL** database management.
 - **Pinia** for state management.
 - **Zod** for schema validation.
-- **Chart.js** for analytics charts.
+- **Chart.js** for graph visualization.
 - **TypeScript**.
 - **ESLint**.
 - **Tailwind CSS**.
-- **Framer Motion** via **@vueuse/motion**.
+- **Framer Motion**.
 - **Vercel** for deployment, blob storage and website analytics.
 
-## 📬 Contact
+## Contact
 
 Feel free to reach out to discuss collaboration opportunities or to say hello!
 
@@ -46,7 +43,6 @@ Feel free to reach out to discuss collaboration opportunities or to say hello!
 - [**My LinkedIn Profile**](https://www.linkedin.com/in/matheus-mortari-19rt)
 - [**My GitHub Profile**](https://github.com/matimortari)
 
-## 📄 License
+## License
 
-This project is licensed under the [MIT License](./LICENSE).
-You are free to use, modify, and distribute this software in accordance with the license terms.
+This project is licensed under the [**MIT License**](./LICENSE).

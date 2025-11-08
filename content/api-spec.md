@@ -6,91 +6,52 @@ This document provides documentation for the LinkNest API.
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum. Cras venenatis euismod malesuada.
 
-### Response Format
-
-All responses follow a consistent JSON format:
-
-#### Success Response
-
-```json
-{
-  "data": "response_data"
-}
-```
-
-#### Error Response
-
-```json
-{
-  "statusCode": 400,
-  "message": "Error message"
-}
-```
-
-#### Error Codes
-
-- **400 Bad Request**: Invalid request data or validation errors
-- **401 Unauthorized**: Authentication required
-- **403 Forbidden**: Insufficient permissions
-- **404 Not Found**: Resource not found
-- **409 Conflict**: Resource conflict
-- **500 Internal Server Error**: Server error
-
 ---
 
 ## Endpoints
 
 ### Authentication
 
-Most endpoints require authentication via session cookies. Authentication is handled through OAuth providers.
+#### Sign In with OAuth Provider
 
-#### Sign In With Google
+**GET** `/auth/{provider}`
 
-**GET** `/auth/google`
-
-Initiates Google OAuth authentication flow.
+Initiates OAuth authentication flow. The supported providers are `google` and `github`.
 
 **Response:**
 
-- Redirects to Google OAuth consent screen
-- On success, redirects to application with session cookie
-
-#### Sign In With GitHub
-
-**GET** `/auth/github`
-
-Initiates GitHub OAuth authentication flow.
-
-**Response:**
-
-- Redirects to GitHub OAuth consent screen
+- Redirects to the provider OAuth consent screen
 - On success, redirects to application with session cookie
 
 ---
 
-### User Endpoints
+### User
 
 #### Get User Profile
 
 **GET** `/user`
 
-Retrieves the authenticated user's profile information.
+Get the current user's profile information.
 
 **Response:**
 
 ```json
 {
   "user": {
-    "id": "cuid",
-    "name": "string",
+    "id": "string",
     "email": "string",
+    "name": "string",
+    "image": "string | null",
     "slug": "string",
     "description": "string | null",
+    "createdAt": "Date",
+    "updatedAt": "Date",
     "preferences": {
-      "backgroundType": "FLAT | GRADIENT",
-      "backgroundColor": "string",
-      "backgroundGradientStart": "string",
-      "backgroundGradientEnd": "string",
+      "userId": "string",
+      "backgroundType": "GRADIENT | FLAT",
+      "backgroundColor": "string | null",
+      "backgroundGradientStart": "string | null",
+      "backgroundGradientEnd": "string | null",
       "profilePictureRadius": "string",
       "profilePictureBorderColor": "string",
       "profilePictureBorderWidth": "string",
@@ -120,68 +81,28 @@ Retrieves the authenticated user's profile information.
       "iconShadowWeight": "string",
       "iconLogoColor": "string",
       "iconHoverBackgroundColor": "string",
-      "supportBanner": "NONE | LGBTQ_RIGHTS | ANTI_RACISM | MENTAL_HEALTH | CLIMATE_ACTION"
-    }
+      "supportBanner": "NONE | string"
+    },
+    "views": [
+      {
+        "id": "string",
+        "userId": "string",
+        "date": "Date"
+      }
+    ]
   }
 }
 ```
 
-#### Update User Profile
-
-**PUT** `/user`
-
-Updates the authenticated user's profile information.
-
-**Request Body:**
-
-```json
-{
-  "name": "string (2-100 chars, optional)",
-  "email": "string (valid email, optional)",
-  "slug": "string (alphanumeric with hyphens only, optional)",
-  "description": "string (max 300 chars, optional)",
-  "image": "string (valid URL, optional)"
-}
-```
-
-**Response:**
-
-```json
-{
-  "user": {
-    "id": "cuid",
-    "name": "string",
-    "email": "string",
-    "slug": "string",
-    "description": "string | null",
-    "image": "string | null"
-  }
-}
-```
-
-#### Delete User Account
-
-**DELETE** `/user`
-
-Permanently deletes the authenticated user's account and all associated data.
-
-**Response:**
-
-```json
-{
-  "message": "User deleted successfully"
-}
-```
-
-#### Get User Profile by Slug
+#### Get User by Slug
 
 **GET** `/user/{slug}`
 
-Retrieves a user's public profile by slug, including links, icons, and preferences.
+Retrieves a user's public profile information by slug.
 
-**Parameters:**
+**Route Parameters:**
 
-- `slug` (path): User's unique slug
+- `slug`: User slug.
 
 **Response:**
 
@@ -214,6 +135,38 @@ Retrieves a user's public profile by slug, including links, icons, and preferenc
   "preferences": {
     // Same as user preferences above
   }
+}
+```
+
+#### Update User Profile
+
+**PUT** `/user`
+
+Update current user's profile information.
+
+**Request Body:**
+
+```json
+{
+  "name": "string | optional",
+  "image": "string | optional",
+  "description": "string | optional",
+  "slug": "string | optional"
+}
+```
+
+**Response:**
+
+```json
+{
+  "id": "string",
+  "email": "string",
+  "name": "string",
+  "slug": "string",
+  "description": "string | null",
+  "image": "string | null",
+  "createdAt": "Date",
+  "updatedAt": "Date"
 }
 ```
 
@@ -274,15 +227,52 @@ Updates the authenticated user's preferences.
 }
 ```
 
+#### Update User Image
+
+**PUT** `/user/image-upload`
+
+Update current user's profile image.
+
+**Request Body**:
+
+```json
+{
+  "file": "binary image file (PNG, JPG, or WebP, max 2MB)" // multipart/form-data
+}
+```
+
+**Response**:
+
+```json
+{
+  "imageUrl": "string"
+}
+```
+
+#### Delete User Account
+
+**DELETE** `/user`
+
+Delete current user account.
+
+**Response**:
+
+```json
+{
+  "success": true,
+  "message": "Account deleted successfully"
+}
+```
+
 ---
 
-### Links Endpoints
+### Links
 
 #### Get User Links
 
 **GET** `/links`
 
-Retrieves all links for the authenticated user.
+Get all links for the current user.
 
 **Response:**
 
@@ -304,7 +294,7 @@ Retrieves all links for the authenticated user.
 
 **POST** `/links`
 
-Creates a new link for the authenticated user.
+Create a new link.
 
 **Request Body:**
 
@@ -333,11 +323,11 @@ Creates a new link for the authenticated user.
 
 **PUT** `/links/{id}`
 
-Updates an existing link for the authenticated user.
+Update an existing link.
 
-**Parameters:**
+**Route Parameters:**
 
-- `id` (path): Link ID
+- `id`: Link ID.
 
 **Request Body:**
 
@@ -366,11 +356,11 @@ Updates an existing link for the authenticated user.
 
 **DELETE** `/links/{id}`
 
-Deletes a link for the authenticated user.
+Delete a link.
 
-**Parameters:**
+**Route Parameters:**
 
-- `id` (path): Link ID
+- `id`: Link ID.
 
 **Response:**
 
@@ -382,13 +372,13 @@ Deletes a link for the authenticated user.
 
 ---
 
-### Social Icons Endpoints
+### Social Icons
 
 #### Get User Social Icons
 
 **GET** `/icons`
 
-Retrieves all social media icons for the authenticated user.
+Get all social icons for the current user.
 
 **Response:**
 
@@ -411,7 +401,7 @@ Retrieves all social media icons for the authenticated user.
 
 **POST** `/icons`
 
-Creates a new social media icon for the authenticated user.
+Create a new social icon.
 
 **Request Body:**
 
@@ -446,29 +436,29 @@ Creates a new social media icon for the authenticated user.
 
 **DELETE** `/icons/{id}`
 
-Deletes a social media icon for the authenticated user.
+Delete a social icon.
 
-**Parameters:**
+**Route Parameters:**
 
-- `id` (path): Icon ID
+- `id`: Social icon ID.
 
 **Response:**
 
 ```json
 {
-  "message": "Icon deleted successfully"
+  "message": "Social icon deleted successfully"
 }
 ```
 
 ---
 
-### Analytics Endpoints
+### Analytics
 
 #### Record Analytics Event
 
 **POST** `/analytics`
 
-Records analytics data for page views, link clicks, or icon clicks.
+Record analytics data for page views, link clicks, or social icon clicks.
 
 **Request Body:**
 
@@ -492,7 +482,7 @@ Records analytics data for page views, link clicks, or icon clicks.
 
 **DELETE** `/analytics`
 
-Deletes all analytics data for the authenticated user.
+Delete all analytics data for the current user.
 
 **Response:**
 
