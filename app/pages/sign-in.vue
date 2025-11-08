@@ -2,11 +2,11 @@
   <div class="relative flex min-h-screen flex-1">
     <div class="z-10 flex w-full flex-col items-center justify-center px-6 py-12 md:w-1/2">
       <div class="w-full max-w-md">
-        <header class="my-4 flex flex-col items-center gap-2 text-center">
+        <header class="my-4 flex flex-col items-center gap-4 text-center">
           <h1>
             Sign In
           </h1>
-          <p class="text-muted-foreground">
+          <p class="text-caption">
             Choose a provider to continue.
           </p>
         </header>
@@ -19,7 +19,7 @@
         </div>
 
         <footer class="mx-auto my-4 max-w-xs text-center">
-          <p class="text-muted-foreground text-center text-sm">
+          <p class="text-caption">
             By signing in, you agree to our
             <nuxt-link to="/legal/terms" class="hover:text-primary underline">
               Terms of Service

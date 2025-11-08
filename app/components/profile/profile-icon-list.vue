@@ -1,6 +1,6 @@
 <template>
   <div class="section-container flex flex-col gap-2">
-    <header class="my-2 flex flex-col gap-1">
+    <header class="my-2 flex flex-col gap-2">
       <h3>
         My Social Icons
       </h3>
@@ -21,7 +21,7 @@
         </nuxt-link>
 
         <button class="absolute right-0 bottom-0 flex items-center p-1" aria-label="Delete Social Icon" @click="deleteIcon(icon.id!)">
-          <icon name="mdi:remove-circle-outline" size="25" class="hover:scale-md text-danger-foreground transition-all" />
+          <icon name="mdi:remove-circle-outline" size="25" class="text-danger-foreground" />
         </button>
       </li>
     </ul>

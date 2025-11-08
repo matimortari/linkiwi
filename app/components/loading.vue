@@ -4,7 +4,7 @@
       <div class="progress-bar from-primary to-secondary h-full w-1/4 rounded-full bg-linear-to-r" />
     </div>
 
-    <p class="text-muted-foreground font-semibold">
+    <p class="text-caption">
       Loading
       <span class="dot one">.</span>
       <span class="dot two">.</span>

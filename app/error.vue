@@ -14,8 +14,8 @@
         </span>
       </p>
 
-      <button class="group flex flex-row items-center gap-4 font-semibold" @click="() => clearError({ redirect: '/' })">
-        <icon name="ph:arrow-left-bold" size="25" class="group-hover:scale-md" />
+      <button class="flex flex-row items-center gap-4 font-semibold" @click="() => clearError({ redirect: '/' })">
+        <icon name="ph:arrow-left-bold" size="25" />
         <span>Go Back</span>
       </button>
     </div>

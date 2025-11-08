@@ -3,7 +3,7 @@
 
   <Loading v-if="isLoading" />
 
-  <main v-show="!isLoading" class="flex min-h-screen w-full overflow-x-hidden">
+  <main v-show="!isLoading" class="min-h-screen w-full overflow-x-hidden">
     <slot />
   </main>
 

@@ -11,7 +11,7 @@
           {{ '' }}
         </p>
       </button>
-      <span class="text-sm">{{ theme.title }}</span>
+      <span class="text-caption">{{ theme.title }}</span>
     </div>
   </div>
 </template>

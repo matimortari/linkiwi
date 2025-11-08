@@ -1,7 +1,5 @@
 <template>
-  <nuxt-link to="/" class="hover:scale-sm fixed top-4 left-4 z-50 flex flex-row items-center gap-2 rounded-full transition-all select-none">
-    <img src="/assets/logo.png" alt="Logo" width="30">
-  </nuxt-link>
+  <Logo />
 
   <div v-if="user && !loading" class="min-h-screen p-12 pb-28" :style="backgroundStyle">
     <div class="flex flex-col items-center justify-center gap-4 text-center">
@@ -90,6 +88,6 @@ watch(() => route.params.slug, async (newSlug) => {
 }, { immediate: true })
 
 definePageMeta({
-  layout: "user",
+  layout: "minimal",
 })
 </script>

@@ -9,7 +9,7 @@
         <input
           type="radio" :name="name"
           :value="option.value" :checked="value === option.value"
-          class="hover:scale-sm transition-all" @change="$emit('update:value', option.value)"
+          @change="$emit('update:value', option.value)"
         >
         <span class="text-caption">{{ option.label }}</span>
       </label>

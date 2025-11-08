@@ -1,12 +1,15 @@
 @import "tailwindcss";
 
+/*
+  Default theme (light mode)
+*/
 :root {
   --background: #e0dddd;
   --foreground: #2e2d2d;
   --card: #eeeded;
   --card-foreground: #2e2d2d;
-  --popover: #eeeded;
-  --popover-foreground: #2e2d2d;
+  --overlay: #eeeded;
+  --overlay-foreground: #2e2d2d;
   --primary: #748d6e;
   --primary-foreground: #ebe8e8;
   --secondary: #63abb5;
@@ -20,23 +23,28 @@
   --accent: #f09875;
   --border: #b8b5b5;
 
+  /*
+    Base styles
+  */
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-default);
   overflow-x: hidden;
   scroll-behavior: smooth;
-  outline: none;
   margin: 0;
   padding: 0;
 }
 
+/*
+  Dark theme overrides
+*/
 html.dark {
   --background: #040308;
   --foreground: #ebe8e8;
   --card: #111016;
   --card-foreground: #ebe8e8;
-  --popover: #111016;
-  --popover-foreground: #ebe8e8;
+  --overlay: #111016;
+  --overlay-foreground: #ebe8e8;
   --primary: #748d6e;
   --primary-foreground: #ebe8e8;
   --secondary: #63abb5;
@@ -51,13 +59,16 @@ html.dark {
   --border: #3b3b41;
 }
 
+/*
+  Color and font theme tokens
+*/
 @theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
+  --color-overlay: var(--overlay);
+  --color-overlay-foreground: var(--overlay-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
@@ -76,6 +87,9 @@ html.dark {
   --font-mono: "JetBrains Mono", monospace;
 }
 
+/*
+  Global resets and accessibility
+*/
 @layer base {
   button:not(:disabled),
   [role="button"]:not(:disabled) {
@@ -89,19 +103,25 @@ html.dark {
   ::file-selector-button {
     border-color: var(--border);
   }
+
+  *:focus-visible {
+    outline: solid 2px var(--accent);
+    border-radius: 0.25rem;
+  }
 }
 
-/* Typography */
+/*
+  Typography
+*/
 h1 {
   font-size: 3.5rem;
   line-height: 3.875rem;
-  font-weight: 800;
-  font-family: var(--font-display);
+  font-weight: 700;
 }
 h2 {
   font-size: 2rem;
   line-height: 2.25rem;
-  font-weight: 800;
+  font-weight: 700;
 }
 h3 {
   font-size: 1.75rem;
@@ -127,7 +147,7 @@ h6 {
 .text-lead {
   font-size: 1rem;
   line-height: 1.5rem;
-  font-weight: 400;
+  font-weight: 500;
   color: var(--muted-foreground);
 }
 
@@ -136,7 +156,7 @@ h6 {
 .text-success {
   font-size: 0.875rem;
   line-height: 0.875rem;
-  font-weight: 400;
+  font-weight: 600;
   color: var(--muted-foreground);
 }
 .text-warning {
@@ -146,7 +166,9 @@ h6 {
   color: var(--success-foreground);
 }
 
-/* UI components */
+/*
+  UI elements
+*/
 .card {
   background-color: var(--card);
   color: var(--card-foreground);
@@ -155,15 +177,18 @@ h6 {
   padding: 1rem;
 }
 
-.popover {
-  background-color: var(--popover);
-  color: var(--popover-foreground);
+.overlay {
+  background-color: var(--overlay);
+  color: var(--overlay-foreground);
   border: 1px solid var(--border);
   border-radius: 1rem;
   padding: 1rem;
   box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, 0.4);
 }
 
+/*
+  Form elements
+*/
 input,
 textarea,
 select {
@@ -184,11 +209,6 @@ input:hover,
 textarea:hover,
 select:hover {
   box-shadow: 0 0 0 1px var(--muted);
-}
-input:focus,
-textarea:focus,
-select:focus {
-  outline: 1px solid var(--accent);
 }
 
 input[type="checkbox"],
@@ -244,23 +264,9 @@ input[type="radio"]:checked::after {
   transform: translate(-50%, -50%) scale(1);
 }
 
-.section-container {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 1rem;
-  background-color: var(--background);
-  color: var(--foreground);
-  border-radius: 1rem;
-}
-
-.navigation-group {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5rem;
-}
-
+/*
+  Buttons
+*/
 .btn,
 .btn-primary,
 .btn-secondary,
@@ -332,6 +338,26 @@ input[type="radio"]:checked::after {
   color: var(--btn-fg);
 }
 
+/*
+  Utilities
+*/
+.navigation-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.section-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  background-color: var(--background);
+  color: var(--foreground);
+  border-radius: 1rem;
+}
+
 ::selection {
   background: color-mix(in srgb, var(--secondary) 50%, transparent);
   color: var(--secondary-foreground);
@@ -376,7 +402,9 @@ html.dark {
   background: var(--vignette);
 }
 
-/* Match background and foreground colors */
+/*
+  Background color utilities for matching themes
+*/
 .bg-primary {
   background-color: var(--primary);
   color: var(--primary-foreground);
@@ -398,13 +426,9 @@ html.dark {
   color: var(--success-foreground);
 }
 
-@utility scale-sm {
-  transform: scale(1.05);
-}
-@utility scale-md {
-  transform: scale(1.2);
-}
-
+/*
+  ?????
+*/
 @utility navigation-group {
   @apply flex flex-row items-center gap-2;
 }

@@ -1,8 +1,8 @@
 <template>
-  <div class="navigation-group group w-full justify-between rounded-2xl border p-2" :class="disabled ? 'line-through opacity-50 cursor-not-allowed' : ''">
+  <div class="navigation-group w-full justify-between rounded-2xl border p-2" :class="disabled ? 'line-through opacity-50 cursor-not-allowed' : ''">
     <label :for="id" class="text-caption">{{ label }}</label>
 
-    <div class="hover:scale-sm flex flex-row items-center gap-2 transition-all">
+    <div class="flex flex-row items-center gap-2">
       <span class="text-caption">{{ value }}</span>
       <input
         :id="id" type="color"

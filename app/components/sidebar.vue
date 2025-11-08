@@ -17,15 +17,15 @@
             <img v-if="user.image" :src="user.image" alt="Avatar" class="size-full rounded-full border object-cover select-none">
 
             <button title="Edit Profile Information" class="btn-primary absolute -right-2 -bottom-2 p-1!" aria-label="Edit Profile Information" @click="isDialogOpen = true">
-              <icon name="mdi:square-edit-outline" size="20" class="transition-all hover:scale-110" />
+              <icon name="mdi:square-edit-outline" size="20" />
             </button>
           </div>
 
-          <div class="flex w-full min-w-0 flex-col overflow-x-hidden">
-            <span class="text-sm font-semibold wrap-break-word">
+          <div class="flex w-full min-w-0 flex-col gap-1 overflow-hidden">
+            <span class="font-semibold wrap-break-word">
               {{ user.name }}
             </span>
-            <nuxt-link :to="`/${user.slug}`" :title="`${BASE_URL}/${user.slug}`" class="text-muted-foreground text-sm wrap-break-word hover:underline">
+            <nuxt-link :to="`/${user.slug}`" :title="`${BASE_URL}/${user.slug}`" class="text-caption wrap-break-word hover:underline">
               @{{ user.slug }}
             </nuxt-link>
           </div>
@@ -38,7 +38,7 @@
 
           <nuxt-link
             v-for="link in SIDEBAR_NAV_LINKS" :key="link.url"
-            :to="link.url" class="hover:scale-sm flex w-full flex-row items-center justify-start gap-4 font-semibold transition-all"
+            :to="link.url" class="flex w-full flex-row items-center justify-start gap-4 font-semibold"
             aria-label="Navigate to {{ link.label }}" @click="isMobileNavOpen = false"
           >
             <icon :name="link.icon" size="25" />
@@ -53,18 +53,18 @@
             Actions
           </p>
 
-          <button class="hover:scale-sm flex w-full flex-row items-center justify-start gap-4 font-semibold transition-all" aria-label="Toggle Theme" @click="toggleTheme">
+          <button class="flex w-full flex-row items-center justify-start gap-4 font-semibold" aria-label="Toggle Theme" @click="toggleTheme">
             <icon :name="themeIcon" size="25" />
             <span>Toggle Theme</span>
           </button>
-          <button class="hover:scale-sm flex w-full flex-row items-center justify-start gap-4 font-semibold transition-all" aria-label="Sign Out" @click="signOut">
+          <button class="flex w-full flex-row items-center justify-start gap-4 font-semibold" aria-label="Sign Out" @click="signOut">
             <icon name="material-symbols:logout" size="25" class="text-danger-foreground" />
             <span>Sign Out</span>
           </button>
         </nav>
       </div>
 
-      <div class="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-row items-center gap-2 transition-all select-none md:hidden">
+      <div class="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-row items-center gap-2 select-none md:hidden">
         <Logo />
       </div>
     </aside>

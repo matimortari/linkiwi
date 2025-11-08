@@ -5,12 +5,12 @@
         <img :src="themeTitle" alt="Wordmark" width="100">
 
         <div class="flex flex-row items-center justify-between gap-4">
-          <p class="text-muted-foreground text-sm whitespace-nowrap">
+          <p class="text-caption whitespace-nowrap">
             © {{ new Date().getFullYear() }} LinkNest. All rights reserved.
           </p>
 
           <nuxt-link to="https://github.com/matimortari/linknest" target="_blank" aria-label="GitHub Repository">
-            <icon name="simple-icons:github" size="25" class="text-muted-foreground hover:scale-md hover:text-accent transition-all" />
+            <icon name="simple-icons:github" size="25" class="text-muted-foreground hover:text-accent" />
           </nuxt-link>
         </div>
       </div>

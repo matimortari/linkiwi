@@ -1,19 +1,4 @@
 <template>
-  <nav class="absolute top-4 right-0 left-0 z-50 flex items-center justify-between p-4 md:top-0">
-    <Logo />
-
-    <div class="flex flex-row items-center gap-4" aria-label="User Actions">
-      <button aria-label="Toggle Theme" @click="toggleTheme()">
-        <icon :name="themeIcon" size="25" />
-      </button>
-
-      <nuxt-link to="/sign-in" class="hidden flex-row items-center gap-2 text-sm font-semibold whitespace-nowrap hover:underline md:flex">
-        <icon name="ph:sign-in-bold" size="25" />
-        <span>Sign In</span>
-      </nuxt-link>
-    </div>
-  </nav>
-
   <section id="hero" class="flex min-h-screen flex-col items-center justify-center overflow-hidden border-b-2 px-8 py-24 md:flex-row md:px-24 2xl:min-h-[60vh]">
     <header
       v-motion :initial="{ opacity: 0, y: -40 }"
@@ -23,7 +8,7 @@
       <h5 class="text-secondary">
         Your link-in-bio page 🪺
       </h5>
-      <h1 class="max-w-md">
+      <h1 class="font-display max-w-md">
         Keep all your stuff together!
       </h1>
       <p class="text-muted-foreground max-w-lg font-semibold">
@@ -96,8 +81,6 @@
 </template>
 
 <script setup lang="ts">
-const { toggleTheme, themeIcon } = useTheme()
-
 const randomQuote = ref<{
   quote: string
   author: string

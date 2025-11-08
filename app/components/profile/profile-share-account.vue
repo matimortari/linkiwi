@@ -10,7 +10,7 @@
         </p>
       </div>
 
-      <nuxt-link :to="`/${user.slug}`" :title="pageUrl" class="text-muted-foreground truncate text-sm hover:underline">
+      <nuxt-link :to="`/${user.slug}`" :title="pageUrl" class="text-caption truncate hover:underline">
         @{{ user.slug }}
       </nuxt-link>
     </header>
@@ -22,7 +22,7 @@
       </button>
 
       <transition name="dropdown-fade">
-        <div v-if="isDropdownOpen" class="popover absolute top-full right-0 z-20" role="menu">
+        <div v-if="isDropdownOpen" class="overlay absolute top-full right-0 z-20" role="menu">
           <div class="flex flex-col items-start gap-2 text-xs font-semibold">
             <button
               class="hover:bg-muted flex flex-row items-center gap-2 rounded-2xl p-2 whitespace-nowrap" role="menuitem"
