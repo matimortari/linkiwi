@@ -4,11 +4,19 @@ const backgroundTypeEnum = z.enum(["FLAT", "GRADIENT"])
 const supportBannerEnum = z.enum(["NONE", "LGBTQ_RIGHTS", "ANTI_RACISM", "MENTAL_HEALTH", "CLIMATE_ACTION"])
 
 export const updateUserSchema = z.object({
-  name: z.string().min(2).max(100).optional(),
-  email: z.email().optional(),
+  name: z
+    .string()
+    .min(1, "Name is required")
+    .max(100, "Name must be at most 100 characters")
+    .transform(val => val.trim())
+    .refine(val => val.length > 0, { message: "Name cannot be empty or only whitespace" })
+    .optional(),
+  image: z
+    .union([z.url(), z.literal(""), z.null()])
+    .transform(val => (val === "" ? null : val))
+    .optional(),
   slug: z.string().regex(/^[a-z0-9-]+$/, "Invalid slug").optional(),
   description: z.string().max(300).optional(),
-  image: z.url().trim().optional(),
 })
 
 export const updateUserPreferencesSchema = z.object({

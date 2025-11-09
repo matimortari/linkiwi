@@ -58,7 +58,7 @@
             <span>Toggle Theme</span>
           </button>
           <button class="flex w-full flex-row items-center justify-start gap-4 font-semibold" aria-label="Sign Out" @click="signOut">
-            <icon name="material-symbols:logout" size="25" class="text-danger-foreground" />
+            <icon name="material-symbols:logout" size="25" class="text-danger" />
             <span>Sign Out</span>
           </button>
         </nav>

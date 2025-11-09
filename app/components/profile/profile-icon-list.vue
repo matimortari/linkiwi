@@ -21,7 +21,7 @@
         </nuxt-link>
 
         <button class="absolute right-0 bottom-0 flex items-center p-1" aria-label="Delete Social Icon" @click="deleteIcon(icon.id!)">
-          <icon name="mdi:remove-circle-outline" size="25" class="text-danger-foreground" />
+          <icon name="mdi:remove-circle-outline" size="25" class="text-danger" />
         </button>
       </li>
     </ul>

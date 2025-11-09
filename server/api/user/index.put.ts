@@ -1,39 +1,36 @@
 import db from "#server/lib/db"
 import { getUserFromSession } from "#server/lib/utils"
 import { updateUserSchema } from "#shared/lib/schemas/user-schema"
+import z from "zod"
 
 export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
-
   const body = await readBody(event)
-  const { email, name, slug, description } = updateUserSchema.parse(body)
-  if (email && email !== user.email) {
-    const existingUser = await db.user.findUnique({
-      where: { email },
-    })
-    if (existingUser) {
-      throw createError({ statusCode: 409, message: "Email already in use" })
-    }
-  }
-  if (slug && slug !== user.slug) {
-    const existingUser = await db.user.findUnique({
-      where: { slug },
-    })
-    if (existingUser) {
-      throw createError({ statusCode: 409, message: "Slug already taken" })
-    }
+
+  const result = updateUserSchema.safeParse(body)
+  if (!result.success) {
+    throw createError({ statusCode: 400, statusMessage: "Invalid input", data: z.treeifyError(result.error) })
   }
 
-  const updatedUser = await db.user.update({
+  const updatedUserData = await db.user.update({
     where: { id: user.id },
     data: {
-      email,
-      name,
-      slug,
-      description,
+      name: result.data.name,
+      image: result.data.image,
+      slug: result.data.slug,
+      description: result.data.description,
     },
-    select: { id: true, name: true, email: true, slug: true, description: true },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      slug: true,
+      description: true,
+      image: true,
+      createdAt: true,
+      updatedAt: true,
+    },
   })
 
-  return { user: updatedUser }
+  return updatedUserData
 })

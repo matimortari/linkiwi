@@ -108,28 +108,28 @@ Retrieves a user's public profile information by slug.
 
 ```json
 {
-  "id": "cuid",
+  "id": "string",
   "name": "string",
   "slug": "string",
   "description": "string | null",
   "image": "string | null",
   "links": [
     {
-      "id": "cuid",
+      "id": "string",
       "url": "string",
       "title": "string",
       "clicks": "number",
-      "createdAt": "datetime"
+      "createdAt": "Date"
     }
   ],
   "icons": [
     {
-      "id": "cuid",
+      "id": "string",
       "url": "string",
       "platform": "string",
       "logo": "string",
       "clicks": "number",
-      "createdAt": "datetime"
+      "createdAt": "Date"
     }
   ],
   "preferences": {
@@ -280,11 +280,11 @@ Get all links for the current user.
 {
   "links": [
     {
-      "id": "cuid",
+      "id": "string",
       "url": "string",
       "title": "string",
       "clicks": "number",
-      "createdAt": "datetime"
+      "createdAt": "Date"
     }
   ]
 }
@@ -310,11 +310,11 @@ Create a new link.
 ```json
 {
   "link": {
-    "id": "cuid",
+    "id": "string",
     "url": "string",
     "title": "string",
     "clicks": 0,
-    "createdAt": "datetime"
+    "createdAt": "Date"
   }
 }
 ```
@@ -343,11 +343,11 @@ Update an existing link.
 ```json
 {
   "link": {
-    "id": "cuid",
+    "id": "string",
     "url": "string",
     "title": "string",
     "clicks": "number",
-    "createdAt": "datetime"
+    "createdAt": "Date"
   }
 }
 ```
@@ -386,12 +386,12 @@ Get all social icons for the current user.
 {
   "icons": [
     {
-      "id": "cuid",
+      "id": "string",
       "url": "string",
       "platform": "string",
       "logo": "string",
       "clicks": "number",
-      "createdAt": "datetime"
+      "createdAt": "Date"
     }
   ]
 }
@@ -422,12 +422,12 @@ Create a new social icon.
 ```json
 {
   "icon": {
-    "id": "cuid",
+    "id": "string",
     "url": "string",
     "platform": "string",
     "logo": "string",
     "clicks": 0,
-    "createdAt": "datetime"
+    "createdAt": "Date"
   }
 }
 ```
@@ -465,8 +465,8 @@ Record analytics data for page views, link clicks, or social icon clicks.
 ```json
 {
   "type": "pageView | link | icon",
-  "userId": "cuid (required)",
-  "id": "cuid (required for link and icon types, optional for pageView)"
+  "userId": "string (required)",
+  "id": "string (required for link and icon types, optional for pageView)"
 }
 ```
 

@@ -16,12 +16,9 @@
   --secondary-foreground: #ebe8e8;
   --muted: #b8b5b5;
   --muted-foreground: #535353;
-  --danger: #e7d8d9;
-  --danger-foreground: #c53333;
-  --success: #c7dbd0;
-  --success-foreground: #5e836d;
+  --danger: #c53333;
+  --success: #5e836d;
   --accent: #f09875;
-  --border: #b8b5b5;
 
   /*
     Base styles
@@ -51,12 +48,9 @@ html.dark {
   --secondary-foreground: #ebe8e8;
   --muted: #3b3b41;
   --muted-foreground: #c7c4c4;
-  --danger: #e7d8d9;
-  --danger-foreground: #c53333;
-  --success: #c7dbd0;
-  --success-foreground: #5e836d;
+  --danger: #c53333;
+  --success: #5e836d;
   --accent: #f09875;
-  --border: #3b3b41;
 }
 
 /*
@@ -76,11 +70,8 @@ html.dark {
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-danger: var(--danger);
-  --color-danger-foreground: var(--danger-foreground);
   --color-success: var(--success);
-  --color-success-foreground: var(--success-foreground);
   --color-accent: var(--accent);
-  --color-border: var(--border);
 
   --font-default: "Lato", sans-serif;
   --font-display: "Caprasimo";
@@ -101,7 +92,7 @@ html.dark {
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--border);
+    border-color: var(--muted);
   }
 
   *:focus-visible {
@@ -152,18 +143,15 @@ h6 {
 }
 
 .text-caption,
-.text-warning,
+.text-danger,
 .text-success {
   font-size: 0.875rem;
   line-height: 0.875rem;
   font-weight: 600;
   color: var(--muted-foreground);
 }
-.text-warning {
-  color: var(--danger-foreground);
-}
-.text-success {
-  color: var(--success-foreground);
+.text-caption {
+  color: var(--muted-foreground);
 }
 
 /*
@@ -172,7 +160,7 @@ h6 {
 .card {
   background-color: var(--card);
   color: var(--card-foreground);
-  border: 1px solid var(--border);
+  border: 1px solid var(--muted);
   border-radius: 1rem;
   padding: 1rem;
 }
@@ -180,9 +168,10 @@ h6 {
 .overlay {
   background-color: var(--overlay);
   color: var(--overlay-foreground);
-  border: 1px solid var(--border);
+  border: 1px solid var(--muted);
   border-radius: 1rem;
   padding: 1rem;
+  z-index: 40;
   box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, 0.4);
 }
 
@@ -197,7 +186,7 @@ select {
   -moz-appearance: none;
   background-color: var(--card);
   color: var(--foreground);
-  border: 1px solid var(--border);
+  border: 1px solid var(--muted);
   accent-color: var(--accent);
   border-radius: 5rem;
   padding: 0.5rem;
@@ -245,7 +234,7 @@ input[type="radio"] {
   -moz-appearance: none;
   position: relative;
   background-color: transparent;
-  border: 1px solid var(--border);
+  border: 1px solid var(--muted);
   border-radius: 100%;
   padding: 0.75rem;
   cursor: pointer;
@@ -279,7 +268,7 @@ input[type="radio"]:checked::after {
   gap: 0.5rem;
   font-size: 0.875rem;
   font-weight: 600;
-  border: 2px solid var(--border);
+  border: 2px solid var(--muted);
   border-radius: 5rem;
   white-space: nowrap;
   user-select: none;
@@ -327,13 +316,18 @@ input[type="radio"]:checked::after {
 }
 .btn-danger {
   --btn-bg: var(--card);
-  --btn-fg: var(--danger-foreground);
+  --btn-fg: var(--secondary-foreground);
+}
+.btn-success {
+  --btn-bg: var(--success);
+  --btn-fg: var(--secondary-foreground);
 }
 
 .btn,
 .btn-primary,
 .btn-secondary,
-.btn-danger {
+.btn-danger,
+.btn-success {
   background-color: var(--btn-bg);
   color: var(--btn-fg);
 }
@@ -358,14 +352,9 @@ input[type="radio"]:checked::after {
   border-radius: 1rem;
 }
 
-::selection {
-  background: color-mix(in srgb, var(--secondary) 50%, transparent);
-  color: var(--secondary-foreground);
-}
-
 .scroll-area {
   scrollbar-width: thin;
-  scrollbar-color: var(--border) var(--background);
+  scrollbar-color: var(--muted) var(--background);
 }
 
 .scroll-hide {
@@ -374,6 +363,11 @@ input[type="radio"]:checked::after {
 }
 .scroll-hide::-webkit-scrollbar {
   display: none;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--secondary) 50%, transparent);
+  color: var(--secondary-foreground);
 }
 
 html.light {
@@ -416,14 +410,6 @@ html.dark {
 .bg-muted {
   background-color: var(--muted);
   color: var(--muted-foreground);
-}
-.bg-danger {
-  background-color: var(--danger);
-  color: var(--danger-foreground);
-}
-.bg-success {
-  background-color: var(--success);
-  color: var(--success-foreground);
 }
 
 /*

@@ -27,7 +27,7 @@
                 <icon name="mdi:circle-edit-outline" size="25" class="text-primary" />
               </button>
               <button aria-label="Delete Link" class="flex items-center" @click="deleteLink(link.id!)">
-                <icon name="mdi:remove-circle-outline" size="25" class="text-danger-foreground" />
+                <icon name="mdi:remove-circle-outline" size="25" class="text-danger" />
               </button>
             </div>
           </div>
