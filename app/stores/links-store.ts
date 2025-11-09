@@ -1,4 +1,4 @@
-import type { CreateUserLinkInput, UpdateUserLinkInput } from "#shared/lib/schemas/link-schema"
+import type { CreateUserLinkInput, UpdateUserLinkInput } from "~~/shared/schemas/link-schema"
 
 export const useLinksStore = defineStore("links", () => {
   const links = ref<Link[]>([])
