@@ -9,7 +9,7 @@
             </h3>
 
             <button @mousedown="close">
-              <icon name="ph:x-bold" size="20" class="text-muted-foreground" />
+              <icon name="mdi:close" size="20" class="text-muted-foreground" />
             </button>
           </header>
 

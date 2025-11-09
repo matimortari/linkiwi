@@ -15,14 +15,9 @@
       </p>
 
       <button class="flex flex-row items-center gap-4 font-semibold" @click="() => clearError({ redirect: '/' })">
-        <icon name="ph:arrow-left-bold" size="25" />
+        <icon name="mdi:arrow-left" size="25" />
         <span>Go Back</span>
       </button>
-    </div>
-
-    <div class="flex items-center justify-center md:items-end md:justify-end">
-      <icon name="ph:smiley-sad-light" size="180" class="md:hidden" />
-      <icon name="ph:smiley-sad-light" size="300" class="hidden md:block" />
     </div>
   </div>
 </template>

@@ -148,7 +148,6 @@ h6 {
   font-size: 0.875rem;
   line-height: 0.875rem;
   font-weight: 600;
-  color: var(--muted-foreground);
 }
 .text-caption {
   color: var(--muted-foreground);

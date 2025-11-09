@@ -6,7 +6,7 @@
 
     <div class="flex flex-1 flex-col xl:flex-row">
       <button class="btn fixed bottom-4 left-4 z-50 xl:hidden!" @click="sidebarOpen = !sidebarOpen">
-        <icon :name="sidebarOpen ? 'ph:x-bold' : 'ph:list-bold'" size="30" />
+        <icon :name="sidebarOpen ? 'mdi:close' : 'mdi:menu'" size="30" />
       </button>
 
       <article
