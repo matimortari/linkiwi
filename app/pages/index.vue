@@ -8,11 +8,11 @@
       <h5 class="text-secondary">
         Your link-in-bio page 🪺
       </h5>
-      <h1 class="font-display max-w-md">
+      <h1 class="max-w-md font-display">
         Keep all your stuff together!
       </h1>
-      <p class="text-muted-foreground max-w-lg font-semibold">
-        Welcome to <span class="text-secondary font-bold">LinkNest</span>! Your links, profiles, contact info, and more
+      <p class="max-w-lg font-semibold text-muted-foreground">
+        Welcome to <span class="font-bold text-secondary">LinkNest</span>! Your links, profiles, contact info, and more
         in one place. Create and customize your page and share it with your audience.
       </p>
       <nuxt-link to="/sign-in" class="btn-primary">
@@ -37,21 +37,21 @@
         :delay="200 * index" class="card flex flex-col gap-2 text-start"
       >
         <div class="flex flex-row items-center gap-2">
-          <span class="from-primary to-secondary flex size-10 items-center justify-center rounded-full bg-linear-to-br p-2">
+          <span class="flex size-10 items-center justify-center rounded-full bg-linear-to-br from-primary to-secondary p-2">
             <icon :name="feature.icon" size="25" class="text-[#ebe8e8]" />
           </span>
           <h5>
             {{ feature.title }}
           </h5>
         </div>
-        <p class="text-muted-foreground text-sm">
+        <p class="text-sm text-muted-foreground">
           {{ feature.description }}
         </p>
       </div>
     </div>
   </section>
 
-  <section id="cta" class="bg-card relative z-10 flex min-h-[50vh] flex-col items-center justify-center gap-12 border-y p-12 text-center md:p-20">
+  <section id="cta" class="relative z-10 flex min-h-[50vh] flex-col items-center justify-center gap-12 border-y bg-card p-12 text-center md:p-20">
     <div class="cta-wrapper-grid" />
     <div class="cta-wrapper-vignette" />
 
@@ -75,7 +75,7 @@
       class="text-sm italic" :initial="{ opacity: 0, x: 60 }"
       :visible="{ opacity: 1, x: 0 }" :duration="800"
     >
-      "{{ randomQuote.quote }}" - <span class="text-primary font-semibold">{{ randomQuote.author }}</span>
+      "{{ randomQuote.quote }}" - <span class="font-semibold text-primary">{{ randomQuote.author }}</span>
     </p>
   </section>
 </template>

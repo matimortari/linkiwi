@@ -1,5 +1,5 @@
 <template>
-  <div v-if="user" class="section-container bg-muted! my-2 flex max-w-lg flex-row! justify-between shadow-lg">
+  <div v-if="user" class="section-container my-2 flex max-w-lg flex-row! justify-between bg-muted! shadow-lg">
     <header class="flex max-w-[80%] flex-col gap-2 whitespace-nowrap">
       <div class="flex flex-row items-center justify-between gap-4">
         <h4>
@@ -15,7 +15,7 @@
       </nuxt-link>
     </header>
 
-    <div ref="dropdownRef" class="navigation-group relative">
+    <div ref="dropdownRef" class="relative navigation-group">
       <button title="See sharing options" class="btn" aria-label="Share Profile" @click="isDropdownOpen = !isDropdownOpen">
         <icon name="mdi:share-variant" size="20" />
         <span>Share Now</span>
@@ -25,7 +25,7 @@
         <div v-if="isDropdownOpen" class="overlay absolute top-full right-0 z-20" role="menu">
           <div class="flex flex-col items-start gap-2 text-xs font-semibold">
             <button
-              class="hover:bg-muted flex flex-row items-center gap-2 rounded-2xl p-2 whitespace-nowrap" role="menuitem"
+              class="flex flex-row items-center gap-2 rounded-2xl p-2 whitespace-nowrap hover:bg-muted" role="menuitem"
               aria-label="Copy Profile Link" @click="copyPageUrl()"
             >
               <icon name="mdi:clipboard-multiple-outline" size="20" />
@@ -33,7 +33,7 @@
             </button>
 
             <button
-              class="hover:bg-muted flex flex-row items-center gap-2 rounded-2xl p-2 whitespace-nowrap" role="menuitem"
+              class="flex flex-row items-center gap-2 rounded-2xl p-2 whitespace-nowrap hover:bg-muted" role="menuitem"
               aria-label="Share on X" @click="handleShareTwitter()"
             >
               <icon name="simple-icons:x" size="20" />
@@ -41,7 +41,7 @@
             </button>
 
             <button
-              class="hover:bg-muted flex flex-row items-center gap-2 rounded-2xl p-2 whitespace-nowrap" role="menuitem"
+              class="flex flex-row items-center gap-2 rounded-2xl p-2 whitespace-nowrap hover:bg-muted" role="menuitem"
               aria-label="Get QR Code" @click="() => { isDialogOpen = true; isDropdownOpen = false }"
             >
               <icon name="mdi:qrcode" size="20" />

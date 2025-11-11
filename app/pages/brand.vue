@@ -15,7 +15,7 @@
           <img :src="logo.image" :alt="logo.name" class="size-full object-contain">
         </div>
 
-        <div class="bg-card flex w-full flex-row items-center justify-between rounded-b-lg px-2 py-1">
+        <div class="flex w-full flex-row items-center justify-between rounded-b-lg bg-card px-2 py-1">
           <span class="text-sm font-semibold">{{ logo.name }}</span>
           <nuxt-link :href="logo.image" download :title="`Download ${logo.name}`">
             <icon name="mdi:download" size="35" class="rounded-full p-1" />

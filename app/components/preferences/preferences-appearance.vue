@@ -13,7 +13,7 @@
       <div class="flex flex-row flex-wrap items-center gap-1 md:flex-nowrap">
         <button
           v-for="t in APPEARANCE_TABS" :key="t.value"
-          class="btn" :class="{ ' brightness-50': activeTab === t.value }"
+          class="btn" :class="{ 'brightness-50': activeTab === t.value }"
           @click="activeTab = t.value"
         >
           {{ t.label }}

@@ -26,7 +26,7 @@
             <span v-else>{{ item.title }}</span>
           </div>
 
-          <span class="text-primary text-sm font-medium">
+          <span class="text-sm font-medium text-primary">
             {{ clicksMap[item.id] ?? 0 }} clicks
           </span>
         </div>

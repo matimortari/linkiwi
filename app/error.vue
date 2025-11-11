@@ -5,7 +5,7 @@
         {{ error.statusCode }} - {{ error.statusMessage || "An unexpected error has occurred." }}
       </p>
 
-      <p class="text-muted-foreground flex flex-col text-lg">
+      <p class="flex flex-col text-lg text-muted-foreground">
         <span class="text-lg">
           Please try going back to the homepage or refreshing the page.
         </span>

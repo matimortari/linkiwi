@@ -1,7 +1,7 @@
 <template>
   <div class="flex min-h-screen flex-col items-center justify-center gap-4">
-    <div class="bg-muted relative w-1/4 rounded-full">
-      <div class="progress-bar from-primary to-secondary h-full w-1/4 rounded-full bg-linear-to-r" />
+    <div class="relative w-1/4 rounded-full bg-muted">
+      <div class="progress-bar h-full w-1/4 rounded-full bg-linear-to-r from-primary to-secondary" />
     </div>
 
     <p class="text-caption">

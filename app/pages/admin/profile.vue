@@ -10,7 +10,7 @@
           Profile
         </h2>
         <p class="text-caption">
-          Welcome back, <span class="text-accent font-semibold">{{ user.slug }}</span>!
+          Welcome back, <span class="font-semibold text-accent">{{ user.slug }}</span>!
         </p>
       </header>
 

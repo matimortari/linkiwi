@@ -1,13 +1,10 @@
 import antfu from "@antfu/eslint-config"
-import pluginTailwindCSS from "eslint-plugin-tailwindcss"
+import eslintPluginBetterTailwindcss from "eslint-plugin-better-tailwindcss"
 
 export default antfu({
   vue: true,
   typescript: true,
   jsonc: true,
-  plugins: {
-    tailwindcss: pluginTailwindCSS,
-  },
   formatters: {
     css: true,
     html: true,
@@ -17,6 +14,15 @@ export default antfu({
     indent: 2,
     quotes: "double",
     semi: false,
+  },
+  plugins: {
+    "better-tailwindcss": eslintPluginBetterTailwindcss,
+  },
+  settings: {
+    "better-tailwindcss": {
+      entryPoint: "app/assets/styles.css",
+      detectComponentClasses: true,
+    },
   },
   rules: {
     "no-new": "off",
@@ -59,9 +65,8 @@ export default antfu({
       singleline: { max: 4 },
       multiline: { max: 2 },
     }],
-    "tailwindcss/classnames-order": "warn",
-    "tailwindcss/enforces-shorthand": "warn",
-    "tailwindcss/no-unnecessary-arbitrary-value": "warn",
-    "tailwindcss/no-custom-classname": "off",
+    ...eslintPluginBetterTailwindcss.configs["recommended-warn"].rules,
+    "better-tailwindcss/no-unregistered-classes": "off",
+    "better-tailwindcss/enforce-consistent-line-wrapping": "off",
   },
 })

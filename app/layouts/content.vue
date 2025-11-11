@@ -19,11 +19,11 @@
 
       <aside
         id="table-of-contents"
-        class="scroll-area bg-card fixed top-0 right-0 z-40 h-full w-3/4 transform border-l px-4! py-12! transition-transform duration-300 md:w-1/4 xl:relative xl:z-auto xl:translate-x-0 xl:border-l"
+        class="scroll-area fixed top-0 right-0 z-40 h-full w-3/4 transform border-l bg-card px-4! py-12! transition-transform duration-300 md:w-1/4 xl:relative xl:z-auto xl:translate-x-0 xl:border-l"
         :class="sidebarOpen ? 'translate-x-0' : 'translate-x-full'"
       >
         <div class="sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto pr-2">
-          <p class="text-muted-foreground border-b py-2 font-semibold uppercase">
+          <p class="border-b py-2 font-semibold text-muted-foreground uppercase">
             On this page
           </p>
 
@@ -31,7 +31,7 @@
             <nuxt-link
               v-for="header in headers" :key="header.id"
               :to="`#${header.id}`" :class="headerClasses(header)"
-              class="hover:text-primary block transition-colors" @click="sidebarOpen = false"
+              class="block transition-colors hover:text-primary" @click="sidebarOpen = false"
             >
               <div class="flex flex-row items-center gap-2">
                 <span v-if="header.method" :class="[REST_METHOD_LABELS[header.method as keyof typeof REST_METHOD_LABELS]]">

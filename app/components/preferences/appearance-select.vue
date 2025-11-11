@@ -1,5 +1,5 @@
 <template>
-  <div class="navigation-group w-full justify-between rounded-2xl border p-2" :class="disabled ? 'line-through opacity-50 cursor-not-allowed' : ''">
+  <div class="navigation-group w-full justify-between rounded-2xl border p-2" :class="disabled ? 'cursor-not-allowed line-through opacity-50' : ''">
     <label :for="id" class="text-caption">{{ label }}</label>
 
     <select

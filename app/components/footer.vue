@@ -1,5 +1,5 @@
 <template>
-  <footer class="bg-card w-full">
+  <footer class="w-full bg-card">
     <div class="container mx-auto flex flex-col-reverse px-8 py-4 md:flex-row md:justify-between">
       <div class="flex flex-col justify-end gap-2 border-t py-8 md:border-0">
         <img :src="themeTitle" alt="Wordmark" width="100">
@@ -10,7 +10,7 @@
           </p>
 
           <nuxt-link to="https://github.com/matimortari/linknest" target="_blank" aria-label="GitHub Repository">
-            <icon name="simple-icons:github" size="25" class="hover:text-accent transition-transform hover:scale-110" />
+            <icon name="simple-icons:github" size="25" class="transition-transform hover:scale-110 hover:text-accent" />
           </nuxt-link>
         </div>
       </div>
@@ -21,12 +21,12 @@
             {{ section.title }}
           </p>
 
-          <ul class="text-muted-foreground space-y-2 text-sm">
+          <ul class="space-y-2 text-sm text-muted-foreground">
             <li v-for="(link, linkIndex) in section.links" :key="linkIndex">
-              <button v-if="link.action" class="hover:text-foreground w-full text-left transition-colors" @click="link.action">
+              <button v-if="link.action" class="w-full text-left transition-colors hover:text-foreground" @click="link.action">
                 {{ link.label }}
               </button>
-              <nuxt-link v-else :to="link.href" class="hover:text-foreground transition-colors">
+              <nuxt-link v-else :to="link.href" class="transition-colors hover:text-foreground">
                 {{ link.label }}
               </nuxt-link>
             </li>
