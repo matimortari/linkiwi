@@ -35,13 +35,13 @@ export function useContent(options: { selector?: string, parseMethod?: boolean }
     // Clean up and re-init observer
     observer?.disconnect()
     observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
+      for (const entry of entries) {
         if (entry.isIntersecting)
           activeSection.value = entry.target.id
-      })
+      }
     }, { root: null, rootMargin: "0px 0px -70% 0px", threshold: 0 })
 
-    hElements.forEach(heading => observer!.observe(heading))
+    for (const heading of hElements) observer!.observe(heading)
   }
 
   onMounted(extractHeaders)

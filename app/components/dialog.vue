@@ -1,19 +1,19 @@
 <template>
   <teleport to="body">
     <transition name="fade">
-      <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80" @mousedown.self="close">
+      <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80" @mousedown.self="closeDialog">
         <div class="overlay min-w-[400px] space-y-4">
           <header class="flex flex-row items-center justify-between gap-4">
             <h3>
               {{ title }}
             </h3>
 
-            <button @mousedown="close">
+            <button aria-label="Close Dialog" class="flex items-center" @mousedown="closeDialog">
               <icon name="mdi:close" size="20" class="text-muted-foreground" />
             </button>
           </header>
 
-          <section class="m-4">
+          <section>
             <slot />
           </section>
         </div>
@@ -33,23 +33,17 @@ const props = defineProps({
 
 const emit = defineEmits(["update:isOpen", "confirm"])
 
-function close() {
+const dialogRef = ref<HTMLElement | null>(null)
+
+function closeDialog() {
   emit("update:isOpen", false)
 }
 
-function handleEscape(event: KeyboardEvent) {
-  if (event.key === "Escape" && props.isOpen) {
-    close()
+useClickOutside(dialogRef, () => {
+  if (props.isOpen) {
+    closeDialog()
   }
-}
-
-onMounted(() => {
-  window.addEventListener("keydown", handleEscape)
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener("keydown", handleEscape)
-})
+}, { escapeKey: true })
 </script>
 
 <style scoped>

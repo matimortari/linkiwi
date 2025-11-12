@@ -38,7 +38,7 @@
           {{ errors.updateUser || '' }}
         </p>
 
-        <button class="btn-primary" type="submit" aria-label="Save Link">
+        <button class="btn-primary" type="submit">
           Update Profile
         </button>
       </footer>

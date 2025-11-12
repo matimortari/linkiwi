@@ -41,12 +41,13 @@ export function useFormValidation<T>(initialData: T) {
     if (schema) {
       const result = schema.safeParse(form.value)
       if (!result.success) {
-        result.error.issues.forEach((issue: any) => {
+        for (const issue of result.error.issues) {
           const field = issue.path.join(".")
           validationErrors.value[field] = issue.message
-        })
+        }
         return false
       }
+
       return true
     }
 

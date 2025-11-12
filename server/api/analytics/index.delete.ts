@@ -89,7 +89,7 @@ export default defineEventHandler(async (event) => {
 
   return {
     success: true,
-    message: `Successfully deleted ${deletedCount} analytics record${deletedCount !== 1 ? "s" : ""}`,
+    message: `Successfully deleted ${deletedCount} analytics record${deletedCount === 1 ? "" : "s"}`,
     deletedCount,
   }
 })

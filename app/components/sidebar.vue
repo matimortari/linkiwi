@@ -8,7 +8,7 @@
   <div v-if="isMobileNavOpen" class="fixed inset-0 z-20 bg-black/50" @click="isMobileNavOpen = false" />
 
   <transition name="slide">
-    <aside v-if="user" class="fixed top-0 left-0 z-40 size-full px-4 py-16 transition-transform md:static md:w-56 md:translate-x-0 md:py-4" :class="isMobileNavOpen ? 'translate-x-0 bg-card' : '-translate-x-full'">
+    <aside v-if="user" class="fixed top-0 left-0 z-40 size-full px-4 py-16 transition-transform md:static md:w-56 md:translate-x-0 md:py-4 2xl:w-64" :class="isMobileNavOpen ? 'translate-x-0 bg-card' : '-translate-x-full'">
       <div class="flex h-full flex-col gap-12 px-12 md:px-0">
         <Logo />
 
@@ -38,7 +38,7 @@
 
           <nuxt-link
             v-for="link in SIDEBAR_NAV_LINKS" :key="link.url"
-            :to="link.url" class="flex w-full flex-row items-center justify-start gap-4 font-semibold"
+            :to="link.url" class="flex w-full flex-row items-center justify-start gap-4 rounded-lg p-1 font-semibold transition-transform hover:scale-105 hover:underline"
             aria-label="Navigate to {{ link.label }}" @click="isMobileNavOpen = false"
           >
             <icon :name="link.icon" size="25" />
@@ -53,11 +53,11 @@
             Actions
           </p>
 
-          <button class="flex w-full flex-row items-center justify-start gap-4 font-semibold" aria-label="Toggle Theme" @click="toggleTheme">
+          <button class="flex w-full flex-row items-center justify-start gap-4 rounded-lg p-1 font-semibold transition-transform hover:scale-105 hover:underline" aria-label="Toggle Theme" @click="toggleTheme">
             <icon :name="themeIcon" size="25" />
             <span>Toggle Theme</span>
           </button>
-          <button class="flex w-full flex-row items-center justify-start gap-4 font-semibold" aria-label="Sign Out" @click="signOut">
+          <button class="flex w-full flex-row items-center justify-start gap-4 rounded-lg p-1 font-semibold transition-transform hover:scale-105 hover:underline" aria-label="Sign Out" @click="signOut">
             <icon name="material-symbols:logout" size="25" class="text-danger" />
             <span>Sign Out</span>
           </button>

@@ -19,12 +19,12 @@ export async function getUserFromSession(event: H3Event<EventHandlerRequest>) {
 export async function generateSlug(base: string = ""): Promise<string> {
   const cleanedBase = base
     .normalize("NFKD")
-    .replace(/[\u0300-\u036F]/g, "")
+    .replaceAll(/[\u0300-\u036F]/g, "") // Remove diacritics
     .toLowerCase()
-    .replace(/\s+/g, "-") // One or more whitespace characters to hyphen
-    .replace(/[^a-z0-9-]/g, "") // Any character NOT a-z, 0-9, or hyphen
-    .replace(/(-)+/g, "-") // One or more hyphens
-    .replace(/^(-)+|(-)+$/g, "") // Leading OR trailing hyphens
+    .replaceAll(/\s+/g, "-") // Replace one or more whitespace with hyphen
+    .replaceAll(/[^a-z0-9-]/g, "") // Remove invalid characters
+    .replaceAll(/-+/g, "-") // Collapse multiple hyphens
+    .replaceAll(/^(-+)|(-+)$/g, "") // Trim leading/trailing hyphens
     || "user"
 
   let slug: string

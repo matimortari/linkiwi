@@ -28,7 +28,7 @@
           <button class="btn-secondary" aria-label="Cancel" :disabled="isLoading" @click="emit('close')">
             Cancel
           </button>
-          <button class="btn-primary" type="submit" aria-label="Save Link" :disabled="isLoading || !isFormValid">
+          <button class="btn-primary" type="submit" :disabled="isLoading || !isFormValid">
             {{ isUpdateMode ? 'Update Link' : 'Add Link' }}
           </button>
         </div>
@@ -46,9 +46,7 @@ const props = defineProps<{
   selectedLink?: Link | null
 }>()
 
-const emit = defineEmits<{
-  (e: "close"): void
-}>()
+const emit = defineEmits<(e: "close") => void>()
 
 const { errors, createLink, updateLink } = useLinkActions()
 const { form, isLoading, isFormValid, resetForm, validateForm, hasFormChanged } = useFormValidation<CreateUserLinkInput | UpdateUserLinkInput>({
@@ -81,7 +79,12 @@ async function handleSubmit() {
     }
   }
   catch (err: any) {
-    isUpdateMode.value ? errors.value.updateLink = err.message || "Failed to save link" : errors.value.createLink = err.message || "Failed to save link"
+    if (isUpdateMode.value) {
+      errors.value.updateLink = err.message || "Failed to save link"
+    }
+    else {
+      errors.value.createLink = err.message || "Failed to save link"
+    }
   }
   finally {
     isLoading.value = false

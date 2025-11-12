@@ -27,9 +27,7 @@ const props = defineProps<{
   preferences: UserPreferences
 }>()
 
-const emit = defineEmits<{
-  (e: "update:preferences", value: UserPreferences): void
-}>()
+const emit = defineEmits<(e: "update:preferences", value: UserPreferences) => void>()
 
 const localPrefs = reactive({ ...props.preferences })
 

@@ -1,14 +1,14 @@
 <template>
-  <section id="hero" class="flex min-h-screen flex-col items-center justify-center overflow-hidden border-b-2 px-8 py-24 md:flex-row md:px-24 2xl:min-h-[60vh]">
-    <header
-      v-motion :initial="{ opacity: 0, y: -40 }"
-      :visible="{ opacity: 1, y: 0 }" :duration="800"
-      class="flex flex-col items-center gap-4 text-center md:items-start md:text-start"
-    >
-      <h5 class="text-secondary">
+  <section
+    id="hero" v-motion
+    :initial="{ opacity: 0, y: -40 }" :visible="{ opacity: 1, y: 0 }"
+    :duration="800" class="flex min-h-screen flex-col items-center justify-center overflow-hidden border-b-2 px-8 py-24 md:flex-row md:px-24 2xl:min-h-[75vh]"
+  >
+    <header class="flex flex-col items-center gap-4 text-center md:items-start md:text-start">
+      <span class="text-lg text-secondary">
         Your link-in-bio page 🪺
-      </h5>
-      <h1 class="max-w-md font-display">
+      </span>
+      <h1 class="max-w-xl font-display md:text-6xl! 2xl:text-7xl!">
         Keep all your stuff together!
       </h1>
       <p class="max-w-lg font-semibold text-muted-foreground">
@@ -24,7 +24,11 @@
     <Carousel />
   </section>
 
-  <section id="features" class="relative flex flex-col items-center justify-center gap-12 p-12 text-center md:p-20">
+  <section
+    id="features" v-motion
+    :initial="{ opacity: 0, y: 20 }" :visible="{ opacity: 1, y: 0 }"
+    :duration="800" class="relative flex flex-col items-center justify-center gap-12 p-12 text-center md:p-24"
+  >
     <h2 class="font-display!">
       Why Choose LinkNest?
     </h2>
@@ -34,9 +38,9 @@
         v-for="(feature, index) in FEATURES" :key="index"
         v-motion :initial="{ opacity: 0, y: 20 }"
         :visible="{ opacity: 1, y: 0 }" :duration="800"
-        :delay="200 * index" class="card flex flex-col gap-2 text-start"
+        :delay="200 * index" class="card flex flex-col gap-4 text-start"
       >
-        <div class="flex flex-row items-center gap-2">
+        <div class="flex flex-row items-center gap-4">
           <span class="flex size-10 items-center justify-center rounded-full bg-linear-to-br from-primary to-secondary p-2">
             <icon :name="feature.icon" size="25" class="text-[#ebe8e8]" />
           </span>
@@ -59,36 +63,58 @@
       <h2 class="font-display!">
         Ready to Try?
       </h2>
-
       <p class="text-lg font-semibold">
         Create an account and build your page today!
       </p>
-
       <nuxt-link to="/sign-in" class="btn-secondary">
         <span>Get Started</span>
         <icon name="mdi:arrow-right" size="20" />
       </nuxt-link>
     </div>
 
-    <p
-      v-if="randomQuote" v-motion
-      class="text-sm italic" :initial="{ opacity: 0, x: 60 }"
-      :visible="{ opacity: 1, x: 0 }" :duration="800"
-    >
-      "{{ randomQuote.quote }}" - <span class="font-semibold text-primary">{{ randomQuote.author }}</span>
+    <p class="text-sm italic transition-opacity ease-in-out" :class="{ 'opacity-0': fading }">
+      "{{ randomQuote?.quote }}" -<span class="font-semibold text-primary transition-colors ease-in-out">{{ randomQuote?.author }}</span>
     </p>
+
+    <div class="absolute bottom-0 left-0 h-1 w-full overflow-hidden bg-muted">
+      <span class="absolute top-0 left-0 h-full bg-linear-to-r from-primary to-secondary transition-all" :style="{ width: `${progress}%` }" />
+    </div>
   </section>
 </template>
 
 <script setup lang="ts">
-const randomQuote = ref<{
-  quote: string
-  author: string
-}>()
+const randomQuote = ref<{ quote: string, author: string }>()
+const fading = ref(false)
+const progress = ref(0)
+
+let interval: NodeJS.Timeout
 
 onMounted(() => {
-  randomQuote.value = QUOTES[Math.floor(Math.random() * QUOTES.length)]
+  const duration = 10000
+  const step = 100
+  let elapsed = 0
+
+  const updateQuote = () => {
+    fading.value = true
+    setTimeout(() => {
+      randomQuote.value = QUOTES[Math.floor(Math.random() * QUOTES.length)]
+      fading.value = false
+      elapsed = 0
+      progress.value = 0
+    }, 300)
+  }
+
+  updateQuote()
+
+  interval = setInterval(() => {
+    elapsed += step
+    progress.value = Math.min((elapsed / duration) * 100, 100)
+    if (elapsed >= duration)
+      updateQuote()
+  }, step)
 })
+
+onBeforeUnmount(() => clearInterval(interval))
 
 useHead({
   title: "Your Link-in-Bio Page!",
@@ -100,3 +126,30 @@ definePageMeta({
   middleware: guest,
 })
 </script>
+
+<style scoped>
+.cta-wrapper-grid {
+  position: absolute;
+  inset: 0;
+  z-index: -10;
+  background-position: center;
+  background-size: 60px 60px;
+  background-image:
+    linear-gradient(to right, var(--muted) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--muted) 1px, transparent 1px);
+  opacity: 50%;
+  gap: 1rem;
+}
+
+.cta-wrapper-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in oklab, var(--muted) 0%, transparent 100%) 50%,
+    color-mix(in oklab, var(--muted) 100%, var(--background) 0%) 100%
+  );
+}
+</style>

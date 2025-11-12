@@ -24,10 +24,13 @@ const props = defineProps<{
 const selectedTheme = ref("")
 
 function handleThemeSelection(title: string) {
-  if (THEMES.find(theme => theme.title === title)) {
-    selectedTheme.value = title
-    props.setTheme(THEMES.find(theme => theme.title === title)?.preferences || {})
-  }
+  const themeExists = THEMES.some(theme => theme.title === title)
+  if (!themeExists)
+    return
+
+  selectedTheme.value = title
+  const theme = THEMES.find(theme => theme.title === title)
+  props.setTheme(theme?.preferences || {})
 }
 
 function getThemeBackgroundStyle(preferences: any) {

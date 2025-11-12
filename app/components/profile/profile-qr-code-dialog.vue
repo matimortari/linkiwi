@@ -7,7 +7,7 @@
 
       <QrcodeVue :value="user?.slug" :size="150" level="M" class="rounded-lg border bg-white p-2" />
 
-      <button class="hover:underline" aria-label="Copy Profile Link" @click="copyPageUrl(pageUrl)">
+      <button class="hover:underline" @click="copyPageUrl(pageUrl)">
         @{{ user?.slug }}
       </button>
     </div>
@@ -17,7 +17,7 @@
         {{ copySuccess || '' }}
       </p>
 
-      <button class="btn-primary" aria-label="Copy Profile Link" @click="copyPageUrl(pageUrl)">
+      <button class="btn-primary" @click="copyPageUrl(pageUrl)">
         Copy Link
       </button>
     </footer>

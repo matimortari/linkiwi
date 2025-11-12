@@ -1,14 +1,14 @@
 export function useCarousel(itemsLength: number, interval = 3000) {
   const currentIndex = ref(0)
 
-  let timer: number
+  let timer: ReturnType<typeof setInterval>
 
   const next = () => {
     currentIndex.value = (currentIndex.value + 1) % itemsLength
   }
 
   onMounted(() => {
-    timer = window.setInterval(next, interval)
+    timer = globalThis.setInterval(next, interval)
   })
 
   onUnmounted(() => {

@@ -110,8 +110,8 @@ h1 {
   font-weight: 700;
 }
 h2 {
-  font-size: 2rem;
-  line-height: 2.25rem;
+  font-size: 2.5rem;
+  line-height: 2.5rem;
   font-weight: 700;
 }
 h3 {
@@ -314,12 +314,10 @@ input[type="radio"]:checked::after {
   --btn-fg: var(--secondary-foreground);
 }
 .btn-danger {
-  --btn-bg: var(--card);
-  --btn-fg: var(--secondary-foreground);
+  --btn-fg: var(--danger);
 }
 .btn-success {
-  --btn-bg: var(--success);
-  --btn-fg: var(--secondary-foreground);
+  --btn-fg: var(--success);
 }
 
 .btn,
@@ -367,32 +365,6 @@ input[type="radio"]:checked::after {
 ::selection {
   background: color-mix(in srgb, var(--secondary) 50%, transparent);
   color: var(--secondary-foreground);
-}
-
-html.light {
-  --vignette: radial-gradient(ellipse at center, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 1) 100%);
-}
-html.dark {
-  --vignette: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 100%);
-}
-.cta-wrapper-grid {
-  position: absolute;
-  inset: 0;
-  z-index: -10;
-  background-position: center;
-  background-size: 60px 60px;
-  background-image:
-    linear-gradient(to right, var(--muted) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--muted) 1px, transparent 1px);
-  opacity: 50%;
-  gap: 1rem;
-}
-.cta-wrapper-vignette {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  border-radius: inherit;
-  background: var(--vignette);
 }
 
 /*

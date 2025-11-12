@@ -63,8 +63,6 @@ import logoImage from "~/assets/logo.png"
 import logoDark from "~/assets/wordmark-dark.png"
 import logoLight from "~/assets/wordmark-light.png"
 
-const { themeIcon } = useTheme()
-
 const logos = [
   { name: "Logo", image: logoImage, bgClass: "bg-background" },
   { name: "Wordmark (light)", image: logoLight, bgClass: "bg-[#040308]" },
@@ -116,8 +114,7 @@ function updateColors() {
 onMounted(() => {
   updateColors()
   watchEffect(() => {
-    void themeIcon.value
-    nextTick(() => updateColors())
+    updateColors()
   })
 })
 

@@ -69,15 +69,13 @@ async function handleIconClick(iconId: string) {
 }
 
 watch(() => route.params.slug, async (newSlug) => {
-  let lastRecordedSlug: string | null = null
-  if (!newSlug || newSlug === lastRecordedSlug)
+  if (!newSlug)
     return
 
   await fetchUserBySlug(newSlug as string)
   const currentUser = user.value
   if (currentUser?.id) {
     await analyticsService.recordPageView(currentUser.id)
-    lastRecordedSlug = typeof newSlug === "string" ? newSlug : Array.isArray(newSlug) ? newSlug[0] ?? null : null
 
     useHead({
       title: `@${currentUser.slug}`,

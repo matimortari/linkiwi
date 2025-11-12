@@ -20,7 +20,7 @@
           <icon :name="icon.logo" :size="30" />
         </nuxt-link>
 
-        <button class="absolute right-0 bottom-0 flex items-center p-1" aria-label="Delete Social Icon" @click="deleteIcon(icon.id!)">
+        <button class="absolute right-0 bottom-0 flex items-center p-1 transition-transform hover:scale-110" aria-label="Delete Social Icon" @click="deleteIcon(icon.id!)">
           <icon name="mdi:remove-circle-outline" size="25" class="text-danger" />
         </button>
       </li>

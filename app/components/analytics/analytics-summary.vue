@@ -8,8 +8,8 @@
     </header>
 
     <div class="grid grid-cols-2 gap-4 border-b py-4 md:grid-cols-4 md:place-items-center">
-      <div class="flex flex-row items-center gap-2">
-        <icon name="material-symbols:table-eye" size="25" class="text-primary" />
+      <div class="navigation-group">
+        <icon name="material-symbols:table-eye" size="30" class="text-primary" />
         <div class="flex flex-col items-start">
           <p class="text-caption">
             Total Page Views
@@ -20,8 +20,8 @@
         </div>
       </div>
 
-      <div class="flex flex-row items-center gap-2">
-        <icon name="material-symbols:ads-click" size="25" class="text-primary" />
+      <div class="navigation-group">
+        <icon name="material-symbols:ads-click" size="30" class="text-primary" />
         <div class="flex flex-col items-start">
           <p class="text-caption">
             Total Clicks
@@ -32,8 +32,8 @@
         </div>
       </div>
 
-      <div class="flex flex-row items-center gap-2">
-        <icon name="material-symbols:percent" size="25" class="text-primary" />
+      <div class="navigation-group">
+        <icon name="material-symbols:percent" size="30" class="text-primary" />
         <div class="flex flex-col items-start">
           <p class="text-caption">
             Click Rate
@@ -44,8 +44,8 @@
         </div>
       </div>
 
-      <div class="flex flex-row items-center gap-2">
-        <icon name="material-symbols:calendar-month" size="25" class="text-primary" />
+      <div class="navigation-group">
+        <icon name="material-symbols:calendar-month" size="30" class="text-primary" />
         <div class="flex flex-col items-start">
           <p class="text-caption">
             Joined On
@@ -99,18 +99,8 @@ const { user } = useUserActions()
 const analyticsData = ref<AnalyticsRecordSchema[]>([])
 
 const totalViews = computed(() => user.value?.views?.length ?? 0)
-
-const totalClicks = computed(() => {
-  const linkClicks = user.value?.links?.reduce((acc, l) => acc + (l.clicks ?? 0), 0) ?? 0
-  const iconClicks = user.value?.icons?.reduce((acc, i) => acc + (i.clicks ?? 0), 0) ?? 0
-  return linkClicks + iconClicks
-})
-
-const clickRate = computed(() => {
-  const views = totalViews.value
-  return views ? ((totalClicks.value / views) * 100).toFixed(2) : 0
-})
-
+const totalClicks = computed(() => (user.value?.links?.reduce((acc, l) => acc + (l.clicks ?? 0), 0) ?? 0) + (user.value?.icons?.reduce((acc, i) => acc + (i.clicks ?? 0), 0) ?? 0))
+const clickRate = computed(() => totalViews.value ? ((totalClicks.value / totalViews.value) * 100).toFixed(2) : 0)
 const createdAt = computed(() => user.value?.createdAt ? new Date(user.value.createdAt).toLocaleDateString() : "Unknown")
 
 function groupByDate<T extends { date?: string | Date }>(items: T[]): Record<string, number> {

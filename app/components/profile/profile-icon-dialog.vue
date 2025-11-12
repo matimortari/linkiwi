@@ -51,9 +51,7 @@ const props = defineProps<{
   isOpen: boolean
 }>()
 
-const emit = defineEmits<{
-  (e: "close"): void
-}>()
+const emit = defineEmits<(e: "close") => void>()
 
 const { icons, errors, createIcon } = useIconActions()
 const { form, isLoading, isFormValid, resetForm, validateForm } = useFormValidation<CreateUserIconInput>({
