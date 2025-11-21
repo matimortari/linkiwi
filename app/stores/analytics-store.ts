@@ -1,4 +1,4 @@
-import type { AnalyticsRecordSchema } from "~~/shared/schemas/analytics-schema"
+import type { AnalyticsRecordSchema } from "#shared/schemas/analytics-schema"
 
 export const useAnalyticsStore = defineStore("analytics", () => {
   const analytics = ref<any>(null)

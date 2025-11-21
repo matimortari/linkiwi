@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import type { AnalyticsRecordSchema } from "~~/shared/schemas/analytics-schema"
+import type { AnalyticsRecordSchema } from "#shared/schemas/analytics-schema"
 
 const linksStore = useLinksStore()
 const iconsStore = useIconsStore()
