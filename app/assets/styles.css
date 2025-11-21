@@ -7,9 +7,7 @@
   --background: #e0dddd;
   --foreground: #2e2d2d;
   --card: #eeeded;
-  --card-foreground: #2e2d2d;
   --overlay: #eeeded;
-  --overlay-foreground: #2e2d2d;
   --primary: #748d6e;
   --primary-foreground: #ebe8e8;
   --secondary: #63abb5;
@@ -39,9 +37,7 @@ html.dark {
   --background: #040308;
   --foreground: #ebe8e8;
   --card: #111016;
-  --card-foreground: #ebe8e8;
   --overlay: #111016;
-  --overlay-foreground: #ebe8e8;
   --primary: #748d6e;
   --primary-foreground: #ebe8e8;
   --secondary: #63abb5;
@@ -60,9 +56,7 @@ html.dark {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
   --color-overlay: var(--overlay);
-  --color-overlay-foreground: var(--overlay-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
@@ -158,7 +152,6 @@ h6 {
 */
 .card {
   background-color: var(--card);
-  color: var(--card-foreground);
   border: 1px solid var(--muted);
   border-radius: 1rem;
   padding: 1rem;
@@ -166,7 +159,6 @@ h6 {
 
 .overlay {
   background-color: var(--overlay);
-  color: var(--overlay-foreground);
   border: 1px solid var(--muted);
   border-radius: 1rem;
   padding: 1rem;
@@ -303,7 +295,7 @@ input[type="radio"]:checked::after {
 
 .btn {
   --btn-bg: var(--card);
-  --btn-fg: var(--card-foreground);
+  --btn-fg: var(--foreground);
 }
 .btn-primary {
   --btn-bg: var(--primary);

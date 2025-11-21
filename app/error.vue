@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto grid min-h-screen grid-cols-1 items-center gap-6 p-24 md:gap-12 lg:grid-cols-2">
+  <div class="container mx-auto grid min-h-screen grid-cols-1 items-center gap-6 p-24 md:grid-cols-2 md:gap-12">
     <div class="flex flex-col items-center gap-4 text-center md:items-start md:text-start">
       <p class="text-siga-700 text-4xl font-bold md:text-5xl md:whitespace-nowrap">
         {{ error.statusCode }} - {{ error.statusMessage || "An unexpected error has occurred." }}
