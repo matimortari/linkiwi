@@ -94,40 +94,48 @@
 <script setup lang="ts">
 import type { AnalyticsRecordSchema } from "~~/shared/schemas/analytics-schema"
 
-const { user } = useUserActions()
+const analyticsStore = useAnalyticsStore()
+const userStore = useUserStore()
 
 const analyticsData = ref<AnalyticsRecordSchema[]>([])
 
-const totalViews = computed(() => user.value?.views?.length ?? 0)
-const totalClicks = computed(() => (user.value?.links?.reduce((acc, l) => acc + (l.clicks ?? 0), 0) ?? 0) + (user.value?.icons?.reduce((acc, i) => acc + (i.clicks ?? 0), 0) ?? 0))
-const clickRate = computed(() => totalViews.value ? ((totalClicks.value / totalViews.value) * 100).toFixed(2) : 0)
-const createdAt = computed(() => user.value?.createdAt ? new Date(user.value.createdAt).toLocaleDateString() : "Unknown")
+const totalViews = computed(() => {
+  const pageViews = analyticsStore.analytics?.pageViews ?? []
+  return pageViews.length
+})
 
-function groupByDate<T extends { date?: string | Date }>(items: T[]): Record<string, number> {
+const totalClicks = computed(() => {
+  const linkClicks = analyticsStore.analytics?.linkClicks ?? []
+  const iconClicks = analyticsStore.analytics?.iconClicks ?? []
+  return linkClicks.length + iconClicks.length
+})
+
+const clickRate = computed(() => totalViews.value ? ((Number(totalClicks.value) / Number(totalViews.value)) * 100).toFixed(2) : 0)
+const createdAt = computed(() => userStore.user?.createdAt ? new Date(userStore.user.createdAt).toLocaleDateString() : "Unknown")
+
+function groupByDate<T extends { createdAt?: string | Date }>(items: T[]): Record<string, number> {
   const result: Record<string, number> = {}
-
   for (const item of items) {
-    if (!item.date)
+    if (!item.createdAt)
       continue
-
-    const dateObj = new Date(item.date)
+    const dateObj = new Date(item.createdAt)
     if (!Number.isNaN(dateObj.getTime())) {
       const iso = dateObj.toISOString()
       const dateStr = (iso.split("T")[0] ?? iso)
       result[dateStr] = (result[dateStr] ?? 0) + 1
     }
   }
-
   return result
 }
 
 const stats = computed(() => {
-  if (!user.value)
-    return []
+  const pageViews = analyticsStore.analytics?.pageViews ?? []
+  const linkClicks = analyticsStore.analytics?.linkClicks ?? []
+  const iconClicks = analyticsStore.analytics?.iconClicks ?? []
 
-  const viewsByDate = groupByDate(user.value.views ?? [])
-  const linkClicksByDate = groupByDate(user.value.links?.flatMap(l => l.linkClicks ?? []) ?? [])
-  const iconClicksByDate = groupByDate(user.value.icons?.flatMap(i => i.iconClicks ?? []) ?? [])
+  const viewsByDate = groupByDate(pageViews)
+  const linkClicksByDate = groupByDate(linkClicks)
+  const iconClicksByDate = groupByDate(iconClicks)
 
   const allDates = Array.from(new Set([...Object.keys(viewsByDate), ...Object.keys(linkClicksByDate), ...Object.keys(iconClicksByDate)])).sort()
   return allDates.map(date => ({
@@ -141,7 +149,6 @@ const stats = computed(() => {
 const pageViewsChartData = computed(() => {
   if (!stats.value.length)
     return null
-
   return {
     labels: stats.value.map(s => s.date),
     datasets: [{ label: "Page Views", data: stats.value.map(s => s.pageViews), backgroundColor: "#63abb5" }],
@@ -151,7 +158,6 @@ const pageViewsChartData = computed(() => {
 const linkClicksChartData = computed(() => {
   if (!stats.value.length)
     return null
-
   return {
     labels: stats.value.map(s => s.date),
     datasets: [{ label: "Link Clicks", data: stats.value.map(s => s.linkClicks), backgroundColor: "#63abb5" }],
@@ -161,7 +167,6 @@ const linkClicksChartData = computed(() => {
 const iconClicksChartData = computed(() => {
   if (!stats.value.length)
     return null
-
   return {
     labels: stats.value.map(s => s.date),
     datasets: [{ label: "Social Icon Clicks", data: stats.value.map(s => s.iconClicks), backgroundColor: "#63abb5" }],
@@ -169,21 +174,25 @@ const iconClicksChartData = computed(() => {
 })
 
 onMounted(async () => {
-  const res = await analyticsService.getAnalytics()
+  await Promise.all([
+    analyticsStore.getAnalytics(),
+    userStore.getUser(),
+  ])
 
+  const res = analyticsStore.analytics
   analyticsData.value = [
-    ...(res.pageViews?.map((pv: any) => ({
+    ...(res?.pageViews?.map((pv: any) => ({
       type: "pageView" as const,
       userId: String(pv.userId),
       createdAt: pv.createdAt ? String(pv.createdAt) : undefined,
     })) ?? []),
-    ...(res.linkClicks?.map((lc: any) => ({
+    ...(res?.linkClicks?.map((lc: any) => ({
       type: "link" as const,
       userId: String(lc.userId),
       id: lc.id ? String(lc.id) : undefined,
       createdAt: lc.createdAt ? String(lc.createdAt) : undefined,
     })) ?? []),
-    ...(res.iconClicks?.map((ic: any) => ({
+    ...(res?.iconClicks?.map((ic: any) => ({
       type: "icon" as const,
       userId: String(ic.userId),
       id: ic.id ? String(ic.id) : undefined,

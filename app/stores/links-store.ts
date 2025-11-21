@@ -13,9 +13,11 @@ export const useLinksStore = defineStore("links", () => {
   async function getLinks() {
     loading.value = true
     errors.value.getLinks = null
-
     try {
-      const res = await linksService.getLinks()
+      const res = await $fetch<{ links: Link[] }>(`${API_URL}/links`, {
+        method: "GET",
+        credentials: "include",
+      })
       links.value = res.links
     }
     catch (err: any) {
@@ -30,11 +32,12 @@ export const useLinksStore = defineStore("links", () => {
   async function createLink(data: CreateUserLinkInput) {
     loading.value = true
     errors.value.createLink = null
-
     try {
-      const res = await linksService.createLink(data) as unknown as {
-        link: Link
-      }
+      const res = await $fetch<{ link: Link }>(`${API_URL}/links`, {
+        method: "POST",
+        body: data,
+        credentials: "include",
+      })
       links.value.push(res.link)
     }
     catch (err: any) {
@@ -49,11 +52,12 @@ export const useLinksStore = defineStore("links", () => {
   async function updateLink(id: string, data: UpdateUserLinkInput) {
     loading.value = true
     errors.value.updateLink = null
-
     try {
-      const res = await linksService.updateLink(id, data) as unknown as {
-        link: Link
-      }
+      const res = await $fetch<{ link: Link }>(`${API_URL}/links/${id}`, {
+        method: "PUT",
+        body: data,
+        credentials: "include",
+      })
       const index = links.value.findIndex(link => link.id === id)
       if (index !== -1) {
         links.value[index] = res.link
@@ -71,9 +75,11 @@ export const useLinksStore = defineStore("links", () => {
   async function deleteLink(id: string) {
     loading.value = true
     errors.value.deleteLink = null
-
     try {
-      await linksService.deleteLink(id)
+      await $fetch(`${API_URL}/links/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      })
       links.value = links.value.filter(link => link.id !== id)
     }
     catch (err: any) {

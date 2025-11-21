@@ -38,28 +38,32 @@
 <script setup lang="ts">
 import type { AnalyticsRecordSchema } from "~~/shared/schemas/analytics-schema"
 
+const linksStore = useLinksStore()
+const iconsStore = useIconsStore()
+const analyticsStore = useAnalyticsStore()
+
 const items = ref<Array<any>>([])
 const clicksMap = ref<Record<string, number>>({})
 const loading = ref(true)
 
 onMounted(async () => {
-  const { fetchLinks, links } = useLinkActions()
-  const { fetchIcons, icons } = useIconActions()
-
   loading.value = true
 
-  await fetchLinks()
-  await fetchIcons()
+  await Promise.all([
+    linksStore.getLinks(),
+    iconsStore.getIcons(),
+    analyticsStore.getAnalytics(),
+  ])
 
   // Merge links and icons with a type marker
   items.value = [
-    ...links.value.map(l => ({
+    ...linksStore.links.map(l => ({
       id: l.id!,
       type: "link",
       title: l.title,
       url: l.url,
     })),
-    ...icons.value.map(i => ({
+    ...iconsStore.icons.map(i => ({
       id: i.id!,
       type: "icon",
       logo: i.logo,
@@ -69,10 +73,10 @@ onMounted(async () => {
   ]
 
   // Fetch analytics and aggregate clicks
-  const res = await analyticsService.getAnalytics()
+  const res = analyticsStore.analytics
   const raw: Array<any> = [
-    ...(res.linkClicks ?? []).map(r => ({ ...r, type: "link" })),
-    ...(res.iconClicks ?? []).map(r => ({ ...r, type: "icon" })),
+    ...(res?.linkClicks ?? []).map((r: any) => ({ ...r, type: "link" })),
+    ...(res?.iconClicks ?? []).map((r: any) => ({ ...r, type: "icon" })),
   ]
 
   const analytics: AnalyticsRecordSchema[] = raw as AnalyticsRecordSchema[]

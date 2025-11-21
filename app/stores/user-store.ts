@@ -15,12 +15,12 @@ export const useUserStore = defineStore("user", () => {
   async function getUser() {
     loading.value = true
     errors.value.getUser = null
-
     try {
-      const res = await userService.getUser() as {
-        user: User
-      }
-      user.value = res.user
+      const res = await $fetch<User>(`${API_URL}/user`, {
+        method: "GET",
+        credentials: "include",
+      })
+      user.value = res
     }
     catch (err: any) {
       errors.value.getUser = err?.message || "Failed to get user"
@@ -34,9 +34,10 @@ export const useUserStore = defineStore("user", () => {
   async function getUserBySlug(slug: string) {
     loading.value = true
     errors.value.getUserBySlug = null
-
     try {
-      const res = await userService.getUserBySlug(slug) as User
+      const res = await $fetch<User>(`${API_URL}/user/${slug}`, {
+        method: "GET",
+      })
       user.value = res
       return res
     }
@@ -53,10 +54,13 @@ export const useUserStore = defineStore("user", () => {
   async function updateUser(data: UpdateUserInput) {
     loading.value = true
     errors.value.updateUser = null
-
     try {
-      const res = await userService.updateUser(data)
-      user.value = res.user
+      const res = await $fetch<User>(`${API_URL}/user`, {
+        method: "PUT",
+        body: data,
+        credentials: "include",
+      })
+      user.value = res
     }
     catch (err: any) {
       errors.value.updateUser = err?.message || "Failed to update user"
@@ -70,9 +74,14 @@ export const useUserStore = defineStore("user", () => {
   async function updateUserImage(file: File) {
     loading.value = true
     errors.value.updateUserImage = null
-
     try {
-      const res = await userService.updateUserImage(file)
+      const formData = new FormData()
+      formData.append("file", file)
+      const res = await $fetch<{ imageUrl: string }>(`${API_URL}/user/image-upload`, {
+        method: "PUT",
+        body: formData,
+        credentials: "include",
+      })
       if (user.value && res.imageUrl) {
         user.value.image = res.imageUrl
       }
@@ -90,11 +99,14 @@ export const useUserStore = defineStore("user", () => {
   async function updatePreferences(data: UpdateUserPreferencesInput) {
     loading.value = true
     errors.value.updatePreferences = null
-
     try {
-      const res = await userService.updatePreferences(data)
-      if (user.value && res.preferences) {
-        user.value.preferences = res.preferences as typeof user.value.preferences
+      const res = await $fetch<UpdateUserPreferencesInput>(`${API_URL}/user/preferences`, {
+        method: "PUT",
+        body: data,
+        credentials: "include",
+      })
+      if (user.value && res) {
+        user.value.preferences = res as typeof user.value.preferences
       }
     }
     catch (err: any) {
@@ -109,9 +121,11 @@ export const useUserStore = defineStore("user", () => {
   async function deleteUser() {
     loading.value = true
     errors.value.deleteUser = null
-
     try {
-      await userService.deleteUser()
+      await $fetch(`${API_URL}/user`, {
+        method: "DELETE",
+        credentials: "include",
+      })
       user.value = null
     }
     catch (err: any) {
