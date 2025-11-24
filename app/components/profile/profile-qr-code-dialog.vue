@@ -31,10 +31,9 @@ defineProps({
   isOpen: Boolean,
 })
 
-const emit = defineEmits(["close", "update:isOpen"])
+const emit = defineEmits<(e: "close" | "update:isOpen") => void>()
 
-const { user } = useUserActions()
-
+const { user } = storeToRefs(useUserStore())
 const copySuccess = ref<string | null>(null)
 const pageUrl = `${BASE_URL}/${user.value?.slug}`
 

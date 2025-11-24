@@ -1,29 +1,17 @@
-import type { AnalyticsRecordSchema } from "#shared/schemas/analytics-schema"
-
 export const useAnalyticsStore = defineStore("analytics", () => {
   const analytics = ref<any>(null)
   const loading = ref<boolean>(false)
-  const errors = ref<Record<"getAnalytics" | "recordPageView" | "recordLinkClick" | "recordIconClick" | "deleteAnalytics", string | null>>({
-    getAnalytics: null,
-    recordPageView: null,
-    recordLinkClick: null,
-    recordIconClick: null,
-    deleteAnalytics: null,
-  })
+  const errors = ref<Record<string, string | null>>({ getAnalytics: null, recordPageView: null, recordLinkClick: null, recordIconClick: null, deleteAnalytics: null })
 
   async function getAnalytics() {
     loading.value = true
     errors.value.getAnalytics = null
+
     try {
-      const res = await $fetch(`${API_URL}/analytics`, {
-        method: "GET",
-        credentials: "include",
-      })
-      analytics.value = res
-      return res
+      analytics.value = await $fetch(`${API_URL}/analytics`, { method: "GET", credentials: "include" })
     }
     catch (err: any) {
-      errors.value.getAnalytics = err?.message || "Failed to fetch analytics"
+      errors.value.getAnalytics = err.data.message || "Failed to fetch analytics"
       console.error("getAnalytics error:", err)
     }
     finally {
@@ -34,19 +22,12 @@ export const useAnalyticsStore = defineStore("analytics", () => {
   async function recordPageView(userId: string) {
     loading.value = true
     errors.value.recordPageView = null
+
     try {
-      const res = await $fetch(`${API_URL}/analytics`, {
-        method: "POST",
-        body: {
-          type: "pageView",
-          userId,
-        } satisfies AnalyticsRecordSchema,
-        credentials: "include",
-      })
-      return res
+      await $fetch(`${API_URL}/analytics`, { method: "POST", body: { type: "pageView", userId }, credentials: "include" })
     }
     catch (err: any) {
-      errors.value.recordPageView = err?.message || "Failed to record page view"
+      errors.value.recordPageView = err.data.message || "Failed to record page view"
       console.error("recordPageView error:", err)
     }
     finally {
@@ -58,19 +39,10 @@ export const useAnalyticsStore = defineStore("analytics", () => {
     loading.value = true
     errors.value.recordLinkClick = null
     try {
-      const res = await $fetch(`${API_URL}/analytics`, {
-        method: "POST",
-        body: {
-          type: "link",
-          userId,
-          id: linkId,
-        } satisfies AnalyticsRecordSchema,
-        credentials: "include",
-      })
-      return res
+      await $fetch(`${API_URL}/analytics`, { method: "POST", body: { type: "link", userId, id: linkId }, credentials: "include" })
     }
     catch (err: any) {
-      errors.value.recordLinkClick = err?.message || "Failed to record link click"
+      errors.value.recordLinkClick = err.data.message || "Failed to record link click"
       console.error("recordLinkClick error:", err)
     }
     finally {
@@ -81,20 +53,12 @@ export const useAnalyticsStore = defineStore("analytics", () => {
   async function recordIconClick(userId: string, iconId: string) {
     loading.value = true
     errors.value.recordIconClick = null
+
     try {
-      const res = await $fetch(`${API_URL}/analytics`, {
-        method: "POST",
-        body: {
-          type: "icon",
-          userId,
-          id: iconId,
-        } satisfies AnalyticsRecordSchema,
-        credentials: "include",
-      })
-      return res
+      await $fetch(`${API_URL}/analytics`, { method: "POST", body: { type: "icon", userId, id: iconId }, credentials: "include" })
     }
     catch (err: any) {
-      errors.value.recordIconClick = err?.message || "Failed to record icon click"
+      errors.value.recordIconClick = err.data.message || "Failed to record icon click"
       console.error("recordIconClick error:", err)
     }
     finally {
@@ -105,6 +69,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
   async function deleteAnalytics(options?: { type?: "pageView" | "linkClick" | "iconClick", dateFrom?: string, dateTo?: string }) {
     loading.value = true
     errors.value.deleteAnalytics = null
+
     try {
       const params = new URLSearchParams()
       if (options?.type)
@@ -113,14 +78,11 @@ export const useAnalyticsStore = defineStore("analytics", () => {
         params.append("dateFrom", options.dateFrom)
       if (options?.dateTo)
         params.append("dateTo", options.dateTo)
-      const res = await $fetch<{ success: boolean, message: string, deletedCount: number }>(params.toString() ? `${API_URL}/analytics?${params.toString()}` : `${API_URL}/analytics`, {
-        method: "DELETE",
-        credentials: "include",
-      })
-      return res
+
+      await $fetch<{ success: boolean, message: string, deletedCount: number }>(params.toString() ? `${API_URL}/analytics?${params.toString()}` : `${API_URL}/analytics`, { method: "DELETE", credentials: "include" })
     }
     catch (err: any) {
-      errors.value.deleteAnalytics = err?.message || "Failed to delete analytics"
+      errors.value.deleteAnalytics = err.data.message || "Failed to delete analytics"
       console.error("deleteAnalytics error:", err)
     }
     finally {

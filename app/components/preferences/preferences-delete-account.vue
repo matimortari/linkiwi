@@ -19,12 +19,12 @@
 </template>
 
 <script setup lang="ts">
-const { deleteAccount } = useUserActions()
+const userStore = useUserStore()
 
 async function handleDeleteUser() {
   if (!confirm("Are you sure you want to delete your account? This action cannot be undone."))
     return
 
-  await deleteAccount()
+  await userStore.deleteUser()
 }
 </script>

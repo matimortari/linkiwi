@@ -41,7 +41,6 @@ import type { AnalyticsRecordSchema } from "#shared/schemas/analytics-schema"
 const linksStore = useLinksStore()
 const iconsStore = useIconsStore()
 const analyticsStore = useAnalyticsStore()
-
 const items = ref<Array<any>>([])
 const clicksMap = ref<Record<string, number>>({})
 const loading = ref(true)

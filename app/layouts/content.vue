@@ -2,11 +2,11 @@
   <Navbar />
 
   <div class="mt-8 flex min-h-screen border-b">
-    <div v-if="sidebarOpen" class="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm xl:hidden" @click="sidebarOpen = false" />
+    <div v-if="isSidebarOpen" class="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm xl:hidden" @click="isSidebarOpen = false" />
 
     <div class="flex flex-1 flex-col xl:flex-row">
-      <button class="btn fixed bottom-4 left-4 z-50 xl:hidden!" @click="sidebarOpen = !sidebarOpen">
-        <icon :name="sidebarOpen ? 'mdi:close' : 'mdi:menu'" size="30" />
+      <button class="btn fixed bottom-4 left-4 z-50 xl:hidden!" @click="isSidebarOpen = !isSidebarOpen">
+        <icon :name="isSidebarOpen ? 'mdi:close' : 'mdi:menu'" size="30" />
       </button>
 
       <article
@@ -20,7 +20,7 @@
       <aside
         id="table-of-contents"
         class="fixed top-0 right-0 z-40 h-full w-4/5 transform border-l bg-card px-4! py-12! transition-transform duration-300 md:w-2/5 xl:relative xl:z-auto xl:translate-x-0 xl:border-l"
-        :class="sidebarOpen ? 'translate-x-0' : 'translate-x-full'"
+        :class="isSidebarOpen ? 'translate-x-0' : 'translate-x-full'"
       >
         <div class="scroll-area sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto pr-2">
           <p class="border-b py-2 font-semibold text-muted-foreground uppercase">
@@ -31,7 +31,7 @@
             <nuxt-link
               v-for="header in headers" :key="header.id"
               :to="`#${header.id}`" :class="headerClasses(header)"
-              class="block transition-colors hover:text-primary" @click="sidebarOpen = false"
+              class="block transition-colors hover:text-primary" @click="isSidebarOpen = false"
             >
               <div class="flex flex-row items-center gap-2">
                 <span v-if="header.method" :class="[REST_METHOD_LABELS[header.method as keyof typeof REST_METHOD_LABELS]]">
@@ -53,7 +53,7 @@
 const props = useRoute().meta.layoutProps ?? {}
 const { headers, headerClasses } = useContent({ selector: ".markdown", ...props })
 
-const sidebarOpen = ref(false)
+const isSidebarOpen = ref(false)
 </script>
 
 <style scoped>

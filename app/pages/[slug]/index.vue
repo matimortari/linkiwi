@@ -52,19 +52,21 @@
 <script setup lang="ts">
 const route = useRoute()
 const slug = route.params.slug as string
-const { user, loading, fetchUserBySlug } = useUserActions()
+const userStore = useUserStore()
+const { user, loading } = storeToRefs(userStore)
+const analyticsStore = useAnalyticsStore()
 const preferences = computed(() => user.value?.preferences ?? null)
 const { backgroundStyle, profilePictureStyle, slugStyle, descriptionStyle } = useDynamicStyles(preferences)
 
 async function handleLinkClick(linkId: string) {
   if (user.value?.id) {
-    await analyticsService.recordLinkClick(user.value.id, linkId)
+    await analyticsStore.recordLinkClick(user.value.id, linkId)
   }
 }
 
 async function handleIconClick(iconId: string) {
   if (user.value?.id) {
-    await analyticsService.recordIconClick(user.value.id, iconId)
+    await analyticsStore.recordIconClick(user.value.id, iconId)
   }
 }
 
@@ -72,10 +74,10 @@ watch(() => route.params.slug, async (newSlug) => {
   if (!newSlug)
     return
 
-  await fetchUserBySlug(newSlug as string)
+  await userStore.getUserBySlug(newSlug as string)
   const currentUser = user.value
   if (currentUser?.id) {
-    await analyticsService.recordPageView(currentUser.id)
+    await analyticsStore.recordPageView(currentUser.id)
 
     useHead({
       title: `@${currentUser.slug}`,

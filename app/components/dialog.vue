@@ -31,7 +31,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(["update:isOpen", "confirm"])
+const emit = defineEmits<{ (e: "update:isOpen", value: boolean): void, (e: "confirm"): void }>()
 
 const dialogRef = ref<HTMLElement | null>(null)
 

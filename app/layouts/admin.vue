@@ -15,18 +15,18 @@
 </template>
 
 <script setup lang="ts">
-const { fetchUser } = useUserActions()
-const { fetchLinks } = useLinkActions()
-const { fetchIcons } = useIconActions()
+const userStore = useUserStore()
+const linksStore = useLinksStore()
+const iconsStore = useIconsStore()
 
 const isLoading = ref(true)
 
 async function getUserData() {
   try {
     await Promise.all([
-      await fetchUser(),
-      await fetchLinks(),
-      await fetchIcons(),
+      await userStore.getUser(),
+      await linksStore.getLinks(),
+      await iconsStore.getIcons(),
     ])
   }
   catch {
@@ -37,12 +37,5 @@ async function getUserData() {
   }
 }
 
-onMounted(() => {
-  if (document.readyState === "complete") {
-    getUserData()
-  }
-  else {
-    window.addEventListener("load", getUserData)
-  }
-})
+onMounted(getUserData)
 </script>

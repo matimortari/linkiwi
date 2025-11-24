@@ -27,5 +27,5 @@ defineProps({
   },
 })
 
-defineEmits(["update:value"])
+defineEmits<(e: "update:value", value: string) => void>()
 </script>

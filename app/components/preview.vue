@@ -24,19 +24,11 @@
           </p>
 
           <ul v-if="icons.length" class="my-2 flex w-full flex-row items-center justify-center gap-2">
-            <UserIcon
-              v-for="icon in icons" :key="icon.id"
-              :url="icon.url" :logo="icon.logo"
-              :preferences="preferences"
-            />
+            <UserIcon v-for="icon in icons" :key="icon.id" :icon="icon" :preferences="preferences" />
           </ul>
 
           <ul v-if="links.length" class="flex w-full flex-col items-center gap-4">
-            <UserLink
-              v-for="link in links" :key="link.id"
-              :url="link.url" :title="link.title"
-              :preferences="preferences"
-            />
+            <UserLink v-for="link in links" :key="link.id" :link="link" :preferences="preferences" />
           </ul>
 
           <p v-else :style="descriptionStyle">
@@ -74,21 +66,13 @@
 
         <div class="my-2 w-full">
           <ul v-if="icons.length" class="flex flex-row items-center justify-center gap-2">
-            <UserIcon
-              v-for="icon in icons" :key="icon.id"
-              :url="icon.url" :logo="icon.logo"
-              :preferences="preferences"
-            />
+            <UserIcon v-for="icon in icons" :key="icon.id" :icon="icon" :preferences="preferences" />
           </ul>
         </div>
 
         <div class="w-full">
           <ul v-if="links.length" class="flex flex-col items-center gap-4">
-            <UserLink
-              v-for="link in links" :key="link.id"
-              :url="link.url" :title="link.title"
-              :preferences="preferences"
-            />
+            <UserLink v-for="link in links" :key="link.id" :link="link" :preferences="preferences" />
           </ul>
 
           <p v-else :style="descriptionStyle">
@@ -101,11 +85,10 @@
 </template>
 
 <script setup lang="ts">
-const { user } = useUserActions()
-const { links } = useLinkActions()
-const { icons } = useIconActions()
+const { user } = storeToRefs(useUserStore())
+const { links } = storeToRefs(useLinksStore())
+const { icons } = storeToRefs(useIconsStore())
 const isMobilePreviewOpen = ref(false)
-
 const preferences = computed(() => user.value?.preferences ?? null)
 const { backgroundStyle, profilePictureStyle, slugStyle, descriptionStyle } = useDynamicStyles(preferences)
 </script>

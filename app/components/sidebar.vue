@@ -76,8 +76,7 @@
 <script setup lang="ts">
 const { toggleTheme, themeIcon } = useTheme()
 const { clear } = useUserSession()
-
-const { user } = useUserActions()
+const { user } = storeToRefs(useUserStore())
 const isMobileNavOpen = ref(false)
 const isDialogOpen = ref(false)
 

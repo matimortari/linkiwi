@@ -96,28 +96,18 @@ import type { AnalyticsRecordSchema } from "#shared/schemas/analytics-schema"
 
 const analyticsStore = useAnalyticsStore()
 const userStore = useUserStore()
-
 const analyticsData = ref<AnalyticsRecordSchema[]>([])
-
-const totalViews = computed(() => {
-  const pageViews = analyticsStore.analytics?.pageViews ?? []
-  return pageViews.length
-})
-
-const totalClicks = computed(() => {
-  const linkClicks = analyticsStore.analytics?.linkClicks ?? []
-  const iconClicks = analyticsStore.analytics?.iconClicks ?? []
-  return linkClicks.length + iconClicks.length
-})
-
+const totalViews = computed(() => analyticsStore.analytics?.pageViews.length)
+const totalClicks = computed(() => analyticsStore.analytics?.linkClicks.length + analyticsStore.analytics?.iconClicks.length)
 const clickRate = computed(() => totalViews.value ? ((Number(totalClicks.value) / Number(totalViews.value)) * 100).toFixed(2) : 0)
-const createdAt = computed(() => userStore.user?.createdAt ? new Date(userStore.user.createdAt).toLocaleDateString() : "Unknown")
+const createdAt = computed(() => userStore.user?.createdAt)
 
 function groupByDate<T extends { createdAt?: string | Date }>(items: T[]): Record<string, number> {
   const result: Record<string, number> = {}
   for (const item of items) {
     if (!item.createdAt)
       continue
+
     const dateObj = new Date(item.createdAt)
     if (!Number.isNaN(dateObj.getTime())) {
       const iso = dateObj.toISOString()
@@ -125,6 +115,7 @@ function groupByDate<T extends { createdAt?: string | Date }>(items: T[]): Recor
       result[dateStr] = (result[dateStr] ?? 0) + 1
     }
   }
+
   return result
 }
 
@@ -149,6 +140,7 @@ const stats = computed(() => {
 const pageViewsChartData = computed(() => {
   if (!stats.value.length)
     return null
+
   return {
     labels: stats.value.map(s => s.date),
     datasets: [{ label: "Page Views", data: stats.value.map(s => s.pageViews), backgroundColor: "#63abb5" }],
@@ -158,6 +150,7 @@ const pageViewsChartData = computed(() => {
 const linkClicksChartData = computed(() => {
   if (!stats.value.length)
     return null
+
   return {
     labels: stats.value.map(s => s.date),
     datasets: [{ label: "Link Clicks", data: stats.value.map(s => s.linkClicks), backgroundColor: "#63abb5" }],
@@ -167,6 +160,7 @@ const linkClicksChartData = computed(() => {
 const iconClicksChartData = computed(() => {
   if (!stats.value.length)
     return null
+
   return {
     labels: stats.value.map(s => s.date),
     datasets: [{ label: "Social Icon Clicks", data: stats.value.map(s => s.iconClicks), backgroundColor: "#63abb5" }],

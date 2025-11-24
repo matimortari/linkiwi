@@ -53,7 +53,8 @@ const props = defineProps<{
 
 const emit = defineEmits<(e: "close") => void>()
 
-const { user, errors, fetchUser, updateProfile, updateProfileImage } = useUserActions()
+const userStore = useUserStore()
+const { user, errors } = storeToRefs(userStore)
 
 const form = ref({
   slug: "",
@@ -82,14 +83,14 @@ async function handleUpdateImage(event: Event) {
     return
 
   try {
-    const res = await updateProfileImage(file)
+    const res = await userStore.updateUserImage(file)
     if (res?.imageUrl && user.value) {
       user.value.image = res.imageUrl
       form.value.image = res.imageUrl
     }
   }
   catch (err: any) {
-    errors.value.updateUserImage = err.message
+    errors.value.updateUserImage = err.data.message
   }
 }
 
@@ -98,23 +99,23 @@ async function handleSubmit() {
 
   if (!user.value?.id)
     return
-  if (!user?.value?.name) {
+  if (!user.value?.name) {
     errors.value.updateUser = "User name cannot be empty."
     return
   }
 
   try {
-    await updateProfile({
+    await userStore.updateUser({
       name: user.value.name,
       slug: form.value.slug,
       description: form.value.description,
     })
 
-    await fetchUser()
+    await userStore.getUser()
     emit("close")
   }
   catch (err: any) {
-    errors.value.updateUser = err.message
+    errors.value.updateUser = err.data.message
   }
 }
 </script>

@@ -34,7 +34,6 @@ const props = defineProps<{
 const emit = defineEmits<(e: "update:preferences", value: UserPreferences) => void>()
 
 const localPrefs = reactive({ ...props.preferences, linkFontFamily: props.preferences.linkFontFamily ?? "'Roboto'" })
-
 const isLinkShadowDisabled = computed(() => !localPrefs.isLinkShadow)
 
 watch(localPrefs, (newVal) => {

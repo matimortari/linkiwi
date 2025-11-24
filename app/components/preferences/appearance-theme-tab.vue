@@ -17,11 +17,13 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
-  setTheme: (preferences: any) => void
-}>()
-
+const { user } = storeToRefs(useUserStore())
+const preferences = ref(user.value?.preferences ?? null)
 const selectedTheme = ref("")
+
+function handleApplyTheme(newPreferences: UserPreferences) {
+  preferences.value = newPreferences
+}
 
 function handleThemeSelection(title: string) {
   const themeExists = THEMES.some(theme => theme.title === title)
@@ -30,7 +32,9 @@ function handleThemeSelection(title: string) {
 
   selectedTheme.value = title
   const theme = THEMES.find(theme => theme.title === title)
-  props.setTheme(theme?.preferences || {})
+  if (theme?.preferences) {
+    handleApplyTheme(theme.preferences)
+  }
 }
 
 function getThemeBackgroundStyle(preferences: any) {

@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-const { user, loading, errors } = useUserActions()
+const { user, loading, errors } = storeToRefs(useUserStore())
 
 useHead({
   title: "Analytics",

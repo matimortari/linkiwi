@@ -28,7 +28,6 @@ const props = defineProps<{
 const emit = defineEmits<(e: "update:preferences", value: UserPreferences) => void>()
 
 const localPrefs = reactive({ ...props.preferences })
-
 const isIconShadowDisabled = computed(() => !localPrefs.isIconShadow)
 
 watch(localPrefs, (newVal) => {

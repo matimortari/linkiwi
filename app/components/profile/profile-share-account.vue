@@ -57,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-const { user } = useUserActions()
+const { user } = storeToRefs(useUserStore())
 const isDialogOpen = ref(false)
 const isDropdownOpen = ref(false)
 const dropdownRef = ref<HTMLElement | null>(null)

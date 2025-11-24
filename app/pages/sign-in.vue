@@ -26,8 +26,8 @@
             </nuxt-link>
             and
             <nuxt-link to="/legal/privacy" class="underline hover:text-primary">
-              Privacy Policy
-            </nuxt-link>.
+              Privacy Policy.
+            </nuxt-link>
           </p>
         </footer>
       </div>

@@ -52,7 +52,6 @@
 <script setup lang="ts">
 const iconHover = reactive<Record<string, boolean>>({})
 const linkHover = reactive<Record<string, boolean>>({})
-
 const preset = getCarouselPreset(CAROUSEL_PRESETS, 3000)
 const preferences = computed(() => preset.value?.preferences)
 const { backgroundStyle, profilePictureStyle, slugStyle, descriptionStyle, iconStyle, iconInnerStyle, linkStyle, linkInnerStyle } = useDynamicStyles(preferences)

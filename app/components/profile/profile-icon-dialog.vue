@@ -53,16 +53,15 @@ const props = defineProps<{
 
 const emit = defineEmits<(e: "close") => void>()
 
-const { icons, errors, createIcon } = useIconActions()
+const iconsStore = useIconsStore()
+const { icons, errors } = storeToRefs(iconsStore)
 const { form, isLoading, isFormValid, resetForm, validateForm } = useFormValidation<CreateUserIconInput>({
   platform: "" as keyof typeof SOCIAL_ICONS,
   logo: "" as typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS],
   url: "",
 })
 
-const socialIconEntries = computed(() =>
-  Object.entries(SOCIAL_ICONS) as [keyof typeof SOCIAL_ICONS, (typeof SOCIAL_ICONS)[keyof typeof SOCIAL_ICONS]][],
-)
+const socialIconEntries = computed(() => Object.entries(SOCIAL_ICONS) as [keyof typeof SOCIAL_ICONS, (typeof SOCIAL_ICONS)[keyof typeof SOCIAL_ICONS]][])
 
 function selectIcon(label: keyof typeof SOCIAL_ICONS, iconName: typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS]) {
   form.value.platform = label
@@ -75,7 +74,7 @@ async function handleSubmit() {
     errors.value.createIcon = "Platform and URL are required."
     return
   }
-  if (icons.value.some(icon => icon.platform === form.value.platform)) {
+  if (icons.value.some((i: Icon) => i.platform === form.value.platform)) {
     errors.value.createIcon = "You have already a social icon for this platform."
     return
   }
@@ -84,11 +83,11 @@ async function handleSubmit() {
   errors.value.createIcon = null
 
   try {
-    await createIcon(form.value)
+    await iconsStore.createIcon(form.value)
     emit("close")
   }
   catch (err: any) {
-    errors.value.createIcon = err.message || "Failed to add social icon"
+    errors.value.createIcon = err.data.message
   }
   finally {
     isLoading.value = false
