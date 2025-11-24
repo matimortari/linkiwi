@@ -10,7 +10,7 @@
           </p>
 
           <nuxt-link to="https://github.com/matimortari/linknest" target="_blank" aria-label="GitHub Repository">
-            <icon name="simple-icons:github" size="25" class="transition-transform hover:scale-110 hover:text-accent" />
+            <icon name="simple-icons:github" size="25" class="transition-transform hover:scale-110 hover:text-primary" />
           </nuxt-link>
         </div>
       </div>

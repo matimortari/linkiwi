@@ -7,8 +7,8 @@
         <button
           v-for="[label, iconName] in socialIconEntries" :key="label"
           type="button" aria-label="Select Social Icon"
-          class="flex flex-col items-center justify-center gap-1 rounded-lg border p-2 transition-all hover:bg-muted active:bg-accent"
-          :class="{ 'bg-accent': form.platform === label }" @click="selectIcon(label, iconName)"
+          class="flex flex-col items-center justify-center gap-1 rounded-lg border p-2 transition-all hover:bg-muted active:bg-muted"
+          :class="{ 'bg-muted': form.platform === label }" @click="selectIcon(label, iconName)"
         >
           <icon :name="iconName" size="25" />
           <span class="truncate text-xs">{{ label }}</span>

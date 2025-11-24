@@ -52,7 +52,6 @@
 <script setup lang="ts">
 const props = useRoute().meta.layoutProps ?? {}
 const { headers, headerClasses } = useContent({ selector: ".markdown", ...props })
-
 const isSidebarOpen = ref(false)
 </script>
 

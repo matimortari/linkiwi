@@ -18,7 +18,6 @@
 const userStore = useUserStore()
 const linksStore = useLinksStore()
 const iconsStore = useIconsStore()
-
 const isLoading = ref(true)
 
 async function getUserData() {

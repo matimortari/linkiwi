@@ -17,7 +17,7 @@
 
         <div class="flex w-full flex-row items-center justify-between rounded-b-lg bg-card px-2 py-1">
           <span class="text-sm font-semibold">{{ logo.name }}</span>
-          <nuxt-link :href="logo.image" download :title="`Download ${logo.name}`">
+          <nuxt-link :to="logo.image" download :title="`Download ${logo.name}`">
             <icon name="mdi:download" size="35" class="rounded-full p-1" />
           </nuxt-link>
         </div>
@@ -25,7 +25,7 @@
     </div>
 
     <div class="flex w-full flex-col items-center gap-4 p-8">
-      <div class="flex w-full flex-col items-center gap-1 text-center">
+      <div class="flex w-full flex-col items-center gap-2 text-center">
         <h3>
           Brand Colors
         </h3>
@@ -34,16 +34,35 @@
         </p>
       </div>
 
-      <div class="m-4 grid w-full grid-cols-1 gap-4 md:grid-cols-5">
-        <div v-for="color in brandColors" :key="color.name" class="flex flex-col items-center">
+      <div class="m-4 grid w-full grid-cols-1 gap-4 md:grid-cols-6">
+        <div v-for="color in baseColors" :key="color.name" class="flex flex-col items-center">
           <div
             class="group relative h-24 w-full cursor-pointer rounded-lg border-2 transition"
-            :style="{ backgroundColor: `var(${color.var})` }"
-            @click="handleCopyColor(color.var)"
+            :style="{ backgroundColor: `var(${color.var})` }" @click="handleCopyColor(color.var)"
           >
             <div class="absolute inset-0 flex items-center justify-center rounded-md bg-black/60 opacity-0 transition-opacity group-hover:opacity-100">
               <span class="text-sm font-semibold">
-                {{ copiedColor === color.var ? 'Copied!' : 'Copy color' }}
+                {{ copiedColor === color.var ? "Copied!" : "Copy color" }}
+              </span>
+            </div>
+          </div>
+
+          <p class="flex w-full flex-row items-start justify-between p-1 text-start">
+            <span class="text-sm font-semibold">{{ color.name }}</span>
+            <span class="text-xs">{{ colorValues[color.var] }}</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="m-4 grid w-full grid-cols-1 gap-4 md:grid-cols-4">
+        <div v-for="color in brandColors" :key="color.name" class="flex flex-col items-center">
+          <div
+            class="group relative h-24 w-full cursor-pointer rounded-lg border-2 transition"
+            :style="{ backgroundColor: `var(${color.var})` }" @click="handleCopyColor(color.var)"
+          >
+            <div class="absolute inset-0 flex items-center justify-center rounded-md bg-black/60 opacity-0 transition-opacity group-hover:opacity-100">
+              <span class="text-sm font-semibold">
+                {{ copiedColor === color.var ? "Copied!" : "Copy color" }}
               </span>
             </div>
           </div>
@@ -69,18 +88,18 @@ const logos = [
   { name: "Wordmark (dark)", image: logoDark, bgClass: "bg-[#e0dddd]" },
 ]
 
-const brandColors = [
+const baseColors = [
   { name: "Background", var: "--background" },
   { name: "Foreground", var: "--foreground" },
   { name: "Card", var: "--card" },
   { name: "Overlay", var: "--overlay" },
   { name: "Muted", var: "--muted" },
   { name: "Muted Foreground", var: "--muted-foreground" },
+]
+
+const brandColors = [
   { name: "Primary", var: "--primary" },
-  { name: "Primary Foreground", var: "--primary-foreground" },
   { name: "Secondary", var: "--secondary" },
-  { name: "Secondary Foreground", var: "--secondary-foreground" },
-  { name: "Accent", var: "--accent" },
   { name: "Danger", var: "--danger" },
   { name: "Success", var: "--success" },
 ]
@@ -103,7 +122,7 @@ async function handleCopyColor(colorVar: string) {
 
 function updateColors() {
   const styles = getComputedStyle(document.documentElement)
-  for (const color of brandColors) {
+  for (const color of [...baseColors, ...brandColors]) {
     const value = styles.getPropertyValue(color.var).trim()
     colorValues.value[color.var] = value || "—"
   }

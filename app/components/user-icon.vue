@@ -12,7 +12,7 @@ const props = defineProps<{
   preferences: UserPreferences | null
 }>()
 
-defineEmits<{ (e: "click"): void }>()
+defineEmits<(e: "click") => void>()
 
 const { iconStyle, iconInnerStyle } = useDynamicStyles(toRef(props, "preferences"))
 const isHovered = ref(false)

@@ -3,7 +3,7 @@
 
   <div v-if="user && !loading" class="min-h-screen p-12 pb-28" :style="backgroundStyle">
     <div class="flex flex-col items-center justify-center gap-4 text-center">
-      <SupportBanner v-if="user.preferences?.supportBanner && user.preferences.supportBanner !== 'NONE'" :type="user.preferences.supportBanner" />
+      <SupportBanner v-if="preferences?.supportBanner && preferences.supportBanner !== 'NONE'" :type="preferences.supportBanner" />
 
       <img
         v-if="user.image" :src="user.image"
@@ -18,19 +18,19 @@
         {{ user.description }}
       </p>
 
-      <ul v-if="user.icons?.length && user.preferences" class="my-2 flex flex-row items-center justify-center gap-2">
+      <ul v-if="user.icons?.length && preferences" class="my-2 flex flex-row items-center justify-center gap-2">
         <UserIcon
           v-for="icon in user.icons" :key="icon.id"
-          :url="icon.url" :logo="icon.logo"
-          :preferences="user.preferences" @click="handleIconClick(icon.id ?? '')"
+          :icon="icon" :preferences="preferences"
+          @click="handleIconClick(icon.id ?? '')"
         />
       </ul>
 
-      <ul v-if="user.links?.length && user.preferences" class="flex flex-col items-center gap-4">
+      <ul v-if="user.links?.length && preferences" class="flex flex-col items-center gap-4">
         <UserLink
           v-for="link in user.links" :key="link.id"
-          :url="link.url" :title="link.title"
-          :preferences="user.preferences" @click="handleLinkClick(link.id ?? '')"
+          :link="link" :preferences="preferences"
+          @click="handleLinkClick(link.id ?? '')"
         />
       </ul>
 

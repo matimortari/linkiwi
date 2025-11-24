@@ -40,8 +40,8 @@ export default defineNuxtConfig({
     processCSSVariables: true,
     families: [
       // Base fonts (default, display, mono)
-      { name: "Lato", provider: "google", weights: ["300 800"] },
-      { name: "Caprasimo", provider: "google", weights: ["400"] },
+      { name: "Poppins", provider: "google", weights: ["300 800"] },
+      { name: "Spicy Rice", provider: "google", weights: ["400"] },
       { name: "JetBrains Mono", provider: "google", weights: ["400"] },
 
       // Dynamic fonts for user preferences
