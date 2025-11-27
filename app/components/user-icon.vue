@@ -1,15 +1,15 @@
 <template>
   <li class="flex size-10 items-center justify-center rounded-full" :style="iconStyle(isHovered)" @mouseenter="isHovered = true" @mouseleave="isHovered = false">
-    <nuxt-link :to="icon.url" class="flex size-full items-center justify-center" @click="$emit('click')">
-      <icon :name="icon.logo" size="20" :style="iconInnerStyle" />
+    <nuxt-link :to="item.url" class="flex size-full items-center justify-center" @click="$emit('click')">
+      <icon :name="item.logo" size="20" :style="iconInnerStyle" />
     </nuxt-link>
   </li>
 </template>
 
 <script setup lang="ts">
 const props = defineProps<{
-  icon: Icon
-  preferences: UserPreferences | null
+  item: Icon
+  preferences: UserPreferences
 }>()
 
 defineEmits<(e: "click") => void>()

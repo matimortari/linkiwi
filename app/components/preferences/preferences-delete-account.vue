@@ -1,10 +1,10 @@
 <template>
-  <div class="section-container flex flex-col gap-4">
+  <div class="card flex flex-col gap-4">
     <header class="my-2 flex flex-col gap-2">
       <h3>
         Delete Account
       </h3>
-      <p class="text-warning">
+      <p class="text-danger">
         This action is irreversible. All data will be lost.
       </p>
     </header>

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="preferences" class="section-container flex flex-col gap-4">
+  <div v-if="preferences" class="card flex flex-col gap-4">
     <header class="my-2 flex flex-col gap-2">
       <h3>
         Appearance
@@ -9,11 +9,11 @@
       </p>
     </header>
 
-    <div class="flex flex-col justify-between gap-4 py-2 md:flex-row">
+    <div class="flex flex-col justify-between gap-4 border-b py-4 md:flex-row">
       <div class="flex flex-row flex-wrap items-center gap-1 md:flex-nowrap">
         <button
           v-for="t in APPEARANCE_TABS" :key="t.value"
-          class="btn" :class="{ 'brightness-50': activeTab === t.value }"
+          class="btn" :class="{ 'brightness-80': activeTab === t.value }"
           @click="activeTab = t.value"
         >
           {{ t.label }}
@@ -43,8 +43,7 @@
 
 <script setup lang="ts">
 const userStore = useUserStore()
-const { user, errors } = storeToRefs(userStore)
-const preferences = ref(user.value?.preferences ?? null)
+const { errors, preferences } = storeToRefs(userStore)
 const activeTab = ref("background")
 const status = ref<"idle" | "saved" | "reset">("idle")
 
@@ -64,45 +63,8 @@ async function handleResetPreferences() {
   errors.value.updatePreferences = null
 
   try {
-    const defaultPreferences = {
-      backgroundType: "FLAT" as const,
-      backgroundColor: "#f9f5f2",
-      backgroundGradientStart: "#000000",
-      backgroundGradientEnd: "#000000",
-      profilePictureRadius: "0.5rem" as const,
-      profilePictureBorderColor: "#cecfd1",
-      profilePictureBorderWidth: "2px" as const,
-      slugTextColor: "#111827",
-      slugTextWeight: "400" as const,
-      slugTextSize: "1rem" as const,
-      slugFontFamily: "'Roboto', sans-serif" as const,
-      headerTextColor: "#1f2937",
-      headerTextWeight: "400" as const,
-      headerTextSize: "1.1rem" as const,
-      headerFontFamily: "'Roboto', sans-serif" as const,
-      linkBackgroundColor: "#cecfd1",
-      linkTextColor: "#374151",
-      linkTextWeight: "400" as const,
-      linkTextSize: "0.9rem" as const,
-      linkFontFamily: "'Roboto', sans-serif" as const,
-      isLinkShadow: false,
-      linkShadowColor: "#9ca3af",
-      linkShadowWeight: "medium" as const,
-      linkHoverBackgroundColor: "#9ca3af",
-      linkBorderRadius: "0.5rem" as const,
-      linkPadding: "0.5rem" as const,
-      showLinkCopyButton: true,
-      iconBackgroundColor: "#cecfd1",
-      isIconShadow: false,
-      iconShadowColor: "#9ca3af",
-      iconShadowWeight: "medium" as const,
-      iconLogoColor: "#374151",
-      iconHoverBackgroundColor: "#9ca3af",
-      supportBanner: "NONE" as const,
-    }
-
-    await userStore.updatePreferences(defaultPreferences)
-    preferences.value = { ...defaultPreferences }
+    await userStore.updatePreferences(DEFAULT_PREFERENCES)
+    Object.assign(preferences.value, DEFAULT_PREFERENCES)
     status.value = "reset"
   }
   catch (err: any) {
@@ -118,10 +80,4 @@ watch(status, (newStatus, _oldStatus, onInvalidate) => {
     onInvalidate(() => clearTimeout(timer))
   }
 })
-
-watch(() => user.value?.preferences, (newPreferences) => {
-  if (newPreferences) {
-    preferences.value = { ...newPreferences }
-  }
-}, { immediate: true })
 </script>

@@ -1,7 +1,9 @@
 <template>
-  <div class="section-container flex flex-col gap-4">
+  <div class="card flex flex-col gap-4">
     <header class="my-2 flex flex-col gap-2">
-      <h3>Analytics Summary</h3>
+      <h3>
+        Analytics Summary
+      </h3>
       <p class="text-caption">
         View your analytics data at a glance.
       </p>
@@ -51,39 +53,42 @@
             Joined On
           </p>
           <p class="font-semibold md:text-lg">
-            {{ createdAt }}
+            {{ createdAt ? formatDate(new Date(createdAt)) : "N/A" }}
           </p>
         </div>
       </div>
     </div>
 
     <div class="py-4">
-      <h4 class="mb-2 text-xl font-semibold">
+      <h4>
         Page Views Over Time
       </h4>
+
       <AnalyticsLineChart v-if="pageViewsChartData" :chart-data="pageViewsChartData" />
-      <p v-else class="text-caption text-center">
+      <p v-else class="text-caption flex h-64 items-center justify-center text-center">
         Not enough data yet.
       </p>
     </div>
 
     <div class="grid grid-cols-1 gap-4 py-4 md:grid-cols-2">
-      <div>
-        <h4 class="mb-2 text-xl font-semibold">
+      <div class="py-4">
+        <h4>
           Link Clicks
         </h4>
+
         <AnalyticsBarChart v-if="linkClicksChartData" :chart-data="linkClicksChartData" />
-        <p v-else class="text-caption text-center">
+        <p v-else class="text-caption flex h-64 items-center justify-center text-center">
           Not enough data yet.
         </p>
       </div>
 
-      <div>
-        <h4 class="mb-2 text-xl font-semibold">
+      <div class="py-4">
+        <h4>
           Social Icon Clicks
         </h4>
+
         <AnalyticsBarChart v-if="iconClicksChartData" :chart-data="iconClicksChartData" />
-        <p v-else class="text-caption text-center">
+        <p v-else class="text-caption flex h-64 items-center justify-center text-center">
           Not enough data yet.
         </p>
       </div>

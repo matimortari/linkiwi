@@ -19,18 +19,18 @@
         <label for="url" class="w-12 text-sm font-medium">URL</label>
         <input
           id="url" v-model="form.url"
-          type="url" class="flex-1"
+          type="url" class="max-w-sm flex-1"
           placeholder="https://example.com"
         >
       </div>
 
       <footer class="flex flex-row items-center justify-between">
-        <p class="text-warning">
+        <p class="text-danger">
           {{ errors.createIcon || '' }}
         </p>
 
         <div class="flex flex-row items-center gap-2">
-          <button class="btn-secondary" aria-label="Cancel" :disabled="isLoading" @click="emit('close')">
+          <button class="btn-danger" aria-label="Cancel" :disabled="isLoading" @click="emit('close')">
             Cancel
           </button>
           <button class="btn-primary" type="submit" aria-label="Add Social Icon" :disabled="!isFormValid">

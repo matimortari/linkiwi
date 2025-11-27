@@ -18,11 +18,13 @@
 
 <script setup lang="ts">
 const { user } = storeToRefs(useUserStore())
-const preferences = ref(user.value?.preferences ?? null)
 const selectedTheme = ref("")
 
 function handleApplyTheme(newPreferences: UserPreferences) {
-  preferences.value = newPreferences
+  if (!user.value)
+    return
+
+  user.value.preferences = newPreferences
 }
 
 function handleThemeSelection(title: string) {

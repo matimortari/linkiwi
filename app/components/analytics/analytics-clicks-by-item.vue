@@ -1,5 +1,5 @@
 <template>
-  <div class="section-container flex flex-col gap-2">
+  <div class="card flex flex-col gap-4">
     <header class="my-2 flex flex-col gap-2">
       <h3>
         Clicks by Item
@@ -10,7 +10,7 @@
     </header>
 
     <Spinner v-if="loading" />
-    <p v-else-if="!items.length" class="text-lead m-8 text-center">
+    <p v-else-if="!items.length" class="text-caption flex items-center justify-center text-center">
       No links or social icons yet.
     </p>
 

@@ -3,7 +3,7 @@
     <div class="z-10 flex w-full flex-col items-center justify-center px-6 py-12 md:w-1/2">
       <div class="w-full max-w-md">
         <header class="my-4 flex flex-col items-center gap-4 text-center">
-          <h1>
+          <h1 class="font-display">
             Sign In
           </h1>
           <p class="text-caption">
@@ -18,14 +18,14 @@
           </button>
         </div>
 
-        <footer class="mx-auto my-4 max-w-xs text-center">
-          <p class="text-caption">
+        <footer class="mx-auto border-t py-4 text-center">
+          <p class="text-lead mx-auto max-w-sm">
             By signing in, you agree to our
-            <nuxt-link to="/legal/terms" class="underline hover:text-primary">
+            <nuxt-link to="/legal/terms" class="text-primary hover:underline">
               Terms of Service
             </nuxt-link>
             and
-            <nuxt-link to="/legal/privacy" class="underline hover:text-primary">
+            <nuxt-link to="/legal/privacy" class="text-primary hover:underline">
               Privacy Policy.
             </nuxt-link>
           </p>

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="user" class="my-6 flex-col items-center justify-center select-none md:h-[520px] md:min-w-[330px]">
+  <div v-if="user" class="my-6 flex-col items-center justify-center select-none md:h-[520px] md:min-w-[320px] 2xl:min-w-[380px]">
     <!-- Mobile toggle -->
     <button class="btn fixed bottom-4 left-1/2 z-30 -translate-x-1/2 md:hidden!" aria-label="Toggle Mobile Preview" @click="isMobilePreviewOpen = !isMobilePreviewOpen">
       <icon :name="isMobilePreviewOpen ? 'mdi:eye-off' : 'mdi:eye'" size="25" />
@@ -24,11 +24,11 @@
           </p>
 
           <ul v-if="icons.length" class="my-2 flex w-full flex-row items-center justify-center gap-2">
-            <UserIcon v-for="icon in icons" :key="icon.id" :icon="icon" :preferences="preferences" />
+            <UserIcon v-for="icon in icons" :key="icon.id" :item="icon" :preferences="preferences" />
           </ul>
 
           <ul v-if="links.length" class="flex w-full flex-col items-center gap-4">
-            <UserLink v-for="link in links" :key="link.id" :link="link" :preferences="preferences" />
+            <UserLink v-for="link in links" :key="link.id" :item="link" :preferences="preferences" />
           </ul>
 
           <p v-else :style="descriptionStyle">
@@ -66,13 +66,13 @@
 
         <div class="my-2 w-full">
           <ul v-if="icons.length" class="flex flex-row items-center justify-center gap-2">
-            <UserIcon v-for="icon in icons" :key="icon.id" :icon="icon" :preferences="preferences" />
+            <UserIcon v-for="icon in icons" :key="icon.id" :item="icon" :preferences="preferences" />
           </ul>
         </div>
 
         <div class="w-full">
           <ul v-if="links.length" class="flex flex-col items-center gap-4">
-            <UserLink v-for="link in links" :key="link.id" :link="link" :preferences="preferences" />
+            <UserLink v-for="link in links" :key="link.id" :item="link" :preferences="preferences" />
           </ul>
 
           <p v-else :style="descriptionStyle">
@@ -85,12 +85,11 @@
 </template>
 
 <script setup lang="ts">
-const { user } = storeToRefs(useUserStore())
+const { user, preferences } = storeToRefs(useUserStore())
 const { links } = storeToRefs(useLinksStore())
 const { icons } = storeToRefs(useIconsStore())
-const isMobilePreviewOpen = ref(false)
-const preferences = computed(() => user.value?.preferences ?? null)
 const { backgroundStyle, profilePictureStyle, slugStyle, descriptionStyle } = useDynamicStyles(preferences)
+const isMobilePreviewOpen = ref(false)
 </script>
 
 <style scoped>

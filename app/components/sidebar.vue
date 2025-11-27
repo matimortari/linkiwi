@@ -8,10 +8,8 @@
   <div v-if="isMobileNavOpen" class="fixed inset-0 z-20 bg-black/50" @click="isMobileNavOpen = false" />
 
   <transition name="slide">
-    <aside v-if="user" class="fixed top-0 left-0 z-40 size-full px-4 py-16 transition-transform md:static md:w-56 md:translate-x-0 md:py-4 2xl:w-64" :class="isMobileNavOpen ? 'translate-x-0 bg-card' : '-translate-x-full'">
+    <aside v-if="user" class="fixed top-0 left-0 z-40 size-full px-4 py-8 transition-transform md:static md:w-56 md:translate-x-0 2xl:w-64" :class="isMobileNavOpen ? 'translate-x-0 bg-card' : '-translate-x-full'">
       <div class="flex h-full flex-col gap-12 px-12 md:px-0">
-        <Logo />
-
         <div class="navigation-group w-full gap-4!">
           <div class="relative size-12 shrink-0">
             <img v-if="user.image" :src="user.image" alt="Avatar" class="size-full rounded-full border object-cover select-none">

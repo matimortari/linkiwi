@@ -20,7 +20,7 @@
         <input
           id="slug" v-model="form.slug"
           type="text" placeholder="Enter your slug"
-          class="flex-1"
+          class="max-w-sm flex-1"
         >
       </div>
 
@@ -29,12 +29,12 @@
         <input
           id="description" v-model="form.description"
           type="text" placeholder="Enter your description"
-          class="flex-1"
+          class="max-w-sm flex-1"
         >
       </div>
 
       <footer class="flex flex-row items-center justify-between">
-        <p class="text-warning">
+        <p class="text-danger">
           {{ errors.updateUser || '' }}
         </p>
 
@@ -55,25 +55,7 @@ const emit = defineEmits<(e: "close") => void>()
 
 const userStore = useUserStore()
 const { user, errors } = storeToRefs(userStore)
-
-const form = ref({
-  slug: "",
-  description: "",
-  image: "",
-})
-
-watch(() => props.isOpen, (open) => {
-  if (open && user.value) {
-    form.value = {
-      slug: user.value.slug ?? "",
-      description: user.value.description ?? "",
-      image: user.value.image ?? "",
-    }
-  }
-  else {
-    form.value = { slug: "", description: "", image: "" }
-  }
-}, { immediate: true })
+const form = ref({ slug: "", description: "", image: "" })
 
 async function handleUpdateImage(event: Event) {
   errors.value.updateUserImage = null
@@ -118,4 +100,16 @@ async function handleSubmit() {
     errors.value.updateUser = err.data.message
   }
 }
+watch(() => props.isOpen, (open) => {
+  if (open && user.value) {
+    form.value = {
+      slug: user.value.slug ?? "",
+      description: user.value.description ?? "",
+      image: user.value.image ?? "",
+    }
+  }
+  else {
+    form.value = { slug: "", description: "", image: "" }
+  }
+}, { immediate: true })
 </script>

@@ -6,7 +6,7 @@
         <input
           id="title" v-model="form.title"
           type="text" placeholder="Enter link title"
-          class="flex-1" :disabled="isLoading"
+          class="max-w-sm flex-1" :disabled="isLoading"
         >
       </div>
 
@@ -15,17 +15,17 @@
         <input
           id="url" v-model="form.url"
           type="url" placeholder="https://example.com"
-          class="flex-1" :disabled="isLoading"
+          class="max-w-sm flex-1" :disabled="isLoading"
         >
       </div>
 
       <footer class="flex flex-row items-center justify-between">
-        <p class="text-warning">
+        <p class="text-danger">
           {{ isUpdateMode ? errors.updateLink || '' : errors.createLink || '' }}
         </p>
 
         <div class="flex flex-row items-center gap-2">
-          <button class="btn-secondary" aria-label="Cancel" :disabled="isLoading" @click="emit('close')">
+          <button class="btn-danger" aria-label="Cancel" :disabled="isLoading" @click="emit('close')">
             Cancel
           </button>
           <button class="btn-primary" type="submit" :disabled="isLoading || !isFormValid">
