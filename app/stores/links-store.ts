@@ -11,7 +11,7 @@ export const useLinksStore = defineStore("links", () => {
 
     try {
       const res = await $fetch<{ links: Link[] }>(`${API_URL}/links`, { method: "GET", credentials: "include" })
-      links.value = res.links
+      links.value = res.links.map(i => Object.freeze(i))
     }
     catch (err: any) {
       errors.value.getLinks = err.data.message || "Failed to get links"
@@ -28,7 +28,7 @@ export const useLinksStore = defineStore("links", () => {
 
     try {
       const res = await $fetch<{ link: Link }>(`${API_URL}/links`, { method: "POST", body: data, credentials: "include" })
-      links.value.push(res.link)
+      links.value.push(Object.freeze(res.link))
     }
     catch (err: any) {
       errors.value.createLink = err.data.message || "Failed to create link"

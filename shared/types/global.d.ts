@@ -4,10 +4,10 @@ interface User {
   name: string
   slug: string
   description?: string | null
-  image?: string | null
+  image: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  preferences?: UserPreferences
+  preferences: UserPreferences
   views?: PageView[]
   icons?: Icon[]
   links?: Link[]

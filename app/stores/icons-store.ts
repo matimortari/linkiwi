@@ -11,7 +11,7 @@ export const useIconsStore = defineStore("icons", () => {
 
     try {
       const res = await $fetch<{ icons: Icon[] }>(`${API_URL}/icons`, { method: "GET", credentials: "include" })
-      icons.value = res.icons
+      icons.value = res.icons.map(i => Object.freeze(i))
     }
     catch (err: any) {
       errors.value.getIcons = err.data.message || "Failed to get icons"
@@ -28,7 +28,7 @@ export const useIconsStore = defineStore("icons", () => {
 
     try {
       const res = await $fetch<{ icon: Icon }>(`${API_URL}/icons`, { method: "POST", body: data, credentials: "include" })
-      icons.value.push(res.icon)
+      icons.value.push(Object.freeze(res.icon))
     }
     catch (err: any) {
       errors.value.createIcon = err.data.message || "Failed to create icon"

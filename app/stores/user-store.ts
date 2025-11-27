@@ -2,6 +2,14 @@ import type { UpdateUserInput, UpdateUserPreferencesInput } from "#shared/schema
 
 export const useUserStore = defineStore("user", () => {
   const user = ref<User | null>(null)
+  const preferences = computed({
+    get: () => user.value?.preferences ?? DEFAULT_PREFERENCES,
+    set: (val) => {
+      if (user.value) {
+        user.value.preferences = val
+      }
+    },
+  })
   const loading = ref<boolean>(false)
   const errors = ref<Record<string, string | null>>({ getUser: null, getUserBySlug: null, updateUser: null, updateUserImage: null, updatePreferences: null, deleteUser: null })
 
@@ -118,6 +126,7 @@ export const useUserStore = defineStore("user", () => {
     loading,
     errors,
     user,
+    preferences,
     getUser,
     getUserBySlug,
     updateUser,

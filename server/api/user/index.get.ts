@@ -13,5 +13,5 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 404, message: "User not found" })
   }
 
-  return { user }
+  return user
 })
