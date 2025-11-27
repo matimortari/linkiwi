@@ -1,43 +1,42 @@
 <template>
-  <div class="relative flex min-h-screen items-center justify-center">
-    <!-- Loading overlay -->
+  <div class="relative flex min-h-screen flex-col items-center justify-center">
     <div v-if="loading" class="absolute inset-0 z-50 flex items-center justify-center bg-background/60 backdrop-blur-sm">
       <Spinner />
     </div>
 
-    <p v-if="!loading && !user" class="text-lead text-center">
+    <p v-if="!loading && !userProfile" class="text-lead text-center">
       User {{ slug }} not found.
     </p>
 
-    <div v-else-if="user" class="flex min-h-screen w-full flex-col items-center gap-4 py-24 text-center" :style="backgroundStyle">
-      <SupportBanner v-if="preferences?.supportBanner && preferences.supportBanner !== 'NONE'" :type="preferences.supportBanner" />
+    <div v-else-if="userProfile" class="flex w-full flex-1 flex-col items-center gap-4 py-24 text-center" :style="backgroundStyle">
+      <SupportBanner v-if="profilePreferences?.supportBanner && profilePreferences.supportBanner !== 'NONE'" :type="profilePreferences.supportBanner" />
 
       <img
-        v-if="user.image" :src="user.image"
+        v-if="userProfile.image" :src="userProfile.image"
         alt="Avatar" class="size-24 object-cover"
         :style="profilePictureStyle"
       >
 
       <p :style="slugStyle">
-        {{ `@${user.slug}` }}
+        {{ `@${userProfile.slug}` }}
       </p>
 
       <p class="max-w-sm leading-4 whitespace-break-spaces" :style="descriptionStyle">
-        {{ user.description }}
+        {{ userProfile.description }}
       </p>
 
-      <ul v-if="user.icons?.length" class="my-2 flex flex-row items-center justify-center gap-2">
+      <ul v-if="userProfile.icons?.length" class="my-2 flex flex-row items-center justify-center gap-2">
         <UserIcon
-          v-for="icon in user.icons" :key="icon.id"
-          :item="icon" :preferences="preferences"
+          v-for="icon in userProfile.icons" :key="icon.id"
+          :item="icon" :preferences="profilePreferences"
           @click="handleIconClick(icon.id ?? '')"
         />
       </ul>
 
-      <ul v-if="user.links?.length" class="flex w-full flex-col items-center gap-4">
+      <ul v-if="userProfile.links?.length" class="flex w-full flex-col items-center gap-4">
         <UserLink
-          v-for="link in user.links" :key="link.id"
-          :item="link" :preferences="preferences"
+          v-for="link in userProfile.links" :key="link.id"
+          :item="link" :preferences="profilePreferences"
           @click="handleLinkClick(link.id ?? '')"
         />
       </ul>
@@ -54,19 +53,19 @@ const route = useRoute()
 const slug = route.params.slug as string
 const userStore = useUserStore()
 const analyticsStore = useAnalyticsStore()
-const { user, loading, preferences } = storeToRefs(userStore)
-const { backgroundStyle, profilePictureStyle, slugStyle, descriptionStyle }
-  = useDynamicStyles(preferences)
+const { userProfile, loading } = storeToRefs(userStore)
+const profilePreferences = computed(() => userProfile.value?.preferences ?? DEFAULT_PREFERENCES)
+const { backgroundStyle, profilePictureStyle, slugStyle, descriptionStyle } = useDynamicStyles(profilePreferences)
 
 async function handleLinkClick(linkId: string) {
-  if (user.value?.id) {
-    await analyticsStore.recordLinkClick(user.value.id, linkId)
+  if (userProfile.value?.id) {
+    await analyticsStore.recordLinkClick(userProfile.value.id, linkId)
   }
 }
 
 async function handleIconClick(iconId: string) {
-  if (user.value?.id) {
-    await analyticsStore.recordIconClick(user.value.id, iconId)
+  if (userProfile.value?.id) {
+    await analyticsStore.recordIconClick(userProfile.value.id, iconId)
   }
 }
 
@@ -75,7 +74,7 @@ watch(() => route.params.slug, async (newSlug) => {
     return
 
   await userStore.getUserBySlug(newSlug as string)
-  const currentUser = user.value
+  const currentUser = userProfile.value
   if (currentUser?.id) {
     await analyticsStore.recordPageView(currentUser.id)
 

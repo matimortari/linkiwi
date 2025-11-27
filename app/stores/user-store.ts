@@ -2,6 +2,7 @@ import type { UpdateUserInput, UpdateUserPreferencesInput } from "#shared/schema
 
 export const useUserStore = defineStore("user", () => {
   const user = ref<User | null>(null)
+  const userProfile = ref<User | null>(null)
   const preferences = computed({
     get: () => user.value?.preferences ?? DEFAULT_PREFERENCES,
     set: (val) => {
@@ -34,12 +35,12 @@ export const useUserStore = defineStore("user", () => {
     errors.value.getUserBySlug = null
 
     try {
-      user.value = await $fetch<User>(`${API_URL}/user/${slug}`, { method: "GET" })
+      userProfile.value = await $fetch<User>(`${API_URL}/user/${slug}`, { method: "GET" })
     }
     catch (err: any) {
-      errors.value.getUserBySlug = err.data.message || "Failed to get user by slug"
+      errors.value.getUserBySlug = err.data?.message || "Failed to get user by slug"
       console.error("getUserBySlug error:", err)
-      user.value = null
+      userProfile.value = null
     }
     finally {
       loading.value = false
@@ -126,6 +127,7 @@ export const useUserStore = defineStore("user", () => {
     loading,
     errors,
     user,
+    userProfile,
     preferences,
     getUser,
     getUserBySlug,
