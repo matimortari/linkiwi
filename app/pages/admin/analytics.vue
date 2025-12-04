@@ -1,11 +1,11 @@
 <template>
   <div v-if="user" class="flex w-full flex-col gap-4 md:flex-row">
     <div
-      v-motion class="min-h-screen flex-1 rounded-tl-2xl border border-r-0 border-b-0 p-4"
+      v-motion class="min-h-screen w-full space-y-2 rounded-tl-2xl border border-r-0 border-b-0 p-4"
       :initial="{ opacity: 0, x: -20 }" :visible="{ opacity: 1, x: 0 }"
       :duration="800"
     >
-      <header class="flex flex-col gap-2 py-4">
+      <header class="flex flex-col gap-2">
         <h2 v-motion :initial="{ opacity: 0 }" :enter="{ opacity: 1 }" :duration="800">
           Analytics
         </h2>

@@ -4,9 +4,9 @@
       <Logo />
 
       <div class="hidden md:navigation-group">
-        <nuxt-link :to="`/${user?.slug}`" class="text-caption flex cursor-pointer flex-row items-center gap-2 rounded-2xl border bg-muted px-2 py-1" title="Go to your profile page">
-          <icon name="mdi:arrow-top-right" size="20" class="text-secondary" />
-          <span>{{ pageUrl }}</span>
+        <nuxt-link :to="`/${user?.slug}`" class="group btn border bg-muted! px-2! py-1! text-muted-foreground!" title="Go to your profile page">
+          <icon name="mdi:arrow-top-right" size="20" class="text-secondary transition-transform group-hover:scale-110 group-hover:text-secondary" />
+          <span class="truncate group-hover:underline">{{ pageUrl }}</span>
         </nuxt-link>
 
         <div v-if="user" ref="dropdownRef" class="relative">
@@ -36,8 +36,7 @@
         </div>
       </div>
     </div>
-
-    <p v-if="shouldShowPreview" class="text-caption hidden md:block">
+    <p v-if="shouldShowPreview" class="text-caption ml-auto hidden md:block">
       Live Preview
     </p>
 

@@ -20,10 +20,10 @@
         </button>
       </div>
 
-      <div class="flex flex-row flex-wrap items-center gap-1 md:flex-nowrap">
-        <button class="btn-primary" @click="handleUpdatePreferences">
+      <div class="flex min-w-0 flex-row flex-wrap items-center gap-1 md:flex-nowrap">
+        <button class="btn-primary min-w-0" @click="handleUpdatePreferences">
           <icon name="mdi:content-save-check" size="20" />
-          <span>{{ status === 'saved' ? 'Saved!' : status === 'reset' ? 'Reset!' : 'Save Changes' }}</span>
+          <span class="truncate">{{ status === 'saved' ? 'Saved!' : status === 'reset' ? 'Reset!' : 'Save' }}</span>
         </button>
 
         <button class="btn-danger" @click="handleResetPreferences">

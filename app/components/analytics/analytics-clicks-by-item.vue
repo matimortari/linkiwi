@@ -10,9 +10,7 @@
     </header>
 
     <Spinner v-if="loading" />
-    <p v-else-if="!items.length" class="text-caption flex items-center justify-center text-center">
-      No links or social icons yet.
-    </p>
+    <Empty v-if="!items.length" message="No links or social icons yet." icon-name="mdi:octagram-minus-outline" :icon-size="30" />
 
     <ul v-else class="grid grid-cols-1 gap-2 md:grid-cols-2 2xl:grid-cols-3">
       <li v-for="item in items" :key="item.id" class="card flex flex-col gap-2 p-2">

@@ -10,9 +10,7 @@
     </header>
 
     <Spinner v-if="loading" />
-    <p v-else-if="!icons.length" class="text-lead m-8 text-center">
-      Pin social icons to your profile so visitors can easily connect. Add your first social icon!
-    </p>
+    <Empty v-if="!icons.length" message="Your social icons help visitors connect with you. Add your first social icon!" icon-name="mdi:star-minus" :icon-size="30" />
 
     <ul v-else class="flex flex-row items-center gap-2">
       <li v-for="icon in icons" :key="icon.id" class="card relative flex size-20 items-center justify-center">
@@ -27,7 +25,7 @@
     </ul>
 
     <button class="btn-primary self-end" aria-label="Add Social Icon" @click="isDialogOpen = true">
-      <icon name="mdi:favorite-add" size="25" />
+      <icon name="mdi:star-plus" size="25" />
       <span>Add Social Icon</span>
     </button>
   </div>

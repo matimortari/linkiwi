@@ -10,9 +10,7 @@
     </header>
 
     <Spinner v-if="loading" />
-    <p v-else-if="!links.length" class="text-lead m-8 text-center">
-      Your links help visitors discover more about you. Add your first link!
-    </p>
+    <Empty v-if="!links.length" message="Your links help visitors discover more about you. Add your first link!" icon-name="mdi:link-variant-minus" :icon-size="30" />
 
     <ul v-else class="grid grid-cols-1 gap-2 md:grid-cols-2 2xl:grid-cols-3">
       <li v-for="link in links" :key="link.id" class="card">
@@ -40,7 +38,7 @@
     </ul>
 
     <button class="btn-primary self-end" aria-label="Add Link" @click="isDialogOpen = true">
-      <icon name="mdi:link-add" size="25" />
+      <icon name="mdi:link-variant-plus" size="25" />
       <span>Add Link</span>
     </button>
   </div>

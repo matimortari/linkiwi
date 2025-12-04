@@ -92,9 +92,9 @@ export const useUserStore = defineStore("user", () => {
     errors.value.updatePreferences = null
 
     try {
-      const res = await $fetch<UpdateUserPreferencesInput>(`${API_URL}/user/preferences`, { method: "PUT", body: data, credentials: "include" })
-      if (user.value && res) {
-        user.value.preferences = res as typeof user.value.preferences
+      const res = await $fetch<{ preferences: UpdateUserPreferencesInput }>(`${API_URL}/user/preferences`, { method: "PUT", body: data, credentials: "include" })
+      if (user.value && res.preferences) {
+        user.value.preferences = res.preferences as typeof user.value.preferences
       }
     }
     catch (err: any) {

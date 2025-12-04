@@ -65,9 +65,7 @@
       </h4>
 
       <AnalyticsLineChart v-if="pageViewsChartData" :chart-data="pageViewsChartData" />
-      <p v-else class="text-caption flex h-64 items-center justify-center text-center">
-        Not enough data yet.
-      </p>
+      <Empty v-if="!pageViewsChartData" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" :icon-size="30" />
     </div>
 
     <div class="grid grid-cols-1 gap-4 py-4 md:grid-cols-2">
@@ -77,9 +75,7 @@
         </h4>
 
         <AnalyticsBarChart v-if="linkClicksChartData" :chart-data="linkClicksChartData" />
-        <p v-else class="text-caption flex h-64 items-center justify-center text-center">
-          Not enough data yet.
-        </p>
+        <Empty v-if="!linkClicksChartData" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" :icon-size="30" />
       </div>
 
       <div class="py-4">
@@ -88,9 +84,7 @@
         </h4>
 
         <AnalyticsBarChart v-if="iconClicksChartData" :chart-data="iconClicksChartData" />
-        <p v-else class="text-caption flex h-64 items-center justify-center text-center">
-          Not enough data yet.
-        </p>
+        <Empty v-if="!iconClicksChartData" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" :icon-size="30" />
       </div>
     </div>
   </div>

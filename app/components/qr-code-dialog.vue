@@ -7,7 +7,7 @@
 
       <QrcodeVue :value="user?.slug" :size="150" level="M" class="rounded-lg border bg-white p-2" />
 
-      <button class="hover:underline" @click="copyPageUrl(pageUrl)">
+      <button class="font-semibold hover:underline" @click="copyPageUrl(pageUrl)">
         @{{ user?.slug }}
       </button>
     </div>

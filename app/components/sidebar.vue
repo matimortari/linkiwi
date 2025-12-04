@@ -20,10 +20,10 @@
           </div>
 
           <div class="flex w-full min-w-0 flex-col gap-1 overflow-hidden">
-            <span class="font-semibold wrap-break-word">
+            <span class="text-xs font-semibold wrap-break-word">
               {{ user.name }}
             </span>
-            <nuxt-link :to="`/${user.slug}`" :title="`${BASE_URL}/${user.slug}`" class="text-caption wrap-break-word hover:underline">
+            <nuxt-link :to="`/${user.slug}`" :title="`${BASE_URL}/${user.slug}`" class="text-caption truncate hover:underline">
               @{{ user.slug }}
             </nuxt-link>
           </div>
