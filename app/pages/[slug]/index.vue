@@ -69,11 +69,11 @@ async function handleIconClick(iconId: string) {
   }
 }
 
-watch(() => route.params.slug, async (newSlug) => {
-  if (!newSlug)
+async function loadUserProfile(slug: string) {
+  if (!slug)
     return
 
-  await userStore.getUserBySlug(newSlug as string)
+  await userStore.getUserProfile(slug)
   const currentUser = userProfile.value
   if (currentUser?.id) {
     await analyticsStore.recordPageView(currentUser.id)
@@ -84,7 +84,17 @@ watch(() => route.params.slug, async (newSlug) => {
       meta: [{ name: "description", content: `@${currentUser.slug} profile on LinkNest.` }],
     })
   }
-}, { immediate: true })
+}
+
+onMounted(() => {
+  loadUserProfile(slug)
+})
+
+watch(() => route.params.slug, (newSlug) => {
+  if (newSlug) {
+    loadUserProfile(newSlug as string)
+  }
+})
 
 definePageMeta({
   layout: "minimal",

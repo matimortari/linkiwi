@@ -34,8 +34,6 @@
 </template>
 
 <script setup lang="ts">
-import type { AnalyticsRecordSchema } from "#shared/schemas/analytics-schema"
-
 const linksStore = useLinksStore()
 const iconsStore = useIconsStore()
 const analyticsStore = useAnalyticsStore()
@@ -69,21 +67,24 @@ onMounted(async () => {
     })),
   ]
 
-  // Fetch analytics and aggregate clicks
+  // Get analytics and aggregate clicks
   const res = analyticsStore.analytics
-  const raw: Array<any> = [
-    ...(res?.linkClicks ?? []).map((r: any) => ({ ...r, type: "link" })),
-    ...(res?.iconClicks ?? []).map((r: any) => ({ ...r, type: "icon" })),
-  ]
-
-  const analytics: AnalyticsRecordSchema[] = raw as AnalyticsRecordSchema[]
-
   const counts: Record<string, number> = {}
-  for (const a of analytics) {
-    if (!a.id)
-      continue
-    counts[a.id] = (counts[a.id] ?? 0) + 1
+
+  for (const click of res?.linkClicks ?? []) {
+    const id = click.userLinkId
+    if (id) {
+      counts[id] = (counts[id] ?? 0) + 1
+    }
   }
+
+  for (const click of res?.iconClicks ?? []) {
+    const id = click.userIconId
+    if (id) {
+      counts[id] = (counts[id] ?? 0) + 1
+    }
+  }
+
   clicksMap.value = counts
 
   loading.value = false

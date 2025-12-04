@@ -3,7 +3,7 @@
     <label :for="id" class="text-caption">{{ label }}</label>
 
     <div class="flex flex-row items-center gap-2">
-      <span class="text-caption">{{ value }}</span>
+      <span class="text-sm font-medium tracking-tight text-muted-foreground">{{ value }}</span>
       <input
         :id="id" type="color"
         :value="value" :disabled="disabled"

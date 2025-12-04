@@ -12,7 +12,7 @@ export const useUserStore = defineStore("user", () => {
     },
   })
   const loading = ref<boolean>(false)
-  const errors = ref<Record<string, string | null>>({ getUser: null, getUserBySlug: null, updateUser: null, updateUserImage: null, updatePreferences: null, deleteUser: null })
+  const errors = ref<Record<string, string | null>>({ getUser: null, getUserProfile: null, updateUser: null, updateUserImage: null, updatePreferences: null, deleteUser: null })
 
   async function getUser() {
     loading.value = true
@@ -30,16 +30,16 @@ export const useUserStore = defineStore("user", () => {
     }
   }
 
-  async function getUserBySlug(slug: string) {
+  async function getUserProfile(slug: string) {
     loading.value = true
-    errors.value.getUserBySlug = null
+    errors.value.getUserProfile = null
 
     try {
       userProfile.value = await $fetch<User>(`${API_URL}/user/${slug}`, { method: "GET" })
     }
     catch (err: any) {
-      errors.value.getUserBySlug = err.data?.message || "Failed to get user by slug"
-      console.error("getUserBySlug error:", err)
+      errors.value.getUserProfile = err.data?.message || "Failed to get user by slug"
+      console.error("getUserProfile error:", err)
       userProfile.value = null
     }
     finally {
@@ -113,10 +113,12 @@ export const useUserStore = defineStore("user", () => {
     try {
       await $fetch(`${API_URL}/user`, { method: "DELETE", credentials: "include" })
       user.value = null
+      return true
     }
     catch (err: any) {
       errors.value.deleteUser = err.data.message || "Failed to delete user"
       console.error("deleteUser error:", err)
+      return false
     }
     finally {
       loading.value = false
@@ -130,7 +132,7 @@ export const useUserStore = defineStore("user", () => {
     userProfile,
     preferences,
     getUser,
-    getUserBySlug,
+    getUserProfile,
     updateUser,
     updateUserImage,
     updatePreferences,

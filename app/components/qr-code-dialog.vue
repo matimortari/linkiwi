@@ -1,11 +1,13 @@
 <template>
   <Dialog :is-open="isOpen" title="My QR Code" @update:is-open="emit('close')">
-    <div class="flex flex-col items-center gap-4">
-      <p class="text-caption">
+    <div class="flex flex-col items-center gap-4 p-2">
+      <p class="text-caption text-center">
         Scan this QR code to visit your profile:
       </p>
 
-      <QrcodeVue :value="user?.slug" :size="150" level="M" class="rounded-lg border bg-white p-2" />
+      <div class="flex items-center justify-center overflow-hidden rounded-lg bg-secondary p-1 shadow-lg">
+        <QrcodeVue :value="pageUrl" :size="200" level="H" render-as="svg" />
+      </div>
 
       <button class="font-semibold hover:underline" @click="copyPageUrl(pageUrl)">
         @{{ user?.slug }}

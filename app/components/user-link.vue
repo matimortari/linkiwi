@@ -1,6 +1,6 @@
 <template>
   <li class="relative flex w-full max-w-80 min-w-32 flex-row items-center justify-center" :style="linkStyle(isHovered)" @mouseenter="isHovered = true" @mouseleave="isHovered = false">
-    <nuxt-link :to="item.url" class="flex size-full items-center justify-center" @click="$emit('click')">
+    <nuxt-link :to="item.url" class="flex size-full items-center justify-center" target="_blank" @click="handleClick">
       <span class="mx-2 inline-block truncate px-4 text-center" :style="linkInnerStyle">{{ item.title }}</span>
     </nuxt-link>
 
@@ -16,7 +16,14 @@ const props = defineProps<{
   preferences: UserPreferences
 }>()
 
-defineEmits<(e: "click") => void>()
+const emit = defineEmits<(e: "click") => void>()
+
+async function handleClick(event: MouseEvent) {
+  event.preventDefault()
+  emit("click")
+  await nextTick()
+  window.open(props.item.url, "_blank", "noopener,noreferrer")
+}
 
 const { linkStyle, linkInnerStyle } = useDynamicStyles(toRef(props, "preferences"))
 const isHovered = ref(false)

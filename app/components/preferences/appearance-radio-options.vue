@@ -11,7 +11,7 @@
           :value="option.value" :checked="value === option.value"
           @change="$emit('update:value', option.value)"
         >
-        <span class="text-caption">{{ option.label }}</span>
+        <span class="text-sm font-medium tracking-tight text-muted-foreground">{{ option.label }}</span>
       </label>
     </div>
   </div>

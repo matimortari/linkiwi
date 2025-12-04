@@ -4,7 +4,7 @@
 
     <select
       :id="id" :value="value"
-      :disabled="disabled" class="text-caption cursor-pointer bg-transparent p-2 text-end disabled:opacity-50"
+      :disabled="disabled" class="cursor-pointer bg-transparent p-2 text-end text-sm font-medium tracking-tight text-muted-foreground disabled:opacity-50"
       @change="$emit('update:value', ($event.target && ($event.target as HTMLSelectElement).value) ?? '')"
     >
       <option v-for="option in options" :key="option.value" :value="option.value" class="bg-card">

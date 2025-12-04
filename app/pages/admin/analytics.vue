@@ -23,8 +23,8 @@
 
   <div v-else class="flex h-[calc(100vh-8rem)] w-full items-center justify-center">
     <Spinner v-if="loading" />
-    <p class="text-caption text-center" :class="{ 'text-destructive-foreground': errors.getUser || errors.getUserBySlug }">
-      {{ errors.getUser || errors.getUserBySlug || 'User not found.' }}
+    <p class="text-caption text-center" :class="{ 'text-destructive-foreground': errors.getUser || errors.getUserProfile }">
+      {{ errors.getUser || errors.getUserProfile || 'User not found.' }}
     </p>
   </div>
 </template>
