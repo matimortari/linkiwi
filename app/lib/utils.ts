@@ -9,8 +9,9 @@ export function formatDate(dateString: Date) {
 }
 
 export function copyToClipboard(val: string) {
-  if (val)
+  if (val) {
     navigator.clipboard.writeText(val)
+  }
 }
 
 export function getBaseUrl(): string {

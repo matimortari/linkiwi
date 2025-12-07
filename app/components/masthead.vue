@@ -55,15 +55,17 @@ const copySuccess = ref<string | null>(null)
 const shouldShowPreview = computed(() => route.path !== "/admin/analytics")
 
 const pageUrl = computed(() => {
-  if (!user.value)
+  if (!user.value) {
     return ""
+  }
 
   return `${BASE_URL.replace(/^https?:\/\//, "")}/${user.value.slug}`
 })
 
 function handleClickOutside(e: MouseEvent) {
-  if (!dropdownRef.value)
+  if (!dropdownRef.value) {
     return
+  }
   const clickedOutside = !dropdownRef.value.contains(e.target as Node)
   if (isDropdownOpen.value && clickedOutside) {
     isDropdownOpen.value = false
@@ -85,9 +87,10 @@ function handleShareTwitter() {
 }
 
 watch(isDropdownOpen, (state) => {
-  if (state)
+  if (state) {
     document.addEventListener("click", handleClickOutside)
-  else document.removeEventListener("click", handleClickOutside)
+  }
+  else { document.removeEventListener("click", handleClickOutside) }
 })
 
 onBeforeUnmount(() => {

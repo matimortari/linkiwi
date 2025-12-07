@@ -9,8 +9,9 @@ export function useContent(options: { selector?: string, parseMethod?: boolean }
     await nextTick()
 
     const container = document.querySelector(selector)
-    if (!container)
+    if (!container) {
       return
+    }
 
     const hElements = container.querySelectorAll("h2, h3, h4")
     headers.value = Array.from(hElements).map((el) => {
@@ -21,8 +22,9 @@ export function useContent(options: { selector?: string, parseMethod?: boolean }
         if (next && !/^H[2-4]$/.test(next.tagName)) {
           const nextText = next.textContent?.replace(/\*\*/g, "").trim() || ""
           const match = nextText.match(/^(GET|POST|PUT|DELETE)\b/i)
-          if (match)
+          if (match) {
             method = match[1]?.toUpperCase()
+          }
         }
       }
 
@@ -36,12 +38,15 @@ export function useContent(options: { selector?: string, parseMethod?: boolean }
     observer?.disconnect()
     observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
-        if (entry.isIntersecting)
+        if (entry.isIntersecting) {
           activeSection.value = entry.target.id
+        }
       }
     }, { root: null, rootMargin: "0px 0px -70% 0px", threshold: 0 })
 
-    for (const heading of hElements) observer!.observe(heading)
+    for (const heading of hElements) {
+      observer!.observe(heading)
+    }
   }
 
   onMounted(extractHeaders)
@@ -54,14 +59,18 @@ export function useContent(options: { selector?: string, parseMethod?: boolean }
 
   function headerClasses(header: any) {
     const classes: string[] = []
-    if (header.level === 2)
+    if (header.level === 2) {
       classes.push("ml-0 my-2 text-base font-semibold")
-    if (header.level === 3)
+    }
+    if (header.level === 3) {
       classes.push("ml-2 my-2 text-sm font-semibold")
-    if (header.level === 4)
+    }
+    if (header.level === 4) {
       classes.push("ml-4 text-xs")
-    if (activeSection.value === header.id)
+    }
+    if (activeSection.value === header.id) {
       classes.push("text-primary font-semibold")
+    }
     return classes.join(" ")
   }
 

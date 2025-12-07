@@ -61,8 +61,9 @@ async function handleUpdateImage(event: Event) {
   errors.value.updateUserImage = null
   const input = event.target as HTMLInputElement
   const file = input?.files?.[0]
-  if (!file)
+  if (!file) {
     return
+  }
 
   try {
     const res = await userStore.updateUserImage(file)
@@ -79,8 +80,9 @@ async function handleUpdateImage(event: Event) {
 async function handleSubmit() {
   errors.value.updateUser = null
 
-  if (!user.value?.id)
+  if (!user.value?.id) {
     return
+  }
   if (!user.value?.name) {
     errors.value.updateUser = "User name cannot be empty."
     return

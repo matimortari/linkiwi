@@ -109,8 +109,9 @@ const copiedColor = ref<string | null>(null)
 
 async function handleCopyColor(colorVar: string) {
   const value = colorValues.value[colorVar]
-  if (!value || value === "—")
+  if (!value || value === "—") {
     return
+  }
 
   await navigator.clipboard.writeText(value)
   copiedColor.value = colorVar

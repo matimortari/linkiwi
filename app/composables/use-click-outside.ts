@@ -1,7 +1,8 @@
 export function useClickOutside(targetRef: Ref<HTMLElement | null>, callback: () => void, options?: { escapeKey?: boolean }) {
   const handler = (event: MouseEvent) => {
-    if (!targetRef.value)
+    if (!targetRef.value) {
       return
+    }
     if (!targetRef.value.contains(event.target as Node)) {
       callback()
     }

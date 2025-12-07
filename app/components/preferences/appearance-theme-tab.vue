@@ -21,16 +21,18 @@ const { user } = storeToRefs(useUserStore())
 const selectedTheme = ref("")
 
 function handleApplyTheme(newPreferences: UserPreferences) {
-  if (!user.value)
+  if (!user.value) {
     return
+  }
 
   user.value.preferences = newPreferences
 }
 
 function handleThemeSelection(title: string) {
   const themeExists = THEMES.some(theme => theme.title === title)
-  if (!themeExists)
+  if (!themeExists) {
     return
+  }
 
   selectedTheme.value = title
   const theme = THEMES.find(theme => theme.title === title)

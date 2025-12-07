@@ -104,8 +104,9 @@ const createdAt = computed(() => userStore.user?.createdAt)
 function groupByDate<T extends { createdAt?: string | Date }>(items: T[]): Record<string, number> {
   const result: Record<string, number> = {}
   for (const item of items) {
-    if (!item.createdAt)
+    if (!item.createdAt) {
       continue
+    }
 
     const dateObj = new Date(item.createdAt)
     if (!Number.isNaN(dateObj.getTime())) {
@@ -137,8 +138,9 @@ const stats = computed(() => {
 })
 
 const pageViewsChartData = computed(() => {
-  if (!stats.value.length)
+  if (!stats.value.length) {
     return null
+  }
 
   return {
     labels: stats.value.map(s => s.date),
@@ -147,8 +149,9 @@ const pageViewsChartData = computed(() => {
 })
 
 const linkClicksChartData = computed(() => {
-  if (!stats.value.length)
+  if (!stats.value.length) {
     return null
+  }
 
   return {
     labels: stats.value.map(s => s.date),
@@ -157,8 +160,9 @@ const linkClicksChartData = computed(() => {
 })
 
 const iconClicksChartData = computed(() => {
-  if (!stats.value.length)
+  if (!stats.value.length) {
     return null
+  }
 
   return {
     labels: stats.value.map(s => s.date),

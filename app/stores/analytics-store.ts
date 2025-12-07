@@ -72,12 +72,15 @@ export const useAnalyticsStore = defineStore("analytics", () => {
 
     try {
       const params = new URLSearchParams()
-      if (options?.type)
+      if (options?.type) {
         params.append("type", options.type)
-      if (options?.dateFrom)
+      }
+      if (options?.dateFrom) {
         params.append("dateFrom", options.dateFrom)
-      if (options?.dateTo)
+      }
+      if (options?.dateTo) {
         params.append("dateTo", options.dateTo)
+      }
 
       await $fetch<{ success: boolean, message: string, deletedCount: number }>(params.toString() ? `${API_URL}/analytics?${params.toString()}` : `${API_URL}/analytics`, { method: "DELETE", credentials: "include" })
     }

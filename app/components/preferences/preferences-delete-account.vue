@@ -23,8 +23,9 @@ const { clear } = useUserSession()
 const userStore = useUserStore()
 
 async function handleDeleteUser() {
-  if (!confirm("Are you sure you want to delete your account? This action cannot be undone."))
+  if (!confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
     return
+  }
 
   const success = await userStore.deleteUser()
   if (!success) {

@@ -71,8 +71,9 @@ export function useFormValidation<T>(initialData: T) {
   })
 
   const hasFormChanged = (originalData?: T): boolean => {
-    if (!originalData)
+    if (!originalData) {
       return true
+    }
 
     return JSON.stringify(form.value) !== JSON.stringify(originalData)
   }

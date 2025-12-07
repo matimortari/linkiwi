@@ -39,8 +39,9 @@ const { user } = storeToRefs(useUserStore())
 const copySuccess = ref<string | null>(null)
 
 const pageUrl = computed(() => {
-  if (!user.value)
+  if (!user.value) {
     return ""
+  }
 
   return `${BASE_URL}/${user.value.slug}`
 })

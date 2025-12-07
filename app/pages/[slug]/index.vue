@@ -70,8 +70,9 @@ async function handleIconClick(iconId: string) {
 }
 
 async function loadUserProfile(slug: string) {
-  if (!slug)
+  if (!slug) {
     return
+  }
 
   await userStore.getUserProfile(slug)
   const currentUser = userProfile.value

@@ -30,6 +30,7 @@ export default antfu({
     "no-alert": "off",
     "no-console": "off",
     "node/prefer-global/process": "off",
+    "curly": ["error", "all"],
     "object-curly-newline": ["error", {
       ObjectExpression: { multiline: false, consistent: true },
       ObjectPattern: { multiline: false, consistent: true },
