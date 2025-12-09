@@ -1,17 +1,10 @@
-import { PrismaClient } from "@prisma/client"
+import { PrismaPg } from "@prisma/adapter-pg"
+import { PrismaClient } from "../../prisma/.generated/client"
+import "dotenv/config"
 
-function prismaClientSingleton() {
-  return new PrismaClient()
-}
+const connectionString = `${process.env.DATABASE_URL}`
 
-declare const globalThis: {
-  prismaGlobal: ReturnType<typeof prismaClientSingleton>
-} & typeof global
-
-const db = globalThis.prismaGlobal ?? prismaClientSingleton()
+const adapter = new PrismaPg({ connectionString })
+const db = new PrismaClient({ adapter })
 
 export default db
-
-if (process.env.NODE_ENV !== "production") {
-  globalThis.prismaGlobal = db
-}

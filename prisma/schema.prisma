@@ -1,23 +1,11 @@
+generator client {
+  provider   = "prisma-client-js"
+  output     = "./.generated/client"
+  engineType = "binary"
+}
+
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
-generator client {
-  provider = "prisma-client-js"
-}
-
-enum BackgroundType {
-  FLAT
-  GRADIENT
-}
-
-enum SupportBanner {
-  NONE
-  LGBTQ_RIGHTS
-  ANTI_RACISM
-  MENTAL_HEALTH
-  CLIMATE_ACTION
 }
 
 model User {
@@ -30,10 +18,10 @@ model User {
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
   accounts    Account[]
-  links       UserLink[]
-  icons       UserIcon[]
-  preferences UserPreferences?
   views       PageView[]
+  icons       UserIcon[]
+  links       UserLink[]
+  preferences UserPreferences?
 }
 
 model Account {
@@ -95,8 +83,8 @@ model UserLink {
   clicks     Int         @default(0)
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
-  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   linkClicks LinkClick[]
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model UserIcon {
@@ -108,8 +96,8 @@ model UserIcon {
   clicks     Int         @default(0)
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
-  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   iconClicks IconClick[]
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model PageView {
@@ -135,4 +123,17 @@ model IconClick {
 
   @@id([userIconId, date])
   @@index([date])
+}
+
+enum BackgroundType {
+  FLAT
+  GRADIENT
+}
+
+enum SupportBanner {
+  NONE
+  LGBTQ_RIGHTS
+  ANTI_RACISM
+  MENTAL_HEALTH
+  CLIMATE_ACTION
 }

@@ -1,12 +1,11 @@
 .output
 .data
+.generated
 .nuxt
 .nitro
 .cache
 dist
 build
-.nuxt
-.output
 out
 test-results
 coverage
