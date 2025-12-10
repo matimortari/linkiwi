@@ -1,26 +1,29 @@
 import { z } from "zod"
 
-const backgroundTypeEnum = z.enum(["FLAT", "GRADIENT"])
-const supportBannerEnum = z.enum(["NONE", "LGBTQ_RIGHTS", "ANTI_RACISM", "MENTAL_HEALTH", "CLIMATE_ACTION"])
-
 export const updateUserSchema = z.object({
   name: z
     .string()
-    .min(1, "Name is required")
-    .max(100, "Name must be at most 100 characters")
+    .min(3, "Name must be at least 3 characters")
+    .max(50, "Name must be at most 50 characters")
     .transform(val => val.trim())
-    .refine(val => val.length > 0, { message: "Name cannot be empty or only whitespace" })
+    .refine(val => val.length > 0, { message: "Name cannot be empty" })
     .optional(),
   image: z
     .union([z.url(), z.literal(""), z.null()])
     .transform(val => (val === "" ? null : val))
     .optional(),
-  slug: z.string().regex(/^[a-z0-9-]+$/, "Invalid slug").optional(),
-  description: z.string().max(300).optional(),
+  slug: z
+    .string()
+    .regex(/^[a-z0-9-]+$/, "Invalid slug")
+    .optional(),
+  description: z
+    .string()
+    .max(300)
+    .optional(),
 })
 
 export const updateUserPreferencesSchema = z.object({
-  backgroundType: backgroundTypeEnum.optional(),
+  backgroundType: z.enum(["FLAT", "GRADIENT"]).optional(),
   backgroundColor: z.string().optional(),
   backgroundGradientStart: z.string().optional(),
   backgroundGradientEnd: z.string().optional(),
@@ -53,10 +56,9 @@ export const updateUserPreferencesSchema = z.object({
   iconShadowWeight: z.string().optional(),
   iconLogoColor: z.string().optional(),
   iconHoverBackgroundColor: z.string().optional(),
-  supportBanner: supportBannerEnum.optional(),
+  supportBanner: z.enum(["NONE", "LGBTQ_RIGHTS", "ANTI_RACISM", "MENTAL_HEALTH", "CLIMATE_ACTION"]).optional(),
 })
 
 export type UpdateUserInput = z.infer<typeof updateUserSchema>
-export type BackgroundType = z.infer<typeof backgroundTypeEnum>
-export type SupportBanner = z.infer<typeof supportBannerEnum>
+export type BackgroundType = z.infer<typeof updateUserPreferencesSchema.shape.backgroundType>
 export type UpdateUserPreferencesInput = z.infer<typeof updateUserPreferencesSchema>

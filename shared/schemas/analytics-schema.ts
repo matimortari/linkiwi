@@ -10,9 +10,6 @@ export const analyticsRecordSchema = z.object({
     return false
   }
   return true
-}, {
-  message: "ID is required for link and social icon analytics",
-  path: ["id"],
-})
+}, { message: "ID is required for link and social icon analytics", path: ["id"] })
 
 export type AnalyticsRecordSchema = z.infer<typeof analyticsRecordSchema>
