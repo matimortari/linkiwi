@@ -2,6 +2,10 @@ import type { EventHandlerRequest, H3Event } from "h3"
 import db from "#server/lib/db"
 import { del, put } from "@vercel/blob"
 
+/**
+ * Retrieves the authenticated user from the current session.
+ * Throws 401 if no valid session exists.
+ */
 export async function getUserFromSession(event: H3Event<EventHandlerRequest>) {
   const session = await getUserSession(event)
   if (!session?.user?.id) {
@@ -11,6 +15,9 @@ export async function getUserFromSession(event: H3Event<EventHandlerRequest>) {
   return session.user
 }
 
+/**
+ * Generates a unique slug based on the provided base string.
+ */
 export async function generateSlug(base: string = ""): Promise<string> {
   const cleanedBase = base
     .normalize("NFKD")
@@ -20,7 +27,6 @@ export async function generateSlug(base: string = ""): Promise<string> {
     .replaceAll(/[^a-z0-9-]/g, "") // Remove invalid characters
     .replaceAll(/-+/g, "-") // Collapse multiple hyphens
     .replaceAll(/^(-+)|(-+)$/g, "") // Trim leading/trailing hyphens
-    || "user"
 
   let slug: string
   let exists = true
@@ -37,6 +43,10 @@ export async function generateSlug(base: string = ""): Promise<string> {
   return slug!
 }
 
+/**
+ * Uploads a file to Blob storage and removes the previous file if provided.
+ * Validates file size and MIME type before upload.
+ */
 export async function uploadFile({ path, file, maxSize, allowedMimeTypes, oldFileUrl }: {
   path: string
   file: File

@@ -1,3 +1,5 @@
+// Prisma Client instantiation (https://www.prisma.io/docs/getting-started/prisma-orm/quickstart/postgresql#7-instantiate-prisma-client)
+
 import { PrismaPg } from "@prisma/adapter-pg"
 import { PrismaClient } from "../../prisma/.generated/client"
 import "dotenv/config"
