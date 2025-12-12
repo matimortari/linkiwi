@@ -10,50 +10,14 @@
     </header>
 
     <div class="grid grid-cols-2 gap-4 border-b py-4 md:grid-cols-4 md:place-items-center">
-      <div class="navigation-group">
-        <icon name="material-symbols:table-eye" size="30" class="text-primary" />
+      <div v-for="item in summaryItems" :key="item.label" class="navigation-group">
+        <icon :name="item.icon" size="30" class="text-primary" />
         <div class="flex flex-col items-start">
           <p class="text-caption">
-            Total Page Views
+            {{ item.label }}
           </p>
           <p class="font-semibold md:text-lg">
-            {{ totalViews }}
-          </p>
-        </div>
-      </div>
-
-      <div class="navigation-group">
-        <icon name="material-symbols:ads-click" size="30" class="text-primary" />
-        <div class="flex flex-col items-start">
-          <p class="text-caption">
-            Total Clicks
-          </p>
-          <p class="font-semibold md:text-lg">
-            {{ totalClicks }}
-          </p>
-        </div>
-      </div>
-
-      <div class="navigation-group">
-        <icon name="material-symbols:percent" size="30" class="text-primary" />
-        <div class="flex flex-col items-start">
-          <p class="text-caption">
-            Click Rate
-          </p>
-          <p class="font-semibold md:text-lg">
-            {{ clickRate }}%
-          </p>
-        </div>
-      </div>
-
-      <div class="navigation-group">
-        <icon name="material-symbols:calendar-month" size="30" class="text-primary" />
-        <div class="flex flex-col items-start">
-          <p class="text-caption">
-            Joined On
-          </p>
-          <p class="font-semibold md:text-lg">
-            {{ createdAt ? formatDate(new Date(createdAt)) : "N/A" }}
+            {{ item.value }}
           </p>
         </div>
       </div>
@@ -64,8 +28,8 @@
         Page Views Over Time
       </h4>
 
-      <AnalyticsLineChart v-if="pageViewsChartData" :chart-data="pageViewsChartData" />
       <Empty v-if="!pageViewsChartData" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" :icon-size="30" />
+      <AnalyticsLineChart v-else :chart-data="pageViewsChartData" />
     </div>
 
     <div class="grid grid-cols-1 gap-4 py-4 md:grid-cols-2">
@@ -74,8 +38,8 @@
           Link Clicks
         </h4>
 
-        <AnalyticsBarChart v-if="linkClicksChartData" :chart-data="linkClicksChartData" />
         <Empty v-if="!linkClicksChartData" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" :icon-size="30" />
+        <AnalyticsBarChart v-else :chart-data="linkClicksChartData" />
       </div>
 
       <div class="py-4">
@@ -83,8 +47,8 @@
           Social Icon Clicks
         </h4>
 
-        <AnalyticsBarChart v-if="iconClicksChartData" :chart-data="iconClicksChartData" />
         <Empty v-if="!iconClicksChartData" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" :icon-size="30" />
+        <AnalyticsBarChart v-else :chart-data="iconClicksChartData" />
       </div>
     </div>
   </div>
@@ -101,19 +65,21 @@ const totalClicks = computed(() => analyticsStore.analytics?.linkClicks.length +
 const clickRate = computed(() => totalViews.value ? ((Number(totalClicks.value) / Number(totalViews.value)) * 100).toFixed(2) : 0)
 const createdAt = computed(() => userStore.user?.createdAt)
 
-function groupByDate<T extends { createdAt?: string | Date }>(items: T[]): Record<string, number> {
+function groupByDate<T extends Record<string, any>>(items: T[], dateKey: keyof T = "date"): Record<string, number> {
   const result: Record<string, number> = {}
   for (const item of items) {
-    if (!item.createdAt) {
+    const itemDate = item[dateKey]
+    if (!itemDate) {
       continue
     }
 
-    const dateObj = new Date(item.createdAt)
-    if (!Number.isNaN(dateObj.getTime())) {
-      const iso = dateObj.toISOString()
-      const dateStr = (iso.split("T")[0] ?? iso)
-      result[dateStr] = (result[dateStr] ?? 0) + 1
+    const dateObj = new Date(itemDate as string | Date)
+    if (Number.isNaN(dateObj.getTime())) {
+      continue
     }
+
+    const dateStr = dateObj.toISOString().split("T")[0] as string
+    result[dateStr] = (result[dateStr] ?? 0) + 1
   }
 
   return result
@@ -124,11 +90,12 @@ const stats = computed(() => {
   const linkClicks = analyticsStore.analytics?.linkClicks ?? []
   const iconClicks = analyticsStore.analytics?.iconClicks ?? []
 
-  const viewsByDate = groupByDate(pageViews)
-  const linkClicksByDate = groupByDate(linkClicks)
-  const iconClicksByDate = groupByDate(iconClicks)
+  const viewsByDate = groupByDate(pageViews, "date")
+  const linkClicksByDate = groupByDate(linkClicks, "date")
+  const iconClicksByDate = groupByDate(iconClicks, "date")
 
   const allDates = Array.from(new Set([...Object.keys(viewsByDate), ...Object.keys(linkClicksByDate), ...Object.keys(iconClicksByDate)])).sort()
+
   return allDates.map(date => ({
     date,
     pageViews: viewsByDate[date] ?? 0,
@@ -137,14 +104,42 @@ const stats = computed(() => {
   }))
 })
 
+const summaryItems = computed(() => [
+  {
+    label: "Total Page Views",
+    icon: "material-symbols:table-eye",
+    value: totalViews.value,
+  },
+  {
+    label: "Total Clicks",
+    icon: "material-symbols:ads-click",
+    value: totalClicks.value,
+  },
+  {
+    label: "Click Rate",
+    icon: "material-symbols:percent",
+    value: `${clickRate.value}%`,
+  },
+  {
+    label: "Joined On",
+    icon: "material-symbols:calendar-month",
+    value: createdAt.value ? formatDate(new Date(createdAt.value)) : "N/A",
+  },
+])
+
 const pageViewsChartData = computed(() => {
   if (!stats.value.length) {
     return null
   }
 
+  const values = stats.value.map(s => s.pageViews)
+  if (!values.some(v => v > 0)) {
+    return null
+  }
+
   return {
     labels: stats.value.map(s => s.date),
-    datasets: [{ label: "Page Views", data: stats.value.map(s => s.pageViews), backgroundColor: "#63abb5" }],
+    datasets: [{ label: "Page Views", data: values, backgroundColor: "#63abb5" }],
   }
 })
 
@@ -153,9 +148,14 @@ const linkClicksChartData = computed(() => {
     return null
   }
 
+  const values = stats.value.map(s => s.linkClicks)
+  if (!values.some(v => v > 0)) {
+    return null
+  }
+
   return {
     labels: stats.value.map(s => s.date),
-    datasets: [{ label: "Link Clicks", data: stats.value.map(s => s.linkClicks), backgroundColor: "#63abb5" }],
+    datasets: [{ label: "Link Clicks", data: values, backgroundColor: "#63abb5" }],
   }
 })
 
@@ -164,9 +164,14 @@ const iconClicksChartData = computed(() => {
     return null
   }
 
+  const values = stats.value.map(s => s.iconClicks)
+  if (!values.some(v => v > 0)) {
+    return null
+  }
+
   return {
     labels: stats.value.map(s => s.date),
-    datasets: [{ label: "Social Icon Clicks", data: stats.value.map(s => s.iconClicks), backgroundColor: "#63abb5" }],
+    datasets: [{ label: "Social Icon Clicks", data: values, backgroundColor: "#63abb5" }],
   }
 })
 

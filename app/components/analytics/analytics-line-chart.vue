@@ -21,6 +21,22 @@ const chartOptions = {
   aspectRatio: 2,
   plugins: {
     legend: { display: false },
+    tooltip: { enabled: true },
+  },
+  elements: {
+    line: {
+      borderWidth: 2,
+      borderColor: "#63abb5",
+    },
+    point: {
+      radius: 4,
+      hoverRadius: 6,
+    },
+  },
+  scales: {
+    y: {
+      beginAtZero: true,
+    },
   },
 }
 </script>
