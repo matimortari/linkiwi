@@ -1,12 +1,17 @@
-// Prisma Client instantiation (https://www.prisma.io/docs/getting-started/prisma-orm/quickstart/postgresql#7-instantiate-prisma-client)
+import { PrismaClient } from "@prisma/client"
 
-import { PrismaPg } from "@prisma/adapter-pg"
-import { PrismaClient } from "../../prisma/.generated/client"
-import "dotenv/config"
+function prismaClientSingleton() {
+  return new PrismaClient()
+}
 
-const connectionString = `${process.env.DATABASE_URL}`
+declare const globalThis: {
+  prismaGlobal: ReturnType<typeof prismaClientSingleton>
+} & typeof global
 
-const adapter = new PrismaPg({ connectionString })
-const db = new PrismaClient({ adapter })
+const db = globalThis.prismaGlobal ?? prismaClientSingleton()
 
 export default db
+
+if (process.env.NODE_ENV !== "production") {
+  globalThis.prismaGlobal = db
+}
