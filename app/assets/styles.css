@@ -85,7 +85,7 @@ html.dark {
 
   *:focus-visible {
     outline: solid 2px var(--muted);
-    border-radius: 0.25rem;
+    border-radius: 1rem;
   }
 }
 
@@ -170,7 +170,7 @@ select {
   -webkit-appearance: none;
   -moz-appearance: none;
   background-color: var(--card);
-  color: var(--foreground);
+  color: var(--muted-foreground);
   border: 1px solid var(--muted);
   accent-color: var(--muted);
   border-radius: 5rem;

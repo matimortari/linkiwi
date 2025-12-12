@@ -36,10 +36,10 @@
 
           <nuxt-link
             v-for="link in SIDEBAR_NAV_LINKS" :key="link.url"
-            :to="link.url" class="flex w-full flex-row items-center justify-start gap-4 rounded-lg p-1 font-semibold transition-transform hover:scale-105 hover:underline"
+            :to="link.url" class="navigation-group w-full rounded-[5rem] p-2 font-semibold whitespace-nowrap hover:bg-muted"
             aria-label="Navigate to {{ link.label }}" @click="isMobileNavOpen = false"
           >
-            <icon :name="link.icon" size="25" />
+            <icon :name="link.icon" size="30" />
             <span>{{ link.label }}</span>
           </nuxt-link>
         </nav>
@@ -51,11 +51,11 @@
             Actions
           </p>
 
-          <button class="flex w-full flex-row items-center justify-start gap-4 rounded-lg p-1 font-semibold transition-transform hover:scale-105 hover:underline" aria-label="Toggle Theme" @click="toggleTheme">
-            <icon :name="themeIcon" size="25" />
+          <button class="navigation-group w-full rounded-[5rem] p-2 font-semibold whitespace-nowrap hover:bg-muted" aria-label="Toggle Theme" @click="toggleTheme">
+            <icon :name="themeIcon" size="30" />
             <span>Toggle Theme</span>
           </button>
-          <button class="flex w-full flex-row items-center justify-start gap-4 rounded-lg p-1 font-semibold transition-transform hover:scale-105 hover:underline" aria-label="Sign Out" @click="signOut">
+          <button class="navigation-group w-full rounded-[5rem] p-2 font-semibold whitespace-nowrap hover:bg-muted" aria-label="Sign Out" @click="signOut">
             <icon name="material-symbols:logout" size="25" class="text-danger" />
             <span>Sign Out</span>
           </button>

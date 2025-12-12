@@ -3,11 +3,11 @@
     <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
       <span class="text-sm font-medium">Select Platform</span>
 
-      <div class="scroll-area grid max-h-48 grid-cols-3 gap-1 overflow-y-auto pr-2 md:grid-cols-5 2xl:grid-cols-9">
+      <div class="scroll-area grid max-h-64 grid-cols-3 gap-1 overflow-y-auto pr-2 md:grid-cols-5 2xl:grid-cols-9">
         <button
           v-for="[label, iconName] in socialIconEntries" :key="label"
           type="button" aria-label="Select Social Icon"
-          class="flex flex-col items-center justify-center gap-1 rounded-lg border p-2 transition-all hover:bg-muted active:bg-muted"
+          class="flex flex-col items-center justify-center gap-2 rounded-2xl border p-2 transition-all hover:bg-muted active:bg-muted"
           :class="{ 'bg-muted': form.platform === label }" @click="selectIcon(label, iconName)"
         >
           <icon :name="iconName" size="25" />

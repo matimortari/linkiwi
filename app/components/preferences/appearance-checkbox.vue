@@ -1,5 +1,5 @@
 <template>
-  <div class="navigation-group w-full justify-between rounded-2xl border p-2">
+  <div class="navigation-group w-full justify-between rounded-[5rem] border p-2">
     <label :for="id" class="text-caption">{{ label }}</label>
 
     <div class="flex cursor-pointer flex-row items-center gap-2">

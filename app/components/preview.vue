@@ -1,5 +1,5 @@
 <template>
-  <div v-if="user" class="my-6 flex-col items-center justify-center select-none md:h-[520px] md:min-w-[320px] 2xl:min-w-[380px]">
+  <div v-if="user" class="my-6 flex-col items-center justify-center select-none md:h-150 md:min-w-[320px] 2xl:min-w-80">
     <!-- Mobile toggle -->
     <button class="btn fixed bottom-4 left-1/2 z-30 -translate-x-1/2 md:hidden!" aria-label="Toggle Mobile Preview" @click="isMobilePreviewOpen = !isMobilePreviewOpen">
       <icon :name="isMobilePreviewOpen ? 'mdi:eye-off' : 'mdi:eye'" size="25" />
@@ -42,7 +42,7 @@
     <div
       v-motion :initial="{ opacity: 0, x: 20 }"
       :visible="{ opacity: 1, x: 0 }" :duration="800"
-      :style="backgroundStyle" class="scroll-hide relative hidden min-h-[550px] w-full overflow-x-hidden rounded-[2.5rem] border-2 shadow-lg shadow-black md:block"
+      :style="backgroundStyle" class="scroll-hide relative hidden min-h-150 w-full overflow-x-hidden rounded-[2.5rem] border-2 shadow-lg shadow-black md:block"
     >
       <div class="sticky top-2 left-1/2 z-10 h-2 w-24 -translate-x-1/2 rounded-full bg-black" />
       <div class="absolute top-2 right-6 z-10 flex flex-row items-center justify-end gap-2 text-black">

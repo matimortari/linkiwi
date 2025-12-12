@@ -3,7 +3,7 @@
     <div v-for="theme in THEMES" :key="theme.title" class="flex flex-col items-center gap-2">
       <button
         :title="theme.title" aria-label="Select Theme"
-        tabindex="0" class="flex size-full flex-col items-center justify-center gap-4 rounded-lg border p-8 hover:border-dashed hover:opacity-80"
+        tabindex="0" class="flex size-full flex-col items-center justify-center gap-4 rounded-2xl border p-8 hover:border-dashed hover:opacity-80"
         :class="{ 'opacity-60': selectedTheme !== theme.title }" :style="getThemeBackgroundStyle(theme.preferences)"
         @click="handleThemeSelection(theme.title)"
       >

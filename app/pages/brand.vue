@@ -10,12 +10,12 @@
     </header>
 
     <div class="grid grid-cols-1 gap-4 border-b py-4 md:grid-cols-3">
-      <div v-for="logo in logos" :key="logo.name" class="flex flex-col items-center rounded-xl border-2" :class="logo.bgClass">
+      <div v-for="logo in logos" :key="logo.name" class="flex flex-col items-center rounded-2xl border-2" :class="logo.bgClass">
         <div class="my-4 flex h-16 w-36 items-center justify-center">
           <img :src="logo.image" :alt="logo.name" class="size-full object-contain">
         </div>
 
-        <div class="flex w-full flex-row items-center justify-between rounded-b-lg bg-card px-2 py-1">
+        <div class="flex w-full flex-row items-center justify-between rounded-b-2xl bg-card px-2 py-1">
           <span class="text-sm font-semibold">{{ logo.name }}</span>
           <nuxt-link :to="logo.image" download :title="`Download ${logo.name}`">
             <icon name="mdi:download" size="35" class="rounded-full p-1" />
@@ -37,10 +37,10 @@
       <div class="m-4 grid w-full grid-cols-1 gap-4 md:grid-cols-6">
         <div v-for="color in baseColors" :key="color.name" class="flex flex-col items-center">
           <div
-            class="group relative h-24 w-full cursor-pointer rounded-lg border-2 transition"
+            class="group relative h-24 w-full cursor-pointer rounded-2xl border-2 transition"
             :style="{ backgroundColor: `var(${color.var})` }" @click="handleCopyColor(color.var)"
           >
-            <div class="absolute inset-0 flex items-center justify-center rounded-md bg-black/60 opacity-0 transition-opacity group-hover:opacity-100">
+            <div class="absolute inset-0 flex items-center justify-center rounded-2xl bg-black/60 opacity-0 transition-opacity group-hover:opacity-100">
               <span class="text-sm font-semibold">
                 {{ copiedColor === color.var ? "Copied!" : "Copy color" }}
               </span>
@@ -57,10 +57,10 @@
       <div class="m-4 grid w-full grid-cols-1 gap-4 md:grid-cols-4">
         <div v-for="color in brandColors" :key="color.name" class="flex flex-col items-center">
           <div
-            class="group relative h-24 w-full cursor-pointer rounded-lg border-2 transition"
+            class="group relative h-24 w-full cursor-pointer rounded-2xl border-2 transition"
             :style="{ backgroundColor: `var(${color.var})` }" @click="handleCopyColor(color.var)"
           >
-            <div class="absolute inset-0 flex items-center justify-center rounded-md bg-black/60 opacity-0 transition-opacity group-hover:opacity-100">
+            <div class="absolute inset-0 flex items-center justify-center rounded-2xl bg-black/60 opacity-0 transition-opacity group-hover:opacity-100">
               <span class="text-sm font-semibold">
                 {{ copiedColor === color.var ? "Copied!" : "Copy color" }}
               </span>

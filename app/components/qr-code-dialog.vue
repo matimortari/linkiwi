@@ -5,11 +5,11 @@
         Scan this QR code to visit your profile:
       </p>
 
-      <div class="flex items-center justify-center overflow-hidden rounded-lg bg-secondary p-1 shadow-lg">
+      <div class="flex items-center justify-center overflow-hidden rounded-lg border-2">
         <QrcodeVue :value="pageUrl" :size="200" level="H" render-as="svg" />
       </div>
 
-      <button class="font-semibold hover:underline" @click="copyPageUrl(pageUrl)">
+      <button class="text-caption hover:underline" @click="copyPageUrl(pageUrl)">
         @{{ user?.slug }}
       </button>
     </div>
