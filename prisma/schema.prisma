@@ -20,7 +20,7 @@ model User {
   views       PageView[]
   icons       UserIcon[]
   links       UserLink[]
-  preferences UserPreferences?
+  preferences UserPreferences? @relation("UserPreferences")
 }
 
 model Account {
@@ -71,7 +71,7 @@ model UserPreferences {
   iconLogoColor             String         @default("#475569")
   iconHoverBackgroundColor  String         @default("#cbd5e1")
   supportBanner             SupportBanner  @default(NONE)
-  user                      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                      User           @relation("UserPreferences", fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model UserLink {

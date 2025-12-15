@@ -32,6 +32,15 @@ export async function handleOAuthUser(event: H3Event, userData: OAuthUserData) {
         name: name?.trim() || email.split("@")[0],
         image: image || undefined,
         slug: await generateSlug(name ?? email.split("@")[0]),
+        preferences: {
+          create: {},
+        },
+      },
+      include: {
+        preferences: true,
+        links: true,
+        icons: true,
+        views: true,
       },
     })
   }
@@ -41,7 +50,16 @@ export async function handleOAuthUser(event: H3Event, userData: OAuthUserData) {
     where: { provider_providerAccountId: { provider, providerAccountId } },
     update: {},
     create: { userId: user.id, provider, providerAccountId },
-    include: { user: true },
+    include: {
+      user: {
+        include: {
+          preferences: true,
+          links: true,
+          icons: true,
+          views: true,
+        },
+      },
+    },
   })
 
   user = account.user
