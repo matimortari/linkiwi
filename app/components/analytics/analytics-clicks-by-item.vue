@@ -1,31 +1,22 @@
 <template>
-  <div class="card flex flex-col gap-4">
-    <header class="my-2 flex flex-col gap-2">
-      <h3>
-        Clicks by Item
-      </h3>
-      <p class="text-caption">
-        View the number of clicks for each link and social icon.
-      </p>
-    </header>
+  <div class="card flex flex-col gap-2">
+    <h3>
+      Clicks by Item
+    </h3>
 
     <Spinner v-if="loading" />
-    <Empty v-if="!items.length" message="No links or social icons yet." icon-name="mdi:octagram-minus-outline" :icon-size="30" />
+    <Empty v-if="!items.length" message="No links or social icons yet." icon-name="mdi:octagram-minus-outline" />
 
     <ul v-else class="grid grid-cols-1 gap-2 md:grid-cols-2 2xl:grid-cols-3">
-      <li v-for="item in items" :key="item.id" class="card flex flex-col gap-2 p-2">
-        <div class="flex items-center justify-between">
-          <div class="flex max-w-[70%] items-center gap-2 truncate font-semibold">
-            <icon v-if="item.type === 'icon' && item.logo" :name="item.logo" :size="30" />
-            <span v-else>{{ item.title }}</span>
-          </div>
+      <li v-for="item in items" :key="item.id" class="card flex flex-col gap-2">
+        <div class="flex flex-row items-center justify-between font-semibold">
+          <icon v-if="item.type === 'icon' && item.logo" :name="item.logo" :size="30" />
+          <span v-else>{{ item.title }}</span>
 
-          <span class="text-sm font-medium text-primary">
-            {{ clicksMap[item.id] ?? 0 }} clicks
-          </span>
+          <span class="text-sm font-medium text-primary">{{ clicksMap[item.id] ?? 0 }} clicks</span>
         </div>
 
-        <nuxt-link v-if="item.url" :to="item.url" class="text-caption truncate">
+        <nuxt-link v-if="item.url" :to="item.url" class="text-caption truncate hover:underline">
           {{ item.url }}
         </nuxt-link>
       </li>

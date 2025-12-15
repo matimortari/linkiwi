@@ -1,15 +1,14 @@
 <template>
-  <div class="card flex flex-col gap-4">
-    <header class="my-2 flex flex-col gap-2">
-      <h3>
-        Delete Account
-      </h3>
+  <div class="card flex flex-col gap-2">
+    <h3>
+      Delete Account
+    </h3>
+
+    <div class="flex flex-col items-center justify-between md:flex-row">
       <p class="text-danger">
         This action is irreversible. All data will be lost.
       </p>
-    </header>
 
-    <div class="navigation-group justify-end md:justify-start">
       <button title="Delete Account" class="btn-danger" aria-label="Delete Account" @click="handleDeleteUser">
         <icon name="mdi:user-remove" size="20" />
         <span>Delete Account</span>

@@ -1,13 +1,8 @@
 <template>
-  <div v-if="preferences" class="card flex flex-col gap-4">
-    <header class="my-2 flex flex-col gap-2">
-      <h3>
-        Appearance
-      </h3>
-      <p class="text-caption">
-        Customize the appearance for your page.
-      </p>
-    </header>
+  <div v-if="preferences" class="card flex flex-col gap-2">
+    <h3>
+      Appearance
+    </h3>
 
     <div class="flex flex-col justify-between gap-4 border-b py-4 md:flex-row">
       <div class="flex flex-row flex-wrap items-center gap-1 md:flex-nowrap">

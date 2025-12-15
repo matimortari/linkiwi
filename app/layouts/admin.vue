@@ -4,10 +4,10 @@
   <div v-show="!isLoading">
     <Masthead />
 
-    <div class="flex flex-col items-center gap-4 border-b p-8 md:flex-row md:items-start md:p-0">
+    <div class="flex flex-col items-center gap-4 md:flex-row md:items-start">
       <Sidebar />
 
-      <main class="relative min-h-screen flex-1 overflow-x-hidden">
+      <main class="flex-1 overflow-x-hidden">
         <slot />
       </main>
     </div>

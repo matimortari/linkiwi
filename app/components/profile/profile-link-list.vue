@@ -1,39 +1,30 @@
 <template>
-  <div class="card flex flex-col gap-4">
-    <header class="my-2 flex flex-col gap-2">
-      <h3>
-        My Links
-      </h3>
-      <p class="text-caption">
-        Manage your links.
-      </p>
-    </header>
+  <div class="card flex flex-col gap-2">
+    <h3>
+      My Links
+    </h3>
 
     <Spinner v-if="loading" />
-    <Empty v-if="!links.length" message="Your links help visitors discover more about you. Add your first link!" icon-name="mdi:link-variant-minus" :icon-size="30" />
+    <Empty v-if="!links.length" message="Your links help visitors discover more about you. Add your first link!" icon-name="mdi:link-variant-minus" />
 
     <ul v-else class="grid grid-cols-1 gap-2 md:grid-cols-2 2xl:grid-cols-3">
-      <li v-for="link in links" :key="link.id" class="card">
-        <div class="flex flex-col gap-2">
-          <div class="flex flex-row items-center justify-between">
-            <nuxt-link :to="link.url" class="max-w-[80%] truncate font-semibold">
-              {{ link.title }}
-            </nuxt-link>
+      <li v-for="link in links" :key="link.id" class="card flex flex-col gap-2">
+        <div class="flex flex-row items-center justify-between font-semibold">
+          <span>{{ link.title }}</span>
 
-            <div class="flex flex-row items-center gap-1">
-              <button aria-label="Update Link" class="flex items-center transition-transform hover:scale-110" @click="handleUpdateLink(link)">
-                <icon name="mdi:circle-edit-outline" size="25" class="text-primary" />
-              </button>
-              <button aria-label="Delete Link" class="flex items-center transition-transform hover:scale-110" @click="linksStore.deleteLink(link.id!)">
-                <icon name="mdi:remove-circle-outline" size="25" class="text-danger" />
-              </button>
-            </div>
+          <div class="flex flex-row items-center gap-1">
+            <button aria-label="Update Link" class="flex items-center transition-transform hover:scale-110" @click="handleUpdateLink(link)">
+              <icon name="mdi:circle-edit-outline" size="25" class="text-primary" />
+            </button>
+            <button aria-label="Delete Link" class="flex items-center transition-transform hover:scale-110" @click="linksStore.deleteLink(link.id!)">
+              <icon name="mdi:remove-circle-outline" size="25" class="text-danger" />
+            </button>
           </div>
-
-          <p class="text-caption truncate">
-            {{ link.url }}
-          </p>
         </div>
+
+        <nuxt-link :to="link.url" class="text-caption truncate hover:underline">
+          {{ link.url }}
+        </nuxt-link>
       </li>
     </ul>
 

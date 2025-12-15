@@ -15,13 +15,9 @@
         </button>
       </div>
 
-      <div class="navigation-group">
+      <div class="flex max-w-md flex-col gap-2">
         <label for="url" class="w-12 text-sm font-medium">URL</label>
-        <input
-          id="url" v-model="form.url"
-          type="url" class="max-w-sm flex-1"
-          placeholder="https://example.com"
-        >
+        <input id="url" v-model="form.url" type="url" placeholder="https://example.com">
       </div>
 
       <footer class="flex flex-row items-center justify-between">

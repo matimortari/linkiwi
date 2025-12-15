@@ -9,28 +9,20 @@
             accept="image/*" class="absolute top-0 left-0 size-full opacity-0"
             @change="handleUpdateImage"
           >
-          <label class="btn absolute -bottom-2 -left-2" for="image">
+          <label class="btn absolute -bottom-2 -left-2 cursor-pointer" for="image">
             <icon name="mdi:upload" size="20" />
           </label>
         </div>
       </div>
 
-      <div class="navigation-group">
+      <div class="flex max-w-md flex-col gap-2">
         <label for="slug" class="w-20 text-sm font-medium">Slug</label>
-        <input
-          id="slug" v-model="form.slug"
-          type="text" placeholder="Enter your slug"
-          class="max-w-sm flex-1"
-        >
+        <input id="slug" v-model="form.slug" type="text" placeholder="Enter your slug">
       </div>
 
-      <div class="navigation-group">
+      <div class="flex max-w-md flex-col gap-2">
         <label for="description" class="w-20 text-sm font-medium">Description</label>
-        <input
-          id="description" v-model="form.description"
-          type="text" placeholder="Enter your description"
-          class="max-w-sm flex-1"
-        >
+        <input id="description" v-model="form.description" type="text" placeholder="Enter your description">
       </div>
 
       <footer class="flex flex-row items-center justify-between">

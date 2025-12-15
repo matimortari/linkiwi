@@ -4,18 +4,21 @@
   Base styles
 */
 :root {
-  --background: #f3f3f8;
-  --foreground: #2e2d2d;
-  --card: #ededee;
-  --overlay: #ededf1;
-  --primary: #748d6e;
-  --primary-foreground: #ebe8e8;
-  --secondary: #63abb5;
-  --secondary-foreground: #ebe8e8;
-  --muted: #ced3db;
-  --muted-foreground: #535353;
-  --danger: #c53333;
-  --success: #5e836d;
+  --background: #f9fafb;
+  --foreground: #262626;
+  --card: #f3f4f6;
+  --overlay: #e5e7eb;
+  --muted: #d1d5db;
+  --muted-foreground: #4b5563;
+
+  /* Surfaces */
+  --primary: #91a173;
+  --secondary: #de896d;
+  --danger: #b91c1c;
+  --success: #047857;
+
+  /* Content on surfaces */
+  --surface-foreground: #e5e7eb;
 
   background-color: var(--background);
   color: var(--foreground);
@@ -30,18 +33,21 @@
   Dark theme overrides
 */
 html.dark {
-  --background: #040308;
-  --foreground: #ebe8e8;
-  --card: #111016;
-  --overlay: #111016;
-  --primary: #748d6e;
-  --primary-foreground: #ebe8e8;
-  --secondary: #63abb5;
-  --secondary-foreground: #ebe8e8;
-  --muted: #3b3b41;
-  --muted-foreground: #b9b7b7;
-  --danger: #c53333;
-  --success: #5e836d;
+  --background: #030712;
+  --foreground: #e5e7eb;
+  --card: #111827;
+  --overlay: #1f2937;
+  --muted: #374151;
+  --muted-foreground: #9ca3af;
+
+  /* Surfaces */
+  --primary: #91a173;
+  --secondary: #de896d;
+  --danger: #b91c1c;
+  --success: #047857;
+
+  /* Content on surfaces */
+  --surface-foreground: #e5e7eb;
 }
 
 /*
@@ -52,14 +58,14 @@ html.dark {
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-overlay: var(--overlay);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
+
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
   --color-danger: var(--danger);
   --color-success: var(--success);
+  --color-surface-foreground: var(--surface-foreground);
 
   --font-default: "Poppins", sans-serif;
   --font-display: "Spicy Rice";
@@ -93,41 +99,34 @@ html.dark {
   Typography
 */
 h1 {
-  font-size: 3.5rem;
-  line-height: 3.875rem;
+  font-size: 3.25rem;
+  line-height: 3.25rem;
   font-weight: 700;
 }
 h2 {
-  font-size: 2.5rem;
-  line-height: 2.5rem;
+  font-size: 2.25rem;
+  line-height: 2.25rem;
   font-weight: 700;
 }
 h3 {
   font-size: 1.75rem;
-  line-height: 2rem;
+  line-height: 1.75rem;
   font-weight: 700;
 }
 h4 {
-  font-size: 1.2rem;
-  line-height: 1.2rem;
+  font-size: 1.5rem;
+  line-height: 1.5rem;
   font-weight: 700;
 }
 h5 {
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   line-height: 1.25rem;
   font-weight: 700;
 }
 h6 {
-  font-size: 1.1rem;
-  line-height: 1.1rem;
+  font-size: 1.125rem;
+  line-height: 1.125rem;
   font-weight: 700;
-}
-
-.text-lead {
-  font-size: 1rem;
-  line-height: 1.5rem;
-  font-weight: 500;
-  color: var(--muted-foreground);
 }
 
 .text-caption,
@@ -148,7 +147,7 @@ h6 {
   background-color: var(--card);
   border: 1px solid var(--muted);
   border-radius: 1rem;
-  padding: 1rem;
+  padding: 0.875rem;
 }
 
 .overlay {
@@ -167,8 +166,6 @@ input,
 textarea,
 select {
   appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
   background-color: var(--card);
   color: var(--muted-foreground);
   border: 1px solid var(--muted);
@@ -257,7 +254,6 @@ input[type="radio"]:checked::after {
   border-radius: 5rem;
   white-space: nowrap;
   user-select: none;
-  cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -288,17 +284,19 @@ input[type="radio"]:checked::after {
 }
 .btn-primary {
   --btn-bg: var(--primary);
-  --btn-fg: var(--primary-foreground);
+  --btn-fg: var(--surface-foreground);
 }
 .btn-secondary {
   --btn-bg: var(--secondary);
-  --btn-fg: var(--secondary-foreground);
+  --btn-fg: var(--surface-foreground);
 }
 .btn-danger {
-  --btn-fg: var(--danger);
+  --btn-bg: var(--danger);
+  --btn-fg: var(--surface-foreground);
 }
 .btn-success {
-  --btn-fg: var(--success);
+  --btn-bg: var(--success);
+  --btn-fg: var(--surface-foreground);
 }
 
 .btn,
@@ -335,19 +333,19 @@ input[type="radio"]:checked::after {
 
 ::selection {
   background: color-mix(in srgb, var(--secondary) 50%, transparent);
-  color: var(--secondary-foreground);
+  color: var(--foreground);
 }
 
 /*
-  Background color utilities for matching themes
+  Background color utilities
 */
 .bg-primary {
   background-color: var(--primary);
-  color: var(--primary-foreground);
+  color: var(--surface-foreground);
 }
 .bg-secondary {
   background-color: var(--secondary);
-  color: var(--secondary-foreground);
+  color: var(--surface-foreground);
 }
 .bg-muted {
   background-color: var(--muted);
@@ -355,7 +353,7 @@ input[type="radio"]:checked::after {
 }
 
 /*
-  ?????
+  Tailwind utility bridge
 */
 @utility navigation-group {
   @apply flex flex-row items-center gap-2;

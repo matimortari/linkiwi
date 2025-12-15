@@ -1,17 +1,12 @@
 <template>
-  <div class="card flex flex-col gap-4">
-    <header class="my-2 flex flex-col gap-2">
-      <h3>
-        Analytics Summary
-      </h3>
-      <p class="text-caption">
-        View your analytics data at a glance.
-      </p>
-    </header>
+  <div class="card flex flex-col gap-2">
+    <h3>
+      Summary
+    </h3>
 
     <div class="grid grid-cols-2 gap-4 border-b py-4 md:grid-cols-4 md:place-items-center">
       <div v-for="item in summaryItems" :key="item.label" class="navigation-group">
-        <icon :name="item.icon" size="30" class="text-primary" />
+        <icon :name="item.icon" size="35" class="text-primary" />
         <div class="flex flex-col items-start">
           <p class="text-caption">
             {{ item.label }}
@@ -28,7 +23,7 @@
         Page Views Over Time
       </h4>
 
-      <Empty v-if="!pageViewsChartData" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" :icon-size="30" />
+      <Empty v-if="!pageViewsChartData" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
       <AnalyticsLineChart v-else :chart-data="pageViewsChartData" />
     </div>
 
@@ -38,7 +33,7 @@
           Link Clicks
         </h4>
 
-        <Empty v-if="!linkClicksChartData" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" :icon-size="30" />
+        <Empty v-if="!linkClicksChartData" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
         <AnalyticsBarChart v-else :chart-data="linkClicksChartData" />
       </div>
 
@@ -47,7 +42,7 @@
           Social Icon Clicks
         </h4>
 
-        <Empty v-if="!iconClicksChartData" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" :icon-size="30" />
+        <Empty v-if="!iconClicksChartData" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
         <AnalyticsBarChart v-else :chart-data="iconClicksChartData" />
       </div>
     </div>
@@ -139,7 +134,7 @@ const pageViewsChartData = computed(() => {
 
   return {
     labels: stats.value.map(s => s.date),
-    datasets: [{ label: "Page Views", data: values, backgroundColor: "#63abb5" }],
+    datasets: [{ label: "Page Views", data: values, backgroundColor: "#de896d" }],
   }
 })
 
@@ -155,7 +150,7 @@ const linkClicksChartData = computed(() => {
 
   return {
     labels: stats.value.map(s => s.date),
-    datasets: [{ label: "Link Clicks", data: values, backgroundColor: "#63abb5" }],
+    datasets: [{ label: "Link Clicks", data: values, backgroundColor: "#de896d" }],
   }
 })
 
@@ -171,7 +166,7 @@ const iconClicksChartData = computed(() => {
 
   return {
     labels: stats.value.map(s => s.date),
-    datasets: [{ label: "Social Icon Clicks", data: values, backgroundColor: "#63abb5" }],
+    datasets: [{ label: "Social Icon Clicks", data: values, backgroundColor: "#de896d" }],
   }
 })
 

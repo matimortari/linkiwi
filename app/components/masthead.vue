@@ -1,5 +1,5 @@
 <template>
-  <nav class="flex flex-row items-center justify-between p-4 py-2">
+  <nav class="flex flex-row items-center justify-between p-4">
     <div class="flex flex-row items-center gap-8">
       <Logo />
 

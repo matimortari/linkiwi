@@ -1,20 +1,15 @@
 <template>
-  <div class="card flex flex-col gap-4">
-    <header class="my-2 flex flex-col gap-2">
-      <h3>
-        My Social Icons
-      </h3>
-      <p class="text-caption">
-        Manage your social icons.
-      </p>
-    </header>
+  <div class="card flex flex-col gap-2">
+    <h3>
+      My Social Icons
+    </h3>
 
     <Spinner v-if="loading" />
-    <Empty v-if="!icons.length" message="Your social icons help visitors connect with you. Add your first social icon!" icon-name="mdi:star-minus" :icon-size="30" />
+    <Empty v-if="!icons.length" message="Your social icons help visitors connect with you. Add your first social icon!" icon-name="mdi:star-minus" />
 
     <ul v-else class="flex flex-row items-center gap-2">
       <li v-for="icon in icons" :key="icon.id" class="card relative flex size-20 items-center justify-center">
-        <nuxt-link :to="icon.url">
+        <nuxt-link :to="icon.url" class="transition-transform hover:scale-110">
           <icon :name="icon.logo" :size="30" />
         </nuxt-link>
 

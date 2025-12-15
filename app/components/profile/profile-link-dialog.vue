@@ -1,22 +1,14 @@
 <template>
   <Dialog :is-open="isOpen" :title="isUpdateMode ? 'Edit Link' : 'Add Link'" @update:is-open="emit('close')">
     <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
-      <div class="navigation-group">
+      <div class="flex max-w-md flex-col gap-2">
         <label for="title" class="w-12 text-sm font-medium">Title</label>
-        <input
-          id="title" v-model="form.title"
-          type="text" placeholder="Enter link title"
-          class="max-w-sm flex-1" :disabled="isLoading"
-        >
+        <input id="title" v-model="form.title" type="text" placeholder="Enter link title">
       </div>
 
-      <div class="navigation-group">
+      <div class="flex max-w-md flex-col gap-2">
         <label for="url" class="w-12 text-sm font-medium">URL</label>
-        <input
-          id="url" v-model="form.url"
-          type="url" placeholder="https://example.com"
-          class="max-w-sm flex-1" :disabled="isLoading"
-        >
+        <input id="url" v-model="form.url" type="url" placeholder="https://example.com">
       </div>
 
       <footer class="flex flex-row items-center justify-between">

@@ -26,7 +26,7 @@ const chartOptions = {
   elements: {
     line: {
       borderWidth: 2,
-      borderColor: "#63abb5",
+      borderColor: "#de896d",
     },
     point: {
       radius: 4,

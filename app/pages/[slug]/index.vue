@@ -4,9 +4,7 @@
       <Spinner />
     </div>
 
-    <p v-if="!loading && !userProfile" class="text-lead text-center">
-      User {{ slug }} not found.
-    </p>
+    <Empty v-else-if="!userProfile" :message="`User @${slug} not found.`" icon-name="mdi:account-off" />
 
     <div v-else-if="userProfile" class="flex w-full flex-1 flex-col items-center gap-4 py-24 text-center" :style="backgroundStyle">
       <SupportBanner v-if="profilePreferences?.supportBanner && profilePreferences.supportBanner !== 'NONE'" :type="profilePreferences.supportBanner" />

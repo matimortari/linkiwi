@@ -1,9 +1,9 @@
 <template>
   <div v-if="user" class="flex w-full flex-col gap-4 md:flex-row">
     <div
-      v-motion class="min-h-screen w-full space-y-2 rounded-t-2xl border border-b-0 p-4 md:w-2/3"
-      :initial="{ opacity: 0, x: -20 }" :visible="{ opacity: 1, x: 0 }"
-      :duration="800"
+      v-motion :initial="{ opacity: 0, x: -20 }"
+      :visible="{ opacity: 1, x: 0 }" :duration="800"
+      class="min-h-screen w-full space-y-4 border-b-0 p-4 md:w-2/3 md:rounded-t-2xl md:border"
     >
       <header class="flex flex-col gap-2">
         <h2 v-motion :initial="{ opacity: 0 }" :enter="{ opacity: 1 }" :duration="800">
@@ -20,9 +20,7 @@
       </div>
     </div>
 
-    <div class="flex w-full justify-center md:w-1/3">
-      <Preview />
-    </div>
+    <Preview />
   </div>
 
   <div v-else class="flex h-[calc(100vh-8rem)] w-full items-center justify-center">
