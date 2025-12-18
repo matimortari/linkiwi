@@ -21,7 +21,7 @@
             Cancel
           </button>
           <button class="btn-primary" type="submit" :disabled="isLoading || !isFormValid">
-            {{ isUpdateMode ? 'Update Link' : 'Add Link' }}
+            Confirm
           </button>
         </div>
       </footer>

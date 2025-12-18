@@ -1,5 +1,5 @@
 <template>
-  <div class="h-64 w-full">
+  <div class="h-64 w-full py-4">
     <Bar :data="props.chartData" :options="chartOptions" />
   </div>
 </template>

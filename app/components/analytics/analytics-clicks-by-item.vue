@@ -7,7 +7,7 @@
     <Spinner v-if="loading" />
     <Empty v-if="!items.length" message="No links or social icons yet." icon-name="mdi:octagram-minus-outline" />
 
-    <ul v-else class="grid grid-cols-1 gap-2 md:grid-cols-2 2xl:grid-cols-3">
+    <ul v-else class="grid grid-cols-1 gap-2 py-4 md:grid-cols-3">
       <li v-for="item in items" :key="item.id" class="card flex flex-col gap-2">
         <div class="flex flex-row items-center justify-between font-semibold">
           <icon v-if="item.type === 'icon' && item.logo" :name="item.logo" :size="30" />

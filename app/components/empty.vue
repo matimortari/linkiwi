@@ -4,9 +4,9 @@
       <icon :name="iconName || 'mdi:alert-circle-outline'" :size="30" />
     </div>
 
-    <h5 class="max-w-md">
+    <h4 class="max-w-md">
       {{ message }}
-    </h5>
+    </h4>
   </div>
 </template>
 

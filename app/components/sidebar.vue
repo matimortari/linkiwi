@@ -8,7 +8,7 @@
   <div v-if="isMobileNavOpen" class="fixed inset-0 z-20 bg-black/50" @click="isMobileNavOpen = false" />
 
   <transition name="slide">
-    <aside v-if="user" class="fixed top-0 left-0 z-40 size-full px-4 py-8 transition-transform md:static md:w-56 md:translate-x-0 2xl:w-64" :class="isMobileNavOpen ? 'translate-x-0 bg-card' : '-translate-x-full'">
+    <aside v-if="user" class="fixed top-0 left-0 z-40 size-full px-4 py-12 transition-transform md:static md:w-56 md:translate-x-0 md:py-8 2xl:w-64" :class="isMobileNavOpen ? 'translate-x-0 bg-card' : '-translate-x-full'">
       <div class="flex h-full flex-col gap-8 px-12 md:px-0">
         <div class="navigation-group w-full gap-4!">
           <div class="relative size-12 shrink-0">
@@ -20,7 +20,7 @@
           </div>
 
           <div class="flex w-full min-w-0 flex-col gap-1 overflow-hidden">
-            <span class="text-xs font-semibold wrap-break-word">
+            <span class="text-sm font-semibold wrap-break-word">
               {{ user.name }}
             </span>
             <nuxt-link :to="`/${user.slug}`" :title="`${BASE_URL}/${user.slug}`" class="text-caption truncate hover:underline">

@@ -1,29 +1,28 @@
 <template>
-  <div v-if="preferences" class="card flex flex-col gap-2">
+  <div class="card flex flex-col gap-2">
     <h3>
       Appearance
     </h3>
 
-    <div class="flex flex-col justify-between gap-4 border-b py-4 md:flex-row">
-      <div class="flex flex-row flex-wrap items-center gap-1 md:flex-nowrap">
+    <div class="flex flex-col justify-between gap-2 border-b py-4 md:flex-row">
+      <div class="flex flex-row flex-wrap items-center gap-1">
         <button
           v-for="t in APPEARANCE_TABS" :key="t.value"
-          class="btn" :class="{ 'brightness-80': activeTab === t.value }"
+          class="btn" :class="{ 'bg-muted!': activeTab === t.value }"
           @click="activeTab = t.value"
         >
           {{ t.label }}
         </button>
       </div>
 
-      <div class="flex min-w-0 flex-row flex-wrap items-center gap-1 md:flex-nowrap">
-        <button class="btn-primary min-w-0" @click="handleUpdatePreferences">
-          <icon name="mdi:content-save-check" size="20" />
-          <span class="truncate">{{ status === 'saved' ? 'Saved!' : status === 'reset' ? 'Reset!' : 'Save' }}</span>
-        </button>
-
+      <div class="flex flex-row flex-wrap items-center gap-1">
         <button class="btn-danger" @click="handleResetPreferences">
-          <icon name="mdi:close" size="20" />
+          <icon :name="resetStatus === 'reset' ? 'mdi:check' : 'mdi:close'" size="20" />
           <span>Reset</span>
+        </button>
+        <button class="btn-primary" @click="handleUpdatePreferences">
+          <icon :name="saveStatus === 'saved' ? 'mdi:check' : 'mdi:content-save-check'" size="20" />
+          <span class="truncate">Save Changes</span>
         </button>
       </div>
     </div>
@@ -40,14 +39,15 @@
 const userStore = useUserStore()
 const { errors, preferences } = storeToRefs(userStore)
 const activeTab = ref("background")
-const status = ref<"idle" | "saved" | "reset">("idle")
+const saveStatus = ref<"idle" | "saved">("idle")
+const resetStatus = ref<"idle" | "reset">("idle")
 
 async function handleUpdatePreferences() {
   errors.value.updatePreferences = null
 
   try {
     await userStore.updatePreferences(preferences.value!)
-    status.value = "saved"
+    saveStatus.value = "saved"
   }
   catch (err: any) {
     errors.value.updatePreferences = err.data.message
@@ -60,19 +60,24 @@ async function handleResetPreferences() {
   try {
     await userStore.updatePreferences(DEFAULT_PREFERENCES)
     Object.assign(preferences.value, DEFAULT_PREFERENCES)
-    status.value = "reset"
+    resetStatus.value = "reset"
   }
   catch (err: any) {
     errors.value.updatePreferences = err.data.message
   }
 }
 
-watch(status, (newStatus, _oldStatus, onInvalidate) => {
-  if (newStatus !== "idle") {
-    const timer = setTimeout(() => {
-      status.value = "idle"
-    }, 2000)
-    onInvalidate(() => clearTimeout(timer))
+watch(saveStatus, (value, _, onInvalidate) => {
+  if (value !== "idle") {
+    const t = setTimeout(() => (saveStatus.value = "idle"), 2000)
+    onInvalidate(() => clearTimeout(t))
+  }
+})
+
+watch(resetStatus, (value, _, onInvalidate) => {
+  if (value !== "idle") {
+    const t = setTimeout(() => (resetStatus.value = "idle"), 2000)
+    onInvalidate(() => clearTimeout(t))
   }
 })
 </script>

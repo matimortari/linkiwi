@@ -2,7 +2,6 @@ import db from "#server/lib/db"
 
 export default defineEventHandler(async (event) => {
   const { userId, name, email, message } = await readBody(event)
-
   if (!name || !message || message.length > 500) {
     throw createError({ statusCode: 400, message: "Invalid input" })
   }

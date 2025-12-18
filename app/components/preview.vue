@@ -1,6 +1,6 @@
 <template>
   <div v-if="user" class="flex w-full justify-center md:w-1/3">
-    <div class="my-4 flex-col items-center justify-center select-none md:h-150 md:min-w-[320px] 2xl:min-w-80">
+    <div class="my-4 items-center justify-center select-none md:h-150 md:min-w-[320px] 2xl:min-w-80">
       <!-- Mobile toggle -->
       <button class="btn fixed bottom-4 left-1/2 z-30 -translate-x-1/2 md:hidden!" aria-label="Toggle Mobile Preview" @click="isMobilePreviewOpen = !isMobilePreviewOpen">
         <icon :name="isMobilePreviewOpen ? 'mdi:eye-off' : 'mdi:eye'" size="25" />
@@ -10,12 +10,8 @@
       <!-- Mobile full-screen preview -->
       <transition name="slide">
         <div v-if="isMobilePreviewOpen" class="fixed top-0 left-0 z-20 size-full overflow-y-auto p-12 md:hidden" :style="backgroundStyle">
-          <div class="flex flex-col items-center justify-center gap-4 text-center md:my-6">
-            <img
-              v-if="user.image" :src="user.image"
-              alt="Avatar" class="size-24 object-cover"
-              :style="profilePictureStyle"
-            >
+          <div class="flex max-h-full flex-col items-center justify-start gap-4 overflow-y-auto p-4 text-center">
+            <img :src="user.image" alt="Avatar" class="size-24 object-cover" :style="profilePictureStyle">
 
             <p class="line-clamp-3 max-w-sm truncate whitespace-break-spaces" :style="slugStyle">
               @{{ user.slug }}
@@ -43,20 +39,18 @@
       <div
         v-motion :initial="{ opacity: 0, x: 20 }"
         :visible="{ opacity: 1, x: 0 }" :duration="800"
-        :style="backgroundStyle" class="scroll-hide relative hidden min-h-150 w-full overflow-x-hidden rounded-[2.5rem] border-2 shadow-lg shadow-black md:block"
+        :style="backgroundStyle" class="scroll-hide relative hidden h-150 w-full overflow-x-hidden rounded-[2.5rem] border-2 shadow-lg shadow-black md:block"
       >
         <div class="sticky top-2 left-1/2 z-10 h-2 w-24 -translate-x-1/2 rounded-full bg-black" />
-        <div class="absolute top-2 right-6 z-10 flex flex-row items-center justify-end gap-2 text-black">
-          <icon name="mdi:signal" size="15" />
-          <icon name="mdi:wifi" size="15" />
+        <div class="sticky top-2 z-10 w-full px-4">
+          <div class="flex justify-end gap-2 text-black">
+            <icon name="mdi:signal" size="15" />
+            <icon name="mdi:wifi" size="15" />
+          </div>
         </div>
 
         <div class="flex flex-col items-center justify-start gap-4 overflow-y-auto p-4 text-center">
-          <img
-            v-if="user.image" :src="user.image"
-            alt="Avatar" class="size-24 object-cover"
-            :style="profilePictureStyle"
-          >
+          <img :src="user.image" alt="Avatar" class="size-24 object-cover" :style="profilePictureStyle">
 
           <p class="line-clamp-3 max-w-sm truncate whitespace-break-spaces" :style="slugStyle">
             @{{ user.slug }}

@@ -4,15 +4,17 @@
       Delete Account
     </h3>
 
-    <div class="flex flex-col justify-between gap-2 md:flex-row md:items-start">
-      <p class="text-danger">
-        This action is irreversible. All data will be lost.
-      </p>
+    <div class="py-4">
+      <div class="flex flex-col items-start justify-between rounded-full border p-2 md:flex-row md:items-center">
+        <p class="text-danger">
+          This action is irreversible. All data will be lost.
+        </p>
 
-      <button title="Delete Account" class="btn-danger self-end" aria-label="Delete Account" @click="handleDeleteUser">
-        <icon name="mdi:user-remove" size="20" />
-        <span>Delete Account</span>
-      </button>
+        <button title="Delete Account" class="btn-danger self-end" aria-label="Delete Account" @click="handleDeleteUser">
+          <icon name="mdi:user-remove" size="20" />
+          <span>Delete Account</span>
+        </button>
+      </div>
     </div>
   </div>
 </template>

@@ -1,12 +1,12 @@
 <template>
-  <div class="relative flex min-h-screen flex-col items-center justify-center">
+  <div class="relative flex min-h-screen flex-col items-center justify-center overflow-hidden">
     <div v-if="loading" class="absolute inset-0 z-50 flex items-center justify-center bg-background/60 backdrop-blur-sm">
       <Spinner />
     </div>
 
     <Empty v-else-if="!userProfile" :message="`User @${slug} not found.`" icon-name="mdi:account-off" />
 
-    <div v-else-if="userProfile" class="flex w-full flex-1 flex-col items-center gap-4 py-24 text-center" :style="backgroundStyle">
+    <div v-else-if="userProfile" class="flex w-full flex-1 flex-col items-center gap-4 py-12 text-center" :style="backgroundStyle">
       <SupportBanner v-if="profilePreferences?.supportBanner && profilePreferences.supportBanner !== 'NONE'" :type="profilePreferences.supportBanner" />
 
       <img
@@ -44,7 +44,7 @@
       </p>
     </div>
 
-    <Guestbook :user-id="userProfile?.id" class="absolute right-4 bottom-4 w-full max-w-md" />
+    <Guestbook :user-id="userProfile?.id" />
   </div>
 </template>
 

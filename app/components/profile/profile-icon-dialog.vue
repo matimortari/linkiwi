@@ -7,7 +7,7 @@
         <button
           v-for="[label, iconName] in socialIconEntries" :key="label"
           type="button" aria-label="Select Social Icon"
-          class="flex flex-col items-center justify-center gap-2 rounded-2xl border p-2 transition-all hover:bg-muted active:bg-muted"
+          class="card flex flex-col items-center justify-center gap-2 p-2! transition-all hover:bg-muted! active:bg-muted"
           :class="{ 'bg-muted': form.platform === label }" @click="selectIcon(label, iconName)"
         >
           <icon :name="iconName" size="25" />
@@ -30,7 +30,7 @@
             Cancel
           </button>
           <button class="btn-primary" type="submit" aria-label="Add Social Icon" :disabled="!isFormValid">
-            Add Social Icon
+            Confirm
           </button>
         </div>
       </footer>

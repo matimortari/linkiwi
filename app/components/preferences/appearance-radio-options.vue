@@ -1,6 +1,6 @@
 <template>
   <div class="flex w-full flex-col gap-4 p-2">
-    <p class="text-caption">
+    <p class="text-sm font-medium">
       {{ label }}
     </p>
 

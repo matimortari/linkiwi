@@ -4,68 +4,66 @@
       Summary
     </h3>
 
-    <div class="grid grid-cols-2 gap-4 border-b py-4 md:grid-cols-4 md:place-items-center">
+    <div class="grid grid-cols-2 gap-2 border-b py-4 md:grid-cols-4 md:place-items-center">
       <div v-for="item in summaryItems" :key="item.label" class="navigation-group">
         <icon :name="item.icon" size="35" class="text-primary" />
         <div class="flex flex-col items-start">
           <p class="text-caption">
             {{ item.label }}
           </p>
-          <p class="font-semibold md:text-lg">
-            {{ item.value }}
-          </p>
+          <span class="font-semibold md:text-lg 2xl:text-xl">{{ item.value }}</span>
         </div>
       </div>
     </div>
 
-    <div class="py-4">
-      <h4>Page Views Over Time</h4>
+    <div class="card">
+      <h4>
+        Page Views Over Time
+      </h4>
 
       <Empty v-if="!pageViewsChartData" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
       <AnalyticsLineChart v-else :chart-data="pageViewsChartData" />
     </div>
 
-    <div class="py-4">
+    <div class="card">
       <h4>
         Traffic Sources
       </h4>
 
-      <Empty v-if="!analyticsStore.referrerStats?.referrers?.length" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
+      <Empty v-if="!referrerStats.length" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
 
-      <div v-else class="mt-4">
+      <div v-else>
         <AnalyticsBarChart v-if="referrerChartData" :chart-data="referrerChartData" />
 
-        <div class="overflow-hidden rounded-2xl border">
+        <div class="card overflow-hidden p-0!">
           <table class="w-full">
-            <thead>
+            <thead class="bg-muted text-sm font-semibold">
               <tr>
-                <th class="px-4 py-2 text-left text-sm font-semibold">
+                <th class="px-4 py-2 text-left">
                   Source
                 </th>
-                <th class="px-4 py-2 text-right text-sm font-semibold">
+                <th class="px-4 py-2 text-right">
                   Views
                 </th>
-                <th class="px-4 py-2 text-right text-sm font-semibold">
+                <th class="px-4 py-2 text-right">
                   Percentage
                 </th>
               </tr>
             </thead>
 
             <tbody class="divide-y">
-              <tr v-for="stat in analyticsStore.referrerStats.referrers" :key="stat.source" class="hover:bg-muted">
+              <tr v-for="stat in referrerStats" :key="stat.source" class="hover:bg-muted">
                 <td class="px-4 py-2 text-sm">
                   <div class="navigation-group">
                     <icon :name="getSourceIcon(stat.source)" size="20" />
-                    <span>{{ stat.label }}</span>
+                    <span class="font-semibold">{{ stat.label }}</span>
                   </div>
                 </td>
                 <td class="px-4 py-2 text-right text-sm font-medium">
                   {{ stat.count }}
                 </td>
                 <td class="px-4 py-2 text-right text-sm">
-                  <span class="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
-                    {{ stat.percentage }}%
-                  </span>
+                  <span class="inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-primary!">{{ stat.percentage }}%</span>
                 </td>
               </tr>
             </tbody>
@@ -74,8 +72,8 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-1 gap-4 py-4 md:grid-cols-2">
-      <div class="py-4">
+    <div class="grid grid-cols-1 gap-2 md:grid-cols-2">
+      <div class="card">
         <h4>
           Link Clicks
         </h4>
@@ -84,7 +82,7 @@
         <AnalyticsBarChart v-else :chart-data="linkClicksChartData" />
       </div>
 
-      <div class="py-4">
+      <div class="card">
         <h4>
           Social Icon Clicks
         </h4>
@@ -100,6 +98,7 @@
 const analyticsStore = useAnalyticsStore()
 const userStore = useUserStore()
 const { totalViews, totalClicks, clickRate, joinedAt, pageViewsChartData, linkClicksChartData, iconClicksChartData, referrerChartData } = useAnalyticsData()
+const referrerStats = computed(() => analyticsStore.referrerStats?.referrers || [])
 
 const summaryItems = computed(() => [
   {
