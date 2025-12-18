@@ -1,25 +1,73 @@
 export const BASE_URL = "https://linknest.vercel.app"
 
-export const FEATURES = [
+export const PRODUCT_BULLETS = [
   {
-    title: "Unlimited Links",
-    description: "Add as many links or social icons as you want.",
-    icon: "mdi:account-details-outline",
-  },
-  {
-    title: "Fully Customizable",
-    description: "Customize the colors, layouts and more for your page.",
+    description: "Design your own personalized link page",
     icon: "mdi:palette-outline",
   },
   {
-    title: "Detailed Analytics",
-    description: "Track your page views, clicks, and more with analytics.",
-    icon: "mdi:chart-bell-curve-cumulative",
+    description: "Add unlimited links and social profiles",
+    icon: "mdi:link-variant-plus",
   },
   {
-    title: "Free to Use!",
-    description: "LinkNest is completely free to use, with no hidden fees.",
+    description: "Free to use!",
     icon: "mdi:tag-remove-outline",
+  },
+]
+
+export const ANALYTICS_BULLETS = [
+  {
+    description: "Real-time page view tracking",
+    icon: "mdi:clock-star-four-points-outline",
+  },
+  {
+    description: "Monitor link and social icon clicks",
+    icon: "mdi:cursor-default-click-outline",
+  },
+  {
+    description: "Discover your traffic sources",
+    icon: "mdi:web",
+  },
+]
+
+export const MOCK_ANALYTICS = [
+  {
+    label: "Total Page Views",
+    icon: "material-symbols:table-eye",
+    value: "1,247",
+  },
+  {
+    label: "Total Clicks",
+    icon: "material-symbols:ads-click",
+    value: "389",
+  },
+  {
+    label: "Click Rate",
+    icon: "material-symbols:percent",
+    value: "31.2%",
+  },
+  {
+    label: "Joined On",
+    icon: "material-symbols:calendar-month",
+    value: "Jan,",
+  },
+]
+
+export const MOCK_REFERRALS = [
+  {
+    source: "LinkedIn",
+    percentage: "45%",
+    color: "#60A5FA",
+  },
+  {
+    source: "Reddit",
+    percentage: "35%",
+    color: "#FBBF24",
+  },
+  {
+    source: "Instagram",
+    percentage: "20%",
+    color: "#F472B6",
   },
 ]
 

@@ -4,22 +4,18 @@ export function useAnalyticsData() {
   const analyticsStore = useAnalyticsStore()
   const userStore = useUserStore()
 
-  function groupByDate<T extends Record<string, any>>(items: T[], dateKey: keyof T = "date"): Record<string, number> {
+  function groupByDate<T extends Record<string, any>>(items: T[], dateKey: keyof T & string = "date"): Record<string, number> {
     const result: Record<string, number> = {}
-
     for (const item of items) {
       const raw = item[dateKey]
-      if (!raw) {
-        continue
-      }
-
       const date = new Date(raw as string | Date)
       if (Number.isNaN(date.getTime())) {
         continue
       }
-
       const key = date.toISOString().split("T")[0]
-      result[key] = (result[key] ?? 0) + 1
+      if (typeof key === "string" && key) {
+        result[key] = (result[key] ?? 0) + 1
+      }
     }
 
     return result
@@ -61,44 +57,18 @@ export function useAnalyticsData() {
 
     return {
       labels,
-      datasets: [
-        {
-          label,
-          data: values,
-          backgroundColor: "#de896d",
-        },
-      ],
+      datasets: [{ label, data: values, backgroundColor: "#de896d" }],
     }
   }
 
   const pageViewsChartData = computed(() =>
-    stats.value.length
-      ? buildChart(
-          stats.value.map(s => s.pageViews),
-          stats.value.map(s => s.date),
-          "Page Views",
-        )
-      : null,
+    stats.value.length ? buildChart(stats.value.map(s => s.pageViews), stats.value.map(s => s.date), "Page Views") : null,
   )
-
   const linkClicksChartData = computed(() =>
-    stats.value.length
-      ? buildChart(
-          stats.value.map(s => s.linkClicks),
-          stats.value.map(s => s.date),
-          "Link Clicks",
-        )
-      : null,
+    stats.value.length ? buildChart(stats.value.map(s => s.linkClicks), stats.value.map(s => s.date), "Link Clicks") : null,
   )
-
   const iconClicksChartData = computed(() =>
-    stats.value.length
-      ? buildChart(
-          stats.value.map(s => s.iconClicks),
-          stats.value.map(s => s.date),
-          "Social Icon Clicks",
-        )
-      : null,
+    stats.value.length ? buildChart(stats.value.map(s => s.iconClicks), stats.value.map(s => s.date), "Social Icon Clicks") : null,
   )
 
   const referrerChartData = computed(() => {
@@ -108,11 +78,11 @@ export function useAnalyticsData() {
     }
 
     return {
-      labels: referrers.map(r => r.label),
+      labels: referrers.map((r: any) => r.label),
       datasets: [
         {
           label: "Traffic Sources",
-          data: referrers.map(r => r.count),
+          data: referrers.map((r: any) => r.count),
           backgroundColor: [
             "#de896d",
             "#4299e1",
@@ -132,18 +102,18 @@ export function useAnalyticsData() {
     const res = analyticsStore.analytics
 
     return [
-      ...(res?.pageViews?.map(pv => ({
+      ...(res?.pageViews?.map((pv: any) => ({
         type: "pageView" as const,
         userId: String(pv.userId),
         createdAt: pv.createdAt ? String(pv.createdAt) : undefined,
       })) ?? []),
-      ...(res?.linkClicks?.map(lc => ({
+      ...(res?.linkClicks?.map((lc: any) => ({
         type: "link" as const,
         userId: String(lc.userId),
         id: lc.id ? String(lc.id) : undefined,
         createdAt: lc.createdAt ? String(lc.createdAt) : undefined,
       })) ?? []),
-      ...(res?.iconClicks?.map(ic => ({
+      ...(res?.iconClicks?.map((ic: any) => ({
         type: "icon" as const,
         userId: String(ic.userId),
         id: ic.id ? String(ic.id) : undefined,

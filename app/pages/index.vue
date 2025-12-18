@@ -2,22 +2,22 @@
   <section
     id="hero" v-motion
     :initial="{ opacity: 0, y: -40 }" :visible="{ opacity: 1, y: 0 }"
-    :duration="800" class="flex min-h-screen flex-col items-center justify-center overflow-hidden border-b-2 px-4 py-24 md:flex-row md:px-24 2xl:min-h-[90vh]"
+    :duration="800" class="flex min-h-screen flex-col items-center justify-center overflow-hidden border-b-2 px-4 py-32 md:flex-row md:px-32"
   >
     <header class="flex flex-col items-center gap-4 text-center md:items-start md:text-start">
-      <span class="text-lg font-semibold text-secondary">
-        Your link-in-bio page 🪺
+      <span class="font-semibold text-secondary">
+        Your link-in-bio page
       </span>
       <h1 class="max-w-md font-display text-5xl! md:text-6xl!">
         Keep all your stuff together!
       </h1>
-      <p class="max-w-lg font-semibold text-muted-foreground 2xl:text-lg">
-        Welcome to <span class="font-bold text-secondary">LinkNest</span>! Your links, profiles, contact info, and more
+      <p class="max-w-lg leading-6 font-medium text-muted-foreground 2xl:text-lg">
+        Welcome to <span class="font-semibold text-secondary">LinkNest</span>! Your links, profiles, contact info, and more
         in one place. Create and customize your page and share it with your audience.
       </p>
       <nuxt-link to="/sign-in" class="btn-primary">
         <span>Get Started Now!</span>
-        <icon name="mdi:arrow-right" size="20" />
+        <icon name="mdi:arrow-right" size="25" />
       </nuxt-link>
     </header>
 
@@ -25,71 +25,111 @@
   </section>
 
   <section
-    id="features" v-motion
+    id="product" v-motion
     :initial="{ opacity: 0, y: 20 }" :visible="{ opacity: 1, y: 0 }"
-    :duration="800" class="relative flex flex-col items-center justify-center gap-12 p-12 text-center md:p-24 2xl:p-32"
+    :duration="800" class="relative flex flex-col items-center justify-center gap-12 p-12 md:p-32"
   >
-    <h2 class="font-display">
-      Why Choose LinkNest?
+    <h2>
+      Create Your Page In Minutes
     </h2>
 
-    <div class="container mx-auto grid w-full grid-cols-1 gap-4 md:grid-cols-4">
-      <div
-        v-for="(feature, index) in FEATURES" :key="index"
-        v-motion :initial="{ opacity: 0, y: 20 }"
-        :visible="{ opacity: 1, y: 0 }" :duration="800"
-        :delay="200 * index" class="card flex flex-col gap-4 text-start"
-      >
-        <div class="flex flex-row items-center gap-4">
-          <span class="flex size-10 items-center justify-center rounded-full bg-linear-to-br from-primary to-secondary p-2">
-            <icon :name="feature.icon" size="25" class="text-[#ebe8e8]" />
-          </span>
-          <h5>
-            {{ feature.title }}
-          </h5>
+    <div class="container mx-auto grid w-full grid-cols-1 items-center gap-12 md:grid-cols-2">
+      <div class="flex items-center justify-center">
+        <div class="relative size-64 md:size-80">
+          <div class="absolute inset-0 animate-pulse rounded-2xl bg-linear-to-br from-primary to-secondary opacity-20 blur-2xl" />
+
+          <div class="overlay relative flex size-full flex-col items-center justify-center gap-4">
+            <icon name="mdi:link-variant" size="60" class="text-primary" />
+
+            <div class="flex flex-col gap-2 text-center">
+              <div class="h-4 w-32 animate-pulse rounded bg-muted" />
+              <div class="h-4 w-24 animate-pulse rounded bg-muted" />
+              <div class="h-4 w-28 animate-pulse rounded bg-muted" />
+            </div>
+          </div>
         </div>
-        <p class="text-caption">
-          {{ feature.description }}
+      </div>
+
+      <div class="flex flex-col gap-4 text-start">
+        <p class="max-w-lg leading-6 font-medium text-muted-foreground 2xl:text-lg">
+          Customize your page with your own style and share your unique URL with your audience.
+          Whether you're a creator, business, or influencer, LinkNest makes it easy to connect all your online presence in one place.
         </p>
+
+        <div class="flex flex-col gap-2">
+          <div v-for="bullet in PRODUCT_BULLETS" :key="bullet.description" class="navigation-group">
+            <icon :name="bullet.icon" size="25" class="text-secondary" />
+            <span class="font-medium">{{ bullet.description }}</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <section
-    id="how-it-works" v-motion
+    id="analytics" v-motion
     :initial="{ opacity: 0, y: 20 }" :visible="{ opacity: 1, y: 0 }"
-    :duration="800" class="relative flex flex-col items-center justify-center gap-12 p-12 text-center md:p-24 2xl:p-32"
+    :duration="800" class="relative flex flex-col items-center justify-center gap-12 bg-muted/30 p-12 md:p-32"
   >
-    <h2 class="font-display">
-      How It Works
+    <h2>
+      Track Your Performance
     </h2>
 
-    <div class="grid w-full max-w-5xl grid-cols-1 gap-8 md:grid-cols-3">
-      <div
-        v-for="(step, index) in STEPS" :key="index"
-        v-motion :initial="{ opacity: 0, y: 20 }"
-        :visible="{ opacity: 1, y: 0 }" :duration="800"
-        :delay="200 * index" class="card flex flex-col items-center gap-4 text-center"
-      >
-        <span class="text-primary-foreground flex h-14 w-14 items-center justify-center rounded-full bg-linear-to-br from-primary to-secondary text-xl font-bold">
-          {{ index + 1 }}
-        </span>
-        <h3 class="font-display-alt text-lg">
-          {{ step.title }}
-        </h3>
-        <p class="text-caption">
-          {{ step.description }}
+    <div class="container mx-auto grid w-full grid-cols-1 items-center gap-12 md:grid-cols-2">
+      <div class="flex flex-col gap-4 text-start">
+        <p class="max-w-lg leading-6 font-medium text-muted-foreground 2xl:text-lg">
+          Get insights into how your audience engages with your content.
+          Track page views, link clicks, and traffic sources all in one place.
+          Make data-driven decisions to optimize your online presence.
         </p>
+
+        <div class="flex flex-col gap-2">
+          <div v-for="bullet in ANALYTICS_BULLETS" :key="bullet.description" class="navigation-group">
+            <icon :name="bullet.icon" size="25" class="text-secondary" />
+            <span class="font-medium">{{ bullet.description }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-center">
+        <div class="relative w-full max-w-md">
+          <div class="absolute inset-0 animate-pulse rounded-2xl bg-linear-to-br from-secondary to-primary opacity-20 blur-2xl" />
+
+          <div class="overlay relative space-y-1 backdrop-blur-sm">
+            <div class="grid grid-cols-2 gap-1">
+              <div v-for="item in MOCK_ANALYTICS" :key="item.label" class="card navigation-group">
+                <icon :name="item.icon" size="30" class="text-primary" />
+                <div class="flex flex-col items-start">
+                  <p class="text-caption">
+                    {{ item.label }}
+                  </p>
+                  <span class="font-semibold md:text-lg 2xl:text-xl">{{ item.value }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card flex w-full flex-col gap-2">
+              <span class="font-semibold">Top Traffic Sources</span>
+              <div v-for="referral in MOCK_REFERRALS" :key="referral.source" class="flex items-center justify-between text-sm">
+                <div class="navigation-group gap-2">
+                  <icon name="mdi:link-variant" size="15" />
+                  <span>{{ referral.source }}</span>
+                </div>
+                <span class="font-semibold">{{ referral.percentage }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <section id="cta" class="relative z-10 flex min-h-[50vh] flex-col items-center justify-center gap-12 border-y bg-card p-12 text-center md:p-20">
+  <section id="cta" class="relative z-10 flex min-h-[50vh] flex-col items-center justify-center gap-8 border-y bg-card p-12 text-center md:p-32">
     <div class="cta-wrapper-grid" />
     <div class="cta-wrapper-vignette" />
 
     <div class="flex flex-col items-center gap-4">
-      <h2 class="font-display">
+      <h2>
         Ready to Try?
       </h2>
       <p class="text-lg font-semibold">
@@ -101,8 +141,8 @@
       </nuxt-link>
     </div>
 
-    <p class="text-sm font-medium italic transition-opacity ease-in-out" :class="{ 'opacity-0': fading }">
-      "{{ randomQuote?.quote }}" - <span class="font-bold text-primary transition-colors ease-in-out">{{ randomQuote?.author }}</span>
+    <p class="text-sm font-medium text-muted-foreground italic transition-opacity ease-in-out" :class="{ 'opacity-0': fading }">
+      "{{ randomQuote?.quote }}" - <span class="font-semibold text-primary transition-colors ease-in-out">{{ randomQuote?.author }}</span>
     </p>
 
     <div class="absolute bottom-0 left-0 h-1 w-full overflow-hidden">
@@ -114,10 +154,8 @@
 <script setup lang="ts">
 const randomQuote = ref<{ quote: string, author: string }>()
 const fading = ref(false)
-
-const CYCLE = 10000
-let cycleInterval: NodeJS.Timeout
-let fadeTimeout: NodeJS.Timeout
+let cycleInterval: ReturnType<typeof setInterval>
+let fadeTimeout: ReturnType<typeof setTimeout>
 
 function setRandomQuote() {
   randomQuote.value = QUOTES[Math.floor(Math.random() * QUOTES.length)]
@@ -135,8 +173,7 @@ function runCycle() {
 onMounted(() => {
   setRandomQuote()
   runCycle()
-
-  cycleInterval = setInterval(runCycle, CYCLE)
+  cycleInterval = setInterval(runCycle, 10000)
 })
 
 onBeforeUnmount(() => {
@@ -153,12 +190,6 @@ useHead({
 definePageMeta({
   middleware: guest,
 })
-
-const STEPS = [
-  { title: "Sign Up", description: "Create your LinkNest account quickly using Google or GitHub authentication." },
-  { title: "Add Links", description: "Add links to your social profiles, websites, and favorite content all in one place." },
-  { title: "Customize", description: "Choose your favorite theme, adjust colors, fonts, and layout to match your style." },
-]
 </script>
 
 <style scoped>
@@ -178,15 +209,10 @@ const STEPS = [
 .cta-wrapper-vignette {
   position: absolute;
   inset: 0;
+  z-index: -10;
   pointer-events: none;
   border-radius: inherit;
-
-  /* fixed: fade toward transparent so it works in both themes */
-  background: radial-gradient(
-    ellipse at center,
-    color-mix(in oklab, var(--background) 0%, transparent 100%) 10%,
-    color-mix(in oklab, var(--background) 100%, transparent 10%) 90%
-  );
+  background: radial-gradient(ellipse at center, transparent 0%, transparent 40%, var(--background) 100%);
 }
 
 .animate-progress {

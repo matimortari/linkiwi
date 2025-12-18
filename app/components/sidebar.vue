@@ -56,7 +56,7 @@
             <span>Toggle Theme</span>
           </button>
           <button class="navigation-group w-full rounded-[5rem] p-2 font-semibold whitespace-nowrap hover:bg-muted" aria-label="Sign Out" @click="signOut">
-            <icon name="material-symbols:logout" size="25" class="text-danger" />
+            <icon name="mdi:logout" size="25" class="text-danger" />
             <span>Sign Out</span>
           </button>
         </nav>
