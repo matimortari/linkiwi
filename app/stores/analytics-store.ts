@@ -1,5 +1,6 @@
 export const useAnalyticsStore = defineStore("analytics", () => {
   const analytics = ref<any>(null)
+  const referrerStats = ref<any>(null)
   const loading = ref<boolean>(false)
   const errors = ref<Record<string, string | null>>({ getAnalytics: null, recordPageView: null, recordLinkClick: null, recordIconClick: null, deleteAnalytics: null })
 
@@ -19,12 +20,12 @@ export const useAnalyticsStore = defineStore("analytics", () => {
     }
   }
 
-  async function recordPageView(userId: string) {
+  async function recordPageView(userId: string, referrer?: string) {
     loading.value = true
     errors.value.recordPageView = null
 
     try {
-      await $fetch(`${API_URL}/analytics`, { method: "POST", body: { type: "pageView", userId }, credentials: "include" })
+      await $fetch(`${API_URL}/analytics`, { method: "POST", body: { type: "pageView", userId, referrer }, credentials: "include" })
     }
     catch (err: any) {
       errors.value.recordPageView = err.data.message || "Failed to record page view"
@@ -93,8 +94,25 @@ export const useAnalyticsStore = defineStore("analytics", () => {
     }
   }
 
+  async function getReferrerStats() {
+    loading.value = true
+    errors.value.getReferrerStats = null
+
+    try {
+      referrerStats.value = await $fetch(`${API_URL}/analytics/referrers`, { method: "GET", credentials: "include" })
+    }
+    catch (err: any) {
+      errors.value.getReferrerStats = err.data.message || "Failed to fetch referrer stats"
+      console.error("getReferrerStats error:", err)
+    }
+    finally {
+      loading.value = false
+    }
+  }
+
   return {
     analytics,
+    referrerStats,
     loading,
     errors,
     getAnalytics,
@@ -102,5 +120,6 @@ export const useAnalyticsStore = defineStore("analytics", () => {
     recordLinkClick,
     recordIconClick,
     deleteAnalytics,
+    getReferrerStats,
   }
 })

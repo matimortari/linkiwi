@@ -100,10 +100,14 @@ model UserIcon {
 }
 
 model PageView {
-  id     String   @id @default(cuid())
-  userId String
-  date   DateTime @default(now())
-  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id       String   @id @default(cuid())
+  userId   String
+  date     DateTime @default(now())
+  referrer String?
+  source   String?
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
 }
 
 model LinkClick {

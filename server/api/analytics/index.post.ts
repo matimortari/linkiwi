@@ -1,4 +1,5 @@
 import db from "#server/lib/db"
+import { categorizeReferrer } from "#server/lib/utils"
 import { analyticsRecordSchema } from "#shared/schemas/analytics-schema"
 
 export default defineEventHandler(async (event) => {
@@ -20,10 +21,15 @@ export default defineEventHandler(async (event) => {
 
   switch (type) {
     case "pageView": {
+      const referrer = body.referrer || getHeader(event, "referer") || getHeader(event, "referrer") || null
+      const source = categorizeReferrer(referrer)
+
       await db.pageView.create({
         data: {
           userId,
           date: new Date(),
+          referrer,
+          source,
         },
       })
       return { message: "Page view recorded successfully" }

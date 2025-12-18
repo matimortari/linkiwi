@@ -43,6 +43,8 @@ interface PageView {
   id: string
   userId: string
   date: Date | string
+  referrer?: string | null
+  source?: string | null
 }
 
 interface CarouselPreset {

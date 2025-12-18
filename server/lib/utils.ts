@@ -44,6 +44,98 @@ export async function generateSlug(base: string = ""): Promise<string> {
 }
 
 /**
+ * Categorizes a referrer URL into a known source type.
+ * Returns 'direct' if no referrer, or a specific platform/source name.
+ */
+export function categorizeReferrer(referrer: string | null | undefined): string {
+  if (!referrer || referrer.trim() === "") {
+    return "direct"
+  }
+
+  try {
+    const url = referrer.toLowerCase()
+    const sources: [string[], string][] = [
+      [["facebook.com", "fb.com", "fb.me"], "facebook"],
+      [["twitter.com", "x.com", "t.co"], "twitter"],
+      [["instagram.com"], "instagram"],
+      [["linkedin.com", "lnkd.in"], "linkedin"],
+      [["reddit.com"], "reddit"],
+      [["tiktok.com"], "tiktok"],
+      [["pinterest.com", "pin.it"], "pinterest"],
+      [["youtube.com", "youtu.be"], "youtube"],
+      [["snapchat.com"], "snapchat"],
+      [["whatsapp.com"], "whatsapp"],
+      [["telegram.org", "t.me"], "telegram"],
+      [["discord.com", "discord.gg"], "discord"],
+      [["threads.net"], "threads"],
+      [["mastodon"], "mastodon"],
+      [["bluesky.social", "bsky.app"], "bluesky"],
+      [["google.com", "google."], "google"],
+      [["bing.com"], "bing"],
+      [["yahoo.com"], "yahoo"],
+      [["duckduckgo.com"], "duckduckgo"],
+      [["baidu.com"], "baidu"],
+      [["yandex.com", "yandex.ru"], "yandex"],
+      [["slack.com"], "slack"],
+      [["teams.microsoft.com"], "teams"],
+      [["github.com"], "github"],
+      [["gitlab.com"], "gitlab"],
+      [["stackoverflow.com"], "stackoverflow"],
+      [["medium.com"], "medium"],
+      [["dev.to"], "dev.to"],
+      [["hashnode.com"], "hashnode"],
+    ]
+    for (const [patterns, name] of sources) {
+      if (patterns.some(pattern => url.includes(pattern))) {
+        return name
+      }
+    }
+
+    // If it's from the same domain, mark as internal. Otherwise, categorize as external/other
+    if (url.includes("linknest.vercel.app") || url.includes("localhost")) {
+      return "internal"
+    }
+    //
+    return "external"
+  }
+  catch (error) {
+    console.error("Error categorizing referrer:", error)
+    return "unknown"
+  }
+}
+
+/**
+  Formats a source string into a human-readable label.
+ */
+export function formatSourceLabel(source: string | null): string {
+  if (!source) {
+    return "Unknown"
+  }
+
+  const labels: Record<string, string> = {
+    direct: "Direct",
+    google: "Google",
+    facebook: "Facebook",
+    twitter: "Twitter / X",
+    instagram: "Instagram",
+    linkedin: "LinkedIn",
+    reddit: "Reddit",
+    tiktok: "TikTok",
+    youtube: "YouTube",
+    pinterest: "Pinterest",
+    github: "GitHub",
+    discord: "Discord",
+    threads: "Threads",
+    bluesky: "Bluesky",
+    internal: "Internal",
+    external: "External Site",
+    unknown: "Unknown",
+  }
+
+  return labels[source] || source.charAt(0).toUpperCase() + source.slice(1)
+}
+
+/**
  * Uploads a file to Blob storage and removes the previous file if provided.
  * Validates file size and MIME type before upload.
  */

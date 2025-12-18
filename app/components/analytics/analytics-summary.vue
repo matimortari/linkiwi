@@ -19,12 +19,59 @@
     </div>
 
     <div class="py-4">
-      <h4>
-        Page Views Over Time
-      </h4>
+      <h4>Page Views Over Time</h4>
 
       <Empty v-if="!pageViewsChartData" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
       <AnalyticsLineChart v-else :chart-data="pageViewsChartData" />
+    </div>
+
+    <div class="py-4">
+      <h4>
+        Traffic Sources
+      </h4>
+
+      <Empty v-if="!analyticsStore.referrerStats?.referrers?.length" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
+
+      <div v-else class="mt-4">
+        <AnalyticsBarChart v-if="referrerChartData" :chart-data="referrerChartData" />
+
+        <div class="overflow-hidden rounded-2xl border">
+          <table class="w-full">
+            <thead>
+              <tr>
+                <th class="px-4 py-2 text-left text-sm font-semibold">
+                  Source
+                </th>
+                <th class="px-4 py-2 text-right text-sm font-semibold">
+                  Views
+                </th>
+                <th class="px-4 py-2 text-right text-sm font-semibold">
+                  Percentage
+                </th>
+              </tr>
+            </thead>
+
+            <tbody class="divide-y">
+              <tr v-for="stat in analyticsStore.referrerStats.referrers" :key="stat.source" class="hover:bg-muted">
+                <td class="px-4 py-2 text-sm">
+                  <div class="navigation-group">
+                    <icon :name="getSourceIcon(stat.source)" size="20" />
+                    <span>{{ stat.label }}</span>
+                  </div>
+                </td>
+                <td class="px-4 py-2 text-right text-sm font-medium">
+                  {{ stat.count }}
+                </td>
+                <td class="px-4 py-2 text-right text-sm">
+                  <span class="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
+                    {{ stat.percentage }}%
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
 
     <div class="grid grid-cols-1 gap-4 py-4 md:grid-cols-2">
@@ -50,54 +97,9 @@
 </template>
 
 <script setup lang="ts">
-import type { AnalyticsRecordSchema } from "#shared/schemas/analytics-schema"
-
 const analyticsStore = useAnalyticsStore()
 const userStore = useUserStore()
-const analyticsData = ref<AnalyticsRecordSchema[]>([])
-const totalViews = computed(() => analyticsStore.analytics?.pageViews.length)
-const totalClicks = computed(() => analyticsStore.analytics?.linkClicks.length + analyticsStore.analytics?.iconClicks.length)
-const clickRate = computed(() => totalViews.value ? ((Number(totalClicks.value) / Number(totalViews.value)) * 100).toFixed(2) : 0)
-const createdAt = computed(() => userStore.user?.createdAt)
-
-function groupByDate<T extends Record<string, any>>(items: T[], dateKey: keyof T = "date"): Record<string, number> {
-  const result: Record<string, number> = {}
-  for (const item of items) {
-    const itemDate = item[dateKey]
-    if (!itemDate) {
-      continue
-    }
-
-    const dateObj = new Date(itemDate as string | Date)
-    if (Number.isNaN(dateObj.getTime())) {
-      continue
-    }
-
-    const dateStr = dateObj.toISOString().split("T")[0] as string
-    result[dateStr] = (result[dateStr] ?? 0) + 1
-  }
-
-  return result
-}
-
-const stats = computed(() => {
-  const pageViews = analyticsStore.analytics?.pageViews ?? []
-  const linkClicks = analyticsStore.analytics?.linkClicks ?? []
-  const iconClicks = analyticsStore.analytics?.iconClicks ?? []
-
-  const viewsByDate = groupByDate(pageViews, "date")
-  const linkClicksByDate = groupByDate(linkClicks, "date")
-  const iconClicksByDate = groupByDate(iconClicks, "date")
-
-  const allDates = Array.from(new Set([...Object.keys(viewsByDate), ...Object.keys(linkClicksByDate), ...Object.keys(iconClicksByDate)])).sort()
-
-  return allDates.map(date => ({
-    date,
-    pageViews: viewsByDate[date] ?? 0,
-    linkClicks: linkClicksByDate[date] ?? 0,
-    iconClicks: iconClicksByDate[date] ?? 0,
-  }))
-})
+const { totalViews, totalClicks, clickRate, joinedAt, pageViewsChartData, linkClicksChartData, iconClicksChartData, referrerChartData } = useAnalyticsData()
 
 const summaryItems = computed(() => [
   {
@@ -118,83 +120,39 @@ const summaryItems = computed(() => [
   {
     label: "Joined On",
     icon: "material-symbols:calendar-month",
-    value: createdAt.value ? formatDate(new Date(createdAt.value)) : "N/A",
+    value: joinedAt.value ? formatDate(new Date(joinedAt.value)) : "N/A",
   },
 ])
 
-const pageViewsChartData = computed(() => {
-  if (!stats.value.length) {
-    return null
+function getSourceIcon(source: string): string {
+  const icons: Record<string, string> = {
+    direct: "mdi:link-variant",
+    google: "mdi:google",
+    facebook: "mdi:facebook",
+    twitter: "mdi:twitter",
+    instagram: "mdi:instagram",
+    linkedin: "mdi:linkedin",
+    reddit: "mdi:reddit",
+    tiktok: "simple-icons:tiktok",
+    youtube: "mdi:youtube",
+    pinterest: "mdi:pinterest",
+    github: "mdi:github",
+    discord: "mdi:discord",
+    threads: "simple-icons:threads",
+    bluesky: "simple-icons:bluesky",
+    internal: "mdi:home",
+    external: "mdi:web",
+    unknown: "mdi:help-circle",
   }
 
-  const values = stats.value.map(s => s.pageViews)
-  if (!values.some(v => v > 0)) {
-    return null
-  }
-
-  return {
-    labels: stats.value.map(s => s.date),
-    datasets: [{ label: "Page Views", data: values, backgroundColor: "#de896d" }],
-  }
-})
-
-const linkClicksChartData = computed(() => {
-  if (!stats.value.length) {
-    return null
-  }
-
-  const values = stats.value.map(s => s.linkClicks)
-  if (!values.some(v => v > 0)) {
-    return null
-  }
-
-  return {
-    labels: stats.value.map(s => s.date),
-    datasets: [{ label: "Link Clicks", data: values, backgroundColor: "#de896d" }],
-  }
-})
-
-const iconClicksChartData = computed(() => {
-  if (!stats.value.length) {
-    return null
-  }
-
-  const values = stats.value.map(s => s.iconClicks)
-  if (!values.some(v => v > 0)) {
-    return null
-  }
-
-  return {
-    labels: stats.value.map(s => s.date),
-    datasets: [{ label: "Social Icon Clicks", data: values, backgroundColor: "#de896d" }],
-  }
-})
+  return icons[source] || "mdi:web"
+}
 
 onMounted(async () => {
   await Promise.all([
     analyticsStore.getAnalytics(),
+    analyticsStore.getReferrerStats(),
     userStore.getUser(),
   ])
-
-  const res = analyticsStore.analytics
-  analyticsData.value = [
-    ...(res?.pageViews?.map((pv: any) => ({
-      type: "pageView" as const,
-      userId: String(pv.userId),
-      createdAt: pv.createdAt ? String(pv.createdAt) : undefined,
-    })) ?? []),
-    ...(res?.linkClicks?.map((lc: any) => ({
-      type: "link" as const,
-      userId: String(lc.userId),
-      id: lc.id ? String(lc.id) : undefined,
-      createdAt: lc.createdAt ? String(lc.createdAt) : undefined,
-    })) ?? []),
-    ...(res?.iconClicks?.map((ic: any) => ({
-      type: "icon" as const,
-      userId: String(ic.userId),
-      id: ic.id ? String(ic.id) : undefined,
-      createdAt: ic.createdAt ? String(ic.createdAt) : undefined,
-    })) ?? []),
-  ]
 })
 </script>

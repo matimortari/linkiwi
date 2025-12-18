@@ -8,6 +8,13 @@ export default defineEventHandler(async (event) => {
     db.pageView.findMany({
       where: { userId: user.id },
       orderBy: { date: "desc" },
+      select: {
+        id: true,
+        userId: true,
+        date: true,
+        referrer: true,
+        source: true,
+      },
     }),
     db.linkClick.findMany({
       where: { userLink: { userId: user.id } },

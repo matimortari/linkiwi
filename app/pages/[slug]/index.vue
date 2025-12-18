@@ -75,7 +75,14 @@ async function loadUserProfile(slug: string) {
   await userStore.getUserProfile(slug)
   const currentUser = userProfile.value
   if (currentUser?.id) {
-    await analyticsStore.recordPageView(currentUser.id)
+    const referrer = route.query.ref as string
+
+    if (referrer) {
+      await analyticsStore.recordPageView(currentUser.id, referrer)
+    }
+    else {
+      await analyticsStore.recordPageView(currentUser.id)
+    }
 
     useHead({
       title: `@${currentUser.slug}`,
