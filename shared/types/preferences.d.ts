@@ -36,6 +36,7 @@ declare global {
     iconShadowColor?: string
     iconShadowWeight?: ShadowWeight
     supportBanner?: BannerOption
+    enableGuestbook: boolean
   }
 }
 

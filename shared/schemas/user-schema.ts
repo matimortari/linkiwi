@@ -57,6 +57,7 @@ export const updateUserPreferencesSchema = z.object({
   iconLogoColor: z.string().optional(),
   iconHoverBackgroundColor: z.string().optional(),
   supportBanner: z.enum(["NONE", "LGBTQ_RIGHTS", "ANTI_RACISM", "MENTAL_HEALTH", "CLIMATE_ACTION"]).optional(),
+  enableGuestbook: z.boolean().optional(),
 })
 
 export type UpdateUserInput = z.infer<typeof updateUserSchema>

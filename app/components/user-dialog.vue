@@ -94,6 +94,7 @@ async function handleSubmit() {
     errors.value.updateUser = err.data.message
   }
 }
+
 watch(() => props.isOpen, (open) => {
   if (open && user.value) {
     form.value = {

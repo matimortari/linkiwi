@@ -43,6 +43,8 @@
         No links yet.
       </p>
     </div>
+
+    <Guestbook :user-id="userProfile?.id" class="absolute right-4 bottom-4 w-full max-w-md" />
   </div>
 </template>
 

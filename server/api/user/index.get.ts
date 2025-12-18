@@ -6,6 +6,7 @@ export default defineEventHandler(async (event) => {
     where: { id: (await getUserFromSession(event))?.id },
     include: {
       preferences: true,
+      comments: true,
       views: true,
     },
   })

@@ -4,12 +4,12 @@
       Delete Account
     </h3>
 
-    <div class="flex flex-col items-center justify-between md:flex-row">
+    <div class="flex flex-col justify-between gap-2 md:flex-row md:items-start">
       <p class="text-danger">
         This action is irreversible. All data will be lost.
       </p>
 
-      <button title="Delete Account" class="btn-danger" aria-label="Delete Account" @click="handleDeleteUser">
+      <button title="Delete Account" class="btn-danger self-end" aria-label="Delete Account" @click="handleDeleteUser">
         <icon name="mdi:user-remove" size="20" />
         <span>Delete Account</span>
       </button>

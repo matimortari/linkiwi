@@ -9,6 +9,7 @@ interface User {
   updatedAt?: Date | string
   preferences: UserPreferences
   views?: PageView[]
+  comments?: Comment[]
   icons?: Icon[]
   links?: Link[]
 }
@@ -45,6 +46,16 @@ interface PageView {
   date: Date | string
   referrer?: string | null
   source?: string | null
+}
+
+interface Comment {
+  id: string
+  userId: string
+  name: string
+  email?: string | null
+  message: string
+  createdAt: Date | string
+  updatedAt: Date | string
 }
 
 interface CarouselPreset {

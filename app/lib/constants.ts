@@ -141,4 +141,5 @@ export const DEFAULT_PREFERENCES = {
   iconLogoColor: "#475569",
   iconHoverBackgroundColor: "#cbd5e1",
   supportBanner: "NONE" as const,
+  enableGuestbook: false,
 }

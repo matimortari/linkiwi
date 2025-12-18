@@ -16,6 +16,7 @@
 
       <div class="flex flex-col gap-4">
         <PreferencesAppearance />
+        <PreferencesGuestbookAdmin />
         <PreferencesDeleteAccount />
       </div>
     </div>

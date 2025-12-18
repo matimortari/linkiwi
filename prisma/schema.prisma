@@ -7,6 +7,19 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum BackgroundType {
+  FLAT
+  GRADIENT
+}
+
+enum SupportBanner {
+  NONE
+  LGBTQ_RIGHTS
+  ANTI_RACISM
+  MENTAL_HEALTH
+  CLIMATE_ACTION
+}
+
 model User {
   id          String           @id @default(cuid())
   email       String           @unique
@@ -21,6 +34,7 @@ model User {
   icons       UserIcon[]
   links       UserLink[]
   preferences UserPreferences? @relation("UserPreferences")
+  comments    Comment[]
 }
 
 model Account {
@@ -71,6 +85,7 @@ model UserPreferences {
   iconLogoColor             String         @default("#475569")
   iconHoverBackgroundColor  String         @default("#cbd5e1")
   supportBanner             SupportBanner  @default(NONE)
+  enableGuestbook           Boolean        @default(false)
   user                      User           @relation("UserPreferences", fields: [userId], references: [id], onDelete: Cascade)
 }
 
@@ -128,15 +143,14 @@ model IconClick {
   @@index([date])
 }
 
-enum BackgroundType {
-  FLAT
-  GRADIENT
-}
+model Comment {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  email     String?
+  message   String   @db.Text
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-enum SupportBanner {
-  NONE
-  LGBTQ_RIGHTS
-  ANTI_RACISM
-  MENTAL_HEALTH
-  CLIMATE_ACTION
+  @@index([userId, createdAt])
 }
