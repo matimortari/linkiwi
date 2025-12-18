@@ -19,7 +19,7 @@ export const useUserStore = defineStore("user", () => {
     errors.value.getUser = null
 
     try {
-      user.value = await $fetch<User>(`${API_URL}/user`, { method: "GET", credentials: "include" })
+      user.value = await $fetch<User>("/api/user", { method: "GET", credentials: "include" })
     }
     catch (err: any) {
       errors.value.getUser = err.data.message || "Failed to get user"
@@ -35,7 +35,7 @@ export const useUserStore = defineStore("user", () => {
     errors.value.getUserProfile = null
 
     try {
-      userProfile.value = await $fetch<User>(`${API_URL}/user/${slug}`, { method: "GET" })
+      userProfile.value = await $fetch<User>(`/api/user/${slug}`, { method: "GET" })
     }
     catch (err: any) {
       errors.value.getUserProfile = err.data?.message || "Failed to get user by slug"
@@ -52,7 +52,7 @@ export const useUserStore = defineStore("user", () => {
     errors.value.updateUser = null
 
     try {
-      user.value = await $fetch<User>(`${API_URL}/user`, { method: "PUT", body: data, credentials: "include" })
+      user.value = await $fetch<User>("/api/user", { method: "PUT", body: data, credentials: "include" })
     }
     catch (err: any) {
       errors.value.updateUser = err.data.message || "Failed to update user"
@@ -71,7 +71,7 @@ export const useUserStore = defineStore("user", () => {
       const formData = new FormData()
       formData.append("file", file)
 
-      const res = await $fetch<{ imageUrl: string }>(`${API_URL}/user/image-upload`, { method: "PUT", body: formData, credentials: "include" })
+      const res = await $fetch<{ imageUrl: string }>("/api/user/image-upload", { method: "PUT", body: formData, credentials: "include" })
       if (user.value && res.imageUrl) {
         user.value.image = res.imageUrl
       }
@@ -92,7 +92,7 @@ export const useUserStore = defineStore("user", () => {
     errors.value.updatePreferences = null
 
     try {
-      const res = await $fetch<{ preferences: UpdateUserPreferencesInput }>(`${API_URL}/user/preferences`, { method: "PUT", body: data, credentials: "include" })
+      const res = await $fetch<{ preferences: UpdateUserPreferencesInput }>("/api/user/preferences", { method: "PUT", body: data, credentials: "include" })
       if (user.value && res.preferences) {
         user.value.preferences = res.preferences as typeof user.value.preferences
       }
@@ -111,7 +111,7 @@ export const useUserStore = defineStore("user", () => {
     errors.value.deleteUser = null
 
     try {
-      await $fetch(`${API_URL}/user`, { method: "DELETE", credentials: "include" })
+      await $fetch("/api/user", { method: "DELETE", credentials: "include" })
       user.value = null
       return true
     }

@@ -9,7 +9,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
     errors.value.getAnalytics = null
 
     try {
-      analytics.value = await $fetch(`${API_URL}/analytics`, { method: "GET", credentials: "include" })
+      analytics.value = await $fetch("/api/analytics", { method: "GET", credentials: "include" })
     }
     catch (err: any) {
       errors.value.getAnalytics = err.data.message || "Failed to fetch analytics"
@@ -25,7 +25,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
     errors.value.recordPageView = null
 
     try {
-      await $fetch(`${API_URL}/analytics`, { method: "POST", body: { type: "pageView", userId, referrer }, credentials: "include" })
+      await $fetch("/api/analytics", { method: "POST", body: { type: "pageView", userId, referrer }, credentials: "include" })
     }
     catch (err: any) {
       errors.value.recordPageView = err.data.message || "Failed to record page view"
@@ -40,7 +40,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
     loading.value = true
     errors.value.recordLinkClick = null
     try {
-      await $fetch(`${API_URL}/analytics`, { method: "POST", body: { type: "link", userId, id: linkId }, credentials: "include" })
+      await $fetch("/api/analytics", { method: "POST", body: { type: "link", userId, id: linkId }, credentials: "include" })
     }
     catch (err: any) {
       errors.value.recordLinkClick = err.data.message || "Failed to record link click"
@@ -56,7 +56,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
     errors.value.recordIconClick = null
 
     try {
-      await $fetch(`${API_URL}/analytics`, { method: "POST", body: { type: "icon", userId, id: iconId }, credentials: "include" })
+      await $fetch("/api/analytics", { method: "POST", body: { type: "icon", userId, id: iconId }, credentials: "include" })
     }
     catch (err: any) {
       errors.value.recordIconClick = err.data.message || "Failed to record icon click"
@@ -83,7 +83,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
         params.append("dateTo", options.dateTo)
       }
 
-      await $fetch<{ success: boolean, message: string, deletedCount: number }>(params.toString() ? `${API_URL}/analytics?${params.toString()}` : `${API_URL}/analytics`, { method: "DELETE", credentials: "include" })
+      await $fetch<{ success: boolean, message: string, deletedCount: number }>(params.toString() ? `/api/analytics?${params.toString()}` : `/api/analytics`, { method: "DELETE", credentials: "include" })
     }
     catch (err: any) {
       errors.value.deleteAnalytics = err.data.message || "Failed to delete analytics"
@@ -99,7 +99,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
     errors.value.getReferrerStats = null
 
     try {
-      referrerStats.value = await $fetch(`${API_URL}/analytics/referrers`, { method: "GET", credentials: "include" })
+      referrerStats.value = await $fetch("/api/analytics/referrers", { method: "GET", credentials: "include" })
     }
     catch (err: any) {
       errors.value.getReferrerStats = err.data.message || "Failed to fetch referrer stats"

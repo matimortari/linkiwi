@@ -10,7 +10,7 @@ export const useLinksStore = defineStore("links", () => {
     errors.value.getLinks = null
 
     try {
-      const res = await $fetch<{ links: Link[] }>(`${API_URL}/links`, { method: "GET", credentials: "include" })
+      const res = await $fetch<{ links: Link[] }>("/api/links", { method: "GET", credentials: "include" })
       links.value = res.links.map(i => Object.freeze(i))
     }
     catch (err: any) {
@@ -27,7 +27,7 @@ export const useLinksStore = defineStore("links", () => {
     errors.value.createLink = null
 
     try {
-      const res = await $fetch<{ link: Link }>(`${API_URL}/links`, { method: "POST", body: data, credentials: "include" })
+      const res = await $fetch<{ link: Link }>("/api/links", { method: "POST", body: data, credentials: "include" })
       links.value.push(Object.freeze(res.link))
     }
     catch (err: any) {
@@ -44,7 +44,7 @@ export const useLinksStore = defineStore("links", () => {
     errors.value.updateLink = null
 
     try {
-      const res = await $fetch<{ link: Link }>(`${API_URL}/links/${id}`, { method: "PUT", body: data, credentials: "include" })
+      const res = await $fetch<{ link: Link }>(`/api/links/${id}`, { method: "PUT", body: data, credentials: "include" })
       const index = links.value.findIndex(link => link.id === id)
       if (index !== -1) {
         links.value[index] = res.link
@@ -64,7 +64,7 @@ export const useLinksStore = defineStore("links", () => {
     errors.value.deleteLink = null
 
     try {
-      await $fetch(`${API_URL}/links/${id}`, { method: "DELETE", credentials: "include" })
+      await $fetch(`/api/links/${id}`, { method: "DELETE", credentials: "include" })
       links.value = links.value.filter(link => link.id !== id)
     }
     catch (err: any) {
