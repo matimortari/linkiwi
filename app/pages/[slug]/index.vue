@@ -88,8 +88,8 @@ async function loadUserProfile(slug: string) {
 
     useHead({
       title: `@${currentUser.slug}`,
-      link: [{ rel: "canonical", href: `https://linknest.vercel.app/${currentUser.slug}` }],
-      meta: [{ name: "description", content: `@${currentUser.slug} profile on LinkNest.` }],
+      link: [{ rel: "canonical", href: `https://linkstashr.vercel.app/${currentUser.slug}` }],
+      meta: [{ name: "description", content: `@${currentUser.slug} profile on Linkstashr.` }],
     })
   }
 }

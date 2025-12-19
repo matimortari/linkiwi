@@ -5,7 +5,7 @@
         Brand & Assets
       </h2>
       <p class="text-caption">
-        Download LinkNest logos and explore our design colors.
+        Download Linkstashr logos and explore our design colors.
       </p>
     </header>
 
@@ -138,7 +138,7 @@ onMounted(() => {
 
 useHead({
   title: "Brand Assets",
-  link: [{ rel: "canonical", href: "https://linknest.vercel.app/brand" }],
-  meta: [{ name: "description", content: "LinkNest Brand Assets." }],
+  link: [{ rel: "canonical", href: "https://linkstashr.vercel.app/brand" }],
+  meta: [{ name: "description", content: "Linkstashr Brand Assets." }],
 })
 </script>

@@ -12,7 +12,7 @@
         Keep all your stuff together!
       </h1>
       <p class="max-w-lg leading-6 font-medium text-muted-foreground 2xl:text-lg">
-        Welcome to <span class="font-semibold text-secondary">LinkNest</span>! Your links, profiles, contact info, and more
+        Welcome to <span class="font-semibold text-secondary">Linkstashr</span>! Your links, profiles, contact info, and more
         in one place. Create and customize your page and share it with your audience.
       </p>
       <nuxt-link to="/sign-in" class="btn-primary">
@@ -53,7 +53,7 @@
       <div class="flex flex-col gap-4 text-start">
         <p class="max-w-lg leading-6 font-medium text-muted-foreground 2xl:text-lg">
           Customize your page with your own style and share your unique URL with your audience.
-          Whether you're a creator, business, or influencer, LinkNest makes it easy to connect all your online presence in one place.
+          Whether you're a creator, business, or influencer, Linkstashr makes it easy to connect all your online presence in one place.
         </p>
 
         <div class="flex flex-col gap-2">
@@ -183,7 +183,7 @@ onBeforeUnmount(() => {
 
 useHead({
   title: "Your Link-in-Bio Page!",
-  link: [{ rel: "canonical", href: "https://linknest.vercel.app" }],
+  link: [{ rel: "canonical", href: "https://linkstashr.vercel.app" }],
   meta: [{ name: "description", content: "Create your own landing page for sharing links to your social media profiles, websites, and more!" }],
 })
 

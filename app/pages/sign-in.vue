@@ -48,6 +48,6 @@ function signIn(provider: string) {
 
 useHead({
   title: "Sign In",
-  meta: [{ name: "description", content: "LinkNest Sign In page" }],
+  meta: [{ name: "description", content: "Linkstashr Sign In page" }],
 })
 </script>

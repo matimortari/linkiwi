@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "linknest",
+      "name": "linkstashr",
       "dependencies": {
         "@nuxt/content": "3.9.0",
         "@nuxt/fonts": "0.12.1",

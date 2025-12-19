@@ -80,7 +80,7 @@ async function copyPageUrl() {
 }
 
 function handleShareTwitter() {
-  const tweet = `🚀 Check out my LinkNest profile! 🌟\n\n🔗 ${pageUrl.value}`
+  const tweet = `🚀 Check out my #Linkstashr profile! 🌟\n\n🔗 ${pageUrl.value}`
   const twitterUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(tweet)}`
   window.open(twitterUrl, "_blank")
   isDropdownOpen.value = false

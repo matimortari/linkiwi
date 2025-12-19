@@ -9,8 +9,8 @@ provide("contentHeaders", useContent({ selector: ".markdown", parseMethod: true 
 
 useHead({
   title: "API Specification",
-  link: [{ rel: "canonical", href: "https://linknest.vercel.app/api-spec" }],
-  meta: [{ name: "description", content: "LinkNest API Specification." }],
+  link: [{ rel: "canonical", href: "https://linkstashr.vercel.app/api-spec" }],
+  meta: [{ name: "description", content: "Linkstashr API Specification." }],
 })
 
 definePageMeta({

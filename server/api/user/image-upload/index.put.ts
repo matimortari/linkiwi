@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const imageUrl = await uploadFile({
-    path: `linknest-user-uploads/avatar/${user.id}`,
+    path: `linkstashr-user-uploads/avatar/${user.id}`,
     file,
     maxSize: 2 * 1024 * 1024, // 2 MB
     allowedMimeTypes: ["image/png", "image/jpeg", "image/webp"],

@@ -34,8 +34,8 @@ const { user, loading, errors } = storeToRefs(useUserStore())
 
 useHead({
   title: "Analytics",
-  link: [{ rel: "canonical", href: "https://linknest.vercel.app/admin/analytics" }],
-  meta: [{ name: "description", content: "LinkNest analytics page." }],
+  link: [{ rel: "canonical", href: "https://linkstashr.vercel.app/admin/analytics" }],
+  meta: [{ name: "description", content: "Linkstashr analytics page." }],
 })
 
 definePageMeta({
