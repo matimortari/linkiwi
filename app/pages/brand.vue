@@ -78,7 +78,7 @@
 </template>
 
 <script setup lang="ts">
-import logoImage from "~/assets/logo.png"
+import logoImage from "~/assets/symbol.png"
 import logoDark from "~/assets/wordmark-dark.png"
 import logoLight from "~/assets/wordmark-light.png"
 
