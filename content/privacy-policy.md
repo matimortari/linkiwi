@@ -2,16 +2,16 @@
 
 ## Introduction
 
-This Privacy Policy explains how LinkNest collects, uses, and protects your personal information when you access or use our services.
+This Privacy Policy explains how Linkstashr collects, uses, and protects your personal information when you access or use our services.
 
-In this Policy, “we”, “us”, and “our” refer to LinkNest and its affiliates, and “you” and “your” refer to users of our services.
+In this Policy, “we”, “us”, and “our” refer to Linkstashr and its affiliates, and “you” and “your” refer to users of our services.
 
 ## Information We Collect
 
 We collect information to provide and improve our services, including:
 
 - Account information from OAuth providers (Google, GitHub).
-- Content you create or share on your LinkNest page.
+- Content you create or share on your Linkstashr page.
 - Usage analytics such as page views, clicks, and interactions.
 - Technical data such as device type, browser, IP address, and cookies.
 
@@ -30,11 +30,11 @@ We do not sell your personal information. We may share information in the follow
 
 - With service providers that help us operate the platform.
 - When required by law, legal process, or governmental request.
-- To protect rights, safety, or property of LinkNest and our users.
+- To protect rights, safety, or property of Linkstashr and our users.
 
 ## Cookies and Tracking
 
-LinkNest uses cookies and similar technologies to enhance your experience, measure usage, and improve our services.
+Linkstashr uses cookies and similar technologies to enhance your experience, measure usage, and improve our services.
 
 - Essential cookies to enable account login and security.
 - Analytics cookies to monitor traffic and feature usage.
@@ -55,7 +55,7 @@ Depending on your jurisdiction, you may have rights regarding your personal data
 
 ## Changes to This Policy
 
-We may update this Privacy Policy from time to time. Continued use of LinkNest constitutes acceptance of the updated policy. We encourage you to review this page periodically.
+We may update this Privacy Policy from time to time. Continued use of Linkstashr constitutes acceptance of the updated policy. We encourage you to review this page periodically.
 
 ## Contact
 

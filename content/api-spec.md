@@ -1,6 +1,6 @@
-# LinkNest API Specification
+# Linkstashr API Specification
 
-This document provides documentation for the LinkNest API.
+This document provides documentation for the Linkstashr API.
 
 ## Overview
 
