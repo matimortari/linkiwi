@@ -50,16 +50,7 @@ export async function handleOAuthUser(event: H3Event, userData: OAuthUserData) {
     where: { provider_providerAccountId: { provider, providerAccountId } },
     update: {},
     create: { userId: user.id, provider, providerAccountId },
-    include: {
-      user: {
-        include: {
-          preferences: true,
-          links: true,
-          icons: true,
-          views: true,
-        },
-      },
-    },
+    include: { user: true },
   })
 
   user = account.user

@@ -1,6 +1,6 @@
 <template>
   <transition name="banner-slide-up">
-    <div v-if="showBanner" class="fixed bottom-0 z-50 flex w-screen flex-col items-center justify-between gap-4 p-6 text-[#ebe8e8] md:flex-row md:gap-2" :class="banner.class">
+    <div v-if="showBanner && banner" class="fixed bottom-0 z-50 flex w-screen flex-col items-center justify-between gap-2 p-4 text-[#ebe8e8] md:flex-row md:gap-2" :class="banner.class">
       <div class="flex flex-row items-center gap-2 md:flex-col md:items-start">
         <div class="flex flex-col gap-2 text-start">
           <div class="flex flex-row items-center gap-2">
@@ -9,36 +9,51 @@
               {{ banner.message }}
             </h5>
           </div>
-          <p class="text-sm leading-4">
+          <p class="text-xs leading-4 md:text-sm">
             {{ banner.description }}
           </p>
         </div>
       </div>
 
-      <nuxt-link :to="banner.link" class="btn self-center">
-        ACT NOW
+      <nuxt-link :to="banner.link" class="btn self-end md:self-center">
+        <span>Learn More</span>
+        <icon name="mdi:arrow-right" size="20" />
       </nuxt-link>
     </div>
   </transition>
 </template>
 
 <script setup lang="ts">
+import type { BannerOption } from "#shared/lib/constants"
 import { BANNER_DESCRIPTIONS, BANNER_ICONS, BANNER_LINKS, BANNER_MESSAGES, BANNER_STYLES } from "#shared/lib/constants"
 
 const props = defineProps<{
-  type: keyof typeof BANNER_MESSAGES
+  preferences: UserPreferences
 }>()
 
 const showBanner = ref(true)
 let lastScrollY = window.scrollY
 
-const banner = computed(() => ({
-  message: BANNER_MESSAGES[props.type],
-  description: BANNER_DESCRIPTIONS[props.type],
-  icon: BANNER_ICONS[props.type],
-  link: BANNER_LINKS[props.type],
-  class: BANNER_STYLES[props.type],
-}))
+const activeBanner = computed<Exclude<BannerOption, "NONE"> | null>(() => {
+  const value = props.preferences.supportBanner
+  return value && value !== "NONE" ? value : null
+})
+
+const banner = computed(() => {
+  if (!activeBanner.value) {
+    return null
+  }
+
+  const key = activeBanner.value
+
+  return {
+    message: BANNER_MESSAGES[key],
+    description: BANNER_DESCRIPTIONS[key],
+    icon: BANNER_ICONS[key],
+    link: BANNER_LINKS[key],
+    class: BANNER_STYLES[key],
+  }
+})
 
 function handleScroll() {
   const current = window.scrollY
@@ -46,7 +61,13 @@ function handleScroll() {
   lastScrollY = current
 }
 
-addEventListener("scroll", handleScroll)
+onMounted(() => {
+  addEventListener("scroll", handleScroll)
+})
+
+onBeforeUnmount(() => {
+  removeEventListener("scroll", handleScroll)
+})
 </script>
 
 <style scoped>

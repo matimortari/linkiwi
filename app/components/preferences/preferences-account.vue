@@ -1,0 +1,108 @@
+<template>
+  <div class="card flex flex-col gap-2">
+    <h3>
+      Account Options
+    </h3>
+
+    <div class="flex flex-col gap-2 py-4">
+      <div class="card flex flex-col gap-2">
+        <h4>
+          Guestbook Messages
+        </h4>
+        <p class="text-caption">
+          Allow visitors to leave comments on your profile page.
+        </p>
+
+        <PreferencesCheckbox id="enableGuestbook" v-model:value="preferences.enableGuestbook" label="Enable Guestbook" class="max-w-xs" />
+
+        <p v-if="preferences.enableGuestbook && comments.length === 0" class="text-caption my-4 text-center">
+          No comments yet.
+        </p>
+
+        <div v-for="comment in comments" :key="comment.id" class="card">
+          <div class="flex justify-between">
+            <div class="flex items-center gap-1">
+              <h5>
+                {{ comment.name }}
+              </h5>
+              <span v-if="comment.email" class="text-xs text-muted-foreground">({{ comment.email }})</span>
+            </div>
+            <span class="text-caption">{{ formatDate(new Date(comment.createdAt)) }}</span>
+          </div>
+
+          <p class="my-2 text-sm text-muted-foreground">
+            {{ comment.message }}
+          </p>
+        </div>
+
+        <button class="btn-primary self-end" @click="handleSubmit">
+          <icon :name="saveStatus === 'saved' ? 'mdi:check' : 'mdi:content-save-check'" size="20" />
+          <span class="truncate">Save</span>
+        </button>
+      </div>
+
+      <div class="card flex flex-col gap-2">
+        <h4>
+          Delete Account
+        </h4>
+        <p class="text-danger">
+          This action is irreversible. All data will be lost.
+        </p>
+
+        <button title="Delete Account" class="btn-danger self-end" @click="handleDeleteUser">
+          <icon name="mdi:user-remove" size="20" />
+          <span>Delete Account</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+const { clear } = useUserSession()
+const userStore = useUserStore()
+const { preferences, errors } = storeToRefs(userStore)
+const comments = computed(() => userStore.user?.comments ?? [])
+const saveStatus = ref<"idle" | "saved">("idle")
+
+async function handleSubmit() {
+  errors.value.updateUser = null
+  saveStatus.value = "idle"
+
+  try {
+    await userStore.updatePreferences({
+      enableGuestbook: preferences.value.enableGuestbook,
+    })
+
+    await userStore.getUser()
+    saveStatus.value = "saved"
+  }
+  catch (err: any) {
+    errors.value.updateUser = err.data.message
+    saveStatus.value = "idle"
+  }
+}
+
+watch(saveStatus, (newStatus, _oldStatus, onInvalidate) => {
+  if (newStatus !== "idle") {
+    const timer = setTimeout(() => {
+      saveStatus.value = "idle"
+    }, 2000)
+    onInvalidate(() => clearTimeout(timer))
+  }
+})
+
+async function handleDeleteUser() {
+  if (!confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+    return
+  }
+
+  const success = await userStore.deleteUser()
+  if (!success) {
+    return
+  }
+
+  await clear()
+  await navigateTo("/sign-in", { replace: true })
+}
+</script>

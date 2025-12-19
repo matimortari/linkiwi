@@ -5,7 +5,7 @@
     </h3>
 
     <div class="flex flex-col justify-between gap-2 border-b py-4 md:flex-row">
-      <div class="flex flex-row flex-wrap items-center gap-1">
+      <div class="flex flex-row items-center gap-1">
         <button
           v-for="t in APPEARANCE_TABS" :key="t.value"
           class="btn" :class="{ 'bg-muted!': activeTab === t.value }"
@@ -15,23 +15,19 @@
         </button>
       </div>
 
-      <div class="flex flex-row flex-wrap items-center gap-1">
+      <div class="flex flex-row items-center gap-1">
         <button class="btn-danger" @click="handleResetPreferences">
           <icon :name="resetStatus === 'reset' ? 'mdi:check' : 'mdi:close'" size="20" />
           <span>Reset</span>
         </button>
         <button class="btn-primary" @click="handleUpdatePreferences">
           <icon :name="saveStatus === 'saved' ? 'mdi:check' : 'mdi:content-save-check'" size="20" />
-          <span class="truncate">Save Changes</span>
+          <span class="truncate">Save</span>
         </button>
       </div>
     </div>
 
-    <PreferencesAppearanceBackgroundTab v-if="activeTab === 'background'" v-model:preferences="preferences" />
-    <PreferencesAppearanceProfileTab v-if="activeTab === 'user'" v-model:preferences="preferences" />
-    <PreferencesAppearanceLinksTab v-if="activeTab === 'links'" v-model:preferences="preferences" />
-    <PreferencesAppearanceIconsTab v-if="activeTab === 'icons'" v-model:preferences="preferences" />
-    <PreferencesAppearanceThemeTab v-if="activeTab === 'themes'" :preferences="preferences" />
+    <PreferencesTabs v-model:preferences="preferences" v-model:active-tab="activeTab" />
   </div>
 </template>
 
@@ -67,17 +63,17 @@ async function handleResetPreferences() {
   }
 }
 
-watch(saveStatus, (value, _, onInvalidate) => {
-  if (value !== "idle") {
-    const t = setTimeout(() => (saveStatus.value = "idle"), 2000)
-    onInvalidate(() => clearTimeout(t))
-  }
-})
+function useStatusAutoReset(statusRef: Ref<"idle" | string>) {
+  watch(statusRef, (value, _, onInvalidate) => {
+    if (value !== "idle") {
+      const t = setTimeout(() => (statusRef.value = "idle"), 2000)
+      onInvalidate(() => clearTimeout(t))
+    }
+  })
+}
 
-watch(resetStatus, (value, _, onInvalidate) => {
-  if (value !== "idle") {
-    const t = setTimeout(() => (resetStatus.value = "idle"), 2000)
-    onInvalidate(() => clearTimeout(t))
-  }
+onMounted(() => {
+  useStatusAutoReset(saveStatus)
+  useStatusAutoReset(resetStatus)
 })
 </script>
