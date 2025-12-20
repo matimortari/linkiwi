@@ -28,7 +28,7 @@
     "chart.js": "4.5.1",
     "nuxt": "4.2.2",
     "nuxt-auth-utils": "0.5.26",
-    "qrcode.vue": "3.6.0",
+    "qrcode-generator": "2.0.4",
     "tailwindcss": "4.1.18",
     "vue": "3.5.25",
     "vue-chartjs": "5.3.3",

@@ -34,16 +34,15 @@ const props = defineProps({
 const emit = defineEmits<{ (e: "update:isOpen", value: boolean): void, (e: "confirm"): void }>()
 
 const dialogRef = ref<HTMLElement | null>(null)
-
-function closeDialog() {
-  emit("update:isOpen", false)
-}
-
 useClickOutside(dialogRef, () => {
   if (props.isOpen) {
     closeDialog()
   }
 }, { escapeKey: true })
+
+function closeDialog() {
+  emit("update:isOpen", false)
+}
 </script>
 
 <style scoped>
@@ -51,7 +50,6 @@ useClickOutside(dialogRef, () => {
 .fade-leave-active {
   transition: opacity 0.4s ease;
 }
-
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;

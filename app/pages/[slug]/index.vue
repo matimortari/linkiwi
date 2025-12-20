@@ -9,7 +9,7 @@
     <Empty v-else-if="!userProfile" :message="`User @${slug} not found.`" icon-name="mdi:account-off" />
 
     <div v-else-if="userProfile" class="flex w-full flex-1 flex-col items-center gap-4 py-12 text-center" :style="backgroundStyle">
-      <SupportBanner v-if="profilePreferences.supportBanner !== 'NONE'" :preferences="profilePreferences" />
+      <UserSupportBanner v-if="profilePreferences.supportBanner !== 'NONE'" :preferences="profilePreferences" />
 
       <img :src="userProfile.image" alt="Avatar" class="size-24 object-cover" :style="profilePictureStyle">
       <p :style="slugStyle">
@@ -40,7 +40,7 @@
       </p>
     </div>
 
-    <Guestbook v-if="profilePreferences?.enableGuestbook" />
+    <UserGuestbook v-if="profilePreferences?.enableGuestbook" />
   </div>
 </template>
 

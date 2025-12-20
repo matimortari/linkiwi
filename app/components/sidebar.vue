@@ -36,8 +36,9 @@
 
           <nuxt-link
             v-for="link in SIDEBAR_NAV_LINKS" :key="link.url"
-            :to="link.url" class="navigation-group w-full rounded-[5rem] p-2 font-semibold whitespace-nowrap hover:bg-muted"
-            aria-label="Navigate to {{ link.label }}" @click="isMobileNavOpen = false"
+            :to="link.url" class="navigation-group w-full rounded-[5rem] p-2 font-semibold hover:bg-muted/30"
+            :class="{ 'bg-card': route.path === link.url }" aria-label="Navigate to {{ link.label }}"
+            @click="isMobileNavOpen = false"
           >
             <icon :name="link.icon" size="30" />
             <span>{{ link.label }}</span>
@@ -73,6 +74,7 @@
 
 <script setup lang="ts">
 const { toggleTheme, themeIcon } = useTheme()
+const route = useRoute()
 const { clear } = useUserSession()
 const { user } = storeToRefs(useUserStore())
 const isMobileNavOpen = ref(false)
