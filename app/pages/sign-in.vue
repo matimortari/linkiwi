@@ -18,7 +18,7 @@
           </button>
         </div>
 
-        <p class="mx-auto max-w-sm border-t py-4 text-center text-sm font-medium text-muted-foreground">
+        <p class="mx-auto max-w-xs border-t py-4 text-center text-sm font-medium text-muted-foreground">
           By signing in, you agree to our
           <nuxt-link to="/legal/terms" class="text-primary hover:underline">
             Terms of Service

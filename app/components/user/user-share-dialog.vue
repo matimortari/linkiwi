@@ -181,12 +181,9 @@ watchEffect(() => {
     }
   }
 
-  // Add logo image using base64 data URL + white background circle
-  const centerX = moduleCount / 2 + 2
-  const centerY = moduleCount / 2 + 2
-  svg += `<circle cx="${centerX}" cy="${centerY}" r="${((moduleCount * 0.2) / 2) + 0.5}" fill="#ffffff"/>`
+  // Add logo image using base64 data URL (no white background circle)
   const logoImgSize = (moduleCount * 0.2) * 0.85
-  const logoImgPos = centerX - (logoImgSize / 2)
+  const logoImgPos = (moduleCount / 2 + 2) - (logoImgSize / 2)
   svg += `<image href="${logoBase64.value}" x="${logoImgPos}" y="${logoImgPos}" width="${logoImgSize}" height="${logoImgSize}"/>`
   svg += "</svg>"
   qrContainer.value.innerHTML = svg

@@ -37,7 +37,6 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "6.7.1",
-    "@iconify-json/material-symbols": "1.2.50",
     "@iconify-json/mdi": "1.2.3",
     "@iconify-json/simple-icons": "1.2.63",
     "@types/node": "25.0.0",

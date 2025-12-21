@@ -1,7 +1,7 @@
 <template>
   <!-- Mobile toggle -->
   <button class="btn fixed top-4 right-4 z-50 md:hidden!" :aria-label="isMobileNavOpen ? 'Close menu' : 'Open menu'" @click="isMobileNavOpen = !isMobileNavOpen">
-    <icon :name="isMobileNavOpen ? 'mdi:close' : 'mdi:menu'" size="30" :class="isMobileNavOpen ? 'text-muted-foreground' : ''" />
+    <icon :name="isMobileNavOpen ? 'mdi:close' : 'mdi:menu'" size="25" :class="isMobileNavOpen ? 'text-muted-foreground' : ''" />
   </button>
 
   <!-- Mobile overlay -->
@@ -14,7 +14,7 @@
           <div class="relative size-12 shrink-0">
             <img v-if="user.image" :src="user.image" alt="Avatar" class="size-full rounded-full border object-cover select-none">
 
-            <button title="Edit Profile Information" class="btn-primary absolute -right-2 -bottom-2 p-1!" aria-label="Edit Profile Information" @click="isDialogOpen = true">
+            <button title="Edit Profile Information" class="btn-primary absolute -right-2 -bottom-2 p-1!" aria-label="Edit Profile Information" @click="isUserDialogOpen = true">
               <icon name="mdi:square-edit-outline" size="20" />
             </button>
           </div>
@@ -40,9 +40,14 @@
             :class="{ 'bg-card': route.path === link.url }" aria-label="Navigate to {{ link.label }}"
             @click="isMobileNavOpen = false"
           >
-            <icon :name="link.icon" size="30" />
+            <icon :name="link.icon" size="25" />
             <span>{{ link.label }}</span>
           </nuxt-link>
+
+          <button class="navigation-group w-full rounded-[5rem] p-2 font-semibold hover:bg-muted/30" aria-label="Share Profile" @click="isShareDialogOpen = true">
+            <icon name="mdi:share-variant-outline" size="25" />
+            <span>Share</span>
+          </button>
         </nav>
 
         <div class="border-t md:flex-1" />
@@ -53,7 +58,7 @@
           </p>
 
           <button class="navigation-group w-full rounded-[5rem] p-2 font-semibold whitespace-nowrap hover:bg-muted" aria-label="Toggle Theme" @click="toggleTheme">
-            <icon :name="themeIcon" size="30" />
+            <icon :name="themeIcon" size="25" />
             <span>Toggle Theme</span>
           </button>
           <button class="navigation-group w-full rounded-[5rem] p-2 font-semibold whitespace-nowrap hover:bg-muted" aria-label="Sign Out" @click="signOut">
@@ -69,7 +74,8 @@
     </aside>
   </transition>
 
-  <UserDialog :is-open="isDialogOpen" @close=" isDialogOpen = false" />
+  <UserDialog :is-open="isUserDialogOpen" @close=" isUserDialogOpen = false" />
+  <UserShareDialog :is-open="isShareDialogOpen" @close="isShareDialogOpen = false" />
 </template>
 
 <script setup lang="ts">
@@ -78,7 +84,8 @@ const route = useRoute()
 const { clear } = useUserSession()
 const { user } = storeToRefs(useUserStore())
 const isMobileNavOpen = ref(false)
-const isDialogOpen = ref(false)
+const isUserDialogOpen = ref(false)
+const isShareDialogOpen = ref(false)
 
 async function signOut() {
   await clear()

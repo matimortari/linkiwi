@@ -3,7 +3,7 @@ export const BASE_URL = "https://linkstashr.vercel.app"
 export const PRODUCT_BULLETS = [
   {
     description: "Design your own personalized link page",
-    icon: "mdi:palette-outline",
+    icon: "mdi:cards-playing-heart-outline",
   },
   {
     description: "Add unlimited links and social profiles",
@@ -33,22 +33,22 @@ export const ANALYTICS_BULLETS = [
 export const MOCK_ANALYTICS = [
   {
     label: "Total Page Views",
-    icon: "material-symbols:table-eye",
+    icon: "mdi:file-eye-outline",
     value: "1,247",
   },
   {
     label: "Total Clicks",
-    icon: "material-symbols:ads-click",
+    icon: "mdi:cursor-default-click-outline",
     value: "389",
   },
   {
     label: "Click Rate",
-    icon: "material-symbols:percent",
+    icon: "mdi:file-percent-outline",
     value: "31.2%",
   },
   {
     label: "Joined On",
-    icon: "material-symbols:calendar-month",
+    icon: "mdi:calendar-clock-outline",
     value: "Jan,",
   },
 ]
@@ -139,9 +139,9 @@ export const REST_METHOD_LABELS = {
 }
 
 export const SIDEBAR_NAV_LINKS = [
-  { label: "Profile", url: "/admin/profile", icon: "material-symbols:location-home-outline" },
-  { label: "Preferences", url: "/admin/preferences", icon: "material-symbols:settings-applications-outline" },
-  { label: "Analytics", url: "/admin/analytics", icon: "material-symbols:chart-data-outline" },
+  { label: "Profile", url: "/admin/profile", icon: "mdi:home-outline" },
+  { label: "Preferences", url: "/admin/preferences", icon: "mdi:cog-outline" },
+  { label: "Analytics", url: "/admin/analytics", icon: "mdi:chart-bell-curve-cumulative" },
 ]
 
 export const APPEARANCE_TABS = [

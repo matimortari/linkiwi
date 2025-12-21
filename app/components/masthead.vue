@@ -8,26 +8,18 @@
           <icon name="mdi:arrow-top-right" size="20" class="text-secondary" />
           <span class="truncate">{{ pageUrl }}</span>
         </nuxt-link>
-
-        <button class="btn flex items-center gap-2 whitespace-nowrap" title="See sharing options" aria-label="Share Profile" @click="isDialogOpen = true">
-          <icon name="mdi:share-variant" size="20" />
-          <span>Share</span>
-        </button>
       </div>
     </div>
 
     <p v-if="shouldShowPreview" class="text-caption ml-auto hidden md:block">
       Live Preview
     </p>
-
-    <UserShareDialog :is-open="isDialogOpen" @close="isDialogOpen = false" />
   </nav>
 </template>
 
 <script setup lang="ts">
 const route = useRoute()
 const { user } = storeToRefs(useUserStore())
-const isDialogOpen = ref(false)
 const shouldShowPreview = computed(() => route.path !== "/admin/analytics")
 const pageUrl = computed(() => `${BASE_URL.replace(/^https?:\/\//, "")}/${user?.value?.slug}`)
 </script>

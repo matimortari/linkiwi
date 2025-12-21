@@ -28,7 +28,6 @@
       },
       "devDependencies": {
         "@antfu/eslint-config": "6.7.1",
-        "@iconify-json/material-symbols": "1.2.50",
         "@iconify-json/mdi": "1.2.3",
         "@iconify-json/simple-icons": "1.2.63",
         "@types/node": "25.0.0",
@@ -218,8 +217,6 @@
     "@humanwhocodes/module-importer": ["@humanwhocodes/module-importer@1.0.1", "", {}, "sha512-bxveV4V8v5Yb4ncFTT3rPSgZBOpCkjfK0y4oVVVJwIuDVBRMDXrPyXRL988i5ap9m9bnyEEjWfm5WkBmtffLfA=="],
 
     "@humanwhocodes/retry": ["@humanwhocodes/retry@0.4.3", "", {}, "sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ=="],
-
-    "@iconify-json/material-symbols": ["@iconify-json/material-symbols@1.2.50", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-71tjHR70h46LHtBFab3fAd2V/wPTO7JMV5lKnRn3IcF303LaFgAlO0BZeTJDcmCv9d0snRZmnoLZAJVD7/eisw=="],
 
     "@iconify-json/mdi": ["@iconify-json/mdi@1.2.3", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-O3cLwbDOK7NNDf2ihaQOH5F9JglnulNDFV7WprU2dSoZu3h3cWH//h74uQAB87brHmvFVxIOkuBX2sZSzYhScg=="],
 

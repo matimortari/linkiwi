@@ -52,10 +52,12 @@
             </thead>
 
             <tbody class="divide-y">
-              <tr v-for="stat in referrerStats" :key="stat.source" class="hover:bg-muted">
+              <tr v-for="stat in referrerStats" :key="stat.source" class="hover:bg-muted/20">
                 <td class="px-4 py-2 text-sm">
                   <div class="navigation-group">
-                    <icon :name="getSourceIcon(stat.source)" size="20" />
+                    <div class="rounded-full bg-muted p-1">
+                      <icon :name="getSourceIcon(stat.source)" size="18" />
+                    </div>
                     <span class="font-semibold">{{ stat.label }}</span>
                   </div>
                 </td>
@@ -63,7 +65,9 @@
                   {{ stat.count }}
                 </td>
                 <td class="px-4 py-2 text-right text-sm">
-                  <span class="inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-primary!">{{ stat.percentage }}%</span>
+                  <span class="inline-flex items-center rounded-full border bg-primary/20 px-2 py-1 text-xs font-medium text-primary">
+                    {{ stat.percentage }}%
+                  </span>
                 </td>
               </tr>
             </tbody>
@@ -103,22 +107,22 @@ const referrerStats = computed(() => analyticsStore.referrerStats?.referrers || 
 const summaryItems = computed(() => [
   {
     label: "Total Page Views",
-    icon: "material-symbols:table-eye",
+    icon: "mdi:file-eye-outline",
     value: totalViews.value,
   },
   {
     label: "Total Clicks",
-    icon: "material-symbols:ads-click",
+    icon: "mdi:cursor-default-click-outline",
     value: totalClicks.value,
   },
   {
     label: "Click Rate",
-    icon: "material-symbols:percent",
+    icon: "mdi:file-percent-outline",
     value: `${clickRate.value}%`,
   },
   {
     label: "Joined On",
-    icon: "material-symbols:calendar-month",
+    icon: "mdi:calendar-clock-outline",
     value: joinedAt.value ? formatDate(new Date(joinedAt.value)) : "N/A",
   },
 ])

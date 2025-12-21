@@ -5,7 +5,7 @@
     </h3>
 
     <div class="flex flex-col justify-between gap-2 border-b py-4 md:flex-row">
-      <div class="flex flex-row items-center gap-1">
+      <div class="flex flex-row flex-wrap items-center gap-1">
         <button
           v-for="t in APPEARANCE_TABS" :key="t.value"
           class="btn" :class="{ 'bg-muted!': activeTab === t.value }"
