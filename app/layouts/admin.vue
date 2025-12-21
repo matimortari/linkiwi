@@ -1,16 +1,13 @@
 <template>
-  <Loading v-if="isLoading" />
+  <Masthead />
 
-  <div v-show="!isLoading">
-    <Masthead />
+  <div class="flex flex-col items-center gap-4 md:flex-row md:items-start">
+    <Sidebar />
 
-    <div class="flex flex-col items-center gap-4 md:flex-row md:items-start">
-      <Sidebar />
-
-      <main class="flex-1 overflow-x-hidden">
-        <slot />
-      </main>
-    </div>
+    <main class="flex-1 overflow-x-hidden">
+      <Loading v-if="isLoading" />
+      <slot :class="{ hidden: isLoading }" />
+    </main>
   </div>
 
   <Footer />

@@ -3,7 +3,7 @@
     <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
       <span class="text-sm font-medium">Select Platform</span>
 
-      <div class="scroll-area grid max-h-64 grid-cols-3 gap-1 overflow-y-auto pr-2 md:grid-cols-5 2xl:grid-cols-9">
+      <div class="scroll-area grid max-h-64 grid-cols-3 gap-1 overflow-y-auto pr-1 md:grid-cols-6 2xl:grid-cols-9">
         <button
           v-for="[label, iconName] in socialIconEntries" :key="label"
           type="button" aria-label="Select Social Icon"
@@ -29,7 +29,7 @@
           <button class="btn-danger" aria-label="Cancel" :disabled="isLoading" @click="emit('close')">
             Cancel
           </button>
-          <button class="btn-primary" type="submit" aria-label="Add Social Icon" :disabled="!isFormValid">
+          <button class="btn-success" type="submit" aria-label="Add Social Icon" :disabled="!isFormValid">
             Confirm
           </button>
         </div>

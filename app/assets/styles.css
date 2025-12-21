@@ -14,8 +14,8 @@
   /* Surfaces */
   --primary: #91a173;
   --secondary: #de896d;
-  --danger: #b91c1c;
-  --success: #047857;
+  --danger: #991b1b;
+  --success: #064e3b;
 
   /* Content on surfaces */
   --surface-foreground: #e5e7eb;
@@ -43,8 +43,8 @@ html.dark {
   /* Surfaces */
   --primary: #91a173;
   --secondary: #de896d;
-  --danger: #b91c1c;
-  --success: #047857;
+  --danger: #991b1b;
+  --success: #064e3b;
 
   /* Content on surfaces */
   --surface-foreground: #e5e7eb;
@@ -241,7 +241,8 @@ input[type="radio"]:checked::after {
 .btn,
 .btn-primary,
 .btn-secondary,
-.btn-danger {
+.btn-danger,
+.btn-success {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -261,6 +262,7 @@ input[type="radio"]:checked::after {
 .btn-primary:hover,
 .btn-secondary:hover,
 .btn-danger:hover,
+.btn-success:hover,
 .btn:active,
 .btn-primary:active,
 .btn-secondary:active,
@@ -273,7 +275,8 @@ input[type="radio"]:checked::after {
 .btn:disabled,
 .btn-primary:disabled,
 .btn-secondary:disabled,
-.btn-danger:disabled {
+.btn-danger:disabled,
+.btn-success:disabled {
   filter: brightness(0.8);
   cursor: not-allowed;
 }

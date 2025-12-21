@@ -7,7 +7,6 @@ export function useContent(options: { selector?: string, parseMethod?: boolean }
 
   async function extractHeaders() {
     await nextTick()
-
     const container = document.querySelector(selector)
     if (!container) {
       return
@@ -18,13 +17,22 @@ export function useContent(options: { selector?: string, parseMethod?: boolean }
       const text = el.textContent?.trim() || ""
       let method: string | undefined
       if (parseMethod) {
-        const next = el.nextElementSibling
-        if (next && !/^H[2-4]$/.test(next.tagName)) {
-          const nextText = next.textContent?.replace(/\*\*/g, "").trim() || ""
-          const match = nextText.match(/^(GET|POST|PUT|DELETE)\b/i)
-          if (match) {
-            method = match[1]?.toUpperCase()
+        let node = el.nextElementSibling
+        while (node) {
+          if (/^H[2-4]$/.test(node.tagName)) {
+            break
           }
+
+          const text = node.textContent?.replace(/\*\*/g, "").trim()
+          if (text) {
+            const match = text.match(/\b(GET|POST|PUT|DELETE)\b/i)
+            if (match && match[1]) {
+              method = match[1].toUpperCase()
+            }
+            break
+          }
+
+          node = node.nextElementSibling
         }
       }
 
@@ -43,7 +51,6 @@ export function useContent(options: { selector?: string, parseMethod?: boolean }
         }
       }
     }, { root: null, rootMargin: "0px 0px -70% 0px", threshold: 0 })
-
     for (const heading of hElements) {
       observer!.observe(heading)
     }
@@ -51,7 +58,6 @@ export function useContent(options: { selector?: string, parseMethod?: boolean }
 
   onMounted(extractHeaders)
   onBeforeUnmount(() => observer?.disconnect())
-
   watch(() => route.fullPath, async () => {
     observer?.disconnect()
     await extractHeaders()
@@ -71,6 +77,7 @@ export function useContent(options: { selector?: string, parseMethod?: boolean }
     if (activeSection.value === header.id) {
       classes.push("text-primary font-semibold")
     }
+
     return classes.join(" ")
   }
 

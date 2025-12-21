@@ -2,13 +2,13 @@
   <section
     id="hero" v-motion
     :initial="{ opacity: 0, y: -40 }" :visible="{ opacity: 1, y: 0 }"
-    :duration="800" class="flex min-h-screen flex-col items-center justify-center overflow-hidden border-b-2 px-4 py-32 md:flex-row md:px-32"
+    :duration="800" class="flex min-h-screen flex-col items-center justify-center overflow-hidden border-b-2 px-4 py-24 md:flex-row md:px-24"
   >
     <header class="flex flex-col items-center gap-4 text-center md:items-start md:text-start">
       <span class="font-semibold text-secondary">
         Your link-in-bio page
       </span>
-      <h1 class="max-w-md font-display text-5xl! md:text-6xl!">
+      <h1 class="max-w-md font-display text-5xl! leading-tight! md:text-6xl!">
         Keep all your stuff together!
       </h1>
       <p class="max-w-lg leading-6 font-medium text-muted-foreground 2xl:text-lg">
@@ -42,9 +42,7 @@
             <icon name="mdi:link-variant" size="60" class="text-primary" />
 
             <div class="flex flex-col gap-2 text-center">
-              <div class="h-4 w-32 animate-pulse rounded bg-muted" />
-              <div class="h-4 w-24 animate-pulse rounded bg-muted" />
-              <div class="h-4 w-28 animate-pulse rounded bg-muted" />
+              <span v-for="i in 3" :key="i" class="h-4 w-32 animate-pulse rounded bg-muted" />
             </div>
           </div>
         </div>

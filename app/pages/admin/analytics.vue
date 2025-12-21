@@ -3,7 +3,7 @@
     <div
       v-motion :initial="{ opacity: 0, x: -20 }"
       :visible="{ opacity: 1, x: 0 }" :duration="800"
-      class="min-h-screen w-full space-y-4 border-r-0 border-b-0 p-4 md:rounded-tl-2xl md:border"
+      class="min-h-screen w-full space-y-4 border-r-0! border-b-0! p-4 md:rounded-tl-2xl md:border"
     >
       <header class="flex flex-col gap-2">
         <h2 v-motion :initial="{ opacity: 0 }" :enter="{ opacity: 1 }" :duration="800">
@@ -14,7 +14,7 @@
         </p>
       </header>
 
-      <div class="flex flex-col gap-4">
+      <div class="flex flex-col gap-2">
         <AnalyticsSummary />
         <AnalyticsClicksByItem />
       </div>

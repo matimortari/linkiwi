@@ -4,7 +4,7 @@
       <Logo />
 
       <div v-if="user" class="hidden md:navigation-group">
-        <nuxt-link :to="`/${user.slug}`" class="btn bg-muted! p-1! text-xs! text-muted-foreground!" title="Go to your profile page">
+        <nuxt-link :to="`/${user.slug}`" class="btn bg-muted/50! p-1! text-xs! text-muted-foreground!" title="Go to your profile page">
           <icon name="mdi:arrow-top-right" size="20" class="text-secondary" />
           <span class="truncate">{{ pageUrl }}</span>
         </nuxt-link>

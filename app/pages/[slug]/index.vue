@@ -40,7 +40,7 @@
       </p>
     </div>
 
-    <UserGuestbook v-if="profilePreferences?.enableGuestbook" />
+    <UserGuestbook v-if="profilePreferences?.enableGuestbook" :user-id="userProfile?.id" />
   </div>
 </template>
 
@@ -90,9 +90,7 @@ async function loadUserProfile(slug: string) {
   }
 }
 
-onMounted(() => {
-  loadUserProfile(slug)
-})
+onMounted(() => loadUserProfile(slug))
 
 watch(() => route.params.slug, (newSlug) => {
   if (newSlug) {

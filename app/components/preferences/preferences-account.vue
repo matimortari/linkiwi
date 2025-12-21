@@ -7,38 +7,48 @@
     <div class="flex flex-col gap-2 py-4">
       <div class="card flex flex-col gap-2">
         <h4>
-          Guestbook Messages
+          Guestbook
         </h4>
         <p class="text-caption">
           Allow visitors to leave comments on your profile page.
         </p>
 
-        <PreferencesCheckbox id="enableGuestbook" v-model:value="preferences.enableGuestbook" label="Enable Guestbook" class="max-w-xs" />
+        <div class="flex items-center justify-between">
+          <PreferencesCheckbox id="enableGuestbook" v-model:value="preferences.enableGuestbook" label="Enable Guestbook" class="max-w-xs" />
 
-        <p v-if="preferences.enableGuestbook && comments.length === 0" class="text-caption my-4 text-center">
-          No comments yet.
-        </p>
-
-        <div v-for="comment in comments" :key="comment.id" class="card">
-          <div class="flex justify-between">
-            <div class="flex items-center gap-1">
-              <h5>
-                {{ comment.name }}
-              </h5>
-              <span v-if="comment.email" class="text-xs text-muted-foreground">({{ comment.email }})</span>
-            </div>
-            <span class="text-caption">{{ formatDate(new Date(comment.createdAt)) }}</span>
-          </div>
-
-          <p class="my-2 text-sm text-muted-foreground">
-            {{ comment.message }}
-          </p>
+          <button class="btn-primary self-end" @click="handleSubmit">
+            <icon :name="saveStatus === 'saved' ? 'mdi:check' : 'mdi:content-save-check'" size="20" />
+            <span class="truncate">Save</span>
+          </button>
         </div>
 
-        <button class="btn-primary self-end" @click="handleSubmit">
-          <icon :name="saveStatus === 'saved' ? 'mdi:check' : 'mdi:content-save-check'" size="20" />
-          <span class="truncate">Save</span>
-        </button>
+        <div v-if="preferences.enableGuestbook" class="my-4 flex flex-col gap-2">
+          <h5>
+            Messages
+          </h5>
+
+          <p v-if="comments.length === 0" class="text-caption text-center">
+            No comments yet.
+          </p>
+
+          <div v-else class="scroll-area flex max-h-64 flex-col gap-1 overflow-y-auto pr-1">
+            <div v-for="comment in comments" :key="comment.id" class="card">
+              <div class="flex justify-between">
+                <div class="flex items-center gap-1">
+                  <h5>
+                    {{ comment.name }}
+                  </h5>
+                  <span v-if="comment.email" class="text-xs text-muted-foreground">({{ comment.email }})</span>
+                </div>
+                <span class="text-caption">{{ formatDate(new Date(comment.createdAt)) }}</span>
+              </div>
+
+              <p class="my-2 text-sm text-muted-foreground">
+                {{ comment.message }}
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="card flex flex-col gap-2">

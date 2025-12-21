@@ -4,9 +4,9 @@
       Summary
     </h3>
 
-    <div class="grid grid-cols-2 gap-2 border-b py-4 md:grid-cols-4 md:place-items-center">
+    <div class="grid grid-cols-2 gap-4 border-b py-4 md:grid-cols-4 md:place-items-center">
       <div v-for="item in summaryItems" :key="item.label" class="navigation-group">
-        <icon :name="item.icon" size="35" class="text-primary" />
+        <icon :name="item.icon" size="30" class="text-primary" />
         <div class="flex flex-col items-start">
           <p class="text-caption">
             {{ item.label }}

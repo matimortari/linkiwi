@@ -3,18 +3,18 @@
     <div
       v-motion :initial="{ opacity: 0, x: -20 }"
       :visible="{ opacity: 1, x: 0 }" :duration="800"
-      class="min-h-screen w-full space-y-4 border-b-0 p-4 md:w-2/3 md:rounded-t-2xl md:border"
+      class="min-h-screen w-full space-y-4 border-b-0! p-4 md:w-2/3 md:rounded-t-2xl md:border"
     >
       <header class="flex flex-col gap-2">
         <h2 v-motion :initial="{ opacity: 0 }" :enter="{ opacity: 1 }" :duration="800">
           Profile
         </h2>
         <p class="text-caption">
-          Welcome back, <span class="font-semibold text-primary">{{ user.slug }}</span>!
+          Welcome back, <span class="font-semibold text-primary">{{ user.name }}</span>!
         </p>
       </header>
 
-      <div class="flex flex-col gap-4">
+      <div class="flex flex-col gap-2">
         <ProfileLinkList />
         <ProfileIconList />
       </div>
