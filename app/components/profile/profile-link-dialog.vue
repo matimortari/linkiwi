@@ -17,10 +17,10 @@
         </p>
 
         <div class="flex flex-row items-center gap-2">
-          <button class="btn-danger" aria-label="Cancel" :disabled="isLoading" @click="emit('close')">
+          <button class="btn-danger" aria-label="Cancel" :disabled="loading" @click="emit('close')">
             Cancel
           </button>
-          <button class="btn-primary" type="submit" :disabled="isLoading || !isFormValid">
+          <button class="btn-primary" type="submit" :disabled="loading || !form.title || !form.url">
             Confirm
           </button>
         </div>
@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
 import type { CreateUserLinkInput, UpdateUserLinkInput } from "#shared/schemas/link-schema"
-import { createUserLinkSchema, updateUserLinkSchema } from "#shared/schemas/link-schema"
+import { updateUserLinkSchema } from "#shared/schemas/link-schema"
 
 const props = defineProps<{
   isOpen: boolean
@@ -41,24 +41,23 @@ const props = defineProps<{
 const emit = defineEmits<(e: "close") => void>()
 
 const linksStore = useLinksStore()
-const { errors } = storeToRefs(linksStore)
-const { form, isLoading, isFormValid, resetForm, validateForm, hasFormChanged } = useFormValidation<CreateUserLinkInput | UpdateUserLinkInput>({
+const { errors, loading } = storeToRefs(linksStore)
+const form = ref<CreateUserLinkInput | UpdateUserLinkInput>({
   title: "",
   url: "",
 })
 const isUpdateMode = computed(() => !!(props.selectedLink?.id))
 
 async function handleSubmit() {
-  if (!isFormValid.value) {
+  if (!form.value.title || !form.value.url) {
     errors.value[isUpdateMode.value ? "updateLink" : "createLink"] = "Title and URL are required."
     return
   }
-  if (isUpdateMode.value && !hasFormChanged(props.selectedLink || undefined)) {
+  if (isUpdateMode.value) {
     emit("close")
     return
   }
 
-  isLoading.value = true
   errors.value.createLink = null
   errors.value.updateLink = null
 
@@ -79,12 +78,12 @@ async function handleSubmit() {
     }
   }
   finally {
-    isLoading.value = false
+    loading.value = false
   }
 }
 
 async function handleCreateLink() {
-  if (!validateForm(createUserLinkSchema)) {
+  if (!form.value.title || !form.value.url) {
     errors.value.createLink = "Please check your input and try again."
     return
   }
@@ -126,7 +125,7 @@ async function handleUpdateLink() {
 
 watch(() => props.isOpen, (open) => {
   if (open) {
-    resetForm(props.selectedLink ? { ...props.selectedLink } : { title: "", url: "" })
+    form.value = props.selectedLink ? { ...props.selectedLink } : { title: "", url: "" }
     errors.value.createLink = null
     errors.value.updateLink = null
   }
@@ -134,7 +133,7 @@ watch(() => props.isOpen, (open) => {
 
 watch(() => props.selectedLink, () => {
   if (props.isOpen) {
-    resetForm(props.selectedLink ? { ...props.selectedLink } : { title: "", url: "" })
+    form.value = props.selectedLink ? { ...props.selectedLink } : { title: "", url: "" }
     errors.value.createLink = null
     errors.value.updateLink = null
   }

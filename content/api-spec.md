@@ -8,28 +8,11 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vi
 
 ---
 
-## Endpoints
-
-### Authentication
-
-#### Sign In with OAuth Provider
-
-**GET** `/auth/{provider}`
-
-Initiates OAuth authentication flow. The supported providers are `google` and `github`.
-
-**Response:**
-
-- Redirects to the provider OAuth consent screen
-- On success, redirects to application with session cookie
-
----
-
-### User
+### User Profile
 
 #### Get User Profile
 
-**GET** `/user`
+> **GET** `/user`
 
 Get the current user's profile information.
 
@@ -94,9 +77,9 @@ Get the current user's profile information.
 }
 ```
 
-#### Get User by Slug
+#### Get User Public Profile
 
-**GET** `/user/{slug}`
+> **GET** `/user/{slug}`
 
 Retrieves a user's public profile information by slug.
 
@@ -140,7 +123,7 @@ Retrieves a user's public profile information by slug.
 
 #### Update User Profile
 
-**PUT** `/user`
+> **PUT** `/user`
 
 Update current user's profile information.
 
@@ -148,10 +131,10 @@ Update current user's profile information.
 
 ```json
 {
-  "name": "string | optional",
-  "image": "string | optional",
-  "description": "string | optional",
-  "slug": "string | optional"
+  "name": "string", // Optional
+  "image": "string", // Optional
+  "description": "string", // Optional
+  "slug": "string" // Optional
 }
 ```
 
@@ -172,7 +155,7 @@ Update current user's profile information.
 
 #### Update User Preferences
 
-**PUT** `/user/preferences`
+> **PUT** `/user/preferences`
 
 Updates the authenticated user's preferences.
 
@@ -229,7 +212,7 @@ Updates the authenticated user's preferences.
 
 #### Update User Image
 
-**PUT** `/user/image-upload`
+> **PUT** `/user/image-upload`
 
 Update current user's profile image.
 
@@ -241,7 +224,7 @@ Update current user's profile image.
 }
 ```
 
-**Response**:
+**Response:**
 
 ```json
 {
@@ -251,11 +234,11 @@ Update current user's profile image.
 
 #### Delete User Account
 
-**DELETE** `/user`
+> **DELETE** `/user`
 
 Delete current user account.
 
-**Response**:
+**Response:**
 
 ```json
 {
@@ -270,7 +253,7 @@ Delete current user account.
 
 #### Get User Links
 
-**GET** `/links`
+> **GET** `/links`
 
 Get all links for the current user.
 
@@ -292,7 +275,7 @@ Get all links for the current user.
 
 #### Create New Link
 
-**POST** `/links`
+> **POST** `/links`
 
 Create a new link.
 
@@ -321,7 +304,7 @@ Create a new link.
 
 #### Update Link by ID
 
-**PUT** `/links/{id}`
+> **PUT** `/links/{id}`
 
 Update an existing link.
 
@@ -333,8 +316,8 @@ Update an existing link.
 
 ```json
 {
-  "url": "string (valid URL, optional)",
-  "title": "string (1-100 chars, optional)"
+  "url": "string", // Optional
+  "title": "string" // Optional
 }
 ```
 
@@ -354,7 +337,7 @@ Update an existing link.
 
 #### Delete Link by ID
 
-**DELETE** `/links/{id}`
+> **DELETE** `/links/{id}`
 
 Delete a link.
 
@@ -376,7 +359,7 @@ Delete a link.
 
 #### Get User Social Icons
 
-**GET** `/icons`
+> **GET** `/icons`
 
 Get all social icons for the current user.
 
@@ -399,7 +382,7 @@ Get all social icons for the current user.
 
 #### Create New Social Icon
 
-**POST** `/icons`
+> **POST** `/icons`
 
 Create a new social icon.
 
@@ -434,7 +417,7 @@ Create a new social icon.
 
 #### Delete Social Icon by ID
 
-**DELETE** `/icons/{id}`
+> **DELETE** `/icons/{id}`
 
 Delete a social icon.
 
@@ -454,9 +437,37 @@ Delete a social icon.
 
 ### Analytics
 
+#### Get Analytics Data
+
+> **GET** `/analytics`
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+**Response:**
+
+```json
+{
+  "message": "Social icon deleted successfully"
+}
+```
+
+#### Get Referrer Stats
+
+> **GET** `/analytics/referrers`
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+**Response:**
+
+```json
+{
+  "message": "Social icon deleted successfully"
+}
+```
+
 #### Record Analytics Event
 
-**POST** `/analytics`
+> **POST** `/analytics`
 
 Record analytics data for page views, link clicks, or social icon clicks.
 
@@ -465,8 +476,8 @@ Record analytics data for page views, link clicks, or social icon clicks.
 ```json
 {
   "type": "pageView | link | icon",
-  "userId": "string (required)",
-  "id": "string (required for link and icon types, optional for pageView)"
+  "userId": "string",
+  "id": "string" // Required for link and icon types, optional for pageView
 }
 ```
 
@@ -475,6 +486,20 @@ Record analytics data for page views, link clicks, or social icon clicks.
 ```json
 {
   "message": "Analytics recorded successfully"
+}
+```
+
+#### Submit Comment
+
+> **POST** `/analytics/comments`
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+**Response:**
+
+```json
+{
+  "message": "Social icon deleted successfully"
 }
 ```
 

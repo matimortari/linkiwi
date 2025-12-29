@@ -26,10 +26,10 @@
         </p>
 
         <div class="flex flex-row items-center gap-2">
-          <button class="btn-danger" aria-label="Cancel" :disabled="isLoading" @click="emit('close')">
+          <button class="btn-danger" aria-label="Cancel" :disabled="loading" @click="emit('close')">
             Cancel
           </button>
-          <button class="btn-success" type="submit" aria-label="Add Social Icon" :disabled="!isFormValid">
+          <button class="btn-success" type="submit" aria-label="Add Social Icon" :disabled="loading || !form.platform || !form.url">
             Confirm
           </button>
         </div>
@@ -41,7 +41,6 @@
 <script setup lang="ts">
 import type { CreateUserIconInput } from "#shared/schemas/icon-schema"
 import { SOCIAL_ICONS } from "#shared/lib/constants"
-import { createUserIconSchema } from "#shared/schemas/icon-schema"
 
 const props = defineProps<{
   isOpen: boolean
@@ -50,8 +49,8 @@ const props = defineProps<{
 const emit = defineEmits<(e: "close") => void>()
 
 const iconsStore = useIconsStore()
-const { icons, errors } = storeToRefs(iconsStore)
-const { form, isLoading, isFormValid, resetForm, validateForm } = useFormValidation<CreateUserIconInput>({
+const { icons, errors, loading } = storeToRefs(iconsStore)
+const form = ref<CreateUserIconInput>({
   platform: "" as keyof typeof SOCIAL_ICONS,
   logo: "" as typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS],
   url: "",
@@ -66,7 +65,7 @@ function selectIcon(label: keyof typeof SOCIAL_ICONS, iconName: typeof SOCIAL_IC
 }
 
 async function handleSubmit() {
-  if (!validateForm(createUserIconSchema)) {
+  if (!form.value.platform || !form.value.url) {
     errors.value.createIcon = "Platform and URL are required."
     return
   }
@@ -75,7 +74,7 @@ async function handleSubmit() {
     return
   }
 
-  isLoading.value = true
+  loading.value = true
   errors.value.createIcon = null
 
   try {
@@ -86,13 +85,13 @@ async function handleSubmit() {
     errors.value.createIcon = err.data.message
   }
   finally {
-    isLoading.value = false
+    loading.value = false
   }
 }
 
 watch(() => props.isOpen, (open) => {
   if (open) {
-    resetForm({ platform: "" as keyof typeof SOCIAL_ICONS, logo: "" as typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS], url: "" })
+    form.value = { platform: "" as keyof typeof SOCIAL_ICONS, logo: "" as typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS], url: "" }
     errors.value.createIcon = null
   }
 }, { immediate: true })

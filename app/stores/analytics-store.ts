@@ -1,8 +1,10 @@
+import type { CreateCommentInput } from "#shared/schemas/analytics-schema"
+
 export const useAnalyticsStore = defineStore("analytics", () => {
   const analytics = ref<any>(null)
   const referrerStats = ref<any>(null)
   const loading = ref<boolean>(false)
-  const errors = ref<Record<string, string | null>>({ getAnalytics: null, recordPageView: null, recordLinkClick: null, recordIconClick: null, deleteAnalytics: null })
+  const errors = ref<Record<string, string | null>>({ getAnalytics: null, recordPageView: null, recordLinkClick: null, recordIconClick: null, submitComment: null, deleteAnalytics: null, getReferrerStats: null })
 
   async function getAnalytics() {
     loading.value = true
@@ -14,6 +16,22 @@ export const useAnalyticsStore = defineStore("analytics", () => {
     catch (err: any) {
       errors.value.getAnalytics = err.data.message || "Failed to fetch analytics"
       console.error("getAnalytics error:", err)
+    }
+    finally {
+      loading.value = false
+    }
+  }
+
+  async function getReferrerStats() {
+    loading.value = true
+    errors.value.getReferrerStats = null
+
+    try {
+      referrerStats.value = await $fetch("/api/analytics/referrers", { method: "GET", credentials: "include" })
+    }
+    catch (err: any) {
+      errors.value.getReferrerStats = err.data.message || "Failed to get referrer stats"
+      console.error("getReferrerStats error:", err)
     }
     finally {
       loading.value = false
@@ -67,6 +85,22 @@ export const useAnalyticsStore = defineStore("analytics", () => {
     }
   }
 
+  async function submitComment(data: CreateCommentInput) {
+    loading.value = true
+    errors.value.submitComment = null
+
+    try {
+      await $fetch("/api/analytics/comments", { method: "POST", body: data, credentials: "include" })
+    }
+    catch (err: any) {
+      errors.value.submitComment = err.data.message || "Failed to submit comment"
+      console.error("submitComment error:", err)
+    }
+    finally {
+      loading.value = false
+    }
+  }
+
   async function deleteAnalytics(options?: { type?: "pageView" | "linkClick" | "iconClick", dateFrom?: string, dateTo?: string }) {
     loading.value = true
     errors.value.deleteAnalytics = null
@@ -94,32 +128,17 @@ export const useAnalyticsStore = defineStore("analytics", () => {
     }
   }
 
-  async function getReferrerStats() {
-    loading.value = true
-    errors.value.getReferrerStats = null
-
-    try {
-      referrerStats.value = await $fetch("/api/analytics/referrers", { method: "GET", credentials: "include" })
-    }
-    catch (err: any) {
-      errors.value.getReferrerStats = err.data.message || "Failed to fetch referrer stats"
-      console.error("getReferrerStats error:", err)
-    }
-    finally {
-      loading.value = false
-    }
-  }
-
   return {
     analytics,
     referrerStats,
     loading,
     errors,
     getAnalytics,
+    getReferrerStats,
     recordPageView,
     recordLinkClick,
     recordIconClick,
+    submitComment,
     deleteAnalytics,
-    getReferrerStats,
   }
 })

@@ -1,15 +1,15 @@
 <template>
   <!-- Mobile toggle -->
-  <button class="btn fixed top-4 right-4 z-50 md:hidden!" :aria-label="isMobileNavOpen ? 'Close menu' : 'Open menu'" @click="isMobileNavOpen = !isMobileNavOpen">
-    <icon :name="isMobileNavOpen ? 'mdi:close' : 'mdi:menu'" size="25" :class="isMobileNavOpen ? 'text-muted-foreground' : ''" />
+  <button class="btn fixed top-4 right-4 z-50 md:hidden!" :aria-label="isOpen ? 'Close menu' : 'Open menu'" @click="$emit('update:isOpen', !isOpen)">
+    <icon :name="isOpen ? 'mdi:close' : 'mdi:menu'" size="25" :class="isOpen ? 'text-muted-foreground' : ''" />
   </button>
 
   <!-- Mobile overlay -->
-  <div v-if="isMobileNavOpen" class="fixed inset-0 z-20 bg-black/50 md:hidden" @click="isMobileNavOpen = false" />
+  <div v-if="isOpen" class="fixed inset-0 z-20 bg-black/50 md:hidden" @click="$emit('update:isOpen', false)" />
 
   <aside
     class="fixed top-0 left-0 z-40 size-full px-4 py-12 transition-transform duration-300 ease-in-out md:static md:block md:w-56 md:translate-x-0 md:py-8 2xl:w-64"
-    :class="[isMobileNavOpen ? 'translate-x-0 bg-card' : '-translate-x-full md:translate-x-0',]"
+    :class="[isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0']"
   >
     <div class="flex h-full flex-col gap-8 px-12 md:px-0">
       <Spinner v-if="!user" />
@@ -42,7 +42,7 @@
           v-for="link in SIDEBAR_NAV_LINKS" :key="link.url"
           :to="link.url" class="navigation-group w-full rounded-[5rem] p-2 font-semibold hover:bg-muted/30"
           :class="{ 'bg-card': route.path === link.url }" aria-label="Navigate to {{ link.label }}"
-          @click="isMobileNavOpen = false"
+          @click="$emit('update:isOpen', false)"
         >
           <icon :name="link.icon" size="25" />
           <span>{{ link.label }}</span>
@@ -61,11 +61,11 @@
           Actions
         </p>
 
-        <button class="navigation-group w-full rounded-[5rem] p-2 font-semibold whitespace-nowrap hover:bg-muted" aria-label="Toggle Theme" @click="toggleTheme">
+        <button class="navigation-group w-full rounded-[5rem] p-2 font-semibold whitespace-nowrap hover:bg-muted/30" aria-label="Toggle Theme" @click="toggleTheme">
           <icon :name="themeIcon" size="25" />
           <span>Toggle Theme</span>
         </button>
-        <button class="navigation-group w-full rounded-[5rem] p-2 font-semibold whitespace-nowrap hover:bg-muted" aria-label="Sign Out" @click="signOut">
+        <button class="navigation-group w-full rounded-[5rem] p-2 font-semibold whitespace-nowrap hover:bg-muted/30" aria-label="Sign Out" @click="signOut">
           <icon name="mdi:logout" size="25" class="text-danger" />
           <span>Sign Out</span>
         </button>
@@ -82,11 +82,16 @@
 </template>
 
 <script setup lang="ts">
+defineProps<{
+  isOpen: boolean
+}>()
+
+defineEmits<(e: "update:isOpen", value: boolean) => void>()
+
 const { toggleTheme, themeIcon } = useTheme()
 const route = useRoute()
 const { clear } = useUserSession()
 const { user } = storeToRefs(useUserStore())
-const isMobileNavOpen = ref(false)
 const isUserDialogOpen = ref(false)
 const isShareDialogOpen = ref(false)
 

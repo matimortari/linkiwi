@@ -12,4 +12,12 @@ export const analyticsRecordSchema = z.object({
   return true
 }, { message: "ID is required for link and social icon analytics", path: ["id"] })
 
+export const createCommentSchema = z.object({
+  userId: z.cuid(),
+  name: z.string().min(1, "Name is required").max(100),
+  email: z.string().email("Invalid email address").max(100),
+  message: z.string().min(1, "Message is required").max(500),
+})
+
 export type AnalyticsRecordSchema = z.infer<typeof analyticsRecordSchema>
+export type CreateCommentInput = z.infer<typeof createCommentSchema>

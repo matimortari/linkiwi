@@ -10,7 +10,7 @@
           Leave a message!
         </h5>
 
-        <form class="flex flex-col gap-2" @submit.prevent="submitComment">
+        <form class="flex flex-col gap-2" @submit.prevent="handleSubmitComment">
           <input v-model="form.name" placeholder="Your name" class="rounded-lg!">
           <input v-model="form.email" placeholder="Your email (optional)" class="rounded-lg!">
           <textarea v-model="form.message" placeholder="Your message..." class="h-20 rounded-lg!" />
@@ -28,18 +28,33 @@ const props = defineProps<{
   userId?: string
 }>()
 
+const analyticsStore = useAnalyticsStore()
+const { errors } = storeToRefs(analyticsStore)
 const isOpen = ref(false)
 const form = ref({ name: "", email: "", message: "" })
 
-async function submitComment() {
+async function handleSubmitComment() {
+  errors.value.submitComment = null
+
   try {
-    await $fetch("/api/user/comments", { method: "POST", body: { userId: props.userId, ...form.value } })
-    form.value = { name: "", email: "", message: "" }
+    if (!props.userId) {
+      return
+    }
+
+    await analyticsStore.submitComment({
+      userId: props.userId,
+      name: form.value.name,
+      email: form.value.email,
+      message: form.value.message,
+    })
+
+    form.value.name = ""
+    form.value.email = ""
+    form.value.message = ""
     isOpen.value = false
   }
   catch (err: any) {
-    alert("Failed to submit message")
-    console.error(err)
+    errors.value.submitComment = err.data?.message || "Failed to submit comment"
   }
 }
 </script>

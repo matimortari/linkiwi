@@ -2,14 +2,14 @@
   <div v-if="user" class="flex w-full justify-center md:w-1/3">
     <div class="my-4 items-center justify-center select-none md:h-150 md:min-w-[320px] 2xl:min-w-80">
       <!-- Mobile toggle -->
-      <button class="btn fixed bottom-4 left-1/2 z-30 -translate-x-1/2 md:hidden!" aria-label="Toggle Mobile Preview" @click="isMobilePreviewOpen = !isMobilePreviewOpen">
-        <icon :name="isMobilePreviewOpen ? 'mdi:eye-off' : 'mdi:eye'" size="25" />
-        <span>{{ isMobilePreviewOpen ? 'Close Preview' : 'Preview' }}</span>
+      <button class="btn fixed bottom-4 left-1/2 z-30 -translate-x-1/2 md:hidden!" aria-label="Toggle Mobile Preview" @click="isPreviewOpen = !isPreviewOpen">
+        <icon :name="isPreviewOpen ? 'mdi:eye-off' : 'mdi:eye'" size="25" />
+        <span>{{ isPreviewOpen ? 'Close Preview' : 'Preview' }}</span>
       </button>
 
       <!-- Mobile full-screen preview -->
       <transition name="slide">
-        <div v-if="isMobilePreviewOpen" class="fixed top-0 left-0 z-20 size-full overflow-y-auto p-12 md:hidden" :style="backgroundStyle">
+        <div v-if="isPreviewOpen" class="fixed top-0 left-0 z-20 size-full overflow-y-auto p-12 md:hidden" :style="backgroundStyle">
           <div class="flex max-h-full flex-col items-center justify-start gap-4 overflow-y-auto p-4 text-center">
             <img :src="user.image" alt="Avatar" class="size-24 object-cover" :style="profilePictureStyle">
 
@@ -85,7 +85,7 @@ const { user, preferences } = storeToRefs(useUserStore())
 const { links } = storeToRefs(useLinksStore())
 const { icons } = storeToRefs(useIconsStore())
 const { backgroundStyle, profilePictureStyle, slugStyle, descriptionStyle } = useDynamicStyles(preferences)
-const isMobilePreviewOpen = ref(false)
+const isPreviewOpen = ref(false)
 </script>
 
 <style scoped>

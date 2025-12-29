@@ -4,7 +4,7 @@
       Clicks by Item
     </h3>
 
-    <Spinner v-if="loading" />
+    <Spinner v-if="linksLoading || iconsLoading || analyticsLoading" />
     <Empty v-if="!items.length" message="No links or social icons yet." icon-name="mdi:octagram-minus-outline" />
 
     <ul v-else class="grid grid-cols-1 gap-2 py-4 md:grid-cols-3">
@@ -30,10 +30,14 @@ const iconsStore = useIconsStore()
 const analyticsStore = useAnalyticsStore()
 const items = ref<Array<any>>([])
 const clicksMap = ref<Record<string, number>>({})
-const loading = ref(true)
+const { loading: linksLoading } = storeToRefs(linksStore)
+const { loading: iconsLoading } = storeToRefs(iconsStore)
+const { loading: analyticsLoading } = storeToRefs(analyticsStore)
 
 onMounted(async () => {
-  loading.value = true
+  linksLoading.value = true
+  iconsLoading.value = true
+  analyticsLoading.value = true
 
   await Promise.all([
     linksStore.getLinks(),
@@ -78,6 +82,8 @@ onMounted(async () => {
 
   clicksMap.value = counts
 
-  loading.value = false
+  linksLoading.value = false
+  iconsLoading.value = false
+  analyticsLoading.value = false
 })
 </script>

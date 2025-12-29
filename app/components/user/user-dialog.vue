@@ -51,6 +51,7 @@ const form = ref({ slug: "", description: "", image: "" })
 
 async function handleUpdateImage(event: Event) {
   errors.value.updateUserImage = null
+
   const input = event.target as HTMLInputElement
   const file = input?.files?.[0]
   if (!file) {

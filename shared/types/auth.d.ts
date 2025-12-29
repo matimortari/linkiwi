@@ -5,6 +5,7 @@ declare module "#auth-utils" {
     name: string
     image?: string | null
     slug: string
+    description?: string | null
     preferences: UserPreferences
     links: Link[]
     icons: Icon[]
@@ -32,5 +33,5 @@ interface OAuthUserData {
   email: string
   name: string
   image: string | null
-  provider: "google" | "github" | "gitlab"
+  provider: "google" | "github"
 }
