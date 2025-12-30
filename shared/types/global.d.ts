@@ -2,42 +2,37 @@ interface User {
   id: string
   email: string
   name: string
+  image: string | null
   slug: string
   description?: string | null
-  image: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
   preferences: UserPreferences
+  links?: Link[]
+  icons?: Icon[]
   views?: PageView[]
   comments?: Comment[]
-  icons?: Icon[]
-  links?: Link[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 interface Link {
-  id?: string
-  title: string
+  id: string
   url: string
-  clicks?: number
+  title: string
+  clickCount: number
+  clicks?: { date: string | Date }[]
   createdAt?: Date | string
   updatedAt?: Date | string
-  linkClicks?: { date: string | Date }[]
 }
 
 interface Icon {
-  id?: string
-  platform: string
+  id: string
   url: string
+  platform: string
   logo: string
-  clicks?: number
+  clickCount: number
+  clicks?: { date: string | Date }[]
   createdAt?: Date | string
   updatedAt?: Date | string
-  iconClicks?: { date: string | Date }[]
-}
-
-interface ThemePreset {
-  title: string
-  preferences: UserPreferences
 }
 
 interface PageView {
@@ -50,19 +45,8 @@ interface PageView {
 
 interface Comment {
   id: string
-  userId: string
   name: string
   email?: string | null
   message: string
   createdAt: Date | string
-  updatedAt: Date | string
-}
-
-interface CarouselPreset {
-  slug: string
-  description: string
-  image: string
-  icons: (Omit<Pick<Icon, "id" | "logo">, "id"> & { id: string | number })[]
-  links: (Omit<Pick<Link, "id" | "title">, "id"> & { id: string | number })[]
-  preferences: UserPreferences
 }

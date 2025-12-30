@@ -4,12 +4,6 @@ declare module "#auth-utils" {
     email: string
     name: string
     image?: string | null
-    slug: string
-    description?: string | null
-    preferences: UserPreferences
-    links: Link[]
-    icons: Icon[]
-    views: PageView[]
   }
 
   interface UserSession {
@@ -22,9 +16,9 @@ declare module "#auth-utils" {
     userId: string
     provider: string
     providerAccountId: string
+    user?: User
     createdAt?: Date | string
     updatedAt?: Date | string
-    user?: User
   }
 }
 
