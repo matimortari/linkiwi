@@ -7,12 +7,7 @@ export default defineEventHandler(async (event) => {
 
   // Delete user's avatar from blob storage if it exists
   if (user.image && user.image.includes("blob.vercel-storage.com")) {
-    try {
-      await del(user.image)
-    }
-    catch (error) {
-      console.error("Failed to delete user avatar:", error)
-    }
+    await del(user.image)
   }
 
   // Delete the user (cascade will handle related records)

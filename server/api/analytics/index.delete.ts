@@ -54,7 +54,7 @@ export default defineEventHandler(async (event) => {
           userId: user.id,
           id: { in: userLinks.map(link => link.id) },
         },
-        data: { clicks: 0 },
+        data: { clickCount: 0 },
       })
     }
   }
@@ -79,7 +79,7 @@ export default defineEventHandler(async (event) => {
           userId: user.id,
           id: { in: userIcons.map(icon => icon.id) },
         },
-        data: { clicks: 0 },
+        data: { clickCount: 0 },
       })
     }
   }

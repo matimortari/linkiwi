@@ -11,7 +11,7 @@
       <transition name="slide">
         <div v-if="isPreviewOpen" class="fixed top-0 left-0 z-20 size-full overflow-y-auto p-12 md:hidden" :style="backgroundStyle">
           <div class="flex max-h-full flex-col items-center justify-start gap-4 overflow-y-auto p-4 text-center">
-            <img :src="user.image" alt="Avatar" class="size-24 object-cover" :style="profilePictureStyle">
+            <img :src="user.image ?? undefined" alt="Avatar" class="size-24 object-cover" :style="profilePictureStyle">
 
             <p class="line-clamp-3 max-w-sm truncate whitespace-break-spaces" :style="slugStyle">
               @{{ user.slug }}
@@ -50,7 +50,7 @@
         </div>
 
         <div class="flex flex-col items-center justify-start gap-4 overflow-y-auto p-4 text-center">
-          <img :src="user.image" alt="Avatar" class="size-24 object-cover" :style="profilePictureStyle">
+          <img :src="user.image ?? undefined" alt="Avatar" class="size-24 object-cover" :style="profilePictureStyle">
 
           <p class="line-clamp-3 max-w-sm truncate whitespace-break-spaces" :style="slugStyle">
             @{{ user.slug }}

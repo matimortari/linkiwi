@@ -30,10 +30,7 @@ export function useAnalyticsData() {
     const viewsByDate = groupByDate(pageViews.value, "date")
     const linksByDate = groupByDate(linkClicks.value, "date")
     const iconsByDate = groupByDate(iconClicks.value, "date")
-
-    const allDates = Array.from(
-      new Set([...Object.keys(viewsByDate), ...Object.keys(linksByDate), ...Object.keys(iconsByDate)]),
-    ).sort()
+    const allDates = Array.from(new Set([...Object.keys(viewsByDate), ...Object.keys(linksByDate), ...Object.keys(iconsByDate)])).sort()
 
     return allDates.map(date => ({
       date,
@@ -61,15 +58,9 @@ export function useAnalyticsData() {
     }
   }
 
-  const pageViewsChartData = computed(() =>
-    stats.value.length ? buildChart(stats.value.map(s => s.pageViews), stats.value.map(s => s.date), "Page Views") : null,
-  )
-  const linkClicksChartData = computed(() =>
-    stats.value.length ? buildChart(stats.value.map(s => s.linkClicks), stats.value.map(s => s.date), "Link Clicks") : null,
-  )
-  const iconClicksChartData = computed(() =>
-    stats.value.length ? buildChart(stats.value.map(s => s.iconClicks), stats.value.map(s => s.date), "Social Icon Clicks") : null,
-  )
+  const pageViewsChartData = computed(() => stats.value.length ? buildChart(stats.value.map(s => s.pageViews), stats.value.map(s => s.date), "Page Views") : null)
+  const linkClicksChartData = computed(() => stats.value.length ? buildChart(stats.value.map(s => s.linkClicks), stats.value.map(s => s.date), "Link Clicks") : null)
+  const iconClicksChartData = computed(() => stats.value.length ? buildChart(stats.value.map(s => s.iconClicks), stats.value.map(s => s.date), "Social Icon Clicks") : null)
 
   const referrerChartData = computed(() => {
     const referrers = analyticsStore.referrerStats?.referrers

@@ -5,16 +5,17 @@
     :duration="800" class="flex min-h-screen flex-col items-center justify-center overflow-hidden border-b-2 px-4 py-24 md:flex-row md:px-24"
   >
     <header class="flex flex-col items-center gap-4 text-center md:items-start md:text-start">
-      <span class="font-semibold text-secondary">
-        Your link-in-bio page
-      </span>
-      <h1 class="max-w-md font-display text-5xl! leading-tight! md:text-6xl!">
+      <span class="font-semibold text-secondary">Your link-in-bio page</span>
+
+      <h1 class="max-w-md font-display text-5xl! leading-20 md:text-6xl! 2xl:max-w-lg 2xl:md:text-7xl!">
         Keep all your stuff together!
       </h1>
-      <p class="max-w-lg leading-6 font-medium text-muted-foreground 2xl:text-lg">
+
+      <p class="text-lead">
         Welcome to <span class="font-semibold text-secondary">Linkstashr</span>! Your links, profiles, contact info, and more
         in one place. Create and customize your page and share it with your audience.
       </p>
+
       <nuxt-link to="/sign-in" class="btn-primary">
         <span>Get Started Now!</span>
         <icon name="mdi:arrow-right" size="25" />
@@ -40,7 +41,6 @@
 
           <div class="overlay relative flex size-full flex-col items-center justify-center gap-4">
             <icon name="mdi:link-variant" size="60" class="text-primary" />
-
             <div class="flex flex-col gap-2 text-center">
               <span v-for="i in 3" :key="i" class="h-4 w-32 animate-pulse rounded bg-muted" />
             </div>
@@ -49,7 +49,7 @@
       </div>
 
       <div class="flex flex-col gap-4 text-start">
-        <p class="max-w-lg leading-6 font-medium text-muted-foreground 2xl:text-lg">
+        <p class="text-lead">
           Customize your page with your own style and share your unique URL with your audience.
           Whether you're a creator, business, or influencer, Linkstashr makes it easy to connect all your online presence in one place.
         </p>
@@ -75,7 +75,7 @@
 
     <div class="container mx-auto grid w-full grid-cols-1 items-center gap-12 md:grid-cols-2">
       <div class="flex flex-col gap-4 text-start">
-        <p class="max-w-lg leading-6 font-medium text-muted-foreground 2xl:text-lg">
+        <p class="text-lead">
           Get insights into how your audience engages with your content.
           Track page views, link clicks, and traffic sources all in one place.
           Make data-driven decisions to optimize your online presence.
@@ -130,17 +130,19 @@
       <h2>
         Ready to Try?
       </h2>
+
       <p class="text-lg font-semibold">
         Create an account and build your page today!
       </p>
+
       <nuxt-link to="/sign-in" class="btn-secondary">
         <span>Get Started</span>
         <icon name="mdi:arrow-right" size="20" />
       </nuxt-link>
     </div>
 
-    <p class="text-sm font-medium text-muted-foreground italic transition-opacity ease-in-out" :class="{ 'opacity-0': fading }">
-      "{{ randomQuote?.quote }}" - <span class="font-semibold text-primary transition-colors ease-in-out">{{ randomQuote?.author }}</span>
+    <p class="text-caption italic transition-opacity ease-in-out" :class="{ 'opacity-0': fading }">
+      "{{ randomQuote?.quote }}" - <span class="text-primary">{{ randomQuote?.author }}</span>
     </p>
 
     <div class="absolute bottom-0 left-0 h-1 w-full overflow-hidden">
@@ -165,7 +167,7 @@ function runCycle() {
   fadeTimeout = setTimeout(() => {
     setRandomQuote()
     fading.value = false
-  }, 300)
+  }, 500)
 }
 
 onMounted(() => {
@@ -211,6 +213,14 @@ definePageMeta({
   pointer-events: none;
   border-radius: inherit;
   background: radial-gradient(ellipse at center, transparent 0%, transparent 40%, var(--background) 100%);
+}
+
+.text-lead {
+  max-width: 28rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
 }
 
 .animate-progress {

@@ -20,6 +20,18 @@ enum SupportBanner {
   CLIMATE_ACTION
 }
 
+model Account {
+  id                String   @id @default(cuid())
+  userId            String
+  provider          String
+  providerAccountId String
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@unique([provider, providerAccountId])
+}
+
 model User {
   id          String           @id @default(cuid())
   email       String           @unique
@@ -27,26 +39,14 @@ model User {
   image       String?
   slug        String           @unique
   description String?
+  preferences UserPreferences? @relation("UserPreferences")
+  links       UserLink[]
+  icons       UserIcon[]
+  views       PageView[]
+  comments    Comment[]
+  accounts    Account[]
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
-  accounts    Account[]
-  views       PageView[]
-  icons       UserIcon[]
-  links       UserLink[]
-  preferences UserPreferences? @relation("UserPreferences")
-  comments    Comment[]
-}
-
-model Account {
-  id                String   @id @default(cuid())
-  userId            String
-  provider          String
-  providerAccountId String
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
 }
 
 model UserPreferences {
@@ -94,11 +94,11 @@ model UserLink {
   userId     String
   url        String
   title      String
-  clicks     Int         @default(0)
+  clickCount Int         @default(0)
+  clicks     LinkClick[]
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
-  linkClicks LinkClick[]
-  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model UserIcon {
@@ -107,40 +107,40 @@ model UserIcon {
   url        String
   platform   String
   logo       String
-  clicks     Int         @default(0)
+  clickCount Int         @default(0)
+  clicks     IconClick[]
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
-  iconClicks IconClick[]
-  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model PageView {
-  id       String   @id @default(cuid())
-  userId   String
-  date     DateTime @default(now())
-  referrer String?
-  source   String?
-  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String   @id @default(cuid())
+  userId    String
+  createdAt DateTime @default(now())
+  referrer  String?
+  source    String?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([userId, date])
+  @@index([userId, createdAt])
 }
 
 model LinkClick {
   userLinkId String
-  date       DateTime @default(now())
+  createdAt  DateTime @default(now())
   userLink   UserLink @relation(fields: [userLinkId], references: [id], onDelete: Cascade)
 
-  @@id([userLinkId, date])
-  @@index([date])
+  @@id([userLinkId, createdAt])
+  @@index([createdAt])
 }
 
 model IconClick {
   userIconId String
-  date       DateTime @default(now())
+  createdAt  DateTime @default(now())
   userIcon   UserIcon @relation(fields: [userIconId], references: [id], onDelete: Cascade)
 
-  @@id([userIconId, date])
-  @@index([date])
+  @@id([userIconId, createdAt])
+  @@index([createdAt])
 }
 
 model Comment {

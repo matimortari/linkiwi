@@ -52,56 +52,50 @@ export function categorizeReferrer(referrer: string | null | undefined): string 
     return "direct"
   }
 
-  try {
-    const url = referrer.toLowerCase()
-    const sources: [string[], string][] = [
-      [["facebook.com", "fb.com", "fb.me"], "facebook"],
-      [["twitter.com", "x.com", "t.co"], "twitter"],
-      [["instagram.com"], "instagram"],
-      [["linkedin.com", "lnkd.in"], "linkedin"],
-      [["reddit.com"], "reddit"],
-      [["tiktok.com"], "tiktok"],
-      [["pinterest.com", "pin.it"], "pinterest"],
-      [["youtube.com", "youtu.be"], "youtube"],
-      [["snapchat.com"], "snapchat"],
-      [["whatsapp.com"], "whatsapp"],
-      [["telegram.org", "t.me"], "telegram"],
-      [["discord.com", "discord.gg"], "discord"],
-      [["threads.net"], "threads"],
-      [["mastodon"], "mastodon"],
-      [["bluesky.social", "bsky.app"], "bluesky"],
-      [["google.com", "google."], "google"],
-      [["bing.com"], "bing"],
-      [["yahoo.com"], "yahoo"],
-      [["duckduckgo.com"], "duckduckgo"],
-      [["baidu.com"], "baidu"],
-      [["yandex.com", "yandex.ru"], "yandex"],
-      [["slack.com"], "slack"],
-      [["teams.microsoft.com"], "teams"],
-      [["github.com"], "github"],
-      [["gitlab.com"], "gitlab"],
-      [["stackoverflow.com"], "stackoverflow"],
-      [["medium.com"], "medium"],
-      [["dev.to"], "dev.to"],
-      [["hashnode.com"], "hashnode"],
-    ]
-    for (const [patterns, name] of sources) {
-      if (patterns.some(pattern => url.includes(pattern))) {
-        return name
-      }
+  const url = referrer.toLowerCase()
+  const sources: [string[], string][] = [
+    [["facebook.com", "fb.com", "fb.me"], "facebook"],
+    [["twitter.com", "x.com", "t.co"], "twitter"],
+    [["instagram.com"], "instagram"],
+    [["linkedin.com", "lnkd.in"], "linkedin"],
+    [["reddit.com"], "reddit"],
+    [["tiktok.com"], "tiktok"],
+    [["pinterest.com", "pin.it"], "pinterest"],
+    [["youtube.com", "youtu.be"], "youtube"],
+    [["snapchat.com"], "snapchat"],
+    [["whatsapp.com"], "whatsapp"],
+    [["telegram.org", "t.me"], "telegram"],
+    [["discord.com", "discord.gg"], "discord"],
+    [["threads.net"], "threads"],
+    [["mastodon"], "mastodon"],
+    [["bluesky.social", "bsky.app"], "bluesky"],
+    [["google.com", "google."], "google"],
+    [["bing.com"], "bing"],
+    [["yahoo.com"], "yahoo"],
+    [["duckduckgo.com"], "duckduckgo"],
+    [["baidu.com"], "baidu"],
+    [["yandex.com", "yandex.ru"], "yandex"],
+    [["slack.com"], "slack"],
+    [["teams.microsoft.com"], "teams"],
+    [["github.com"], "github"],
+    [["gitlab.com"], "gitlab"],
+    [["stackoverflow.com"], "stackoverflow"],
+    [["medium.com"], "medium"],
+    [["dev.to"], "dev.to"],
+    [["hashnode.com"], "hashnode"],
+  ]
+  for (const [patterns, name] of sources) {
+    if (patterns.some(pattern => url.includes(pattern))) {
+      return name
     }
+  }
 
-    // If it's from the same domain, mark as internal. Otherwise, categorize as external/other
-    if (url.includes("linkstashr.vercel.app") || url.includes("localhost")) {
-      return "internal"
-    }
-    //
-    return "external"
+  // If it's from the same domain, mark as internal. Otherwise, categorize as external/other
+  if (url.includes("linkstashr.vercel.app") || url.includes("localhost")) {
+    return "internal"
   }
-  catch (error) {
-    console.error("Error categorizing referrer:", error)
-    return "unknown"
-  }
+
+  return "external"
 }
 
 /**

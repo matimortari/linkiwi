@@ -1,4 +1,4 @@
-export const THEMES: ThemePreset[] = [
+export const THEMES: { title: string, preferences: UserPreferences }[] = [
   {
     title: "Mint",
     preferences: {

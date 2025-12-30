@@ -49,7 +49,7 @@ export const MOCK_ANALYTICS = [
   {
     label: "Joined On",
     icon: "mdi:calendar-clock-outline",
-    value: "Jan,",
+    value: "Oct 12, 2025",
   },
 ]
 

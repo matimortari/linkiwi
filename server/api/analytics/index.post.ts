@@ -25,12 +25,7 @@ export default defineEventHandler(async (event) => {
       const source = categorizeReferrer(referrer)
 
       await db.pageView.create({
-        data: {
-          userId,
-          date: new Date(),
-          referrer,
-          source,
-        },
+        data: { userId, referrer, source },
       })
       return { message: "Page view recorded successfully" }
     }
@@ -50,14 +45,11 @@ export default defineEventHandler(async (event) => {
 
       const [linkClick] = await db.$transaction([
         db.linkClick.create({
-          data: {
-            userLinkId: id,
-            date: new Date(),
-          },
+          data: { userLinkId: id },
         }),
         db.userLink.update({
           where: { id },
-          data: { clicks: { increment: 1 } },
+          data: { clickCount: { increment: 1 } },
         }),
       ])
 
@@ -65,7 +57,7 @@ export default defineEventHandler(async (event) => {
         message: "Link click recorded successfully",
         linkClick: {
           userLinkId: linkClick.userLinkId,
-          date: linkClick.date,
+          createdAt: linkClick.createdAt,
         },
       }
     }
@@ -85,14 +77,11 @@ export default defineEventHandler(async (event) => {
 
       const [iconClick] = await db.$transaction([
         db.iconClick.create({
-          data: {
-            userIconId: id,
-            date: new Date(),
-          },
+          data: { userIconId: id },
         }),
         db.userIcon.update({
           where: { id },
-          data: { clicks: { increment: 1 } },
+          data: { clickCount: { increment: 1 } },
         }),
       ])
 
@@ -100,7 +89,7 @@ export default defineEventHandler(async (event) => {
         message: "Social icon click recorded successfully",
         iconClick: {
           userIconId: iconClick.userIconId,
-          date: iconClick.date,
+          createdAt: iconClick.createdAt,
         },
       }
     }

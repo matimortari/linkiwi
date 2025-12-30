@@ -11,7 +11,13 @@ export function useTheme() {
     html.classList.add(colorMode.value)
   }
 
-  const syncThemeFromLocalStorage = () => {
+  const toggleTheme = () => {
+    colorMode.value = colorMode.value === "dark" ? "light" : "dark"
+    globalThis.localStorage.setItem(storageKey, colorMode.value)
+    updateHtmlClass()
+  }
+
+  onMounted(() => {
     const saved = globalThis.localStorage.getItem(storageKey)
     if (saved === "dark" || saved === "light") {
       colorMode.value = saved
@@ -22,25 +28,10 @@ export function useTheme() {
     }
 
     updateHtmlClass()
-  }
-
-  const toggleTheme = () => {
-    colorMode.value = colorMode.value === "dark" ? "light" : "dark"
-    globalThis.localStorage.setItem(storageKey, colorMode.value)
-    updateHtmlClass()
-  }
-
-  onMounted(() => {
-    syncThemeFromLocalStorage()
   })
 
-  const themeIcon = computed(() =>
-    colorMode.value === "light" ? "mdi:weather-night" : "mdi:weather-sunny",
-  )
-
-  const themeTitle = computed(() =>
-    colorMode.value === "light" ? logoDark : logoLight,
-  )
+  const themeIcon = computed(() => colorMode.value === "light" ? "mdi:weather-night" : "mdi:weather-sunny")
+  const themeTitle = computed(() => colorMode.value === "light" ? logoDark : logoLight)
 
   return {
     colorMode,

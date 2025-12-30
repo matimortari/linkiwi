@@ -7,23 +7,22 @@ export default defineEventHandler(async (event) => {
   const [pageViews, linkClicks, iconClicks] = await Promise.all([
     db.pageView.findMany({
       where: { userId: user.id },
-      orderBy: { date: "desc" },
+      orderBy: { createdAt: "desc" },
       select: {
         id: true,
         userId: true,
-        date: true,
         referrer: true,
         source: true,
       },
     }),
     db.linkClick.findMany({
       where: { userLink: { userId: user.id } },
-      orderBy: { date: "desc" },
+      orderBy: { createdAt: "desc" },
       include: { userLink: true },
     }),
     db.iconClick.findMany({
       where: { userIcon: { userId: user.id } },
-      orderBy: { date: "desc" },
+      orderBy: { createdAt: "desc" },
       include: { userIcon: true },
     }),
   ])

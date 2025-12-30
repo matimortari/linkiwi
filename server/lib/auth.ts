@@ -20,6 +20,7 @@ export async function handleOAuthUser(event: H3Event, userData: OAuthUserData) {
         links: true,
         icons: true,
         views: true,
+        comments: true,
       },
     })
   }
@@ -41,6 +42,7 @@ export async function handleOAuthUser(event: H3Event, userData: OAuthUserData) {
         links: true,
         icons: true,
         views: true,
+        comments: true,
       },
     })
   }
@@ -66,6 +68,7 @@ export async function handleOAuthUser(event: H3Event, userData: OAuthUserData) {
     links: user.links ?? [],
     icons: user.icons ?? [],
     views: user.views ?? [],
+    comments: user.comments ?? [],
   }
 
   await setUserSession(event, { user: sessionUser, loggedInAt: new Date() })

@@ -108,7 +108,6 @@ async function handleCopyColor(colorVar: string) {
 
   await navigator.clipboard.writeText(value)
   copiedColor.value = colorVar
-  setTimeout(() => copiedColor.value = null, 1000)
 }
 
 function updateColors() {
