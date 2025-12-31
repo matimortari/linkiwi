@@ -24,10 +24,10 @@
 
         <div v-if="preferences.enableGuestbook" class="my-4 flex flex-col gap-2">
           <h5>
-            Messages
+            Comments
           </h5>
 
-          <p v-if="comments.length === 0" class="text-caption text-center">
+          <p v-if="comments.length === 0" class="text-">
             No comments yet.
           </p>
 

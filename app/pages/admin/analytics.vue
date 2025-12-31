@@ -14,17 +14,17 @@
         </p>
       </header>
 
-      <div class="flex flex-col gap-2">
+      <div class="flex flex-col gap-4">
         <AnalyticsSummary />
         <AnalyticsClicksByItem />
       </div>
     </div>
   </div>
 
-  <div v-else class="flex h-[calc(100vh-8rem)] w-full items-center justify-center">
+  <div v-else class="flex h-[calc(100vh-8rem)] w-full items-center justify-center text-center">
     <Spinner v-if="loading" />
-    <p class="text-caption text-center" :class="{ 'text-destructive-foreground': errors.getUser || errors.getUserProfile }">
-      {{ errors.getUser || errors.getUserProfile || 'User not found.' }}
+    <p class="text-caption" :class="{ 'text-danger!': errors.getUser || errors.getUserProfile }">
+      {{ errors.getUser || errors.getUserProfile }}
     </p>
   </div>
 </template>

@@ -103,7 +103,6 @@ async function copyPageUrl() {
   await navigator.clipboard.writeText(pageUrl.value)
   isDropdownOpen.value = false
   copySuccess.value = "Copied to clipboard!"
-  setTimeout(() => (copySuccess.value = null), 2000)
 }
 
 function downloadQRCode() {
@@ -129,7 +128,6 @@ function downloadQRCode() {
 
   isDropdownOpen.value = false
   copySuccess.value = "QR code downloaded!"
-  setTimeout(() => (copySuccess.value = null), 2000)
 }
 
 function shareToSocial(platform: "twitter" | "facebook" | "linkedin" | "whatsapp") {
@@ -156,9 +154,8 @@ watchEffect(() => {
   qr.make()
   const moduleCount = qr.getModuleCount()
 
-  // Helper function to check if position is in center (for logo area)
   const isCenterArea = (row: number, col: number) => {
-    const radius = (moduleCount * 0.2) / 2
+    const radius = (moduleCount * 0.25) / 2
     return Math.abs(row - (moduleCount / 2)) < radius && Math.abs(col - (moduleCount / 2)) < radius
   }
 
@@ -181,7 +178,7 @@ watchEffect(() => {
     }
   }
 
-  // Add logo image using base64 data URL (no white background circle)
+  // Add logo image using base64 data URL
   const logoImgSize = (moduleCount * 0.2) * 0.85
   const logoImgPos = (moduleCount / 2 + 2) - (logoImgSize / 2)
   svg += `<image href="${logoBase64.value}" x="${logoImgPos}" y="${logoImgPos}" width="${logoImgSize}" height="${logoImgSize}"/>`
@@ -191,18 +188,11 @@ watchEffect(() => {
 
 // Convert logo to base64 on mount
 onMounted(async () => {
-  try {
-    const response = await fetch(logoImage)
-    const blob = await response.blob()
-    const reader = new FileReader()
-    reader.onloadend = () => {
-      logoBase64.value = reader.result as string
-    }
-    reader.readAsDataURL(blob)
-  }
-  catch (error) {
-    console.error("Failed to load logo:", error)
-  }
+  const response = await fetch(logoImage)
+  const blob = await response.blob()
+  const reader = new FileReader()
+  reader.onloadend = () => logoBase64.value = reader.result as string
+  reader.readAsDataURL(blob)
 })
 </script>
 

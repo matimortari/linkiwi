@@ -84,7 +84,7 @@ const isSidebarOpen = ref(false)
 ::v-deep(.markdown) ul,
 ::v-deep(.markdown) ol {
   margin: 0.75em 0 !important;
-  font-size: 0.875rem !important;
+  font-size: 0.75rem !important;
   line-height: 1.5 !important;
 }
 

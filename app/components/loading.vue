@@ -5,7 +5,7 @@
     </div>
 
     <p class="text-caption">
-      Loading
+      <span>Loading</span>
       <span class="dot one">.</span>
       <span class="dot two">.</span>
       <span class="dot three">.</span>
