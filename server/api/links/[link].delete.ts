@@ -3,25 +3,24 @@ import { getUserFromSession } from "#server/lib/utils"
 
 export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
-
-  const link = getRouterParam(event, "link")
-  if (!link) {
-    throw createError({ statusCode: 400, message: "Link ID is required" })
+  const linkId = getRouterParam(event, "link")
+  if (!linkId) {
+    throw createError({ statusCode: 400, statusMessage: "Link ID is required" })
   }
 
   const linkData = await db.userLink.findUnique({
-    where: { id: link },
-    select: { id: true, userId: true, title: true },
+    where: { id: linkId },
+    select: { id: true, userId: true },
   })
   if (!linkData) {
-    throw createError({ statusCode: 404, message: "Link not found" })
+    throw createError({ statusCode: 404, statusMessage: "Link not found" })
   }
   if (linkData.userId !== user.id) {
-    throw createError({ statusCode: 403, message: "You don't have permission to delete this link" })
+    throw createError({ statusCode: 403, statusMessage: "You don't have permission to delete this link" })
   }
 
   await db.userLink.delete({
-    where: { id: link },
+    where: { id: linkId },
   })
 
   return { success: true, message: "Link deleted successfully" }

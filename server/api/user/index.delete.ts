@@ -18,5 +18,5 @@ export default defineEventHandler(async (event) => {
   // Clear the session
   await clearUserSession(event)
 
-  return { success: true, message: "User account deleted successfully" }
+  return { success: true, message: "User deleted successfully" }
 })

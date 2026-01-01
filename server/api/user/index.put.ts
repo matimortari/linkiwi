@@ -1,18 +1,16 @@
 import db from "#server/lib/db"
 import { getUserFromSession } from "#server/lib/utils"
 import { updateUserSchema } from "#shared/schemas/user-schema"
-import z from "zod"
 
 export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
   const body = await readBody(event)
-
   const result = updateUserSchema.safeParse(body)
   if (!result.success) {
-    throw createError({ statusCode: 400, statusMessage: "Invalid input", data: z.treeifyError(result.error) })
+    throw createError({ statusCode: 400, statusMessage: result.error.issues[0]?.message || "Invalid input" })
   }
 
-  const updatedUserData = await db.user.update({
+  const updatedUser = await db.user.update({
     where: { id: user.id },
     data: {
       name: result.data.name,
@@ -32,5 +30,5 @@ export default defineEventHandler(async (event) => {
     },
   })
 
-  return updatedUserData
+  return { updatedUser }
 })

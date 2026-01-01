@@ -4,18 +4,16 @@ import { updateUserPreferencesSchema } from "#shared/schemas/user-schema"
 
 export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
-
   const body = await readBody(event)
-  const preferencesData = updateUserPreferencesSchema.parse({ userId: user.id, ...body })
-
-  await db.userPreferences.findUnique({
-    where: { userId: user.id },
-  })
+  const result = updateUserPreferencesSchema.safeParse(body)
+  if (!result.success) {
+    throw createError({ statusCode: 400, statusMessage: result.error.issues[0]?.message || "Invalid input" })
+  }
 
   const updatedPreferences = await db.userPreferences.update({
     where: { userId: user.id },
-    data: preferencesData,
+    data: result.data,
   })
 
-  return { preferences: updatedPreferences }
+  return { updatedPreferences }
 })

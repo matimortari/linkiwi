@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
     by: ["source"],
     where: {
       userId: user.id,
-      ...(dateFrom || dateTo ? { date: { ...(dateFrom && { gte: dateFrom }), ...(dateTo && { lte: dateTo }) } } : {}),
+      ...(dateFrom || dateTo ? { createdAt: { ...(dateFrom && { gte: dateFrom }), ...(dateTo && { lte: dateTo }) } } : {}),
     },
     _count: {
       source: true,

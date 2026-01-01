@@ -8,9 +8,10 @@ export default defineEventHandler(async (event) => {
     where: { userId: user.id },
     select: {
       id: true,
+      userId: true,
       url: true,
       title: true,
-      clicks: true,
+      clickCount: true,
       createdAt: true,
       updatedAt: true,
     },

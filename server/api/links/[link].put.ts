@@ -4,33 +4,38 @@ import { updateUserLinkSchema } from "#shared/schemas/link-schema"
 
 export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
-  const link = getRouterParam(event, "link")
-  if (!link) {
-    throw createError({ statusCode: 400, message: "Link ID is required" })
+  const linkId = getRouterParam(event, "link")
+  if (!linkId) {
+    throw createError({ statusCode: 400, statusMessage: "Link ID is required" })
+  }
+  const body = await readBody(event)
+  const result = updateUserLinkSchema.safeParse(body)
+  if (!result.success) {
+    throw createError({ statusCode: 400, statusMessage: result.error.issues[0]?.message || "Invalid input" })
   }
 
-  const body = await readBody(event)
-  const { url, title } = updateUserLinkSchema.parse({
-    url: body.url?.trim(),
-    title: body.title?.trim(),
-  })
+  const { url, title } = result.data
 
   const linkData = await db.userLink.findUnique({
-    where: { id: link },
-    select: { id: true, userId: true, url: true, title: true },
+    where: { id: linkId },
+    select: { id: true, userId: true },
   })
-  if (!linkData || linkData.userId !== user.id) {
-    throw createError({ statusCode: 404, message: "Link not found" })
+  if (!linkData) {
+    throw createError({ statusCode: 404, statusMessage: "Link not found" })
+  }
+  if (linkData.userId !== user.id) {
+    throw createError({ statusCode: 403, statusMessage: "You don't have permission to update this link" })
   }
 
   const updatedLink = await db.userLink.update({
-    where: { id: link },
+    where: { id: linkId },
     data: { url, title },
     select: {
       id: true,
+      userId: true,
       url: true,
       title: true,
-      clicks: true,
+      clickCount: true,
       createdAt: true,
       updatedAt: true,
     },

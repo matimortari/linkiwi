@@ -1,19 +1,23 @@
 import { z } from "zod"
 
-export const createUserLinkSchema = z.object({
-  url: z.url().trim(),
-  title: z
-    .string()
-    .min(1, "Title is required")
-    .max(100),
-})
+const urlSchema = z.url("Invalid URL").refine(url => url.startsWith("http://") || url.startsWith("https://"), { message: "URL must start with http:// or https://" })
 
-export const updateUserLinkSchema = z.object({
-  url: z.url().trim().optional(),
+export const createUserLinkSchema = z.object({
+  url: urlSchema.transform(val => val.trim()),
   title: z
     .string()
     .min(1, "Title is required")
     .max(100)
+    .transform(val => val.trim()),
+})
+
+export const updateUserLinkSchema = z.object({
+  url: urlSchema.transform(val => val.trim()).optional(),
+  title: z
+    .string()
+    .min(1, "Title is required")
+    .max(100)
+    .transform(val => val.trim())
     .optional(),
 })
 

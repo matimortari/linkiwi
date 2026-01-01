@@ -16,21 +16,23 @@ interface User {
 
 interface Link {
   id: string
+  userId: string
   url: string
   title: string
   clickCount: number
-  clicks?: { date: string | Date }[]
+  clicks?: { userLinkId: string, createdAt: string | Date }[]
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 interface Icon {
   id: string
+  userId: string
   url: string
   platform: string
   logo: string
   clickCount: number
-  clicks?: { date: string | Date }[]
+  clicks?: { userIconId: string, createdAt: string | Date }[]
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -38,13 +40,14 @@ interface Icon {
 interface PageView {
   id: string
   userId: string
-  date: Date | string
+  createdAt: Date | string
   referrer?: string | null
   source?: string | null
 }
 
 interface Comment {
   id: string
+  userId: string
   name: string
   email?: string | null
   message: string

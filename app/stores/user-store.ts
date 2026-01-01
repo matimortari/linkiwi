@@ -3,14 +3,7 @@ import type { UpdateUserInput, UpdateUserPreferencesInput } from "#shared/schema
 export const useUserStore = defineStore("user", () => {
   const user = ref<User | null>(null)
   const userProfile = ref<User | null>(null)
-  const preferences = computed({
-    get: () => user.value?.preferences ?? DEFAULT_PREFERENCES,
-    set: (val) => {
-      if (user.value) {
-        user.value.preferences = val
-      }
-    },
-  })
+  const preferences = computed(() => user.value?.preferences ?? DEFAULT_PREFERENCES)
   const loading = ref(false)
   const errors = ref<Record<string, string | null>>({
     getUser: null,
@@ -26,13 +19,14 @@ export const useUserStore = defineStore("user", () => {
     errors.value.getUser = null
 
     try {
-      const res = await $fetch<User>("/api/user", { method: "GET", credentials: "include" })
-      user.value = res
+      const res = await $fetch<{ userData: User }>("/api/user", { method: "GET", credentials: "include" })
+      user.value = res.userData
       return res
     }
     catch (err: any) {
       errors.value.getUser = err.data?.message || "Failed to get user"
       console.error("getUser error:", err)
+      throw err
     }
     finally {
       loading.value = false
@@ -44,13 +38,14 @@ export const useUserStore = defineStore("user", () => {
     errors.value.getUserProfile = null
 
     try {
-      const res = await $fetch<User>(`/api/user/${slug}`, { method: "GET" })
-      userProfile.value = res
+      const res = await $fetch<{ userProfile: User }>(`/api/user/${slug}`, { method: "GET" })
+      userProfile.value = res.userProfile
       return res
     }
     catch (err: any) {
       errors.value.getUserProfile = err.data?.message || "Failed to get user by slug"
       console.error("getUserProfile error:", err)
+      throw err
     }
     finally {
       loading.value = false
@@ -62,13 +57,14 @@ export const useUserStore = defineStore("user", () => {
     errors.value.updateUser = null
 
     try {
-      const res = await $fetch<User>("/api/user", { method: "PUT", body: data, credentials: "include" })
-      user.value = res
+      const res = await $fetch<{ updatedUser: User }>("/api/user", { method: "PUT", body: data, credentials: "include" })
+      user.value = res.updatedUser
       return res
     }
     catch (err: any) {
       errors.value.updateUser = err.data?.message || "Failed to update user"
       console.error("updateUser error:", err)
+      throw err
     }
     finally {
       loading.value = false
@@ -92,6 +88,7 @@ export const useUserStore = defineStore("user", () => {
     catch (err: any) {
       errors.value.updateUserImage = err.data?.message || "Failed to update user image"
       console.error("updateUserImage error:", err)
+      throw err
     }
     finally {
       loading.value = false
@@ -103,15 +100,16 @@ export const useUserStore = defineStore("user", () => {
     errors.value.updatePreferences = null
 
     try {
-      const res = await $fetch<{ preferences: UpdateUserPreferencesInput }>("/api/user/preferences", { method: "PUT", body: data, credentials: "include" })
-      if (user.value && res.preferences) {
-        user.value.preferences = res.preferences as typeof user.value.preferences
+      const res = await $fetch<{ updatedPreferences: UpdateUserPreferencesInput }>("/api/user/preferences", { method: "PUT", body: data, credentials: "include" })
+      if (user.value && res.updatedPreferences) {
+        user.value.preferences = res.updatedPreferences as typeof user.value.preferences
       }
       return res
     }
     catch (err: any) {
       errors.value.updatePreferences = err.data?.message || "Failed to update preferences"
       console.error("updatePreferences error:", err)
+      throw err
     }
     finally {
       loading.value = false
@@ -129,6 +127,7 @@ export const useUserStore = defineStore("user", () => {
     catch (err: any) {
       errors.value.deleteUser = err.data?.message || "Failed to delete user"
       console.error("deleteUser error:", err)
+      throw err
     }
     finally {
       loading.value = false

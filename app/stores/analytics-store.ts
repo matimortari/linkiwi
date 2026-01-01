@@ -26,6 +26,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
     catch (err: any) {
       errors.value.getAnalytics = err.data?.message || "Failed to fetch analytics"
       console.error("getAnalytics error:", err)
+      throw err
     }
     finally {
       loading.value = false
@@ -44,6 +45,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
     catch (err: any) {
       errors.value.getReferrerStats = err.data?.message || "Failed to get referrer stats"
       console.error("getReferrerStats error:", err)
+      throw err
     }
     finally {
       loading.value = false
@@ -60,6 +62,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
     catch (err: any) {
       errors.value.recordPageView = err.data?.message || "Failed to record page view"
       console.error("recordPageView error:", err)
+      throw err
     }
     finally {
       loading.value = false
@@ -76,6 +79,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
     catch (err: any) {
       errors.value.recordLinkClick = err.data?.message || "Failed to record link click"
       console.error("recordLinkClick error:", err)
+      throw err
     }
     finally {
       loading.value = false
@@ -92,6 +96,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
     catch (err: any) {
       errors.value.recordIconClick = err.data?.message || "Failed to record icon click"
       console.error("recordIconClick error:", err)
+      throw err
     }
     finally {
       loading.value = false
@@ -108,6 +113,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
     catch (err: any) {
       errors.value.submitComment = err.data?.message || "Failed to submit comment"
       console.error("submitComment error:", err)
+      throw err
     }
     finally {
       loading.value = false
@@ -130,11 +136,12 @@ export const useAnalyticsStore = defineStore("analytics", () => {
         params.append("dateTo", options.dateTo)
       }
 
-      await $fetch<{ success: boolean, message: string, deletedCount: number }>(params.toString() ? `/api/analytics?${params.toString()}` : "/api/analytics", { method: "DELETE", credentials: "include" })
+      await $fetch<{ success: boolean, message: string }>(params.toString() ? `/api/analytics?${params.toString()}` : "/api/analytics", { method: "DELETE", credentials: "include" })
     }
     catch (err: any) {
       errors.value.deleteAnalytics = err.data?.message || "Failed to delete analytics"
       console.error("deleteAnalytics error:", err)
+      throw err
     }
     finally {
       loading.value = false

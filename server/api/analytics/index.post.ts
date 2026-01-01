@@ -19,6 +19,12 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 404, statusMessage: "User not found" })
   }
 
+  // Do not record analytics for own profile views/clicks
+  const session = await getUserSession(event)
+  if (session?.user?.id === userId) {
+    return { message: "Analytics not recorded for own profile" }
+  }
+
   switch (type) {
     case "pageView": {
       const referrer = body.referrer || getHeader(event, "referer") || getHeader(event, "referrer") || null

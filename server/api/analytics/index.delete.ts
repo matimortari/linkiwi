@@ -2,15 +2,13 @@ import db from "#server/lib/db"
 import { getUserFromSession } from "#server/lib/utils"
 
 export default defineEventHandler(async (event) => {
+  const user = await getUserFromSession(event)
   const query = getQuery(event)
   const { type, dateFrom, dateTo } = query
 
-  const user = await db.user.findUnique({
-    where: { id: (await getUserFromSession(event))?.id },
-    select: { id: true },
-  })
-  if (!user) {
-    throw createError({ statusCode: 404, statusMessage: "User not found" })
+  // Validate type if provided
+  if (type && !["pageView", "linkClick", "iconClick"].includes(type as string)) {
+    throw createError({ statusCode: 400, statusMessage: "Invalid analytics type" })
   }
 
   // Build date filter
@@ -28,7 +26,7 @@ export default defineEventHandler(async (event) => {
     const result = await db.pageView.deleteMany({
       where: {
         userId: user.id,
-        ...(Object.keys(dateFilter).length > 0 && { date: dateFilter }),
+        ...(Object.keys(dateFilter).length > 0 && { createdAt: dateFilter }),
       },
     })
     deletedCount += result.count
@@ -44,7 +42,7 @@ export default defineEventHandler(async (event) => {
       const result = await db.linkClick.deleteMany({
         where: {
           userLinkId: { in: userLinks.map(link => link.id) },
-          ...(Object.keys(dateFilter).length > 0 && { date: dateFilter }),
+          ...(Object.keys(dateFilter).length > 0 && { createdAt: dateFilter }),
         },
       })
       deletedCount += result.count
@@ -69,7 +67,7 @@ export default defineEventHandler(async (event) => {
       const result = await db.iconClick.deleteMany({
         where: {
           userIconId: { in: userIcons.map(icon => icon.id) },
-          ...(Object.keys(dateFilter).length > 0 && { date: dateFilter }),
+          ...(Object.keys(dateFilter).length > 0 && { createdAt: dateFilter }),
         },
       })
       deletedCount += result.count
@@ -83,13 +81,6 @@ export default defineEventHandler(async (event) => {
       })
     }
   }
-  if (type && !["pageView", "linkClick", "iconClick"].includes(type as string)) {
-    throw createError({ statusCode: 400, statusMessage: "Invalid analytics type" })
-  }
 
-  return {
-    success: true,
-    message: `Successfully deleted ${deletedCount} analytics record${deletedCount === 1 ? "" : "s"}`,
-    deletedCount,
-  }
+  return { success: true, message: `Successfully deleted ${deletedCount} analytics record${deletedCount === 1 ? "" : "s"}` }
 })

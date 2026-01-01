@@ -11,6 +11,7 @@ export default defineEventHandler(async (event) => {
       select: {
         id: true,
         userId: true,
+        createdAt: true,
         referrer: true,
         source: true,
       },

@@ -1,8 +1,10 @@
 import { SOCIAL_ICONS } from "#shared/lib/constants"
 import { z } from "zod"
 
+const urlSchema = z.url("Invalid URL").refine(url => url.startsWith("http://") || url.startsWith("https://"), { message: "URL must start with http:// or https://" })
+
 export const createUserIconSchema = z.object({
-  url: z.url().trim(),
+  url: urlSchema.transform(val => val.trim()),
   platform: z.enum(Object.keys(SOCIAL_ICONS) as [keyof typeof SOCIAL_ICONS, ...Array<keyof typeof SOCIAL_ICONS>]),
   logo: z.enum(Object.values(SOCIAL_ICONS) as [typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS], ...Array<typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS]>]),
 }).refine((data) => {

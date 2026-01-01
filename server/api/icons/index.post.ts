@@ -4,9 +4,13 @@ import { createUserIconSchema } from "#shared/schemas/icon-schema"
 
 export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
-
   const body = await readBody(event)
-  const { url, platform, logo } = createUserIconSchema.parse(body)
+  const result = createUserIconSchema.safeParse(body)
+  if (!result.success) {
+    throw createError({ statusCode: 400, statusMessage: result.error.issues[0]?.message || "Invalid input" })
+  }
+
+  const { url, platform, logo } = result.data
 
   const existingIcon = await db.userIcon.findFirst({
     where: {
@@ -15,7 +19,7 @@ export default defineEventHandler(async (event) => {
     },
   })
   if (existingIcon) {
-    throw createError({ statusCode: 409, message: "Social icon for this platform already exists" })
+    throw createError({ statusCode: 409, statusMessage: "Social icon for this platform already exists" })
   }
 
   const newIcon = await db.userIcon.create({
@@ -27,10 +31,11 @@ export default defineEventHandler(async (event) => {
     },
     select: {
       id: true,
+      userId: true,
       url: true,
       platform: true,
       logo: true,
-      clicks: true,
+      clickCount: true,
       createdAt: true,
       updatedAt: true,
     },

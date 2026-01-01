@@ -22,6 +22,7 @@ export const useLinksStore = defineStore("links", () => {
     catch (err: any) {
       errors.value.getLinks = err.data?.message || "Failed to get links"
       console.error("getLinks error:", err)
+      throw err
     }
     finally {
       loading.value = false
@@ -40,6 +41,7 @@ export const useLinksStore = defineStore("links", () => {
     catch (err: any) {
       errors.value.createLink = err.data?.message || "Failed to create link"
       console.error("createLink error:", err)
+      throw err
     }
     finally {
       loading.value = false
@@ -61,6 +63,7 @@ export const useLinksStore = defineStore("links", () => {
     catch (err: any) {
       errors.value.updateLink = err.data?.message || "Failed to update link"
       console.error("updateLink error:", err)
+      throw err
     }
     finally {
       loading.value = false
@@ -78,6 +81,7 @@ export const useLinksStore = defineStore("links", () => {
     catch (err: any) {
       errors.value.deleteLink = err.data?.message || "Failed to delete link"
       console.error("deleteLink error:", err)
+      throw err
     }
     finally {
       loading.value = false
