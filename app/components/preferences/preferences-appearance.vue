@@ -33,34 +33,20 @@
 
 <script setup lang="ts">
 const userStore = useUserStore()
-const { errors, preferences } = storeToRefs(userStore)
+const { preferences } = storeToRefs(userStore)
 const activeTab = ref("background")
 const saveStatus = ref<"idle" | "saved">("idle")
 const resetStatus = ref<"idle" | "reset">("idle")
 
 async function handleUpdatePreferences() {
-  errors.value.updatePreferences = null
-
-  try {
-    await userStore.updatePreferences(preferences.value!)
-    saveStatus.value = "saved"
-  }
-  catch (err: any) {
-    errors.value.updatePreferences = err.data.message
-  }
+  await userStore.updatePreferences(preferences.value!)
+  saveStatus.value = "saved"
 }
 
 async function handleResetPreferences() {
-  errors.value.updatePreferences = null
-
-  try {
-    await userStore.updatePreferences(DEFAULT_PREFERENCES)
-    Object.assign(preferences.value, DEFAULT_PREFERENCES)
-    resetStatus.value = "reset"
-  }
-  catch (err: any) {
-    errors.value.updatePreferences = err.data.message
-  }
+  await userStore.updatePreferences(DEFAULT_PREFERENCES)
+  Object.assign(preferences.value, DEFAULT_PREFERENCES)
+  resetStatus.value = "reset"
 }
 
 function useStatusAutoReset(statusRef: Ref<"idle" | string>) {

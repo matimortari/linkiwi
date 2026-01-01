@@ -53,32 +53,12 @@ async function handleSubmit() {
     errors.value[isUpdateMode.value ? "updateLink" : "createLink"] = "Title and URL are required."
     return
   }
+
   if (isUpdateMode.value) {
-    emit("close")
-    return
+    await handleUpdateLink()
   }
-
-  errors.value.createLink = null
-  errors.value.updateLink = null
-
-  try {
-    if (isUpdateMode.value) {
-      await handleUpdateLink()
-    }
-    else {
-      await handleCreateLink()
-    }
-  }
-  catch (err: any) {
-    if (isUpdateMode.value) {
-      errors.value.updateLink = err.data.message
-    }
-    else {
-      errors.value.createLink = err.data.message
-    }
-  }
-  finally {
-    loading.value = false
+  else {
+    await handleCreateLink()
   }
 }
 
@@ -126,16 +106,12 @@ async function handleUpdateLink() {
 watch(() => props.isOpen, (open) => {
   if (open) {
     form.value = props.selectedLink ? { ...props.selectedLink } : { title: "", url: "" }
-    errors.value.createLink = null
-    errors.value.updateLink = null
   }
 }, { immediate: true })
 
 watch(() => props.selectedLink, () => {
   if (props.isOpen) {
     form.value = props.selectedLink ? { ...props.selectedLink } : { title: "", url: "" }
-    errors.value.createLink = null
-    errors.value.updateLink = null
   }
 }, { deep: true })
 </script>

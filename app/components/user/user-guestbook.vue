@@ -29,33 +29,25 @@ const props = defineProps<{
 }>()
 
 const analyticsStore = useAnalyticsStore()
-const { errors } = storeToRefs(analyticsStore)
 const isOpen = ref(false)
 const form = ref({ name: "", email: "", message: "" })
 
 async function handleSubmitComment() {
-  errors.value.submitComment = null
-
-  try {
-    if (!props.userId) {
-      return
-    }
-
-    await analyticsStore.submitComment({
-      userId: props.userId,
-      name: form.value.name,
-      email: form.value.email,
-      message: form.value.message,
-    })
-
-    form.value.name = ""
-    form.value.email = ""
-    form.value.message = ""
-    isOpen.value = false
+  if (!props.userId) {
+    return
   }
-  catch (err: any) {
-    errors.value.submitComment = err.data?.message || "Failed to submit comment"
-  }
+
+  await analyticsStore.submitComment({
+    userId: props.userId,
+    name: form.value.name,
+    email: form.value.email,
+    message: form.value.message,
+  })
+
+  form.value.name = ""
+  form.value.email = ""
+  form.value.message = ""
+  isOpen.value = false
 }
 </script>
 

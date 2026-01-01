@@ -50,29 +50,20 @@ const { user, errors } = storeToRefs(userStore)
 const form = ref({ slug: "", description: "", image: "" })
 
 async function handleUpdateImage(event: Event) {
-  errors.value.updateUserImage = null
-
   const input = event.target as HTMLInputElement
   const file = input?.files?.[0]
   if (!file) {
     return
   }
 
-  try {
-    const res = await userStore.updateUserImage(file)
-    if (res?.imageUrl && user.value) {
-      user.value.image = res.imageUrl
-      form.value.image = res.imageUrl
-    }
-  }
-  catch (err: any) {
-    errors.value.updateUserImage = err.data.message
+  const res = await userStore.updateUserImage(file)
+  if (res?.imageUrl && user.value) {
+    user.value.image = res.imageUrl
+    form.value.image = res.imageUrl
   }
 }
 
 async function handleSubmit() {
-  errors.value.updateUser = null
-
   if (!user.value?.id) {
     return
   }
@@ -81,19 +72,14 @@ async function handleSubmit() {
     return
   }
 
-  try {
-    await userStore.updateUser({
-      name: user.value.name,
-      slug: form.value.slug,
-      description: form.value.description,
-    })
+  await userStore.updateUser({
+    name: user.value.name,
+    slug: form.value.slug,
+    description: form.value.description,
+  })
 
-    await userStore.getUser()
-    emit("close")
-  }
-  catch (err: any) {
-    errors.value.updateUser = err.data.message
-  }
+  await userStore.getUser()
+  emit("close")
 }
 
 watch(() => props.isOpen, (open) => {

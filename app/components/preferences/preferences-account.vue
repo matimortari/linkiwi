@@ -71,26 +71,19 @@
 <script setup lang="ts">
 const { clear } = useUserSession()
 const userStore = useUserStore()
-const { preferences, errors } = storeToRefs(userStore)
+const { preferences } = storeToRefs(userStore)
 const comments = computed(() => userStore.user?.comments ?? [])
 const saveStatus = ref<"idle" | "saved">("idle")
 
 async function handleSubmit() {
-  errors.value.updateUser = null
   saveStatus.value = "idle"
 
-  try {
-    await userStore.updatePreferences({
-      enableGuestbook: preferences.value.enableGuestbook,
-    })
+  await userStore.updatePreferences({
+    enableGuestbook: preferences.value.enableGuestbook,
+  })
 
-    await userStore.getUser()
-    saveStatus.value = "saved"
-  }
-  catch (err: any) {
-    errors.value.updateUser = err.data.message
-    saveStatus.value = "idle"
-  }
+  await userStore.getUser()
+  saveStatus.value = "saved"
 }
 
 watch(saveStatus, (newStatus, _oldStatus, onInvalidate) => {

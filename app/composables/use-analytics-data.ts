@@ -4,7 +4,7 @@ export function useAnalyticsData() {
   const analyticsStore = useAnalyticsStore()
   const userStore = useUserStore()
 
-  function groupByDate<T extends Record<string, any>>(items: T[], dateKey: keyof T & string = "date"): Record<string, number> {
+  function groupByDate<T extends Record<string, any>>(items: T[], dateKey: keyof T & string = "createdAt"): Record<string, number> {
     const result: Record<string, number> = {}
     for (const item of items) {
       const raw = item[dateKey]
@@ -27,9 +27,9 @@ export function useAnalyticsData() {
   const iconClicks = computed(() => analyticsStore.analytics?.iconClicks ?? [])
 
   const stats = computed(() => {
-    const viewsByDate = groupByDate(pageViews.value, "date")
-    const linksByDate = groupByDate(linkClicks.value, "date")
-    const iconsByDate = groupByDate(iconClicks.value, "date")
+    const viewsByDate = groupByDate(pageViews.value, "createdAt")
+    const linksByDate = groupByDate(linkClicks.value, "createdAt")
+    const iconsByDate = groupByDate(iconClicks.value, "createdAt")
     const allDates = Array.from(new Set([...Object.keys(viewsByDate), ...Object.keys(linksByDate), ...Object.keys(iconsByDate)])).sort()
 
     return allDates.map(date => ({

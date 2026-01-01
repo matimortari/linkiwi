@@ -61,7 +61,6 @@ const socialIconEntries = computed(() => Object.entries(SOCIAL_ICONS) as [keyof 
 function selectIcon(label: keyof typeof SOCIAL_ICONS, iconName: typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS]) {
   form.value.platform = label
   form.value.logo = iconName
-  errors.value.createIcon = null
 }
 
 async function handleSubmit() {
@@ -75,24 +74,15 @@ async function handleSubmit() {
   }
 
   loading.value = true
-  errors.value.createIcon = null
 
-  try {
-    await iconsStore.createIcon(form.value)
-    emit("close")
-  }
-  catch (err: any) {
-    errors.value.createIcon = err.data.message
-  }
-  finally {
-    loading.value = false
-  }
+  await iconsStore.createIcon(form.value)
+  emit("close")
+  loading.value = false
 }
 
 watch(() => props.isOpen, (open) => {
   if (open) {
     form.value = { platform: "" as keyof typeof SOCIAL_ICONS, logo: "" as typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS], url: "" }
-    errors.value.createIcon = null
   }
 }, { immediate: true })
 </script>

@@ -20,12 +20,12 @@ const iconsStore = useIconsStore()
 const isSidebarOpen = ref(false)
 const isLoading = ref(true)
 
-onMounted (async () => {
+onMounted(async () => {
   try {
     await Promise.all([
-      await userStore.getUser(),
-      await linksStore.getLinks(),
-      await iconsStore.getIcons(),
+      userStore.getUser(),
+      linksStore.getLinks(),
+      iconsStore.getIcons(),
     ])
   }
   catch {
