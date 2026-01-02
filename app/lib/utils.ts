@@ -1,3 +1,6 @@
+/**
+ * Returns a formatted date string or a placeholder if the date is null/undefined.
+ */
 export function formatDate(date?: string | Date | null): string {
   if (!date) {
     return "-"
@@ -13,12 +16,18 @@ export function formatDate(date?: string | Date | null): string {
   return formatted.charAt(0).toLowerCase() + formatted.slice(1)
 }
 
+/**
+ * Copies the provided string value to the clipboard.
+ */
 export function copyToClipboard(val: string) {
   if (val) {
     navigator.clipboard.writeText(val)
   }
 }
 
+/**
+  Signs out the current user by calling the logout endpoint and clearing the session.
+ */
 export async function signOut() {
   const { clear } = useUserSession()
 

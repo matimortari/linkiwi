@@ -8,33 +8,95 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vi
 
 ---
 
-### User Profile
+### Authentication
 
-#### Get User Profile
+#### Login with Provider
 
-> **GET** `/user`
+> **POST** `/api/auth/{provider}`
 
-Get the current user's profile information.
+Initiates OAuth login with the specified provider.
+
+**Route Parameters:**
+
+- `provider`: OAuth provider name (required). Supported providers: `google`, `github`.
+
+**Response:**
+
+Navigates to the provider's OAuth consent screen.
+
+#### Logout
+
+> **POST** `/api/auth/logout`
+
+Logs out the authenticated user and clears the session.
 
 **Response:**
 
 ```json
 {
-  "user": {
+  "success": true
+}
+```
+
+#### Refresh Session
+
+> **POST** `/api/auth/refresh`
+
+Refreshes the authenticated user's session, extending it by 7 days.
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "expiresAt": "string"
+}
+```
+
+#### Validate Session
+
+> **POST** `/api/auth/validate`
+
+Validates the authenticated user's session and checks for inactivity timeout.
+
+**Response:**
+
+```json
+{
+  "valid": true,
+  "expiresAt": "string"
+}
+```
+
+---
+
+### User Profile
+
+#### Get User Profile
+
+> **GET** `/api/user`
+
+Retrieves the authenticated user's profile information, including preferences, comments, and page views.
+
+**Response:**
+
+```json
+{
+  "userData": {
     "id": "string",
     "email": "string",
     "name": "string",
     "image": "string | null",
     "slug": "string",
     "description": "string | null",
-    "createdAt": "Date",
-    "updatedAt": "Date",
+    "createdAt": "string",
+    "updatedAt": "string",
     "preferences": {
       "userId": "string",
-      "backgroundType": "GRADIENT | FLAT",
-      "backgroundColor": "string | null",
-      "backgroundGradientStart": "string | null",
-      "backgroundGradientEnd": "string | null",
+      "backgroundType": "FLAT | GRADIENT",
+      "backgroundColor": "string",
+      "backgroundGradientStart": "string",
+      "backgroundGradientEnd": "string",
       "profilePictureRadius": "string",
       "profilePictureBorderColor": "string",
       "profilePictureBorderWidth": "string",
@@ -64,13 +126,26 @@ Get the current user's profile information.
       "iconShadowWeight": "string",
       "iconLogoColor": "string",
       "iconHoverBackgroundColor": "string",
-      "supportBanner": "NONE | string"
+      "supportBanner": "NONE | LGBTQ_RIGHTS | ANTI_RACISM | MENTAL_HEALTH | CLIMATE_ACTION",
+      "enableGuestbook": "boolean"
     },
+    "comments": [
+      {
+        "id": "string",
+        "userId": "string",
+        "name": "string",
+        "email": "string | null",
+        "message": "string",
+        "createdAt": "string"
+      }
+    ],
     "views": [
       {
         "id": "string",
         "userId": "string",
-        "date": "Date"
+        "createdAt": "string",
+        "referrer": "string | null",
+        "source": "string | null"
       }
     ]
   }
@@ -79,62 +154,106 @@ Get the current user's profile information.
 
 #### Get User Public Profile
 
-> **GET** `/user/{slug}`
+> **GET** `/api/user/{slug}`
 
-Retrieves a user's public profile information by slug.
+Retrieves a user's public profile information by slug, including their links, social icons, and preferences.
 
 **Route Parameters:**
 
-- `slug`: User slug.
+- `slug`: User slug (required).
 
 **Response:**
 
 ```json
 {
-  "id": "string",
-  "name": "string",
-  "slug": "string",
-  "description": "string | null",
-  "image": "string | null",
-  "links": [
-    {
-      "id": "string",
-      "url": "string",
-      "title": "string",
-      "clicks": "number",
-      "createdAt": "Date"
+  "userProfile": {
+    "id": "string",
+    "email": "string",
+    "name": "string",
+    "image": "string | null",
+    "slug": "string",
+    "description": "string | null",
+    "createdAt": "string",
+    "updatedAt": "string",
+    "links": [
+      {
+        "id": "string",
+        "userId": "string",
+        "url": "string",
+        "title": "string",
+        "clickCount": "number",
+        "createdAt": "string",
+        "updatedAt": "string"
+      }
+    ],
+    "icons": [
+      {
+        "id": "string",
+        "userId": "string",
+        "url": "string",
+        "platform": "string",
+        "logo": "string",
+        "clickCount": "number",
+        "createdAt": "string",
+        "updatedAt": "string"
+      }
+    ],
+    "preferences": {
+      "userId": "string",
+      "backgroundType": "FLAT | GRADIENT",
+      "backgroundColor": "string",
+      "backgroundGradientStart": "string",
+      "backgroundGradientEnd": "string",
+      "profilePictureRadius": "string",
+      "profilePictureBorderColor": "string",
+      "profilePictureBorderWidth": "string",
+      "slugTextColor": "string",
+      "slugTextWeight": "string",
+      "slugTextSize": "string",
+      "slugFontFamily": "string",
+      "headerTextColor": "string",
+      "headerTextWeight": "string",
+      "headerTextSize": "string",
+      "headerFontFamily": "string",
+      "linkBackgroundColor": "string",
+      "linkTextColor": "string",
+      "linkTextWeight": "string",
+      "linkTextSize": "string",
+      "linkFontFamily": "string",
+      "isLinkShadow": "boolean",
+      "linkShadowColor": "string",
+      "linkShadowWeight": "string",
+      "linkHoverBackgroundColor": "string",
+      "linkBorderRadius": "string",
+      "linkPadding": "string",
+      "showLinkCopyButton": "boolean",
+      "iconBackgroundColor": "string",
+      "isIconShadow": "boolean",
+      "iconShadowColor": "string",
+      "iconShadowWeight": "string",
+      "iconLogoColor": "string",
+      "iconHoverBackgroundColor": "string",
+      "supportBanner": "NONE | LGBTQ_RIGHTS | ANTI_RACISM | MENTAL_HEALTH | CLIMATE_ACTION",
+      "enableGuestbook": "boolean"
     }
-  ],
-  "icons": [
-    {
-      "id": "string",
-      "url": "string",
-      "platform": "string",
-      "logo": "string",
-      "clicks": "number",
-      "createdAt": "Date"
-    }
-  ],
-  "preferences": {
-    // Same as user preferences above
   }
 }
 ```
 
 #### Update User Profile
 
-> **PUT** `/user`
+> **PUT** `/api/user`
 
-Update current user's profile information.
+Updates the authenticated user's profile information.
 
-**Request Body:**
+**Request Body:** All fields are optional
 
 ```json
 {
-  "name": "string", // Optional
-  "image": "string", // Optional
-  "description": "string", // Optional
-  "slug": "string" // Optional
+  "name": "string", // Optional: 3-50 characters
+  "image": "string | null", // Optional: valid URL or null to remove image
+  "description": "string", // Optional: up to 300 characters
+  "slug": "string" // Optional: 3-50 characters, lowercase alphanumeric and hyphens only
 }
 ```
 
@@ -142,22 +261,42 @@ Update current user's profile information.
 
 ```json
 {
-  "id": "string",
-  "email": "string",
-  "name": "string",
-  "slug": "string",
-  "description": "string | null",
-  "image": "string | null",
-  "createdAt": "Date",
-  "updatedAt": "Date"
+  "updatedUser": {
+    "id": "string",
+    "email": "string",
+    "name": "string",
+    "slug": "string",
+    "description": "string | null",
+    "image": "string | null",
+    "createdAt": "string",
+    "updatedAt": "string"
+  }
+}
+```
+
+#### Update User Image
+
+> **PUT** `/api/user/image-upload`
+
+Uploads and updates the authenticated user's profile image. Replaces the existing image if one exists.
+
+**Request Body:** Multipart form data
+
+- `file`: Image file (PNG, JPEG, or WebP format, max 2MB)
+
+**Response:**
+
+```json
+{
+  "imageUrl": "string"
 }
 ```
 
 #### Update User Preferences
 
-> **PUT** `/user/preferences`
+> **PUT** `/api/user/preferences`
 
-Updates the authenticated user's preferences.
+Updates the authenticated user's profile customization preferences.
 
 **Request Body:** All fields are optional
 
@@ -196,7 +335,8 @@ Updates the authenticated user's preferences.
   "iconShadowWeight": "string",
   "iconLogoColor": "string",
   "iconHoverBackgroundColor": "string",
-  "supportBanner": "NONE | LGBTQ_RIGHTS | ANTI_RACISM | MENTAL_HEALTH | CLIMATE_ACTION"
+  "supportBanner": "NONE | LGBTQ_RIGHTS | ANTI_RACISM | MENTAL_HEALTH | CLIMATE_ACTION",
+  "enableGuestbook": "boolean"
 }
 ```
 
@@ -204,46 +344,59 @@ Updates the authenticated user's preferences.
 
 ```json
 {
-  "preferences": {
-    // Updated preferences object
+  "updatedPreferences": {
+    "userId": "string",
+    "backgroundType": "FLAT | GRADIENT",
+    "backgroundColor": "string",
+    "backgroundGradientStart": "string",
+    "backgroundGradientEnd": "string",
+    "profilePictureRadius": "string",
+    "profilePictureBorderColor": "string",
+    "profilePictureBorderWidth": "string",
+    "slugTextColor": "string",
+    "slugTextWeight": "string",
+    "slugTextSize": "string",
+    "slugFontFamily": "string",
+    "headerTextColor": "string",
+    "headerTextWeight": "string",
+    "headerTextSize": "string",
+    "headerFontFamily": "string",
+    "linkBackgroundColor": "string",
+    "linkTextColor": "string",
+    "linkTextWeight": "string",
+    "linkTextSize": "string",
+    "linkFontFamily": "string",
+    "isLinkShadow": "boolean",
+    "linkShadowColor": "string",
+    "linkShadowWeight": "string",
+    "linkHoverBackgroundColor": "string",
+    "linkBorderRadius": "string",
+    "linkPadding": "string",
+    "showLinkCopyButton": "boolean",
+    "iconBackgroundColor": "string",
+    "isIconShadow": "boolean",
+    "iconShadowColor": "string",
+    "iconShadowWeight": "string",
+    "iconLogoColor": "string",
+    "iconHoverBackgroundColor": "string",
+    "supportBanner": "NONE | LGBTQ_RIGHTS | ANTI_RACISM | MENTAL_HEALTH | CLIMATE_ACTION",
+    "enableGuestbook": "boolean"
   }
-}
-```
-
-#### Update User Image
-
-> **PUT** `/user/image-upload`
-
-Update current user's profile image.
-
-**Request Body**:
-
-```json
-{
-  "file": "binary image file (PNG, JPG, or WebP, max 2MB)" // multipart/form-data
-}
-```
-
-**Response:**
-
-```json
-{
-  "imageUrl": "string"
 }
 ```
 
 #### Delete User Account
 
-> **DELETE** `/user`
+> **DELETE** `/api/user`
 
-Delete current user account.
+Permanently deletes the authenticated user's account and all associated data.
 
 **Response:**
 
 ```json
 {
   "success": true,
-  "message": "Account deleted successfully"
+  "message": "User deleted successfully"
 }
 ```
 
@@ -253,9 +406,9 @@ Delete current user account.
 
 #### Get User Links
 
-> **GET** `/links`
+> **GET** `/api/links`
 
-Get all links for the current user.
+Retrieves all links for the authenticated user.
 
 **Response:**
 
@@ -264,27 +417,29 @@ Get all links for the current user.
   "links": [
     {
       "id": "string",
+      "userId": "string",
       "url": "string",
       "title": "string",
-      "clicks": "number",
-      "createdAt": "Date"
+      "clickCount": "number",
+      "createdAt": "string",
+      "updatedAt": "string"
     }
   ]
 }
 ```
 
-#### Create New Link
+#### Create Link
 
-> **POST** `/links`
+> **POST** `/api/links`
 
-Create a new link.
+Creates a new link for the authenticated user.
 
 **Request Body:**
 
 ```json
 {
-  "url": "string (valid URL, required)",
-  "title": "string (1-100 chars, required)"
+  "url": "string", // Required: valid URL starting with http:// or https://
+  "title": "string" // Required: 1-100 characters
 }
 ```
 
@@ -294,30 +449,32 @@ Create a new link.
 {
   "link": {
     "id": "string",
+    "userId": "string",
     "url": "string",
     "title": "string",
-    "clicks": 0,
-    "createdAt": "Date"
+    "clickCount": "number",
+    "createdAt": "string",
+    "updatedAt": "string"
   }
 }
 ```
 
-#### Update Link by ID
+#### Update Link
 
-> **PUT** `/links/{id}`
+> **PUT** `/api/links/{link}`
 
-Update an existing link.
+Updates an existing link for the authenticated user.
 
 **Route Parameters:**
 
-- `id`: Link ID.
+- `link`: Link ID (required).
 
-**Request Body:**
+**Request Body:** All fields are optional
 
 ```json
 {
-  "url": "string", // Optional
-  "title": "string" // Optional
+  "url": "string", // Optional: valid URL starting with http:// or https://
+  "title": "string" // Optional: 1-100 characters
 }
 ```
 
@@ -327,28 +484,31 @@ Update an existing link.
 {
   "link": {
     "id": "string",
+    "userId": "string",
     "url": "string",
     "title": "string",
-    "clicks": "number",
-    "createdAt": "Date"
+    "clickCount": "number",
+    "createdAt": "string",
+    "updatedAt": "string"
   }
 }
 ```
 
-#### Delete Link by ID
+#### Delete Link
 
-> **DELETE** `/links/{id}`
+> **DELETE** `/api/links/{link}`
 
-Delete a link.
+Deletes a link for the authenticated user.
 
 **Route Parameters:**
 
-- `id`: Link ID.
+- `link`: Link ID (required).
 
 **Response:**
 
 ```json
 {
+  "success": true,
   "message": "Link deleted successfully"
 }
 ```
@@ -359,9 +519,9 @@ Delete a link.
 
 #### Get User Social Icons
 
-> **GET** `/icons`
+> **GET** `/api/icons`
 
-Get all social icons for the current user.
+Retrieves all social icons for the authenticated user.
 
 **Response:**
 
@@ -370,29 +530,31 @@ Get all social icons for the current user.
   "icons": [
     {
       "id": "string",
+      "userId": "string",
       "url": "string",
       "platform": "string",
       "logo": "string",
-      "clicks": "number",
-      "createdAt": "Date"
+      "clickCount": "number",
+      "createdAt": "string",
+      "updatedAt": "string"
     }
   ]
 }
 ```
 
-#### Create New Social Icon
+#### Create Social Icon
 
-> **POST** `/icons`
+> **POST** `/api/icons`
 
-Create a new social icon.
+Creates a new social icon for the authenticated user. Only one icon per platform is allowed.
 
 **Request Body:**
 
 ```json
 {
-  "url": "string (valid URL, required)",
-  "platform": "string (see supported platforms below, required)",
-  "logo": "string (corresponding icon value, required)"
+  "url": "string", // Required: valid URL starting with http:// or https://
+  "platform": "string", // Required: must be one of the supported platforms
+  "logo": "string" // Required: must match the platform's corresponding logo value
 }
 ```
 
@@ -406,30 +568,33 @@ Create a new social icon.
 {
   "icon": {
     "id": "string",
+    "userId": "string",
     "url": "string",
     "platform": "string",
     "logo": "string",
-    "clicks": 0,
-    "createdAt": "Date"
+    "clickCount": "number",
+    "createdAt": "string",
+    "updatedAt": "string"
   }
 }
 ```
 
-#### Delete Social Icon by ID
+#### Delete Social Icon
 
-> **DELETE** `/icons/{id}`
+> **DELETE** `/api/icons/{icon}`
 
-Delete a social icon.
+Deletes a social icon for the authenticated user.
 
 **Route Parameters:**
 
-- `id`: Social icon ID.
+- `icon`: Social icon ID (required).
 
 **Response:**
 
 ```json
 {
-  "message": "Social icon deleted successfully"
+  "success": true,
+  "message": "Icon deleted successfully"
 }
 ```
 
@@ -439,45 +604,147 @@ Delete a social icon.
 
 #### Get Analytics Data
 
-> **GET** `/analytics`
+> **GET** `/api/analytics`
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Retrieves all analytics data for the authenticated user, including page views, link clicks, and icon clicks.
 
 **Response:**
 
 ```json
 {
-  "message": "Social icon deleted successfully"
+  "pageViews": [
+    {
+      "id": "string",
+      "userId": "string",
+      "createdAt": "string",
+      "referrer": "string | null",
+      "source": "string | null"
+    }
+  ],
+  "linkClicks": [
+    {
+      "userLinkId": "string",
+      "createdAt": "string",
+      "userLink": {
+        "id": "string",
+        "userId": "string",
+        "url": "string",
+        "title": "string",
+        "clickCount": "number",
+        "createdAt": "string",
+        "updatedAt": "string"
+      }
+    }
+  ],
+  "iconClicks": [
+    {
+      "userIconId": "string",
+      "createdAt": "string",
+      "userIcon": {
+        "id": "string",
+        "userId": "string",
+        "url": "string",
+        "platform": "string",
+        "logo": "string",
+        "clickCount": "number",
+        "createdAt": "string",
+        "updatedAt": "string"
+      }
+    }
+  ]
 }
 ```
 
-#### Get Referrer Stats
+#### Get Referrer Statistics
 
-> **GET** `/analytics/referrers`
+> **GET** `/api/analytics/referrers`
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Retrieves referrer statistics for the authenticated user's page views, showing traffic sources and percentages.
+
+**Query Parameters:** All parameters are optional
+
+- `dateFrom`: Start date for filtering (ISO 8601 format).
+- `dateTo`: End date for filtering (ISO 8601 format).
 
 **Response:**
 
 ```json
 {
-  "message": "Social icon deleted successfully"
+  "referrers": [
+    {
+      "source": "string",
+      "count": "number",
+      "percentage": "string",
+      "label": "string"
+    }
+  ],
+  "totalViews": "number"
 }
 ```
 
 #### Record Analytics Event
 
-> **POST** `/analytics`
+> **POST** `/api/analytics`
 
-Record analytics data for page views, link clicks, or social icon clicks.
+Records analytics data for page views, link clicks, or icon clicks. Does not record analytics for the user's own profile interactions.
 
 **Request Body:**
 
 ```json
 {
-  "type": "pageView | link | icon",
-  "userId": "string",
-  "id": "string" // Required for link and icon types, optional for pageView
+  "type": "pageView | link | icon", // Required: analytics event type
+  "userId": "string", // Required: user ID
+  "id": "string", // Required for link and icon types, optional for pageView
+  "referrer": "string" // Optional: only for pageView type
+}
+```
+
+**Response (Page View):**
+
+```json
+{
+  "message": "Page view recorded successfully"
+}
+```
+
+**Response (Link Click):**
+
+```json
+{
+  "message": "Link click recorded successfully",
+  "linkClick": {
+    "userLinkId": "string",
+    "createdAt": "string"
+  }
+}
+```
+
+**Response (Icon Click):**
+
+```json
+{
+  "message": "Social icon click recorded successfully",
+  "iconClick": {
+    "userIconId": "string",
+    "createdAt": "string"
+  }
+}
+```
+
+#### Create Guestbook Comment
+
+> **POST** `/api/analytics/comments`
+
+Creates a new comment in the user's guestbook. The user must have guestbook enabled in their preferences.
+
+**Request Body:**
+
+```json
+{
+  "userId": "string", // Required: user ID to post comment to
+  "name": "string", // Required: 1-100 characters
+  "email": "string", // Optional: valid email address
+  "message": "string" // Required: 1-500 characters
 }
 ```
 
@@ -485,35 +752,35 @@ Record analytics data for page views, link clicks, or social icon clicks.
 
 ```json
 {
-  "message": "Analytics recorded successfully"
+  "comment": {
+    "id": "string",
+    "userId": "string",
+    "name": "string",
+    "email": "string | null",
+    "message": "string",
+    "createdAt": "string"
+  }
 }
 ```
 
-#### Submit Comment
+#### Delete Analytics Data
 
-> **POST** `/analytics/comments`
+> **DELETE** `/api/analytics`
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Deletes analytics data for the authenticated user. Can be filtered by type and date range.
+
+**Query Parameters:** All parameters are optional
+
+- `type`: Analytics type to delete (`pageView`, `linkClick`, or `iconClick`). If omitted, all types are deleted.
+- `dateFrom`: Start date for filtering (ISO 8601 format).
+- `dateTo`: End date for filtering (ISO 8601 format).
 
 **Response:**
 
 ```json
 {
-  "message": "Social icon deleted successfully"
-}
-```
-
-#### Delete All User Analytics
-
-**DELETE** `/analytics`
-
-Delete all analytics data for the current user.
-
-**Response:**
-
-```json
-{
-  "message": "Analytics deleted successfully"
+  "success": true,
+  "message": "Successfully deleted {count} analytics record(s)"
 }
 ```
 
