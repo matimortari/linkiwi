@@ -8,6 +8,7 @@
         <p class="text-caption">
           Choose a provider to continue.
         </p>
+        <span v-if="errorMessage" class="text-danger">{{ errorMessage }}</span>
       </header>
 
       <div class="flex w-full max-w-xs flex-col gap-2">
@@ -40,6 +41,24 @@
 </template>
 
 <script setup lang="ts">
+const route = useRoute()
+
+const errorMessage = computed(() => {
+  const error = route.query.error as string | undefined
+  if (!error) {
+    return null
+  }
+
+  const messages: Record<string, string> = {
+    google_oauth_failed: "Google sign in failed. Please try again.",
+    github_oauth_failed: "GitHub sign in failed. Please try again.",
+    session_expired: "Your session has expired. Please sign in again.",
+    session_timeout: "You were signed out due to inactivity.",
+  }
+
+  return messages[error] || "Authentication failed. Please try again."
+})
+
 function signIn(provider: string) {
   navigateTo(`/api/auth/${provider}`, { external: true })
 }

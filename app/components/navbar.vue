@@ -20,10 +20,5 @@
 
 <script setup lang="ts">
 const { toggleTheme, themeIcon } = useTheme()
-const { clear, loggedIn } = useUserSession()
-
-async function signOut() {
-  await clear()
-  return navigateTo("/")
-}
+const { loggedIn } = useUserSession()
 </script>

@@ -17,6 +17,17 @@ export default defineNuxtConfig({
   alias: {
     "#server": fileURLToPath(new URL("./server", import.meta.url)),
   },
+  runtimeConfig: {
+    session: {
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+      password: process.env.NUXT_SESSION_PASSWORD!,
+      cookie: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+      },
+    },
+  },
   vite: {
     plugins: [tailwindcss()],
   },

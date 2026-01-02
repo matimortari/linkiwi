@@ -90,15 +90,9 @@ defineEmits<(e: "update:isOpen", value: boolean) => void>()
 
 const { toggleTheme, themeIcon } = useTheme()
 const route = useRoute()
-const { clear } = useUserSession()
 const { user } = storeToRefs(useUserStore())
 const isUserDialogOpen = ref(false)
 const isShareDialogOpen = ref(false)
-
-async function signOut() {
-  await clear()
-  return navigateTo("/")
-}
 </script>
 
 <style scoped>

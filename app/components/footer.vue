@@ -39,7 +39,7 @@
 
 <script setup lang="ts">
 const { themeTitle } = useTheme()
-const { clear, loggedIn } = useUserSession()
+const { loggedIn } = useUserSession()
 
 const footerSections = [
   {
@@ -71,9 +71,4 @@ const footerSections = [
     ],
   },
 ]
-
-async function signOut() {
-  await clear()
-  return navigateTo("/")
-}
 </script>

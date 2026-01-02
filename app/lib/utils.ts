@@ -1,11 +1,16 @@
-export function formatDate(dateString: Date) {
-  const formattedDate = new Date(dateString).toLocaleDateString("en-US", {
+export function formatDate(date?: string | Date | null): string {
+  if (!date) {
+    return "-"
+  }
+
+  const dt = typeof date === "string" ? new Date(date) : date
+  const formatted = dt.toLocaleDateString("en-US", {
     year: "2-digit",
     month: "short",
     day: "numeric",
   })
 
-  return formattedDate.charAt(0).toLowerCase() + formattedDate.slice(1)
+  return formatted.charAt(0).toLowerCase() + formatted.slice(1)
 }
 
 export function copyToClipboard(val: string) {
@@ -14,12 +19,10 @@ export function copyToClipboard(val: string) {
   }
 }
 
-export function getBaseUrl(): string {
-  const config = useRuntimeConfig()
-  const url = config.public.baseUrl
-  if (!url || typeof url !== "string") {
-    throw new Error("Base URL is not defined in runtime config.")
-  }
+export async function signOut() {
+  const { clear } = useUserSession()
 
-  return url
+  await $fetch("/api/auth/logout", { method: "POST", credentials: "include" })
+  await clear()
+  await navigateTo("/")
 }
