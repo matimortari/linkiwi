@@ -22,7 +22,8 @@
           <transition name="dropdown-fade">
             <div
               v-if="isDropdownOpen" role="menu"
-              class="overlay absolute right-0 z-50 flex flex-col gap-1" :class="[dropdownPosition === 'top' ? 'bottom-full mb-2' : 'top-full mt-2']"
+              class="overlay absolute right-0 z-50 flex flex-col gap-1"
+              :class="[dropdownPosition === 'top' ? 'bottom-full mb-2' : 'top-full mt-2']"
             >
               <button class="text-caption navigation-group w-full rounded-[5rem] p-2 hover:bg-muted" role="menuitem" @click="copyPageUrl()">
                 <icon name="mdi:link-variant" size="20" />
@@ -123,9 +124,8 @@ function downloadQRCode() {
   link.download = `${user.value?.slug}-qr-code.svg`
   document.body.appendChild(link)
   link.click()
-  document.body.removeChild(link)
+  link.remove()
   URL.revokeObjectURL(url)
-
   isDropdownOpen.value = false
   copySuccess.value = "QR code downloaded!"
 }
@@ -159,31 +159,32 @@ watchEffect(() => {
     return Math.abs(row - (moduleCount / 2)) < radius && Math.abs(col - (moduleCount / 2)) < radius
   }
 
-  let svg = `<svg xmlns="http://www.w3.org/2000/svg" 
-    width="200" 
-    height="200" 
-    viewBox="0 0 ${moduleCount + 2 * 2} ${moduleCount + 2 * 2}">`
+  const padding = 2
+  const viewBoxSize = moduleCount + 2 * padding
+  const svgParts: string[] = [
+    "<svg xmlns=\"http://www.w3.org/2000/svg\" ",
+    "width=\"200\" ",
+    "height=\"200\" ",
+    `viewBox="0 0 ${viewBoxSize} ${viewBoxSize}">`,
+    "<rect width=\"100%\" height=\"100%\" fill=\"#ffffff\"/>",
+  ]
 
-  svg += `<rect width="100%" height="100%" fill="#ffffff"/>`
-
-  // Draw QR code modules as circles instead of squares
   for (let row = 0; row < moduleCount; row++) {
     for (let col = 0; col < moduleCount; col++) {
       if (qr.isDark(row, col) && !isCenterArea(row, col)) {
-        const cx = col + 2 + 0.5
-        const cy = row + 2 + 0.5
+        const cx = col + padding + 0.5
+        const cy = row + padding + 0.5
         const radius = 0.5
-        svg += `<circle cx="${cx}" cy="${cy}" r="${radius}" fill="#000000"/>`
+        svgParts.push(`<circle cx="${cx}" cy="${cy}" r="${radius}" fill="#000000"/>`)
       }
     }
   }
 
   // Add logo image using base64 data URL
   const logoImgSize = (moduleCount * 0.2) * 0.85
-  const logoImgPos = (moduleCount / 2 + 2) - (logoImgSize / 2)
-  svg += `<image href="${logoBase64.value}" x="${logoImgPos}" y="${logoImgPos}" width="${logoImgSize}" height="${logoImgSize}"/>`
-  svg += "</svg>"
-  qrContainer.value.innerHTML = svg
+  const logoImgPos = (moduleCount / 2 + padding) - (logoImgSize / 2)
+  svgParts.push(`<image href="${logoBase64.value}" x="${logoImgPos}" y="${logoImgPos}" width="${logoImgSize}" height="${logoImgSize}"/>`, "</svg>")
+  qrContainer.value.innerHTML = svgParts.join("")
 })
 
 // Convert logo to base64 on mount

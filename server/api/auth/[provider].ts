@@ -59,13 +59,11 @@ export default defineEventHandler(async (event: H3Event) => {
         ...userData,
         provider,
       })
-    }, async onError(event: H3Event<EventHandlerRequest>, err: any) {
-      console.error(`${provider} OAuth error:`, err)
+    }, async onError(event: H3Event<EventHandlerRequest>) {
       return sendRedirect(event, `/sign-in?error=${provider}_oauth_failed`)
     } })(event)
   }
-  catch (err: any) {
-    console.error("OAuth endpoint error:", err)
+  catch {
     throw createError({ statusCode: 500, message: "OAuth processing failed" })
   }
 })

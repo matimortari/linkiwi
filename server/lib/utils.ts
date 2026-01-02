@@ -153,7 +153,7 @@ export async function uploadFile({ path, file, maxSize, allowedMimeTypes, oldFil
   const ext = file.name.split(".").pop()?.toLowerCase()
   const blob = await put(`${path}/${Date.now()}.${ext}`, file, { access: "public" })
   if (oldFileUrl?.includes("blob.vercel-storage.com")) {
-    await del(oldFileUrl).catch(err => console.error("Failed to delete old file:", err))
+    await del(oldFileUrl).catch(() => {})
   }
 
   return blob.url

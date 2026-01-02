@@ -120,9 +120,7 @@ function updateColors() {
 
 onMounted(() => updateColors())
 
-watch(colorMode, () => {
-  updateColors()
-}, { flush: "post" })
+watch(colorMode, () => updateColors(), { flush: "post" })
 
 useHead({
   title: "Brand",

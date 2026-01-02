@@ -1,2 +1,4 @@
-User-Agent: *
-Disallow:
+User-agent: *
+Allow: /
+Disallow: /admin/
+Sitemap: https://linkstashr.vercel.app/sitemap.xml

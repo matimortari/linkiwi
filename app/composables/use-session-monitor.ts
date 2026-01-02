@@ -12,7 +12,7 @@ export function useSessionMonitor() {
   watch(loggedIn, (isLoggedIn) => {
     clearSessionCheck()
 
-    if (isLoggedIn) {
+    if (isLoggedIn && import.meta.client) {
       sessionCheckInterval.value = setInterval(async () => {
         try {
           await $fetch("/api/auth/validate", { method: "POST", credentials: "include" })
