@@ -11,26 +11,40 @@ import { Analytics } from "@vercel/analytics/nuxt"
 const { loggedIn } = useUserSession()
 let sessionCheckInterval: NodeJS.Timeout | null = null
 
-watch(loggedIn, (isLoggedIn) => {
-  if (isLoggedIn) {
-    sessionCheckInterval = setInterval(async () => {
-      try {
-        await $fetch("/api/auth/validate", { method: "POST", credentials: "include" })
-      }
-      catch (err: any) {
-        if (err.statusCode === 401) {
-          await signOut()
+onMounted(() => {
+  watch(loggedIn, (isLoggedIn) => {
+    if (isLoggedIn) {
+      sessionCheckInterval = setInterval(async () => {
+        try {
+          await $fetch("/api/auth/validate", { method: "POST", credentials: "include" })
         }
+        catch (err: any) {
+          if (err.statusCode === 401 || err.status === 401) {
+            await signOut()
+          }
+        }
+      }, 5 * 60 * 1000) // 5 minutes
+    }
+    else {
+      if (sessionCheckInterval) {
+        clearInterval(sessionCheckInterval)
+        sessionCheckInterval = null
       }
-    }, 5 * 60 * 1000) // 5 minutes
-  }
-  else {
-    if (sessionCheckInterval) {
-      clearInterval(sessionCheckInterval)
-      sessionCheckInterval = null
+    }
+  }, { immediate: true })
+
+  // Listen for storage events to sync logout across tabs
+  const handleStorageChange = (e: StorageEvent) => {
+    if (e.key === "nuxt-session" && !e.newValue && loggedIn.value) {
+      window.location.href = "/"
     }
   }
-}, { immediate: true })
+  window.addEventListener("storage", handleStorageChange)
+
+  onBeforeUnmount(() => {
+    window.removeEventListener("storage", handleStorageChange)
+  })
+})
 
 onBeforeUnmount(() => {
   if (sessionCheckInterval) {
