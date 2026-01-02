@@ -71,6 +71,15 @@ export async function handleOAuthUser(event: H3Event, userData: OAuthUserData) {
     comments: user.comments ?? [],
   }
 
-  await setUserSession(event, { user: sessionUser, loggedInAt: new Date() })
+  const now = new Date()
+  const expiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000) // 7 days
+
+  await setUserSession(event, {
+    user: sessionUser,
+    loggedInAt: now,
+    expiresAt,
+    lastActivityAt: now,
+  })
+
   return sendRedirect(event, "/admin/profile")
 }
