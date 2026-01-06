@@ -1,5 +1,5 @@
 <template>
-  <div class="card flex flex-col gap-2">
+  <div class="card flex flex-col gap-4">
     <h3>
       Clicks by Item
     </h3>
@@ -7,10 +7,10 @@
     <Spinner v-if="linksLoading || iconsLoading || analyticsLoading" />
     <Empty v-if="!items.length" message="No links or social icons yet." icon-name="mdi:octagram-minus-outline" />
 
-    <ul v-else class="grid grid-cols-1 gap-2 py-4 md:grid-cols-3">
+    <ul v-else class="grid grid-cols-1 gap-2 md:grid-cols-3">
       <li v-for="item in items" :key="item.id" class="card flex flex-col gap-2">
         <div class="flex flex-row items-center justify-between font-semibold">
-          <icon v-if="item.type === 'icon' && item.logo" :name="item.logo" :size="30" />
+          <icon v-if="item.type === 'icon'" :name="item.logo" :size="30" />
           <span v-else>{{ item.title }}</span>
 
           <span class="text-sm font-medium text-primary">{{ clicksMap[item.id] ?? 0 }} clicks</span>
@@ -81,7 +81,6 @@ onMounted(async () => {
   }
 
   clicksMap.value = counts
-
   linksLoading.value = false
   iconsLoading.value = false
   analyticsLoading.value = false

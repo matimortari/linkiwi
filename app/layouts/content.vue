@@ -110,6 +110,10 @@ const isSidebarOpen = ref(false)
   overflow-x: auto !important;
 }
 
+::v-deep(.markdown) code {
+  padding: 0 !important;
+}
+
 ::v-deep(.markdown) code * {
   font-family: var(--font-mono) !important;
 }

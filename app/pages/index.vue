@@ -2,20 +2,17 @@
   <section
     id="hero" v-motion
     :initial="{ opacity: 0, y: -40 }" :visible="{ opacity: 1, y: 0 }"
-    :duration="800" class="flex min-h-screen flex-col items-center justify-center overflow-hidden border-b-2 px-4 py-24 md:flex-row md:px-24"
+    :duration="800" class="flex min-h-screen flex-col items-center justify-center overflow-hidden border-b-2 px-4 py-40 md:flex-row md:p-24"
   >
-    <header class="flex flex-col items-center gap-4 text-center md:items-start md:text-start">
+    <header class="flex flex-col items-center gap-2.5 text-center md:items-start md:text-start">
       <span class="font-semibold text-secondary">Your link-in-bio page</span>
-
-      <h1 class="max-w-md font-display text-5xl! leading-20 md:text-6xl! 2xl:max-w-lg 2xl:md:text-7xl!">
+      <h1 class="max-w-md font-display text-5xl! leading-16 md:text-6xl!">
         Keep all your stuff together!
       </h1>
-
       <p class="text-lead">
         Welcome to <span class="font-semibold text-secondary">Linkstashr</span>! Your links, profiles, contact info, and more
         in one place. Create and customize your page and share it with your audience.
       </p>
-
       <nuxt-link to="/sign-in" class="btn-primary">
         <span>Get Started Now!</span>
         <icon name="mdi:arrow-right" size="25" />
@@ -35,7 +32,7 @@
     </h2>
 
     <div class="container mx-auto grid w-full grid-cols-1 items-center gap-12 md:grid-cols-2">
-      <div class="flex items-center justify-center">
+      <div class="order-1 flex items-center justify-center">
         <div class="relative size-64 md:size-80">
           <div class="absolute inset-0 animate-pulse rounded-2xl bg-linear-to-br from-primary to-secondary opacity-20 blur-2xl" />
 
@@ -48,7 +45,7 @@
         </div>
       </div>
 
-      <div class="flex flex-col gap-4 text-start">
+      <div class="order-2 flex flex-col gap-4 text-start">
         <p class="text-lead">
           Customize your page with your own style and share your unique URL with your audience.
           Whether you're a creator, business, or influencer, Linkstashr makes it easy to connect all your online presence in one place.
@@ -57,7 +54,7 @@
         <div class="flex flex-col gap-2">
           <div v-for="bullet in PRODUCT_BULLETS" :key="bullet.description" class="navigation-group">
             <icon :name="bullet.icon" size="25" class="text-secondary" />
-            <span class="font-medium">{{ bullet.description }}</span>
+            <span class="text-sm font-medium">{{ bullet.description }}</span>
           </div>
         </div>
       </div>
@@ -74,22 +71,22 @@
     </h2>
 
     <div class="container mx-auto grid w-full grid-cols-1 items-center gap-12 md:grid-cols-2">
-      <div class="flex flex-col gap-4 text-start">
+      <div class="order-2 flex flex-col gap-4 text-start md:order-1">
         <p class="text-lead">
           Get insights into how your audience engages with your content.
-          Track page views, link clicks, and traffic sources all in one place.
+          Track views, clicks, and traffic sources all in one place.
           Make data-driven decisions to optimize your online presence.
         </p>
 
         <div class="flex flex-col gap-2">
           <div v-for="bullet in ANALYTICS_BULLETS" :key="bullet.description" class="navigation-group">
             <icon :name="bullet.icon" size="25" class="text-secondary" />
-            <span class="font-medium">{{ bullet.description }}</span>
+            <span class="text-sm font-medium">{{ bullet.description }}</span>
           </div>
         </div>
       </div>
 
-      <div class="flex items-center justify-center">
+      <div class="order-1 flex items-center justify-center md:order-2">
         <div class="relative w-full max-w-md">
           <div class="absolute inset-0 animate-pulse rounded-2xl bg-linear-to-br from-secondary to-primary opacity-20 blur-2xl" />
 
@@ -122,7 +119,7 @@
     </div>
   </section>
 
-  <section id="cta" class="relative z-10 flex min-h-[50vh] flex-col items-center justify-center gap-8 border-y bg-card p-12 text-center md:p-32">
+  <section id="cta" class="relative z-10 flex min-h-[50vh] flex-col items-center justify-center gap-8 border-y bg-card p-20 text-center md:p-32">
     <div class="cta-wrapper-grid" />
     <div class="cta-wrapper-vignette" />
 
@@ -131,7 +128,7 @@
         Ready to Try?
       </h2>
 
-      <p class="text-lg font-semibold">
+      <p class="font-semibold md:text-lg">
         Create an account and build your page today!
       </p>
 
@@ -217,7 +214,7 @@ definePageMeta({
 
 .text-lead {
   max-width: 28rem;
-  font-size: 1rem;
+  font-size: 0.875rem;
   line-height: 1.5rem;
   font-weight: 500;
   color: var(--muted-foreground);

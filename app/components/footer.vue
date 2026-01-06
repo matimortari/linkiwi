@@ -1,5 +1,5 @@
 <template>
-  <footer class="w-full bg-card">
+  <footer class="w-full border-t bg-card">
     <div class="container mx-auto flex flex-col-reverse px-8 py-4 md:flex-row md:justify-between">
       <div class="flex flex-col justify-end gap-2 border-t py-8 md:border-0">
         <img :src="themeTitle" alt="Wordmark" width="100">

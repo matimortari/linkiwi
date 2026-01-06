@@ -16,6 +16,11 @@
       </div>
 
       <div class="flex max-w-md flex-col gap-2">
+        <label for="name" class="w-20 text-sm font-medium">Name</label>
+        <input id="name" v-model="form.name" type="text" placeholder="Enter your name">
+      </div>
+
+      <div class="flex max-w-md flex-col gap-2">
         <label for="slug" class="w-20 text-sm font-medium">Slug</label>
         <input id="slug" v-model="form.slug" type="text" placeholder="Enter your slug">
       </div>
@@ -47,7 +52,7 @@ const emit = defineEmits<(e: "close") => void>()
 
 const userStore = useUserStore()
 const { user, errors } = storeToRefs(userStore)
-const form = ref({ slug: "", description: "", image: "" })
+const form = ref({ name: "", slug: "", description: "", image: "" })
 
 async function handleUpdateImage(event: Event) {
   const input = event.target as HTMLInputElement
@@ -67,13 +72,13 @@ async function handleSubmit() {
   if (!user.value?.id) {
     return
   }
-  if (!user.value?.name) {
+  if (!form.value.name || form.value.name.trim().length === 0) {
     errors.value.updateUser = "User name cannot be empty."
     return
   }
 
   await userStore.updateUser({
-    name: user.value.name,
+    name: form.value.name,
     slug: form.value.slug,
     description: form.value.description,
   })
@@ -85,13 +90,14 @@ async function handleSubmit() {
 watch(() => props.isOpen, (open) => {
   if (open && user.value) {
     form.value = {
+      name: user.value.name ?? "",
       slug: user.value.slug ?? "",
       description: user.value.description ?? "",
       image: user.value.image ?? "",
     }
   }
   else {
-    form.value = { slug: "", description: "", image: "" }
+    form.value = { name: "", slug: "", description: "", image: "" }
   }
 }, { immediate: true })
 </script>

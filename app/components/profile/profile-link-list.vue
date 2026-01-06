@@ -1,10 +1,10 @@
 <template>
-  <div class="card flex flex-col gap-2">
+  <div class="card flex flex-col gap-4">
     <h3>
       My Links
     </h3>
 
-    <div class="flex flex-col gap-2 py-4">
+    <div class="flex flex-col gap-2">
       <Spinner v-if="loading" />
       <Empty v-if="!links.length" message="Your links help visitors discover more about you. Add your first link!" icon-name="mdi:link-variant-minus" />
 

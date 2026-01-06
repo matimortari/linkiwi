@@ -1,5 +1,5 @@
 <template>
-  <div v-if="props.activeTab === 'background'" class="grid grid-cols-1 gap-2 py-2 md:grid-cols-2">
+  <div v-if="props.activeTab === 'background'" class="card grid grid-cols-1 gap-2 md:grid-cols-2">
     <PreferencesRadioOptions v-model:value="localPrefs.backgroundType" name="backgroundType" label="Background Type" :options="BACKGROUND_TYPES" />
 
     <div class="flex flex-col gap-2">
@@ -9,7 +9,7 @@
     </div>
   </div>
 
-  <div v-if="props.activeTab === 'user'" class="grid grid-cols-1 gap-2 py-2 md:grid-cols-2">
+  <div v-if="props.activeTab === 'user'" class="card grid grid-cols-1 gap-2 md:grid-cols-2">
     <div class="flex flex-col gap-2">
       <PreferencesSelect id="supportBanner" v-model:value="localPrefs.supportBanner" label="Support Banner" :options="BANNER_OPTIONS" />
       <PreferencesSelect id="profilePictureRadius" v-model:value="localPrefs.profilePictureRadius" label="Profile Picture Radius" :options="RADIUS_SIZES" />
@@ -29,7 +29,7 @@
     </div>
   </div>
 
-  <div v-if="props.activeTab === 'links'" class="grid grid-cols-1 gap-2 py-2 md:grid-cols-2">
+  <div v-if="props.activeTab === 'links'" class="card grid grid-cols-1 gap-2 md:grid-cols-2">
     <div class="flex flex-col gap-2">
       <PreferencesColorPicker id="linkBackgroundColor" v-model:value="localPrefs.linkBackgroundColor" label="Background Color" />
       <PreferencesColorPicker id="linkTextColor" v-model:value="localPrefs.linkTextColor" label="Font Color" />
@@ -53,7 +53,7 @@
     </div>
   </div>
 
-  <div v-if="props.activeTab === 'icons'" class="grid grid-cols-1 gap-2 py-2 md:grid-cols-2">
+  <div v-if="props.activeTab === 'icons'" class="card grid grid-cols-1 gap-2 md:grid-cols-2">
     <div class="flex flex-col gap-2">
       <PreferencesColorPicker id="iconBackgroundColor" v-model:value="localPrefs.iconBackgroundColor" label="Background Color" />
       <PreferencesColorPicker id="iconLogoColor" v-model:value="localPrefs.iconLogoColor" label="Icon Color" />

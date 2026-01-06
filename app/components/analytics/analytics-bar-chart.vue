@@ -17,8 +17,7 @@ ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
 const chartOptions: ChartOptions<"bar"> = {
   responsive: true,
-  maintainAspectRatio: true,
-  aspectRatio: 2,
+  maintainAspectRatio: false,
   interaction: {
     intersect: false,
     mode: "index" as keyof InteractionModeMap,
@@ -70,17 +69,7 @@ const chartOptions: ChartOptions<"bar"> = {
   elements: {
     bar: {
       borderSkipped: false,
-      backgroundColor: (context: any) => {
-        const index = context.dataIndex
-        const colors = [
-          "#de896d",
-          "#e09d81",
-          "#e3b195",
-          "#e6c5a9",
-          "#e9d9bd",
-        ]
-        return colors[index % colors.length]
-      },
+      backgroundColor: "de896d",
       hoverBackgroundColor: "#c97859",
     },
   },

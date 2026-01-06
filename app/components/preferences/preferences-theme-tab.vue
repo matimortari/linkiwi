@@ -1,5 +1,5 @@
 <template>
-  <div class="scroll-area grid h-72 grid-cols-1 gap-4 overflow-auto md:grid-cols-2 2xl:grid-cols-3">
+  <div class="scroll-area grid h-72 grid-cols-1 gap-2 overflow-auto md:grid-cols-2 2xl:grid-cols-3">
     <div v-for="theme in THEMES" :key="theme.title" class="flex flex-col items-center gap-2">
       <button
         :title="theme.title" aria-label="Select Theme"
@@ -14,9 +14,7 @@
         </div>
 
         <div class="flex w-full flex-col items-center gap-4">
-          <span v-for="i in 2" :key="i" class="line-clamp-1 min-h-8 w-full truncate p-2 text-center text-sm select-none" :style="getThemeLinkStyle(theme.preferences)">
-            {{ '' }}
-          </span>
+          <span v-for="i in 2" :key="i" class="line-clamp-1 min-h-8 w-full truncate p-2 text-center text-sm select-none" :style="getThemeLinkStyle(theme.preferences)">{{ '' }}</span>
         </div>
       </button>
 

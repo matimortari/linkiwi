@@ -1,33 +1,35 @@
 <template>
-  <div class="card flex flex-col gap-2">
+  <div class="card flex flex-col gap-4">
     <h3>
       Appearance
     </h3>
 
-    <div class="flex flex-col justify-between gap-2 border-b py-4 md:flex-row">
-      <div class="flex flex-row flex-wrap items-center gap-1">
-        <button
-          v-for="t in APPEARANCE_TABS" :key="t.value"
-          class="btn" :class="{ 'bg-muted!': activeTab === t.value }"
-          @click="activeTab = t.value"
-        >
-          {{ t.label }}
-        </button>
+    <div class="flex flex-col gap-2">
+      <div class="flex flex-col justify-between gap-2 p-2 pt-0 md:flex-row">
+        <div class="flex flex-row flex-wrap items-center gap-2 md:gap-1">
+          <button
+            v-for="t in APPEARANCE_TABS" :key="t.value"
+            class="btn" :class="{ 'bg-muted!': activeTab === t.value }"
+            @click="activeTab = t.value"
+          >
+            {{ t.label }}
+          </button>
+        </div>
+
+        <div class="flex flex-row items-center gap-2 md:gap-1">
+          <button class="btn-danger" @click="handleResetPreferences">
+            <icon :name="resetStatus === 'reset' ? 'mdi:check' : 'mdi:close'" size="20" />
+            <span>Reset</span>
+          </button>
+          <button class="btn-primary" @click="handleUpdatePreferences">
+            <icon :name="saveStatus === 'saved' ? 'mdi:check' : 'mdi:content-save-check'" size="20" />
+            <span>Save</span>
+          </button>
+        </div>
       </div>
 
-      <div class="flex flex-row items-center gap-1">
-        <button class="btn-danger" @click="handleResetPreferences">
-          <icon :name="resetStatus === 'reset' ? 'mdi:check' : 'mdi:close'" size="20" />
-          <span>Reset</span>
-        </button>
-        <button class="btn-primary" @click="handleUpdatePreferences">
-          <icon :name="saveStatus === 'saved' ? 'mdi:check' : 'mdi:content-save-check'" size="20" />
-          <span class="truncate">Save</span>
-        </button>
-      </div>
+      <PreferencesAppearanceTabs v-model:preferences="preferences" v-model:active-tab="activeTab" />
     </div>
-
-    <PreferencesTabs v-model:preferences="preferences" v-model:active-tab="activeTab" />
   </div>
 </template>
 

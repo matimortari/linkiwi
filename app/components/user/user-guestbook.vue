@@ -1,25 +1,41 @@
 <template>
-  <div class="fixed right-4 bottom-4 z-40 flex flex-col items-end gap-2">
-    <button class="btn rounded-full!" @click="isOpen = !isOpen">
-      <icon name="mdi:chevron-down" size="30" class="transition-transform" :class="{ 'rotate-180': isOpen }" />
-    </button>
-
-    <transition name="collapse">
-      <div v-if="isOpen" class="overlay flex max-w-sm flex-col gap-2">
-        <h5>
-          Leave a message!
-        </h5>
+  <div class="fixed right-4 bottom-4 z-40 flex flex-col items-end gap-3">
+    <transition name="slide-fade">
+      <div v-if="isOpen" class="overlay flex w-80 flex-col gap-2 md:w-96">
+        <div class="flex items-center justify-between border-b pb-2">
+          <h5>
+            Leave a message
+          </h5>
+          <button class="flex items-center transition-transform hover:scale-110" aria-label="Close guestbook" @click="isOpen = false">
+            <icon name="mdi:close" size="24" />
+          </button>
+        </div>
 
         <form class="flex flex-col gap-2" @submit.prevent="handleSubmitComment">
-          <input v-model="form.name" placeholder="Your name" class="rounded-lg!">
-          <input v-model="form.email" placeholder="Your email (optional)" class="rounded-lg!">
-          <textarea v-model="form.message" placeholder="Your message..." class="h-20 rounded-lg!" />
-          <button type="submit" class="btn-secondary self-end">
-            Submit
+          <label for="name" class="text-sm font-medium">Name</label>
+          <input id="name" v-model="form.name" placeholder="Enter your name" class="rounded-lg!">
+
+          <label for="email" class="text-sm font-medium">Email <span class="text-caption">(optional)</span></label>
+          <input
+            id="email" v-model="form.email"
+            type="email" placeholder="your@email.com"
+            class="rounded-lg!"
+          >
+
+          <label for="message" class="text-sm font-medium">Message</label>
+          <textarea id="message" v-model="form.message" placeholder="Write your message here..." class="h-24 resize-none rounded-lg!" />
+
+          <button type="submit" class="btn-primary self-end">
+            <icon name="mdi:send" size="20" />
+            <span>Submit</span>
           </button>
         </form>
       </div>
     </transition>
+
+    <button class="btn" :class="{ 'bg-primary! text-background!': isOpen }" aria-label="Toggle guestbook" @click="isOpen = !isOpen">
+      <icon name="mdi:message-text" size="25" class="transition-transform" :class="{ 'rotate-12': isOpen }" />
+    </button>
   </div>
 </template>
 
@@ -52,22 +68,18 @@ async function handleSubmitComment() {
 </script>
 
 <style scoped>
-.collapse-enter-active,
-.collapse-leave-active {
-  transition:
-    max-height 300ms ease,
-    opacity 200ms ease;
+.slide-fade-enter-active {
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
-
-.collapse-enter-from,
-.collapse-leave-to {
-  max-height: 0;
+.slide-fade-leave-active {
+  transition: all 200ms cubic-bezier(0.4, 0, 1, 1);
+}
+.slide-fade-enter-from {
   opacity: 0;
+  transform: translateY(20px) scale(0.95);
 }
-
-.collapse-enter-to,
-.collapse-leave-from {
-  max-height: 500px;
-  opacity: 1;
+.slide-fade-leave-to {
+  opacity: 0;
+  transform: translateY(10px) scale(0.98);
 }
 </style>

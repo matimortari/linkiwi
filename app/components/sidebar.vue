@@ -8,7 +8,7 @@
   <div v-if="isOpen" class="fixed inset-0 z-20 bg-black/50 md:hidden" @click="$emit('update:isOpen', false)" />
 
   <aside
-    class="fixed top-0 left-0 z-40 size-full px-4 py-12 transition-transform duration-300 ease-in-out md:static md:block md:w-56 md:translate-x-0 md:py-8 2xl:w-64"
+    class="fixed top-0 left-0 z-40 size-full bg-card px-4 py-12 transition-transform duration-300 ease-in-out md:static md:block md:w-56 md:translate-x-0 md:bg-transparent md:py-8 2xl:w-64"
     :class="[isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0']"
   >
     <div class="flex h-full flex-col gap-8 px-12 md:px-0">

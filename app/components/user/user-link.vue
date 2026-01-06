@@ -4,7 +4,7 @@
       <span class="mx-2 inline-block truncate px-4 text-center" :style="linkInnerStyle">{{ item.title }}</span>
     </nuxt-link>
 
-    <button v-if="preferences.showLinkCopyButton" class="absolute right-2 shrink-0" aria-label="Copy Link" @click.stop="copyToClipboard(item.url)">
+    <button v-if="preferences.showLinkCopyButton" class="absolute right-2 shrink-0 transition-transform hover:scale-110" aria-label="Copy Link" @click.stop="copyToClipboard(item.url)">
       <icon :name="isCopied ? 'mdi:check' : 'mdi:content-copy'" size="15" :style="{ color: preferences.linkTextColor }" />
     </button>
   </li>

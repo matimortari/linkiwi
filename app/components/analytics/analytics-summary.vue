@@ -1,98 +1,107 @@
 <template>
-  <div class="card flex flex-col gap-2">
+  <div class="card flex flex-col gap-4">
     <h3>
       Summary
     </h3>
 
-    <div class="grid grid-cols-2 gap-4 border-b py-4 md:grid-cols-4 md:place-items-center">
-      <div v-for="item in summaryItems" :key="item.label" class="navigation-group">
-        <icon :name="item.icon" size="30" class="text-primary" />
-        <div class="flex flex-col items-start">
-          <p class="text-caption">
-            {{ item.label }}
-          </p>
-          <span class="font-semibold md:text-lg 2xl:text-xl">{{ item.value }}</span>
+    <div class="flex flex-col gap-2">
+      <div class="flex flex-col justify-between gap-2 p-2 pt-0 md:flex-row">
+        <div class="grid grid-cols-2 gap-2 md:grid-cols-4 md:justify-items-center">
+          <div v-for="item in summaryItems" :key="item.label" class="navigation-group">
+            <icon :name="item.icon" size="30" class="text-primary" />
+            <div class="flex flex-col items-start">
+              <p class="text-caption">
+                {{ item.label }}
+              </p>
+              <span class="font-semibold md:text-lg">{{ item.value }}</span>
+            </div>
+          </div>
         </div>
+
+        <button class="btn-danger self-end" @click="handleDeleteAnalytics">
+          <icon :name="resetStatus === 'reset' ? 'mdi:check' : 'mdi:close'" size="20" />
+          <span>Reset</span>
+        </button>
       </div>
-    </div>
 
-    <div class="card">
-      <h4>
-        Page Views Over Time
-      </h4>
+      <div class="card flex flex-col gap-2">
+        <h4>
+          Page Views Over Time
+        </h4>
 
-      <Empty v-if="!pageViewsChartData" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
-      <AnalyticsLineChart v-else :chart-data="pageViewsChartData" />
-    </div>
+        <Empty v-if="!pageViewsChartData" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
+        <AnalyticsLineChart v-else :chart-data="pageViewsChartData" />
+      </div>
 
-    <div class="card">
-      <h4>
-        Traffic Sources
-      </h4>
+      <div class="card flex flex-col gap-2">
+        <h4>
+          Traffic Sources
+        </h4>
 
-      <Empty v-if="!referrerStats.length" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
+        <Empty v-if="!referrerStats.length" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
 
-      <div v-else>
-        <AnalyticsBarChart v-if="referrerChartData" :chart-data="referrerChartData" />
+        <div v-else>
+          <AnalyticsBarChart v-if="referrerChartData" :chart-data="referrerChartData" />
 
-        <div class="card overflow-hidden p-0!">
-          <table class="w-full">
-            <thead class="bg-muted text-sm font-semibold">
-              <tr>
-                <th class="px-4 py-2 text-left">
-                  Source
-                </th>
-                <th class="px-4 py-2 text-right">
-                  Views
-                </th>
-                <th class="px-4 py-2 text-right">
-                  Percentage
-                </th>
-              </tr>
-            </thead>
+          <div class="card overflow-hidden p-0!">
+            <table class="w-full">
+              <thead class="bg-muted text-sm font-semibold">
+                <tr>
+                  <th class="px-4 py-2 text-left">
+                    Source
+                  </th>
+                  <th class="px-4 py-2 text-right">
+                    Views
+                  </th>
+                  <th class="px-4 py-2 text-right">
+                    Percentage
+                  </th>
+                </tr>
+              </thead>
 
-            <tbody class="divide-y">
-              <tr v-for="stat in referrerStats" :key="stat.source" class="hover:bg-muted/20">
-                <td class="px-4 py-2 text-sm">
-                  <div class="navigation-group">
-                    <div class="rounded-full bg-muted p-1">
-                      <icon :name="getSourceIcon(stat.source)" size="18" />
+              <tbody class="divide-y">
+                <tr v-for="stat in referrerStats" :key="stat.source" class="hover:bg-muted/20">
+                  <td class="px-4 py-2 text-sm">
+                    <div class="navigation-group">
+                      <div class="rounded-full bg-muted p-1">
+                        <icon :name="getSourceIcon(stat.source)" size="18" />
+                      </div>
+                      <span class="font-semibold">{{ stat.label }}</span>
                     </div>
-                    <span class="font-semibold">{{ stat.label }}</span>
-                  </div>
-                </td>
-                <td class="px-4 py-2 text-right text-sm font-medium">
-                  {{ stat.count }}
-                </td>
-                <td class="px-4 py-2 text-right text-sm">
-                  <span class="inline-flex items-center rounded-full border bg-primary/20 px-2 py-1 text-xs font-medium text-primary">
-                    {{ stat.percentage }}%
-                  </span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                  </td>
+                  <td class="px-4 py-2 text-right text-sm font-medium">
+                    {{ stat.count }}
+                  </td>
+                  <td class="px-4 py-2 text-right text-sm">
+                    <span class="inline-flex items-center rounded-full border bg-primary/20 px-2 py-1 text-xs font-medium text-primary">
+                      {{ stat.percentage }}%
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="grid grid-cols-1 gap-2 md:grid-cols-2">
-      <div class="card">
-        <h4>
-          Link Clicks
-        </h4>
+      <div class="grid grid-cols-1 gap-2 md:grid-cols-2">
+        <div class="card flex flex-col gap-2">
+          <h4>
+            Link Clicks
+          </h4>
 
-        <Empty v-if="!linkClicksChartData" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
-        <AnalyticsBarChart v-else :chart-data="linkClicksChartData" />
-      </div>
+          <Empty v-if="!linkClicksChartData" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
+          <AnalyticsBarChart v-else :chart-data="linkClicksChartData" />
+        </div>
 
-      <div class="card">
-        <h4>
-          Social Icon Clicks
-        </h4>
+        <div class="card flex flex-col gap-2">
+          <h4>
+            Social Icon Clicks
+          </h4>
 
-        <Empty v-if="!iconClicksChartData" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
-        <AnalyticsBarChart v-else :chart-data="iconClicksChartData" />
+          <Empty v-if="!iconClicksChartData" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
+          <AnalyticsBarChart v-else :chart-data="iconClicksChartData" />
+        </div>
       </div>
     </div>
   </div>
@@ -102,6 +111,7 @@
 const analyticsStore = useAnalyticsStore()
 const userStore = useUserStore()
 const { totalViews, totalClicks, clickRate, joinedAt, pageViewsChartData, linkClicksChartData, iconClicksChartData, referrerChartData } = useAnalyticsData()
+const resetStatus = ref<"idle" | "reset">("idle")
 const referrerStats = computed(() => analyticsStore.referrerStats?.referrers || [])
 
 const summaryItems = computed(() => [
@@ -130,17 +140,17 @@ const summaryItems = computed(() => [
 function getSourceIcon(source: string): string {
   const icons: Record<string, string> = {
     direct: "mdi:link-variant",
-    google: "mdi:google",
-    facebook: "mdi:facebook",
-    twitter: "mdi:twitter",
-    instagram: "mdi:instagram",
-    linkedin: "mdi:linkedin",
-    reddit: "mdi:reddit",
+    google: "simple-icons:google",
+    facebook: "simple-icons:facebook",
+    twitter: "simple-icons:twitter",
+    instagram: "simple-icons:instagram",
+    linkedin: "simple-icons:linkedin",
+    reddit: "simple-icons:reddit",
     tiktok: "simple-icons:tiktok",
-    youtube: "mdi:youtube",
-    pinterest: "mdi:pinterest",
-    github: "mdi:github",
-    discord: "mdi:discord",
+    youtube: "simple-icons:youtube",
+    pinterest: "simple-icons:pinterest",
+    github: "simple-icons:github",
+    discord: "simple-icons:discord",
     threads: "simple-icons:threads",
     bluesky: "simple-icons:bluesky",
     internal: "mdi:home",
@@ -151,7 +161,32 @@ function getSourceIcon(source: string): string {
   return icons[source] || "mdi:web"
 }
 
+async function handleDeleteAnalytics() {
+  const confirmed = confirm("Are you sure you want to reset all analytics data? This action cannot be undone.")
+  if (!confirmed) {
+    return
+  }
+
+  await analyticsStore.deleteAnalytics()
+  await Promise.all([
+    analyticsStore.getAnalytics(),
+    analyticsStore.getReferrerStats(),
+  ])
+  resetStatus.value = "reset"
+}
+
+function useStatusAutoReset(statusRef: Ref<"idle" | string>) {
+  watch(statusRef, (value, _, onInvalidate) => {
+    if (value !== "idle") {
+      const t = setTimeout(() => (statusRef.value = "idle"), 2000)
+      onInvalidate(() => clearTimeout(t))
+    }
+  })
+}
+
 onMounted(async () => {
+  useStatusAutoReset(resetStatus)
+
   await Promise.all([
     analyticsStore.getAnalytics(),
     analyticsStore.getReferrerStats(),

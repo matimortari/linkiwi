@@ -10,7 +10,7 @@
           Profile
         </h2>
         <p class="text-caption">
-          Welcome back, <span class="font-semibold text-primary">{{ user.name }}</span>!
+          Welcome back, {{ user.name }}!
         </p>
       </header>
 

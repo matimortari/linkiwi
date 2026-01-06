@@ -1,6 +1,8 @@
 <template>
   <div class="relative flex min-h-screen flex-col items-center justify-center overflow-hidden">
-    <Logo class="absolute top-4 left-4" />
+    <nuxt-link to="/">
+      <img src="/assets/symbol.png" alt="Logo" width="30" class="absolute top-4 left-4 transition-transform hover:scale-105">
+    </nuxt-link>
 
     <div v-if="loading" class="absolute inset-0 z-50 flex items-center justify-center bg-background/60 backdrop-blur-sm">
       <Spinner />
@@ -23,7 +25,7 @@
         <UserIcon
           v-for="icon in userProfile.icons" :key="icon.id"
           :item="icon" :preferences="profilePreferences"
-          @click="handleIconClick(icon.id ?? '')"
+          @click="handleClick(icon.id ?? '', 'icon')"
         />
       </ul>
 
@@ -31,7 +33,7 @@
         <UserLink
           v-for="link in userProfile.links" :key="link.id"
           :item="link" :preferences="profilePreferences"
-          @click="handleLinkClick(link.id ?? '')"
+          @click="handleClick(link.id ?? '', 'link')"
         />
       </ul>
 
@@ -46,57 +48,45 @@
 
 <script setup lang="ts">
 const route = useRoute()
-const slug = route.params.slug as string
+const slug = computed(() => route.params.slug as string)
 const userStore = useUserStore()
 const analyticsStore = useAnalyticsStore()
 const { userProfile, loading } = storeToRefs(userStore)
 const profilePreferences = computed(() => userProfile.value?.preferences ?? DEFAULT_PREFERENCES)
 const { backgroundStyle, profilePictureStyle, slugStyle, descriptionStyle } = useDynamicStyles(profilePreferences)
 
-async function handleLinkClick(linkId: string) {
-  if (userProfile.value?.id) {
-    await analyticsStore.recordLinkClick(userProfile.value.id, linkId)
-  }
-}
-
-async function handleIconClick(iconId: string) {
-  if (userProfile.value?.id) {
-    await analyticsStore.recordIconClick(userProfile.value.id, iconId)
-  }
-}
-
-async function loadUserProfile(slug: string) {
-  if (!slug) {
+async function handleClick(itemId: string, type: "link" | "icon") {
+  if (!userProfile.value?.id) {
     return
   }
 
-  await userStore.getUserProfile(slug)
-  const currentUser = userProfile.value
-  if (currentUser?.id) {
-    const referrer = route.query.ref as string
-
-    if (referrer) {
-      await analyticsStore.recordPageView(currentUser.id, referrer)
-    }
-    else {
-      await analyticsStore.recordPageView(currentUser.id)
-    }
-
-    useHead({
-      title: `@${currentUser.slug}`,
-      link: [{ rel: "canonical", href: `https://linkstashr.vercel.app/${currentUser.slug}` }],
-      meta: [{ name: "description", content: `@${currentUser.slug} profile on Linkstashr.` }],
-    })
-  }
+  type === "link" ? await analyticsStore.recordLinkClick(userProfile.value.id, itemId) : await analyticsStore.recordIconClick(userProfile.value.id, itemId)
 }
 
-onMounted(() => loadUserProfile(slug))
-
-watch(() => route.params.slug, (newSlug) => {
-  if (newSlug) {
-    loadUserProfile(newSlug as string)
+async function loadUserProfile(slug: string) {
+  await userStore.getUserProfile(slug)
+  const currentUser = userProfile.value
+  if (!currentUser?.id) {
+    return
   }
-})
+
+  await analyticsStore.recordPageView(currentUser.id, route.query.ref as string)
+}
+
+watch(slug, async (newSlug) => {
+  if (!newSlug) {
+    return
+  }
+
+  await loadUserProfile(newSlug)
+  if (userProfile.value) {
+    useHead({
+      title: `@${userProfile.value.slug}`,
+      link: [{ rel: "canonical", href: `https://linkstashr.vercel.app/${userProfile.value.slug}` }],
+      meta: [{ name: "description", content: `@${userProfile.value.slug} profile on Linkstashr.` }],
+    })
+  }
+}, { immediate: true })
 
 definePageMeta({
   layout: "minimal",
