@@ -137,47 +137,10 @@
         <icon name="mdi:arrow-right" size="20" />
       </nuxt-link>
     </div>
-
-    <p class="text-caption italic transition-opacity ease-in-out" :class="{ 'opacity-0': fading }">
-      "{{ randomQuote?.quote }}" - <span class="text-primary">{{ randomQuote?.author }}</span>
-    </p>
-
-    <div class="absolute bottom-0 left-0 h-1 w-full overflow-hidden">
-      <span key="progress" class="animate-progress absolute top-0 left-0 h-full bg-linear-to-r from-primary to-secondary opacity-20" />
-    </div>
   </section>
 </template>
 
 <script setup lang="ts">
-const randomQuote = ref<{ quote: string, author: string }>()
-const fading = ref(false)
-let cycleInterval: ReturnType<typeof setInterval>
-let fadeTimeout: ReturnType<typeof setTimeout>
-
-function setRandomQuote() {
-  randomQuote.value = QUOTES[Math.floor(Math.random() * QUOTES.length)]
-}
-
-function runCycle() {
-  fading.value = true
-
-  fadeTimeout = setTimeout(() => {
-    setRandomQuote()
-    fading.value = false
-  }, 500)
-}
-
-onMounted(() => {
-  setRandomQuote()
-  runCycle()
-  cycleInterval = setInterval(runCycle, 10000)
-})
-
-onBeforeUnmount(() => {
-  clearInterval(cycleInterval)
-  clearTimeout(fadeTimeout)
-})
-
 useHead({
   title: "Your Link-in-Bio Page!",
   link: [{ rel: "canonical", href: "https://linkstashr.vercel.app" }],
