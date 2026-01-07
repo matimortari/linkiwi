@@ -1,7 +1,7 @@
 <template>
   <Navbar />
 
-  <div class="mt-8 flex min-h-screen border-b">
+  <div class="flex min-h-screen border-b">
     <div v-if="isSidebarOpen" class="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm xl:hidden" @click="isSidebarOpen = false" />
 
     <div class="flex flex-1 flex-col xl:flex-row">
@@ -12,18 +12,19 @@
       <article
         v-motion :initial="{ opacity: 0, y: 10 }"
         :enter="{ opacity: 1, y: 0 }" :duration="600"
-        class="markdown mx-auto w-full overflow-x-auto p-8 md:px-24"
+        class="markdown mx-auto w-full max-w-full overflow-x-hidden px-4 py-12 md:p-20"
       >
         <slot />
       </article>
 
       <aside
-        id="table-of-contents" class="fixed top-0 right-0 z-40 h-full w-4/5 transform border-l bg-card px-4! py-12! transition-transform duration-300 md:w-2/5 xl:relative xl:z-auto xl:translate-x-0 xl:border-l"
+        id="table-of-contents" class="fixed top-0 right-0 z-40 h-full w-4/5 transform bg-card p-2 transition-transform duration-300 md:w-2/5 md:bg-transparent xl:relative xl:translate-x-0"
         :class="isSidebarOpen ? 'translate-x-0' : 'translate-x-full'"
       >
-        <div class="scroll-area sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto pr-2">
-          <p class="border-b py-2 font-semibold text-muted-foreground uppercase">
-            On this page
+        <div class="scroll-area sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto">
+          <p class="flex flex-row items-center gap-1 border-b py-2 font-semibold text-muted-foreground uppercase">
+            <icon name="mdi:table-of-contents" size="20" />
+            <span>On this page</span>
           </p>
 
           <nav class="space-y-2">
@@ -34,7 +35,7 @@
             >
               <div class="flex flex-row items-center gap-2">
                 <span v-if="header.method" :class="[REST_METHOD_LABELS[header.method as keyof typeof REST_METHOD_LABELS]]">{{ header.method }}</span>
-                <span>{{ header.text }}</span>
+                <span class="wrap-break-words">{{ header.text }}</span>
               </div>
             </nuxt-link>
           </nav>
@@ -64,25 +65,48 @@ const isSidebarOpen = ref(false)
 ::v-deep(.markdown) h4 {
   font-weight: 700 !important;
   margin: 0.5em 0em !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
 }
 
 ::v-deep(.markdown) h1 {
-  font-size: 2em !important;
+  font-size: 1.75em !important;
 }
 ::v-deep(.markdown) h2 {
-  font-size: 1.875em !important;
-}
-::v-deep(.markdown) h3 {
   font-size: 1.5em !important;
 }
-::v-deep(.markdown) h4 {
+::v-deep(.markdown) h3 {
   font-size: 1.25em !important;
+}
+::v-deep(.markdown) h4 {
+  font-size: 1.125em !important;
+}
+
+@media (min-width: 640px) {
+  ::v-deep(.markdown) h1 {
+    font-size: 2em !important;
+  }
+  ::v-deep(.markdown) h2 {
+    font-size: 1.875em !important;
+  }
+  ::v-deep(.markdown) h3 {
+    font-size: 1.5em !important;
+  }
+  ::v-deep(.markdown) h4 {
+    font-size: 1.25em !important;
+  }
 }
 
 ::v-deep(.markdown) p {
   margin: 0.5em 0 !important;
   font-size: 0.875rem !important;
   line-height: 1.5 !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+::v-deep(.markdown) a {
+  word-break: break-word !important;
 }
 
 ::v-deep(.markdown) a:hover {
@@ -108,6 +132,8 @@ const isSidebarOpen = ref(false)
 ::v-deep(.markdown) li {
   margin: 0.4rem 0;
   padding-left: 0.25rem;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
 }
 
 ::v-deep(.markdown) li::marker {
@@ -131,6 +157,8 @@ const isSidebarOpen = ref(false)
   font-family: var(--font-mono);
   margin: 1rem 0 !important;
   padding: 0.25rem 0.5rem !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
 }
 
 ::v-deep(.markdown) pre,
@@ -142,6 +170,13 @@ const isSidebarOpen = ref(false)
   font-size: 0.75rem !important;
   margin: 1em 0 !important;
   overflow-x: auto !important;
+  max-width: 100% !important;
+  word-break: break-all !important;
+}
+
+::v-deep(.markdown) pre {
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
 }
 
 ::v-deep(.markdown) code {

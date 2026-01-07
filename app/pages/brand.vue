@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-8 px-4 py-32">
+  <div class="space-y-8 py-32">
     <header class="flex flex-col items-center gap-2 text-center">
       <h2>
         Brand Assets
@@ -19,7 +19,7 @@
           <div class="flex w-full flex-row items-center justify-between bg-card p-2">
             <span class="text-sm font-medium">{{ symbol.name }}</span>
             <button :title="`Download ${symbol.name}`" class="transition-transform hover:scale-110" @click="handleDownloadImage(symbol, index, symbolActions)">
-              <icon :name="symbolActions[index]!.icon.value" size="30" />
+              <icon :name="symbolActions[index]!.icon.value" size="25" />
             </button>
           </div>
         </div>
@@ -34,7 +34,7 @@
           <div class="flex w-full flex-row items-center justify-between bg-card p-2">
             <span class="text-sm font-medium">{{ wordmark.name }}</span>
             <button :title="`Download ${wordmark.name}`" class="transition-transform hover:scale-110" @click="handleDownloadImage(wordmark, index, wordmarkActions)">
-              <icon :name="wordmarkActions[index]!.icon.value" size="30" />
+              <icon :name="wordmarkActions[index]!.icon.value" size="25" />
             </button>
           </div>
         </div>
@@ -56,7 +56,7 @@
           <div class="h-24 w-full" :style="{ backgroundColor: `var(${color.var})` }" @click="handleCopyColor(color.var, index)" />
 
           <div class="flex w-full flex-row items-center justify-between bg-card p-2">
-            <p class="flex flex-row items-center gap-2">
+            <p class="flex flex-row items-center gap-1">
               <span class="text-sm font-medium">{{ color.name }}</span>
               <span class="text-xs text-muted-foreground">{{ colorValues[color.var] }}</span>
             </p>
