@@ -70,7 +70,7 @@ const isSidebarOpen = ref(false)
   font-size: 2em !important;
 }
 ::v-deep(.markdown) h2 {
-  font-size: 1.75em !important;
+  font-size: 1.875em !important;
 }
 ::v-deep(.markdown) h3 {
   font-size: 1.5em !important;
@@ -79,17 +79,51 @@ const isSidebarOpen = ref(false)
   font-size: 1.25em !important;
 }
 
-::v-deep(.markdown) p,
-::v-deep(.markdown) ul,
-::v-deep(.markdown) ol,
-::v-deep(.markdown) li {
-  margin: 0.75em 0 !important;
+::v-deep(.markdown) p {
+  margin: 0.5em 0 !important;
   font-size: 0.875rem !important;
   line-height: 1.5 !important;
 }
 
 ::v-deep(.markdown) a:hover {
   text-decoration: underline !important;
+}
+
+::v-deep(.markdown) ul,
+::v-deep(.markdown) ol {
+  margin: 0.75rem 0;
+  padding-left: 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+::v-deep(.markdown) ul {
+  list-style-type: disc;
+}
+
+::v-deep(.markdown) ol {
+  list-style-type: decimal;
+}
+
+::v-deep(.markdown) li {
+  margin: 0.4rem 0;
+  padding-left: 0.25rem;
+}
+
+::v-deep(.markdown) li::marker {
+  color: hsl(var(--primary));
+  font-weight: 600;
+}
+
+::v-deep(.markdown) li p {
+  margin: 0.25rem 0;
+}
+
+::v-deep(.markdown) li ul,
+::v-deep(.markdown) li ol {
+  margin-top: 0.4rem;
+  margin-bottom: 0.4rem;
+  padding-left: 1.25rem;
 }
 
 ::v-deep(.markdown) blockquote {

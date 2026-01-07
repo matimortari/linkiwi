@@ -1,26 +1,48 @@
 <template>
-  <div class="container mx-auto max-w-7xl px-4 py-20">
-    <h2 class="border-b p-4 text-center">
-      Brand Assets
-    </h2>
+  <div class="space-y-8 px-4 py-32">
+    <header class="flex flex-col items-center gap-2 text-center">
+      <h2>
+        Brand Assets
+      </h2>
+      <p class="text-caption">
+        Visual language and assets for Linkstashr branding, including logos and color palette.
+      </p>
+    </header>
 
-    <div class="grid grid-cols-1 gap-4 border-b py-4 md:grid-cols-3">
-      <div v-for="logo in LOGOS" :key="logo.name" class="card flex flex-col items-center p-0!" :class="logo.bgClass">
-        <div class="my-4 flex h-16 w-36 items-center justify-center">
-          <img :src="logo.image" :alt="logo.name" class="size-full object-contain">
-        </div>
+    <div class="container mx-auto flex w-full flex-col items-center gap-4">
+      <section class="grid w-full grid-cols-1 gap-2 md:grid-cols-3">
+        <div v-for="(symbol, index) in SYMBOLS" :key="symbol.name" class="card flex flex-col items-center p-0!" :class="symbol.bgClass">
+          <div class="m-4 flex size-20 items-center justify-center">
+            <img :src="symbol.image" :alt="symbol.name" class="size-full object-contain">
+          </div>
 
-        <div class="flex w-full flex-row items-center justify-between border-t bg-card px-2 py-1">
-          <span class="text-sm font-medium">{{ logo.name }}</span>
-          <button :title="`Download ${logo.name}`" class="transition-transform hover:scale-110" @click="handleDownloadImage(logo)">
-            <icon name="mdi:download" size="30" />
-          </button>
+          <div class="flex w-full flex-row items-center justify-between bg-card p-2">
+            <span class="text-sm font-medium">{{ symbol.name }}</span>
+            <button :title="`Download ${symbol.name}`" class="transition-transform hover:scale-110" @click="handleDownloadImage(symbol, index, symbolActions)">
+              <icon :name="symbolActions[index]!.icon.value" size="30" />
+            </button>
+          </div>
         </div>
-      </div>
+      </section>
+
+      <section class="grid w-full grid-cols-1 gap-2 md:grid-cols-2">
+        <div v-for="(wordmark, index) in WORDMARKS" :key="wordmark.name" class="card flex flex-col items-center p-0!" :class="wordmark.bgClass">
+          <div class="m-4 flex h-20 w-36 items-center justify-center">
+            <img :src="wordmark.image" :alt="wordmark.name" class="size-full object-contain">
+          </div>
+
+          <div class="flex w-full flex-row items-center justify-between bg-card p-2">
+            <span class="text-sm font-medium">{{ wordmark.name }}</span>
+            <button :title="`Download ${wordmark.name}`" class="transition-transform hover:scale-110" @click="handleDownloadImage(wordmark, index, wordmarkActions)">
+              <icon :name="wordmarkActions[index]!.icon.value" size="30" />
+            </button>
+          </div>
+        </div>
+      </section>
     </div>
 
-    <div class="flex w-full flex-col items-center gap-4 p-8">
-      <div class="flex w-full flex-col items-center gap-2 text-center">
+    <div class="container mx-auto flex w-full flex-col items-center gap-4">
+      <div class="flex flex-col items-center gap-2 text-center">
         <h3>
           Colors
         </h3>
@@ -29,33 +51,20 @@
         </p>
       </div>
 
-      <div class="m-4 grid w-full grid-cols-2 gap-4 md:grid-cols-6">
-        <div v-for="color in BASE_COLORS" :key="color.name" class="flex flex-col items-center">
-          <button class="group card relative h-24 w-full" :style="{ backgroundColor: `var(${color.var})` }" @click="handleCopyColor(color.var)">
-            <div class="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 transition-opacity group-hover:opacity-100">
-              <span class="text-sm font-semibold text-surface-foreground">{{ copiedColor === color.var ? "Copied!" : "Copy color" }}</span>
-            </div>
-          </button>
+      <div class="grid w-full grid-cols-2 gap-2 md:grid-cols-5">
+        <div v-for="(color, index) in COLORS" :key="color.name" class="card flex flex-col items-center p-0!">
+          <div class="h-24 w-full" :style="{ backgroundColor: `var(${color.var})` }" @click="handleCopyColor(color.var, index)" />
 
-          <p class="flex w-full flex-row items-start justify-between p-1 text-start">
-            <span class="text-sm font-medium">{{ color.name }}</span>
-            <span class="text-xs text-muted-foreground">{{ colorValues[color.var] }}</span>
-          </p>
-        </div>
-      </div>
+          <div class="flex w-full flex-row items-center justify-between bg-card p-2">
+            <p class="flex flex-row items-center gap-2">
+              <span class="text-sm font-medium">{{ color.name }}</span>
+              <span class="text-xs text-muted-foreground">{{ colorValues[color.var] }}</span>
+            </p>
 
-      <div class="m-4 grid w-full grid-cols-2 gap-4 md:grid-cols-4">
-        <div v-for="color in BRAND_COLORS" :key="color.name" class="flex flex-col items-center">
-          <button class="group card relative h-24 w-full" :style="{ backgroundColor: `var(${color.var})` }" @click="handleCopyColor(color.var)">
-            <div class="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 transition-opacity group-hover:opacity-100">
-              <span class="text-sm font-semibold text-surface-foreground">{{ copiedColor === color.var ? "Copied!" : "Copy color" }}</span>
-            </div>
-          </button>
-
-          <p class="flex w-full flex-row items-start justify-between p-1 text-start">
-            <span class="text-sm font-medium">{{ color.name }}</span>
-            <span class="text-xs text-muted-foreground">{{ colorValues[color.var] }}</span>
-          </p>
+            <button :title="`Copy ${color.name}`" class="transition-transform hover:scale-110" @click="handleCopyColor(color.var, index)">
+              <icon :name="colorActions[index]!.icon.value" size="20" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -63,56 +72,74 @@
 </template>
 
 <script setup lang="ts">
+import SymbolMonoDark from "~/assets/symbol-mono-dark.png"
+import SymbolMonoLight from "~/assets/symbol-mono-light.png"
 import Symbol from "~/assets/symbol.png"
 import WordmarkDark from "~/assets/wordmark-dark.png"
 import WordmarkLight from "~/assets/wordmark-light.png"
 
+const { createActionHandler } = useActionIcon()
 const { colorMode } = useTheme()
 const colorValues = ref<Record<string, string>>({})
-const copiedColor = ref<string | null>(null)
 
-const LOGOS = [
-  { name: "Logo", image: Symbol, bgClass: "bg-background!" },
+const SYMBOLS = [
+  { name: "Symbol", image: Symbol, bgClass: "bg-background!" },
+  { name: "Symbol Mono (dark)", image: SymbolMonoDark, bgClass: "bg-[#f9fafb]!" },
+  { name: "Symbol Mono (light)", image: SymbolMonoLight, bgClass: "bg-[#030712]!" },
+]
+
+const WORDMARKS = [
   { name: "Wordmark (dark)", image: WordmarkDark, bgClass: "bg-[#f9fafb]!" },
   { name: "Wordmark (light)", image: WordmarkLight, bgClass: "bg-[#030712]!" },
 ]
 
-const BASE_COLORS = [
+const COLORS = [
   { name: "Background", var: "--background" },
   { name: "Foreground", var: "--foreground" },
   { name: "Card", var: "--card" },
   { name: "Overlay", var: "--overlay" },
   { name: "Muted", var: "--muted" },
   { name: "Muted Foreground", var: "--muted-foreground" },
-]
-
-const BRAND_COLORS = [
-  { name: "Primary", var: "--primary" },
-  { name: "Secondary", var: "--secondary" },
   { name: "Danger", var: "--danger" },
   { name: "Success", var: "--success" },
+  { name: "Primary", var: "--primary" },
+  { name: "Secondary", var: "--secondary" },
 ]
 
-function handleDownloadImage(logo: { name: string, image: string }) {
+const symbolActions = SYMBOLS.map(() => createActionHandler("mdi:download"))
+const wordmarkActions = WORDMARKS.map(() => createActionHandler("mdi:download"))
+const colorActions = COLORS.map(() => createActionHandler("mdi:copy"))
+
+function handleDownloadImage(logo: { name: string, image: string }, index: number, actions: ReturnType<typeof createActionHandler>[]) {
+  const action = actions[index]
+  if (!action) {
+    return
+  }
+
   const link = document.createElement("a")
   link.href = logo.image
   link.download = logo.name.replace(/\s+/g, "-").toLowerCase()
   link.click()
+  action.triggerSuccess()
 }
 
-async function handleCopyColor(colorVar: string) {
+async function handleCopyColor(colorVar: string, index: number) {
+  const action = colorActions[index]
+  if (!action) {
+    return
+  }
+
   const value = colorValues.value[colorVar]
   if (!value || value === "—") {
     return
   }
 
-  await navigator.clipboard.writeText(value)
-  copiedColor.value = colorVar
+  await action.triggerCopy(value)
 }
 
 function updateColors() {
   const styles = getComputedStyle(document.documentElement)
-  for (const color of [...BASE_COLORS, ...BRAND_COLORS]) {
+  for (const color of [...COLORS]) {
     const value = styles.getPropertyValue(color.var).trim()
     colorValues.value[color.var] = value || "—"
   }
