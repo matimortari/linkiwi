@@ -19,7 +19,7 @@
         </div>
 
         <button class="btn-danger self-end" @click="handleDeleteAnalytics">
-          <icon :name="resetStatus === 'reset' ? 'mdi:check' : 'mdi:close'" size="20" />
+          <icon :name="resetAction.icon.value" size="20" />
           <span>Reset</span>
         </button>
       </div>
@@ -108,11 +108,13 @@
 </template>
 
 <script setup lang="ts">
+const { createActionHandler } = useActionIcon()
 const analyticsStore = useAnalyticsStore()
 const userStore = useUserStore()
 const { totalViews, totalClicks, clickRate, joinedAt, pageViewsChartData, linkClicksChartData, iconClicksChartData, referrerChartData } = useAnalyticsData()
-const resetStatus = ref<"idle" | "reset">("idle")
 const referrerStats = computed(() => analyticsStore.referrerStats?.referrers || [])
+
+const resetAction = createActionHandler("mdi:close")
 
 const summaryItems = computed(() => [
   {
@@ -172,21 +174,10 @@ async function handleDeleteAnalytics() {
     analyticsStore.getAnalytics(),
     analyticsStore.getReferrerStats(),
   ])
-  resetStatus.value = "reset"
-}
-
-function useStatusAutoReset(statusRef: Ref<"idle" | string>) {
-  watch(statusRef, (value, _, onInvalidate) => {
-    if (value !== "idle") {
-      const t = setTimeout(() => (statusRef.value = "idle"), 2000)
-      onInvalidate(() => clearTimeout(t))
-    }
-  })
+  resetAction.triggerSuccess()
 }
 
 onMounted(async () => {
-  useStatusAutoReset(resetStatus)
-
   await Promise.all([
     analyticsStore.getAnalytics(),
     analyticsStore.getReferrerStats(),

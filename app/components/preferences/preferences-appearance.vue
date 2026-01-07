@@ -18,11 +18,11 @@
 
         <div class="flex flex-row items-center gap-2 md:gap-1">
           <button class="btn-danger" @click="handleResetPreferences">
-            <icon :name="resetStatus === 'reset' ? 'mdi:check' : 'mdi:close'" size="20" />
+            <icon :name="resetAction.icon.value" size="20" />
             <span>Reset</span>
           </button>
           <button class="btn-primary" @click="handleUpdatePreferences">
-            <icon :name="saveStatus === 'saved' ? 'mdi:check' : 'mdi:content-save-check'" size="20" />
+            <icon :name="saveAction.icon.value" size="20" />
             <span>Save</span>
           </button>
         </div>
@@ -34,34 +34,22 @@
 </template>
 
 <script setup lang="ts">
+const { createActionHandler } = useActionIcon()
 const userStore = useUserStore()
 const { preferences } = storeToRefs(userStore)
 const activeTab = ref("background")
-const saveStatus = ref<"idle" | "saved">("idle")
-const resetStatus = ref<"idle" | "reset">("idle")
+
+const saveAction = createActionHandler("mdi:content-save-check")
+const resetAction = createActionHandler("mdi:close")
 
 async function handleUpdatePreferences() {
   await userStore.updatePreferences(preferences.value!)
-  saveStatus.value = "saved"
+  saveAction.triggerSuccess()
 }
 
 async function handleResetPreferences() {
   await userStore.updatePreferences(DEFAULT_PREFERENCES)
   Object.assign(preferences.value, DEFAULT_PREFERENCES)
-  resetStatus.value = "reset"
+  resetAction.triggerSuccess()
 }
-
-function useStatusAutoReset(statusRef: Ref<"idle" | string>) {
-  watch(statusRef, (value, _, onInvalidate) => {
-    if (value !== "idle") {
-      const t = setTimeout(() => (statusRef.value = "idle"), 2000)
-      onInvalidate(() => clearTimeout(t))
-    }
-  })
-}
-
-onMounted(() => {
-  useStatusAutoReset(saveStatus)
-  useStatusAutoReset(resetStatus)
-})
 </script>

@@ -17,7 +17,7 @@
           <PreferencesCheckbox id="enableGuestbook" v-model:value="preferences.enableGuestbook" label="Enable Guestbook" class="max-w-xs" />
 
           <button class="btn-primary" @click="handleSubmit">
-            <icon :name="saveStatus === 'saved' ? 'mdi:check' : 'mdi:content-save-check'" size="20" />
+            <icon :name="saveAction.icon.value" size="20" />
             <span>Save</span>
           </button>
         </div>
@@ -69,31 +69,22 @@
 </template>
 
 <script setup lang="ts">
+const { createActionHandler } = useActionIcon()
 const { clear } = useUserSession()
 const userStore = useUserStore()
 const { preferences } = storeToRefs(userStore)
 const comments = computed(() => userStore.user?.comments ?? [])
-const saveStatus = ref<"idle" | "saved">("idle")
+
+const saveAction = createActionHandler("mdi:content-save-check")
 
 async function handleSubmit() {
-  saveStatus.value = "idle"
-
   await userStore.updatePreferences({
     enableGuestbook: preferences.value.enableGuestbook,
   })
 
   await userStore.getUser()
-  saveStatus.value = "saved"
+  saveAction.triggerSuccess()
 }
-
-watch(saveStatus, (newStatus, _oldStatus, onInvalidate) => {
-  if (newStatus !== "idle") {
-    const timer = setTimeout(() => {
-      saveStatus.value = "idle"
-    }, 2000)
-    onInvalidate(() => clearTimeout(timer))
-  }
-})
 
 async function handleDeleteUser() {
   if (!confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
