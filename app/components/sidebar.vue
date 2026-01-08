@@ -12,9 +12,7 @@
     :class="[isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0']"
   >
     <div class="flex h-full flex-col gap-8 px-12 md:px-0">
-      <Spinner v-if="!user" />
-
-      <div v-else class="navigation-group w-full gap-4!">
+      <div v-if="user" class="navigation-group w-full gap-4!">
         <div class="relative size-12 shrink-0">
           <img v-if="user.image" :src="user.image" alt="Avatar" class="size-full rounded-full border object-cover select-none">
 
@@ -24,9 +22,7 @@
         </div>
 
         <div class="flex w-full min-w-0 flex-col gap-1 overflow-hidden">
-          <span class="text-sm font-semibold wrap-break-word">
-            {{ user.name }}
-          </span>
+          <span class="text-sm font-semibold wrap-break-word">{{ user.name }}</span>
           <nuxt-link :to="`/${user.slug}`" :title="`${BASE_URL}/${user.slug}`" class="text-caption truncate hover:underline">
             @{{ user.slug }}
           </nuxt-link>

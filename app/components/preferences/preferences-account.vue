@@ -40,6 +40,7 @@
                   </p>
                   <span v-if="comment.email" class="text-xs text-muted-foreground">({{ comment.email }})</span>
                 </div>
+
                 <span class="text-caption">{{ formatDate(new Date(comment.createdAt)) }}</span>
               </div>
 

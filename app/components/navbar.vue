@@ -11,12 +11,12 @@
         </button>
 
         <button v-if="loggedIn" class="btn" aria-label="Sign Out" @click="signOut">
-          <icon name="ph:sign-out" size="20" />
+          <icon name="mdi:logout" size="20" />
           <span>Sign Out</span>
         </button>
 
         <nuxt-link v-if="!loggedIn" to="/sign-in" class="btn" aria-label="Sign In">
-          <icon name="ph:sign-in" size="20" />
+          <icon name="mdi:login" size="20" />
           <span>Sign In</span>
         </nuxt-link>
       </nav>

@@ -2,10 +2,9 @@
   <section
     id="hero" v-motion
     :initial="{ opacity: 0, y: -40 }" :visible="{ opacity: 1, y: 0 }"
-    :duration="800" class="flex min-h-screen flex-col items-center justify-center overflow-hidden border-b-2 px-4 py-40 md:flex-row md:p-24"
+    :duration="800" class="flex min-h-[90%] w-full flex-col items-center justify-center overflow-hidden border-b-2 px-4 py-40 md:flex-row md:p-24"
   >
-    <header class="flex flex-col items-center gap-2.5 text-center md:items-start md:text-start">
-      <span class="font-semibold text-secondary">Your link-in-bio page</span>
+    <header class="flex flex-col items-center gap-4 text-center md:items-start md:text-start">
       <h1 class="max-w-md font-display text-5xl! leading-16 md:text-6xl!">
         Keep all your stuff together!
       </h1>
@@ -25,7 +24,7 @@
   <section
     id="product" v-motion
     :initial="{ opacity: 0, y: 20 }" :visible="{ opacity: 1, y: 0 }"
-    :duration="800" class="relative flex flex-col items-center justify-center gap-12 p-12 md:p-32"
+    :duration="800" class="relative flex w-full flex-col items-center justify-center gap-12 p-12 text-center md:p-32"
   >
     <h2>
       Create Your Page In Minutes
@@ -33,13 +32,18 @@
 
     <div class="container mx-auto grid w-full grid-cols-1 items-center gap-12 md:grid-cols-2">
       <div class="order-1 flex items-center justify-center">
-        <div class="relative size-64 md:size-80">
+        <div class="relative h-80 w-64">
           <div class="absolute inset-0 animate-pulse rounded-2xl bg-linear-to-br from-primary to-secondary opacity-20 blur-2xl" />
 
-          <div class="overlay relative flex size-full flex-col items-center justify-center gap-4">
-            <icon name="mdi:link-variant" size="60" class="text-primary" />
-            <div class="flex flex-col gap-2 text-center">
-              <span v-for="i in 3" :key="i" class="h-4 w-32 animate-pulse rounded bg-muted" />
+          <div class="overlay relative flex size-full flex-col items-center gap-4">
+            <icon name="mdi:link-variant" size="60" class="my-4 shrink-0 text-primary" />
+
+            <div class="flex flex-row items-center gap-2">
+              <span v-for="i in 3" :key="i" class="size-8 rounded-full bg-muted">{{ '' }}</span>
+            </div>
+
+            <div class="flex w-full flex-col items-center gap-2">
+              <span v-for="i in 3" :key="i" class="min-h-6 w-32 animate-pulse truncate rounded-full bg-muted p-2 text-center text-sm select-none" />
             </div>
           </div>
         </div>
@@ -64,7 +68,7 @@
   <section
     id="analytics" v-motion
     :initial="{ opacity: 0, y: 20 }" :visible="{ opacity: 1, y: 0 }"
-    :duration="800" class="relative flex flex-col items-center justify-center gap-12 bg-muted/30 p-12 md:p-32"
+    :duration="800" class="relative flex w-full flex-col items-center justify-center gap-12 bg-muted/30 p-12 text-center md:p-32"
   >
     <h2>
       Track Your Performance
@@ -90,15 +94,15 @@
         <div class="relative w-full max-w-md">
           <div class="absolute inset-0 animate-pulse rounded-2xl bg-linear-to-br from-secondary to-primary opacity-20 blur-2xl" />
 
-          <div class="overlay relative space-y-1 backdrop-blur-sm">
-            <div class="grid grid-cols-2 gap-1">
-              <div v-for="item in MOCK_ANALYTICS" :key="item.label" class="card navigation-group">
-                <icon :name="item.icon" size="30" class="text-primary" />
-                <div class="flex flex-col items-start">
+          <div class="overlay relative space-y-2 backdrop-blur-sm">
+            <div class="grid grid-cols-2 gap-2">
+              <div v-for="item in MOCK_ANALYTICS" :key="item.label" class="card navigation-group p-2!">
+                <icon :name="item.icon" size="30" class="shrink-0 text-primary" />
+                <div class="flex flex-col items-start text-start">
                   <p class="text-caption">
                     {{ item.label }}
                   </p>
-                  <span class="font-semibold md:text-lg 2xl:text-xl">{{ item.value }}</span>
+                  <span class="text-lg font-semibold">{{ item.value }}</span>
                 </div>
               </div>
             </div>
@@ -119,7 +123,7 @@
     </div>
   </section>
 
-  <section id="cta" class="relative z-10 flex min-h-[50vh] flex-col items-center justify-center gap-8 border-y bg-card p-20 text-center md:p-32">
+  <section id="cta" class="relative z-10 flex min-h-[50vh] w-full flex-col items-center justify-center gap-8 border-y bg-card p-20 text-center md:p-32">
     <div class="cta-wrapper-grid" />
     <div class="cta-wrapper-vignette" />
 
@@ -177,22 +181,8 @@ definePageMeta({
 
 .text-lead {
   max-width: 28rem;
-  font-size: 0.875rem;
-  line-height: 1.5rem;
-  font-weight: 500;
   color: var(--muted-foreground);
-}
-
-.animate-progress {
-  animation: progress 10s linear infinite;
-}
-
-@keyframes progress {
-  0% {
-    width: 0%;
-  }
-  100% {
-    width: 100%;
-  }
+  line-height: 1.25rem;
+  font-weight: 500;
 }
 </style>

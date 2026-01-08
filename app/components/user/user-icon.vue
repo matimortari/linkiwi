@@ -14,6 +14,8 @@ const props = defineProps<{
 
 const emit = defineEmits<(e: "click") => void>()
 
+const isHovered = ref(false)
+
 async function handleClick(event: MouseEvent) {
   event.preventDefault()
   emit("click")
@@ -22,5 +24,4 @@ async function handleClick(event: MouseEvent) {
 }
 
 const { iconStyle, iconInnerStyle } = useDynamicStyles(toRef(props, "preferences"))
-const isHovered = ref(false)
 </script>

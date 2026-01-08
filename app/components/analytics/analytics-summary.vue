@@ -8,7 +8,7 @@
       <div class="flex flex-col justify-between gap-2 p-2 pt-0 md:flex-row">
         <div class="grid grid-cols-2 gap-2 md:grid-cols-4 md:justify-items-center">
           <div v-for="item in summaryItems" :key="item.label" class="navigation-group">
-            <icon :name="item.icon" size="30" class="text-primary" />
+            <icon :name="item.icon" size="30" class="shrink-0 text-primary" />
             <div class="flex flex-col items-start">
               <p class="text-caption">
                 {{ item.label }}
@@ -73,9 +73,7 @@
                     {{ stat.count }}
                   </td>
                   <td class="px-4 py-2 text-right text-sm">
-                    <span class="inline-flex items-center rounded-full border bg-primary/20 px-2 py-1 text-xs font-medium text-primary">
-                      {{ stat.percentage }}%
-                    </span>
+                    <span class="inline-flex items-center rounded-full border bg-primary/20 px-2 py-1 text-xs font-medium text-primary">{{ stat.percentage }}%</span>
                   </td>
                 </tr>
               </tbody>

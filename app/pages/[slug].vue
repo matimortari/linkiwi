@@ -17,6 +17,7 @@
       <p :style="slugStyle">
         {{ `@${userProfile.slug}` }}
       </p>
+
       <p class="max-w-sm leading-4 whitespace-break-spaces" :style="descriptionStyle">
         {{ userProfile.description }}
       </p>

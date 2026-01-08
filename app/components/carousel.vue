@@ -1,16 +1,14 @@
 <template>
-  <div v-if="preset" class="my-20 -mb-40 flex w-full items-center justify-center select-none md:w-1/2 md:min-w-[320px] md:justify-end 2xl:-mb-64 2xl:min-w-80">
-    <transition name="carousel-3d" mode="out-in">
-      <div :key="preset.slug" class="relative flex h-150 w-full flex-col overflow-hidden rounded-[2.5rem] border-4 border-black! shadow-lg shadow-black md:w-[320px] 2xl:w-80">
+  <div v-if="preset" class="my-20 -mb-60 flex w-[320px] items-center justify-center select-none md:w-1/2 md:justify-end 2xl:-mb-64">
+    <transition name="carousel" mode="out-in">
+      <div :key="preset.slug" class="relative flex h-150 w-[320px] flex-col overflow-hidden rounded-[2.5rem] border-4 shadow-lg">
         <div class="absolute -top-1 z-10 w-full rounded-t-[2.5rem] bg-linear-to-r from-primary to-secondary pb-1">
           <div class="flex flex-row items-center justify-between rounded-t-[2.5rem] bg-[#111016] p-4 pb-2">
             <div class="flex flex-row items-center gap-2">
               <span v-for="i in 3" :key="i" class="size-2.5 rounded-full bg-[#3b3b41]" />
             </div>
 
-            <span class="rounded-2xl bg-[#3b3b41] p-1 font-mono text-xs text-[#ebe8e8]">
-              @{{ preset.slug }}
-            </span>
+            <span class="rounded-2xl bg-[#3b3b41] p-1 font-mono text-xs text-[#ebe8e8]">@{{ preset.slug }}</span>
           </div>
         </div>
 
@@ -34,10 +32,10 @@
             </li>
           </ul>
 
-          <ul class="flex flex-col items-center space-y-4 p-4">
+          <ul class="flex w-full flex-col items-center gap-4">
             <li
               v-for="link in preset.links" :key="link.id"
-              class="flex w-full max-w-72 min-w-32 justify-center" :style="linkStyle(linkHover[link.id] ?? false)"
+              class="flex w-full max-w-72 justify-center" :style="linkStyle(linkHover[link.id] ?? false)"
               @mouseenter="linkHover[link.id] = true" @mouseleave="linkHover[link.id] = false"
             >
               <span :style="linkInnerStyle">{{ link.title }}</span>
@@ -77,28 +75,28 @@ function getCarouselPreset(presets: typeof CAROUSEL_PRESETS, interval = 3000) {
 </script>
 
 <style scoped>
-.carousel-3d-enter-active,
-.carousel-3d-leave-active {
+.carousel-enter-active,
+.carousel-leave-active {
   transition:
     transform 0.4s ease,
     opacity 0.4s ease;
   transform-style: preserve-3d;
 }
 
-.carousel-3d-enter-from {
+.carousel-enter-from {
   transform: rotateY(90deg) scale(0.8);
   opacity: 0;
 }
-.carousel-3d-enter-to {
+.carousel-enter-to {
   transform: rotateY(0deg) scale(1);
   opacity: 1;
 }
 
-.carousel-3d-leave-from {
+.carousel-leave-from {
   transform: rotateY(0deg) scale(1);
   opacity: 1;
 }
-.carousel-3d-leave-to {
+.carousel-leave-to {
   transform: rotateY(-90deg) scale(0.95);
   opacity: 0;
 }

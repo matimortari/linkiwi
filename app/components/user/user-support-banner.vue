@@ -44,14 +44,12 @@ const banner = computed(() => {
     return null
   }
 
-  const key = activeBanner.value
-
   return {
-    message: BANNER_MESSAGES[key],
-    description: BANNER_DESCRIPTIONS[key],
-    icon: BANNER_ICONS[key],
-    link: BANNER_LINKS[key],
-    class: BANNER_STYLES[key],
+    message: BANNER_MESSAGES[activeBanner.value],
+    description: BANNER_DESCRIPTIONS[activeBanner.value],
+    icon: BANNER_ICONS[activeBanner.value],
+    link: BANNER_LINKS[activeBanner.value],
+    class: BANNER_STYLES[activeBanner.value],
   }
 })
 
@@ -61,13 +59,9 @@ function handleScroll() {
   lastScrollY = current
 }
 
-onMounted(() => {
-  addEventListener("scroll", handleScroll)
-})
+onMounted(() => addEventListener("scroll", handleScroll))
 
-onBeforeUnmount(() => {
-  removeEventListener("scroll", handleScroll)
-})
+onBeforeUnmount(() => removeEventListener("scroll", handleScroll))
 </script>
 
 <style scoped>

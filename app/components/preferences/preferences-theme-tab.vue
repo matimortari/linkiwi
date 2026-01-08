@@ -12,7 +12,7 @@
         </div>
 
         <div class="flex w-full flex-col items-center gap-4">
-          <span v-for="i in 2" :key="i" class="line-clamp-1 min-h-8 w-full truncate p-2 text-center text-sm select-none" :style="getThemeLinkStyle(theme.preferences)">{{ '' }}</span>
+          <span v-for="i in 2" :key="i" class="min-h-8 w-full truncate p-2 text-center text-sm select-none" :style="getThemeLinkStyle(theme.preferences)">{{ '' }}</span>
         </div>
       </button>
 

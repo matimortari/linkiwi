@@ -1,5 +1,5 @@
 <template>
-  <div class="relative flex min-h-screen flex-1">
+  <div class="relative flex min-h-screen w-full flex-1">
     <div class="z-10 flex w-full flex-col items-center justify-center gap-4 py-12 text-center md:w-1/2">
       <header class="flex flex-col items-center gap-4">
         <h1 class="font-display">
@@ -18,7 +18,7 @@
         </button>
       </div>
 
-      <p class="text-caption max-w-xs border-t p-4">
+      <p class="max-w-xs border-t p-4 text-sm font-medium text-muted-foreground">
         By signing in, you agree to our
         <nuxt-link to="/legal/terms" class="text-primary hover:underline">
           Terms of Service

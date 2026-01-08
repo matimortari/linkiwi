@@ -1,20 +1,9 @@
 <template>
   <Navbar />
 
-  <Loading v-if="isLoading" />
-
-  <main v-show="!isLoading" class="min-h-screen w-full overflow-x-hidden">
+  <main class="flex min-h-screen flex-col items-center">
     <slot />
   </main>
 
   <Footer />
 </template>
-
-<script setup lang="ts">
-const isLoading = ref(true)
-
-onMounted(async () => {
-  await nextTick()
-  isLoading.value = false
-})
-</script>

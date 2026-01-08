@@ -1,5 +1,5 @@
 <template>
-  <div v-if="user" class="flex w-full flex-col gap-4 md:flex-row">
+  <div v-if="user" class="flex w-full flex-col md:flex-row">
     <div
       v-motion :initial="{ opacity: 0, x: -20 }"
       :visible="{ opacity: 1, x: 0 }" :duration="800"
