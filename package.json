@@ -14,9 +14,9 @@
     "db:studio": "prisma studio"
   },
   "dependencies": {
-    "@nuxt/content": "3.9.0",
+    "@nuxt/content": "3.10.0",
     "@nuxt/fonts": "0.12.1",
-    "@nuxt/icon": "2.1.1",
+    "@nuxt/icon": "2.2.0",
     "@nuxtjs/color-mode": "4.0.0",
     "@pinia/nuxt": "0.11.3",
     "@prisma/client": "6.19.1",
@@ -30,19 +30,19 @@
     "nuxt-auth-utils": "0.5.26",
     "qrcode-generator": "2.0.4",
     "tailwindcss": "4.1.18",
-    "vue": "3.5.25",
+    "vue": "3.5.26",
     "vue-chartjs": "5.3.3",
     "vue-router": "4.6.4",
-    "zod": "4.2.1"
+    "zod": "4.3.5"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "6.7.1",
+    "@antfu/eslint-config": "6.7.3",
     "@iconify-json/mdi": "1.2.3",
-    "@iconify-json/simple-icons": "1.2.63",
+    "@iconify-json/simple-icons": "1.2.65",
     "@types/node": "25.0.0",
     "eslint": "9.39.2",
     "eslint-plugin-better-tailwindcss": "3.8.0",
-    "eslint-plugin-format": "1.1.0",
+    "eslint-plugin-format": "1.2.0",
     "prisma": "6.19.1",
     "typescript": "5.9.3"
   }
