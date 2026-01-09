@@ -7,18 +7,16 @@
   --background: #f9fafb;
   --foreground: #262626;
   --card: #f3f4f6;
-  --overlay: #e5e7eb;
+  --input: #e5e7eb;
   --muted: #d1d5db;
   --muted-foreground: #4b5563;
+  --surface-foreground: #e5e7eb;
 
   /* Surfaces */
   --primary: #91a173;
   --secondary: #de896d;
   --danger: #991b1b;
   --success: #064e3b;
-
-  /* Content on surfaces */
-  --surface-foreground: #e5e7eb;
 
   background-color: var(--background);
   color: var(--foreground);
@@ -36,18 +34,16 @@ html.dark {
   --background: #030712;
   --foreground: #e5e7eb;
   --card: #111827;
-  --overlay: #1f2937;
+  --input: #1f2937;
   --muted: #374151;
   --muted-foreground: #9ca3af;
+  --surface-foreground: #e5e7eb;
 
   /* Surfaces */
   --primary: #91a173;
   --secondary: #de896d;
   --danger: #991b1b;
   --success: #064e3b;
-
-  /* Content on surfaces */
-  --surface-foreground: #e5e7eb;
 }
 
 /*
@@ -57,18 +53,17 @@ html.dark {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
-  --color-overlay: var(--overlay);
+  --color-input: var(--input);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
-
+  --color-surface-foreground: var(--surface-foreground);
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
   --color-danger: var(--danger);
   --color-success: var(--success);
-  --color-surface-foreground: var(--surface-foreground);
 
   --font-default: "Poppins", sans-serif;
-  --font-display: "Spicy Rice";
+  --font-display: "Spicy Rice", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 }
 
@@ -151,7 +146,7 @@ h6 {
 }
 
 .overlay {
-  background-color: var(--overlay);
+  background-color: var(--card);
   border: 1px solid var(--muted);
   border-radius: 1.25rem;
   padding: 1rem;
@@ -166,7 +161,7 @@ input,
 textarea,
 select {
   appearance: none;
-  background-color: var(--card);
+  background-color: var(--input);
   color: var(--muted-foreground);
   border: 1px solid var(--muted);
   accent-color: var(--muted);
@@ -178,8 +173,15 @@ select {
 
 input:hover,
 textarea:hover,
-select:hover {
-  box-shadow: 0 0 0 1px var(--muted);
+select:hover,
+input:focus,
+textarea:focus,
+select:focus,
+input:active,
+textarea:active,
+select:active {
+  transform: scale(1.02);
+  filter: brightness(0.8);
 }
 
 input[type="checkbox"],

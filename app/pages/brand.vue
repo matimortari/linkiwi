@@ -97,7 +97,7 @@ const COLORS = [
   { name: "Background", var: "--background" },
   { name: "Foreground", var: "--foreground" },
   { name: "Card", var: "--card" },
-  { name: "Overlay", var: "--overlay" },
+  { name: "Input", var: "--input" },
   { name: "Muted", var: "--muted" },
   { name: "Muted Foreground", var: "--muted-foreground" },
   { name: "Danger", var: "--danger" },
