@@ -5,7 +5,7 @@
         Brand Assets
       </h2>
       <p class="text-caption">
-        Visual language and assets for Linkstashr, including logos and color palette.
+        Visual language and assets for AllLinks, including logos and color palette.
       </p>
     </header>
 
@@ -151,7 +151,7 @@ watch(colorMode, () => updateColors(), { flush: "post" })
 
 useHead({
   title: "Brand",
-  link: [{ rel: "canonical", href: "https://linkstashr.vercel.app/brand" }],
-  meta: [{ name: "description", content: "Linkstashr Brand Assets." }],
+  link: [{ rel: "canonical", href: "https://alllinks-bio.vercel.app/brand" }],
+  meta: [{ name: "description", content: "AllLinks Brand Assets." }],
 })
 </script>

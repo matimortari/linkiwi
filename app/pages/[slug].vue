@@ -83,8 +83,8 @@ watch(slug, async (newSlug) => {
   if (userProfile.value) {
     useHead({
       title: `@${userProfile.value.slug}`,
-      link: [{ rel: "canonical", href: `https://linkstashr.vercel.app/${userProfile.value.slug}` }],
-      meta: [{ name: "description", content: `@${userProfile.value.slug} profile on Linkstashr.` }],
+      link: [{ rel: "canonical", href: `https://alllinks-bio.vercel.app/${userProfile.value.slug}` }],
+      meta: [{ name: "description", content: `@${userProfile.value.slug} profile on AllLinks.` }],
     })
   }
 }, { immediate: true })

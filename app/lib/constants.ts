@@ -1,4 +1,4 @@
-export const BASE_URL = "https://linkstashr.vercel.app"
+export const BASE_URL = "https://alllinks-bio.vercel.app"
 
 export const PRODUCT_BULLETS = [
   {

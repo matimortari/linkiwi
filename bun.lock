@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "linkstashr",
+      "name": "alllinks",
       "dependencies": {
         "@nuxt/content": "3.10.0",
         "@nuxt/fonts": "0.12.1",

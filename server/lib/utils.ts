@@ -91,7 +91,7 @@ export function categorizeReferrer(referrer: string | null | undefined): string 
   }
 
   // If it's from the same domain, mark as internal. Otherwise, categorize as external/other
-  if (url.includes("linkstashr.vercel.app") || url.includes("localhost")) {
+  if (url.includes("alllinks-bio.vercel.app") || url.includes("localhost")) {
     return "internal"
   }
 

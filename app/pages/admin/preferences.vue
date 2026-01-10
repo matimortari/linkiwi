@@ -36,8 +36,8 @@ const { user, loading, errors } = storeToRefs(useUserStore())
 
 useHead({
   title: "Preferences",
-  link: [{ rel: "canonical", href: "https://linkstashr.vercel.app/admin/preferences" }],
-  meta: [{ name: "description", content: "Linkstashr preferences page." }],
+  link: [{ rel: "canonical", href: "https://alllinks-bio.vercel.app/admin/preferences" }],
+  meta: [{ name: "description", content: "AllLinks preferences page." }],
 })
 
 definePageMeta({

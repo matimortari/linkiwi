@@ -6,10 +6,10 @@
 
         <div class="flex flex-row items-center justify-between gap-4">
           <p class="text-caption whitespace-nowrap">
-            © {{ new Date().getFullYear() }} Linkstashr. All rights reserved.
+            © {{ new Date().getFullYear() }} AllLinks. All rights reserved.
           </p>
 
-          <nuxt-link to="https://github.com/matimortari/linkstashr" target="_blank" aria-label="GitHub Repository">
+          <nuxt-link to="https://github.com/matimortari/alllinks" target="_blank" aria-label="GitHub Repository">
             <icon name="simple-icons:github" size="25" class="transition-transform hover:scale-110 hover:text-primary" />
           </nuxt-link>
         </div>

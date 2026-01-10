@@ -65,6 +65,6 @@ function signIn(provider: string) {
 
 useHead({
   title: "Sign In",
-  meta: [{ name: "description", content: "Linkstashr Sign In page" }],
+  meta: [{ name: "description", content: "AllLinks Sign In page" }],
 })
 </script>

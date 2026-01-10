@@ -133,10 +133,10 @@ function downloadQRCode() {
 function shareToSocial(platform: "twitter" | "facebook" | "linkedin" | "whatsapp") {
   const url = pageUrl.value
   const shareUrls: Record<string, string> = {
-    twitter: `https://x.com/intent/tweet?text=${encodeURIComponent(`🚀 Check out my #Linkstashr profile! 🌟\n\n🔗 ${url}`)}`,
+    twitter: `https://x.com/intent/tweet?text=${encodeURIComponent(`🚀 Check out my #AllLinks profile! 🌟\n\n🔗 ${url}`)}`,
     facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
     linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
-    whatsapp: `https://wa.me/?text=${encodeURIComponent(`Check out my Linkstashr profile: ${url}`)}`,
+    whatsapp: `https://wa.me/?text=${encodeURIComponent(`Check out my AllLinks profile: ${url}`)}`,
   }
 
   const shareUrl = shareUrls[platform]

@@ -7,8 +7,8 @@ const pageContent = await queryCollection("content").path("/terms-of-service").f
 
 useHead({
   title: "Terms of Service",
-  link: [{ rel: "canonical", href: "https://linkstashr.vercel.app/legal/terms" }],
-  meta: [{ name: "description", content: "Linkstashr Terms of Service." }],
+  link: [{ rel: "canonical", href: "https://alllinks-bio.vercel.app/legal/terms" }],
+  meta: [{ name: "description", content: "AllLinks Terms of Service." }],
 })
 
 definePageMeta({

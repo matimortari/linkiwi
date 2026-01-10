@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 Disallow: /admin/
-Sitemap: https://linkstashr.vercel.app/sitemap.xml
+Sitemap: https://alllinks-bio.vercel.app/sitemap.xml
