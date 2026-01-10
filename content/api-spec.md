@@ -1,6 +1,6 @@
-# Linkstashr API Specification
+# AllLinks API Specification
 
-This document provides documentation for the Linkstashr API.
+This document provides documentation for the AllLinks API.
 
 ## Overview
 

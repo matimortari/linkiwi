@@ -3,12 +3,12 @@
     <img src="public/logo-light.png" alt="Logo" width="300"/>
 </h1>
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=matimortari_linkstashr&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=matimortari_linkstashr)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=matimortari_linkstashr&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=matimortari_linkstashr)
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=matimortari_linkstashr&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=matimortari_linkstashr)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=matimortari_alllinks&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=matimortari_alllinks)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=matimortari_alllinks&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=matimortari_alllinks)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=matimortari_alllinks&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=matimortari_alllinks)
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat&colorA=0d1117)](https://opensource.org/licenses/MIT)
 
-[**Linkstashr**](https://linkstashr.vercel.app) is a link aggregation platform that lets users and businesses create a customizable landing page for sharing their links and information in one place.
+[**AllLinks**](https://alllinks-bio.vercel.app) is a link aggregation platform that lets users and businesses create a customizable landing page for sharing their links and information in one place.
 
 </div>
 
