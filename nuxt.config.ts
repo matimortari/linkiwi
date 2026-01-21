@@ -1,4 +1,3 @@
-import { fileURLToPath } from "node:url"
 import tailwindcss from "@tailwindcss/vite"
 
 export default defineNuxtConfig({
@@ -13,9 +12,6 @@ export default defineNuxtConfig({
   ],
   imports: {
     dirs: ["lib/**"],
-  },
-  alias: {
-    "#server": fileURLToPath(new URL("./server", import.meta.url)),
   },
   runtimeConfig: {
     session: {
