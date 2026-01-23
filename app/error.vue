@@ -2,7 +2,7 @@
   <div class="container mx-auto grid min-h-screen grid-cols-1 items-center gap-6 p-24 md:grid-cols-2 md:gap-12">
     <div class="flex flex-col items-center gap-4 text-center md:items-start md:text-start">
       <p class="text-4xl font-semibold md:text-5xl md:whitespace-nowrap">
-        {{ error.statusCode }} - {{ error.statusMessage || "An unexpected error has occurred." }}
+        {{ error.status }} - {{ error.statusText || "An unexpected error has occurred." }}
       </p>
 
       <p class="flex flex-col text-lg text-muted-foreground">

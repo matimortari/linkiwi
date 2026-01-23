@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   const analyticsData = analyticsRecordSchema.safeParse(body)
   if (!analyticsData.success) {
-    throw createError({ statusCode: 400, statusMessage: analyticsData.error.issues[0]?.message })
+    throw createError({ status: 400, statusText: analyticsData.error.issues[0]?.message })
   }
 
   const { type, userId, id } = analyticsData.data
@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
     select: { id: true },
   })
   if (!user) {
-    throw createError({ statusCode: 404, statusMessage: "User not found" })
+    throw createError({ status: 404, statusText: "User not found" })
   }
 
   // Do not record analytics for own profile views/clicks
@@ -38,7 +38,7 @@ export default defineEventHandler(async (event) => {
 
     case "link": {
       if (!id) {
-        throw createError({ statusCode: 400, statusMessage: "Link ID is required" })
+        throw createError({ status: 400, statusText: "Link ID is required" })
       }
 
       const link = await db.userLink.findFirst({
@@ -46,7 +46,7 @@ export default defineEventHandler(async (event) => {
         select: { id: true, clicks: true },
       })
       if (!link) {
-        throw createError({ statusCode: 404, statusMessage: "Link not found" })
+        throw createError({ status: 404, statusText: "Link not found" })
       }
 
       const [linkClick] = await db.$transaction([
@@ -70,7 +70,7 @@ export default defineEventHandler(async (event) => {
 
     case "icon": {
       if (!id) {
-        throw createError({ statusCode: 400, statusMessage: "Icon ID is required" })
+        throw createError({ status: 400, statusText: "Icon ID is required" })
       }
 
       const icon = await db.userIcon.findFirst({
@@ -78,7 +78,7 @@ export default defineEventHandler(async (event) => {
         select: { id: true, clicks: true },
       })
       if (!icon) {
-        throw createError({ statusCode: 404, statusMessage: "Icon not found" })
+        throw createError({ status: 404, statusText: "Icon not found" })
       }
 
       const [iconClick] = await db.$transaction([
@@ -101,6 +101,6 @@ export default defineEventHandler(async (event) => {
     }
 
     default:
-      throw createError({ statusCode: 400, statusMessage: "Invalid analytics type" })
+      throw createError({ status: 400, statusText: "Invalid analytics type" })
   }
 })

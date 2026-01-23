@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
   const iconId = getRouterParam(event, "icon")
   if (!iconId) {
-    throw createError({ statusCode: 400, statusMessage: "Icon ID is required" })
+    throw createError({ status: 400, statusText: "Icon ID is required" })
   }
 
   const iconData = await db.userIcon.findUnique({
@@ -13,10 +13,10 @@ export default defineEventHandler(async (event) => {
     select: { id: true, userId: true },
   })
   if (!iconData) {
-    throw createError({ statusCode: 404, statusMessage: "Icon not found" })
+    throw createError({ status: 404, statusText: "Icon not found" })
   }
   if (iconData.userId !== user.id) {
-    throw createError({ statusCode: 403, statusMessage: "You don't have permission to delete this icon" })
+    throw createError({ status: 403, statusText: "You don't have permission to delete this icon" })
   }
 
   await db.userIcon.delete({

@@ -3,7 +3,7 @@ import db from "#server/lib/db"
 export default defineEventHandler(async (event) => {
   const slug = getRouterParam(event, "slug")
   if (!slug) {
-    throw createError({ statusCode: 400, statusMessage: "Slug is required" })
+    throw createError({ status: 400, statusText: "Slug is required" })
   }
 
   const userProfile = await db.user.findUnique({
@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
     },
   })
   if (!userProfile) {
-    throw createError({ statusCode: 404, statusMessage: `User '${slug}' not found` })
+    throw createError({ status: 404, statusText: `User '${slug}' not found` })
   }
 
   return { userProfile }

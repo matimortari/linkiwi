@@ -6,12 +6,12 @@ export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
   const linkId = getRouterParam(event, "link")
   if (!linkId) {
-    throw createError({ statusCode: 400, statusMessage: "Link ID is required" })
+    throw createError({ status: 400, statusText: "Link ID is required" })
   }
   const body = await readBody(event)
   const result = updateUserLinkSchema.safeParse(body)
   if (!result.success) {
-    throw createError({ statusCode: 400, statusMessage: result.error.issues[0]?.message || "Invalid input" })
+    throw createError({ status: 400, statusText: result.error.issues[0]?.message || "Invalid input" })
   }
 
   const { url, title } = result.data
@@ -21,10 +21,10 @@ export default defineEventHandler(async (event) => {
     select: { id: true, userId: true },
   })
   if (!linkData) {
-    throw createError({ statusCode: 404, statusMessage: "Link not found" })
+    throw createError({ status: 404, statusText: "Link not found" })
   }
   if (linkData.userId !== user.id) {
-    throw createError({ statusCode: 403, statusMessage: "You don't have permission to update this link" })
+    throw createError({ status: 403, statusText: "You don't have permission to update this link" })
   }
 
   const updatedLink = await db.userLink.update({

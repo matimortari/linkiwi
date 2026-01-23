@@ -9,7 +9,7 @@ import { del, put } from "@vercel/blob"
 export async function getUserFromSession(event: H3Event<EventHandlerRequest>) {
   const session = await getUserSession(event)
   if (!session?.user?.id) {
-    throw createError({ statusCode: 401, statusMessage: "Unauthorized" })
+    throw createError({ status: 401, statusText: "Unauthorized" })
   }
 
   return session.user
@@ -141,13 +141,13 @@ export async function uploadFile({ path, file, maxSize, allowedMimeTypes, oldFil
   oldFileUrl?: string
 }) {
   if (!file || !(file instanceof File)) {
-    throw createError({ statusCode: 400, statusMessage: "No file uploaded" })
+    throw createError({ status: 400, statusText: "No file uploaded" })
   }
   if (allowedMimeTypes.length && !allowedMimeTypes.includes(file.type)) {
-    throw createError({ statusCode: 415, statusMessage: `Unsupported file type: ${file.type}` })
+    throw createError({ status: 415, statusText: `Unsupported file type: ${file.type}` })
   }
   if (file.size > maxSize) {
-    throw createError({ statusCode: 413, statusMessage: "File too large" })
+    throw createError({ status: 413, statusText: "File too large" })
   }
 
   const ext = file.name.split(".").pop()?.toLowerCase()

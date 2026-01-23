@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
 
   // Validate type if provided
   if (type && !["pageView", "linkClick", "iconClick"].includes(type as string)) {
-    throw createError({ statusCode: 400, statusMessage: "Invalid analytics type" })
+    throw createError({ status: 400, statusText: "Invalid analytics type" })
   }
 
   // Build date filter

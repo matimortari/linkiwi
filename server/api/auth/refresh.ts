@@ -1,7 +1,7 @@
 export default defineEventHandler(async (event) => {
   const session = await getUserSession(event)
   if (!session.user || !session.expiresAt || !session.lastActivityAt) {
-    throw createError({ statusCode: 401, message: "Not authenticated" })
+    throw createError({ status: 401, message: "Not authenticated" })
   }
 
   const now = new Date()
@@ -11,18 +11,18 @@ export default defineEventHandler(async (event) => {
   // Validate dates and check expiration/inactivity
   if (Number.isNaN(expiresAt.getTime()) || Number.isNaN(lastActivityAt.getTime())) {
     await clearUserSession(event)
-    throw createError({ statusCode: 401, message: "Invalid session data" })
+    throw createError({ status: 401, message: "Invalid session data" })
   }
 
   // Check if session has expired
   if (now > expiresAt) {
     await clearUserSession(event)
-    throw createError({ statusCode: 401, message: "Session expired" })
+    throw createError({ status: 401, message: "Session expired" })
   }
 
   if (now.getTime() - lastActivityAt.getTime() > 30 * 60 * 1000) {
     await clearUserSession(event)
-    throw createError({ statusCode: 401, message: "Session timed out due to inactivity" })
+    throw createError({ status: 401, message: "Session timed out due to inactivity" })
   }
 
   const newExpiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000)

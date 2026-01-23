@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   const form = await readFormData(event)
   const file = form.get("file")
   if (!file || !(file instanceof File)) {
-    throw createError({ statusCode: 400, statusMessage: "No file uploaded" })
+    throw createError({ status: 400, statusText: "No file uploaded" })
   }
 
   const imageUrl = await uploadFile({

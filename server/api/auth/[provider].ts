@@ -33,7 +33,7 @@ const extractUserData: Record<string, (user: any) => any> = {
 export default defineEventHandler(async (event: H3Event) => {
   const provider = event.context.params?.provider
   if (!provider || !configs[provider]) {
-    throw createError({ statusCode: 400, message: "Unknown OAuth provider" })
+    throw createError({ status: 400, message: "Unknown OAuth provider" })
   }
 
   try {
@@ -42,17 +42,17 @@ export default defineEventHandler(async (event: H3Event) => {
       github: defineOAuthGitHubEventHandler,
     }[provider]
     if (!oauthHandler) {
-      throw createError({ statusCode: 400, message: `OAuth handler not found for provider: ${provider}` })
+      throw createError({ status: 400, message: `OAuth handler not found for provider: ${provider}` })
     }
 
     return await oauthHandler({ config: configs[provider], async onSuccess(event: H3Event<EventHandlerRequest>, { user }: any) {
       if (!user || typeof user !== "object") {
-        throw createError({ statusCode: 400, message: `Invalid user data from ${provider}` })
+        throw createError({ status: 400, message: `Invalid user data from ${provider}` })
       }
 
       const userData = extractUserData[provider](user)
       if (!userData.id || !userData.email) {
-        throw createError({ statusCode: 400, message: `Missing required user data from ${provider}` })
+        throw createError({ status: 400, message: `Missing required user data from ${provider}` })
       }
 
       return handleOAuthUser(event, {
@@ -64,6 +64,6 @@ export default defineEventHandler(async (event: H3Event) => {
     } })(event)
   }
   catch {
-    throw createError({ statusCode: 500, message: "OAuth processing failed" })
+    throw createError({ status: 500, message: "OAuth processing failed" })
   }
 })

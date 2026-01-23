@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   const result = createCommentSchema.safeParse(body)
   if (!result.success) {
-    throw createError({ statusCode: 400, statusMessage: result.error.issues[0]?.message || "Invalid input" })
+    throw createError({ status: 400, statusText: result.error.issues[0]?.message || "Invalid input" })
   }
 
   const { userId, name, email, message } = result.data
@@ -16,10 +16,10 @@ export default defineEventHandler(async (event) => {
     include: { preferences: true },
   })
   if (!user) {
-    throw createError({ statusCode: 404, statusMessage: "User not found" })
+    throw createError({ status: 404, statusText: "User not found" })
   }
   if (!user.preferences?.enableGuestbook) {
-    throw createError({ statusCode: 403, statusMessage: "Guestbook is disabled for this user" })
+    throw createError({ status: 403, statusText: "Guestbook is disabled for this user" })
   }
 
   const comment = await db.comment.create({

@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   const result = createUserIconSchema.safeParse(body)
   if (!result.success) {
-    throw createError({ statusCode: 400, statusMessage: result.error.issues[0]?.message || "Invalid input" })
+    throw createError({ status: 400, statusText: result.error.issues[0]?.message || "Invalid input" })
   }
 
   const { url, platform, logo } = result.data
@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
     },
   })
   if (existingIcon) {
-    throw createError({ statusCode: 409, statusMessage: "Social icon for this platform already exists" })
+    throw createError({ status: 409, statusText: "Social icon for this platform already exists" })
   }
 
   const newIcon = await db.userIcon.create({

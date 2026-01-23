@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
     },
   })
   if (!userData) {
-    throw createError({ statusCode: 404, statusMessage: "User not found" })
+    throw createError({ status: 404, statusText: "User not found" })
   }
 
   return { userData }
