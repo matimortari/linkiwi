@@ -75,7 +75,7 @@
 </template>
 
 <script setup lang="ts">
-import { BACKGROUND_TYPES, BANNER_OPTIONS, BORDER_WIDTHS, FONT_FAMILIES, FONT_SIZES, FONT_WEIGHTS, LINK_FONT_SIZES, LINK_PADDING_SIZES, RADIUS_SIZES, SHADOW_WEIGHTS } from "#shared/lib/constants"
+import { BACKGROUND_TYPES, BANNER_OPTIONS, BORDER_WIDTHS, FONT_FAMILIES, FONT_SIZES, FONT_WEIGHTS, LINK_FONT_SIZES, LINK_PADDING_SIZES, RADIUS_SIZES, SHADOW_WEIGHTS } from "#shared/utils/constants"
 
 const props = defineProps<{
   preferences: UserPreferences

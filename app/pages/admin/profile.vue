@@ -42,6 +42,6 @@ useHead({
 
 definePageMeta({
   layout: "admin",
-  middleware: auth,
+  middleware: "auth",
 })
 </script>

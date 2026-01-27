@@ -1,5 +1,5 @@
-import db from "#server/lib/db"
-import { categorizeReferrer } from "#server/lib/utils"
+import db from "#server/utils/db"
+import { categorizeReferrer } from "#server/utils/helpers"
 import { analyticsRecordSchema } from "#shared/schemas/analytics-schema"
 
 export default defineEventHandler(async (event) => {

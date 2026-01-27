@@ -1,4 +1,4 @@
-import db from "#server/lib/db"
+import db from "#server/utils/db"
 
 export default defineEventHandler(async (event) => {
   const slug = getRouterParam(event, "slug")

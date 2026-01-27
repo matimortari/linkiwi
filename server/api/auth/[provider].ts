@@ -1,5 +1,5 @@
 import type { EventHandlerRequest, H3Event } from "h3"
-import { handleOAuthUser } from "#server/lib/auth"
+import { handleOAuthUser } from "#server/utils/auth"
 
 const configs: Record<string, any> = {
   google: {

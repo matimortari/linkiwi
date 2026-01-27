@@ -1,4 +1,4 @@
-import { SOCIAL_ICONS } from "#shared/lib/constants"
+import { SOCIAL_ICONS } from "~/utils/preferences"
 import { z } from "zod"
 
 const urlSchema = z.url("Invalid URL").refine(url => url.startsWith("http://") || url.startsWith("https://"), { message: "URL must start with http:// or https://" })

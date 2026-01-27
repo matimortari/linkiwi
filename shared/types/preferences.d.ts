@@ -1,4 +1,4 @@
-import type { BackgroundOption, BannerOption, BorderWidth, FontFamily, FontSize, FontWeight, LinkFontSize, LinkPaddingSize, RadiusSize, ShadowWeight } from "#shared/lib/constants"
+import type { BackgroundOption, BannerOption, BorderWidth, FontFamily, FontSize, FontWeight, LinkFontSize, LinkPaddingSize, RadiusSize, ShadowWeight } from "~/utils/preferences"
 
 declare global {
   interface UserPreferences {

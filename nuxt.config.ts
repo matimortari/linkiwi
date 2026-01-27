@@ -10,9 +10,6 @@ export default defineNuxtConfig({
     "@vueuse/motion/nuxt",
     "nuxt-auth-utils",
   ],
-  imports: {
-    dirs: ["lib/**"],
-  },
   runtimeConfig: {
     session: {
       maxAge: 60 * 60 * 24 * 7, // 7 days

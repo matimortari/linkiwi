@@ -25,7 +25,7 @@
           {{ errors.createIcon || '' }}
         </p>
 
-        <div class="flex flex-row items-center gap-2">
+        <div class="navigation-group">
           <button class="btn-danger" aria-label="Cancel" :disabled="loading" @click="emit('close')">
             Cancel
           </button>
@@ -40,7 +40,7 @@
 
 <script setup lang="ts">
 import type { CreateUserIconInput } from "#shared/schemas/icon-schema"
-import { SOCIAL_ICONS } from "#shared/lib/constants"
+import { SOCIAL_ICONS } from "#shared/utils/constants"
 
 const props = defineProps<{
   isOpen: boolean

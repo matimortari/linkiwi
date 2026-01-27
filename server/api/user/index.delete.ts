@@ -1,5 +1,5 @@
-import db from "#server/lib/db"
-import { getUserFromSession } from "#server/lib/utils"
+import db from "#server/utils/db"
+import { getUserFromSession } from "#server/utils/helpers"
 import { del } from "@vercel/blob"
 
 export default defineEventHandler(async (event) => {

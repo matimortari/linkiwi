@@ -152,7 +152,7 @@ useHead({
 })
 
 definePageMeta({
-  middleware: guest,
+  middleware: "guest",
 })
 </script>
 

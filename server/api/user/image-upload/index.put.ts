@@ -1,5 +1,5 @@
-import db from "#server/lib/db"
-import { getUserFromSession, uploadFile } from "#server/lib/utils"
+import db from "#server/utils/db"
+import { getUserFromSession, uploadFile } from "#server/utils/helpers"
 
 export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)

@@ -1,15 +1,15 @@
 <template>
   <transition name="banner-slide-up">
     <div v-if="showBanner && banner" class="fixed bottom-0 z-50 flex w-screen flex-col items-center justify-between gap-2 p-4 text-[#ebe8e8] md:flex-row md:gap-2" :class="banner.class">
-      <div class="flex flex-row items-center gap-2 md:flex-col md:items-start">
+      <div class="navigation-group md:flex-col md:items-start">
         <div class="flex flex-col gap-2 text-start">
-          <div class="flex flex-row items-center gap-2">
+          <div class="navigation-group">
             <icon :name="banner.icon" size="35" class="hidden shrink-0 text-[#ebe8e8] md:block" />
             <h5>
               {{ banner.message }}
             </h5>
           </div>
-          <p class="text-xs leading-4 md:text-sm">
+          <p class="text-xs/4 md:text-sm">
             {{ banner.description }}
           </p>
         </div>
@@ -24,8 +24,8 @@
 </template>
 
 <script setup lang="ts">
-import type { BannerOption } from "#shared/lib/constants"
-import { BANNER_DESCRIPTIONS, BANNER_ICONS, BANNER_LINKS, BANNER_MESSAGES, BANNER_STYLES } from "#shared/lib/constants"
+import type { BannerOption } from "#shared/utils/constants"
+import { BANNER_DESCRIPTIONS, BANNER_ICONS, BANNER_LINKS, BANNER_MESSAGES, BANNER_STYLES } from "#shared/utils/constants"
 
 const props = defineProps<{
   preferences: UserPreferences

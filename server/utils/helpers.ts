@@ -1,5 +1,5 @@
 import type { EventHandlerRequest, H3Event } from "h3"
-import db from "#server/lib/db"
+import db from "#server/utils/db"
 import { del, put } from "@vercel/blob"
 
 /**

@@ -139,7 +139,7 @@ async function handleCopyColor(colorVar: string, index: number) {
 
 function updateColors() {
   const styles = getComputedStyle(document.documentElement)
-  for (const color of [...COLORS]) {
+  for (const color of COLORS) {
     const value = styles.getPropertyValue(color.var).trim()
     colorValues.value[color.var] = value || "—"
   }

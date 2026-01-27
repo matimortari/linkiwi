@@ -1,4 +1,4 @@
-import db from "#server/lib/db"
+import db from "#server/utils/db"
 import { createCommentSchema } from "#shared/schemas/analytics-schema"
 
 export default defineEventHandler(async (event) => {
