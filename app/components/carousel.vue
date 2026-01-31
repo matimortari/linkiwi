@@ -4,7 +4,7 @@
       <div :key="preset.slug" class="relative flex h-150 w-[320px] flex-col overflow-hidden rounded-[2.5rem] border-4 shadow-lg">
         <div class="absolute -top-1 z-10 w-full rounded-t-[2.5rem] bg-linear-to-r from-primary to-secondary pb-1">
           <div class="flex flex-row items-center justify-between rounded-t-[2.5rem] bg-[#111016] p-4 pb-2">
-            <div class="flex flex-row items-center gap-2">
+            <div class="navigation-group">
               <span v-for="i in 3" :key="i" class="size-2.5 rounded-full bg-[#3b3b41]" />
             </div>
 
@@ -22,7 +22,7 @@
             {{ preset.description }}
           </p>
 
-          <ul class="my-2 flex flex-row items-center justify-center gap-2">
+          <ul class="my-2 navigation-group justify-center">
             <li
               v-for="icon in preset.icons" :key="icon.id"
               class="flex size-10 items-center justify-center rounded-full" :style="iconStyle(iconHover[icon.id] ?? false)"

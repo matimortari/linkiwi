@@ -6,6 +6,7 @@
     "dev": "nuxt dev",
     "build": "prisma generate && nuxt build",
     "postinstall": "nuxt prepare",
+    "typecheck": "nuxt typecheck",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "db:generate": "prisma generate",

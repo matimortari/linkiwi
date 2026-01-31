@@ -40,7 +40,6 @@
 
 <script setup lang="ts">
 import type { CreateUserIconInput } from "#shared/schemas/icon-schema"
-import { SOCIAL_ICONS } from "#shared/utils/constants"
 
 const props = defineProps<{
   isOpen: boolean

@@ -33,7 +33,6 @@ export function useSessionMonitor() {
   }
 
   onMounted(() => globalThis.addEventListener("storage", handleStorageChange))
-
   onBeforeUnmount(() => {
     clearSessionCheck()
     globalThis.removeEventListener("storage", handleStorageChange)

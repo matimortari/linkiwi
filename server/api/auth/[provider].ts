@@ -50,7 +50,12 @@ export default defineEventHandler(async (event: H3Event) => {
         throw createError({ status: 400, message: `Invalid user data from ${provider}` })
       }
 
-      const userData = extractUserData[provider](user)
+      const extractor = extractUserData[provider]
+      if (!extractor) {
+        throw createError({ status: 400, message: `User data extractor not found for provider: ${provider}` })
+      }
+
+      const userData = extractor(user)
       if (!userData.id || !userData.email) {
         throw createError({ status: 400, message: `Missing required user data from ${provider}` })
       }

@@ -24,9 +24,6 @@
 </template>
 
 <script setup lang="ts">
-import type { BannerOption } from "#shared/utils/constants"
-import { BANNER_DESCRIPTIONS, BANNER_ICONS, BANNER_LINKS, BANNER_MESSAGES, BANNER_STYLES } from "#shared/utils/constants"
-
 const props = defineProps<{
   preferences: UserPreferences
 }>()
@@ -60,7 +57,6 @@ function handleScroll() {
 }
 
 onMounted(() => addEventListener("scroll", handleScroll))
-
 onBeforeUnmount(() => removeEventListener("scroll", handleScroll))
 </script>
 

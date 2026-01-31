@@ -30,7 +30,7 @@ export async function handleOAuthUser(event: H3Event, userData: OAuthUserData) {
     user = await db.user.create({
       data: {
         email,
-        name: name?.trim() || email.split("@")[0],
+        name: name?.trim() ?? email.split("@")[0],
         image: image || undefined,
         slug: await generateSlug(name ?? email.split("@")[0]),
         preferences: {
