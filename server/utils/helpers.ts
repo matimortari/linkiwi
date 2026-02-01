@@ -48,67 +48,63 @@ export async function generateSlug(base: string = ""): Promise<string> {
  * Returns 'direct' if no referrer, or a specific platform/source name.
  */
 export function categorizeReferrer(referrer: string | null | undefined): string {
-  if (!referrer || referrer.trim() === "") {
+  if (!referrer || typeof referrer !== "string" || referrer.trim() === "") {
     return "direct"
   }
 
-  const url = referrer.toLowerCase()
+  const url = referrer.toLowerCase().trim()
   const sources: [string[], string][] = [
-    [["facebook.com", "fb.com", "fb.me"], "facebook"],
+    [["facebook.com", "fb.com", "fb.me", "fbcdn.net"], "facebook"],
     [["twitter.com", "x.com", "t.co"], "twitter"],
-    [["instagram.com"], "instagram"],
+    [["instagram.com", "ig.me"], "instagram"],
     [["linkedin.com", "lnkd.in"], "linkedin"],
-    [["reddit.com"], "reddit"],
+    [["reddit.com", "redd.it"], "reddit"],
     [["tiktok.com"], "tiktok"],
     [["pinterest.com", "pin.it"], "pinterest"],
     [["youtube.com", "youtu.be"], "youtube"],
     [["snapchat.com"], "snapchat"],
-    [["whatsapp.com"], "whatsapp"],
+    [["whatsapp.com", "wa.me"], "whatsapp"],
     [["telegram.org", "t.me"], "telegram"],
     [["discord.com", "discord.gg"], "discord"],
     [["threads.net"], "threads"],
     [["mastodon"], "mastodon"],
     [["bluesky.social", "bsky.app"], "bluesky"],
-    [["google.com", "google."], "google"],
-    [["bing.com"], "bing"],
-    [["yahoo.com"], "yahoo"],
+    [["google."], "google"],
+    [["bing.com", "bing."], "bing"],
+    [["yahoo.com", "yahoo."], "yahoo"],
     [["duckduckgo.com"], "duckduckgo"],
     [["baidu.com"], "baidu"],
-    [["yandex.com", "yandex.ru"], "yandex"],
+    [["yandex.com", "yandex.ru", "yandex."], "yandex"],
+    [["ecosia.org"], "ecosia"],
+    [["ask.com"], "ask"],
     [["slack.com"], "slack"],
     [["teams.microsoft.com"], "teams"],
     [["github.com"], "github"],
     [["gitlab.com"], "gitlab"],
-    [["stackoverflow.com"], "stackoverflow"],
     [["medium.com"], "medium"],
-    [["dev.to"], "dev.to"],
-    [["hashnode.com"], "hashnode"],
+    [["substack.com"], "substack"],
   ]
+
   for (const [patterns, name] of sources) {
     if (patterns.some(pattern => url.includes(pattern))) {
       return name
     }
   }
 
-  // If it's from the same domain, mark as internal. Otherwise, categorize as external/other
-  if (url.includes("alllinks-bio.vercel.app") || url.includes("localhost")) {
-    return "internal"
-  }
-
-  return "external"
+  return "unknown"
 }
 
 /**
-  Formats a source string into a human-readable label.
+ * Formats a source string into a human-readable label.
  */
-export function formatSourceLabel(source: string | null): string {
-  if (!source) {
+export function formatSourceLabel(source: string | null | undefined): string {
+  if (!source || typeof source !== "string" || source.trim() === "") {
     return "Unknown"
   }
 
+  const normalizedSource = source.toLowerCase().trim()
   const labels: Record<string, string> = {
     direct: "Direct",
-    google: "Google",
     facebook: "Facebook",
     twitter: "Twitter / X",
     instagram: "Instagram",
@@ -117,16 +113,31 @@ export function formatSourceLabel(source: string | null): string {
     tiktok: "TikTok",
     youtube: "YouTube",
     pinterest: "Pinterest",
-    github: "GitHub",
+    snapchat: "Snapchat",
+    whatsapp: "WhatsApp",
+    telegram: "Telegram",
     discord: "Discord",
     threads: "Threads",
+    mastodon: "Mastodon",
     bluesky: "Bluesky",
-    internal: "Internal",
-    external: "External Site",
+    google: "Google",
+    bing: "Bing",
+    yahoo: "Yahoo",
+    duckduckgo: "DuckDuckGo",
+    baidu: "Baidu",
+    yandex: "Yandex",
+    ecosia: "Ecosia",
+    ask: "Ask",
+    slack: "Slack",
+    teams: "Microsoft Teams",
+    github: "GitHub",
+    gitlab: "GitLab",
+    medium: "Medium",
+    substack: "Substack",
     unknown: "Unknown",
   }
 
-  return labels[source] || source.charAt(0).toUpperCase() + source.slice(1)
+  return labels[normalizedSource] || normalizedSource.charAt(0).toUpperCase() + normalizedSource.slice(1)
 }
 
 /**

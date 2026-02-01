@@ -22,7 +22,7 @@
         {{ userProfile.description }}
       </p>
 
-      <ul v-if="userProfile.icons?.length" class="my-2 flex flex-row items-center justify-center gap-2">
+      <ul v-if="userProfile.icons?.length" class="my-2 navigation-group justify-center">
         <UserIcon
           v-for="icon in userProfile.icons" :key="icon.id"
           :item="icon" :preferences="profilePreferences"
@@ -71,7 +71,8 @@ async function loadUserProfile(slug: string) {
     return
   }
 
-  await analyticsStore.recordPageView(currentUser.id, route.query.ref as string)
+  const referrer = (typeof document !== "undefined" ? document.referrer : "") || (route.query.ref as string) || ""
+  await analyticsStore.recordPageView(currentUser.id, referrer)
 }
 
 watch(slug, async (newSlug) => {

@@ -13,6 +13,7 @@ export default defineEventHandler(async (event) => {
     by: ["source"],
     where: {
       userId: user.id,
+      source: { not: null }, // Exclude null sources to prevent data integrity issues
       ...(dateFrom || dateTo ? { createdAt: { ...(dateFrom && { gte: dateFrom }), ...(dateTo && { lte: dateTo }) } } : {}),
     },
     _count: {
@@ -32,7 +33,7 @@ export default defineEventHandler(async (event) => {
     source: stat.source || "unknown",
     count: stat._count.source,
     percentage: totalViews > 0 ? ((stat._count.source / totalViews) * 100).toFixed(1) : "0",
-    label: formatSourceLabel(stat.source),
+    label: formatSourceLabel(stat.source || "unknown"),
   }))
 
   return {

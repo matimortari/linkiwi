@@ -4,6 +4,18 @@ export const analyticsRecordSchema = z.object({
   type: z.enum(["pageView", "link", "icon"]),
   userId: z.cuid(),
   id: z.cuid().optional(),
+  referrer: z.string().optional().nullable().transform((val) => {
+    if (!val || typeof val !== "string" || val.trim() === "") {
+      return null
+    }
+    try {
+      new URL(val)
+      return val
+    }
+    catch {
+      return null
+    }
+  }),
   createdAt: z.string().optional(),
 }).refine((data) => {
   if ((data.type === "link" || data.type === "icon") && !data.id) {

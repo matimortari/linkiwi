@@ -23,17 +23,14 @@ export default defineEventHandler(async (event) => {
   // Do not record analytics for own profile views/clicks
   const session = await getUserSession(event)
   if (session?.user?.id === userId) {
-    return { message: "Analytics not recorded for own profile" }
+    return
   }
 
   switch (type) {
     case "pageView": {
-      const referrer = body.referrer || getHeader(event, "referer") || getHeader(event, "referrer") || null
+      const referrer = analyticsData.data.referrer || getHeader(event, "referer") || null // The referrer header uses 'referer' due to a misspelling from the original HTTP spec that has been preserved for compatibility
       const source = categorizeReferrer(referrer)
-
-      await db.pageView.create({
-        data: { userId, referrer, source },
-      })
+      await db.pageView.create({ data: { userId, referrer, source } })
 
       // Invalidate analytics cache
       await deleteCached(CacheKeys.analytics(userId))
@@ -70,10 +67,7 @@ export default defineEventHandler(async (event) => {
 
       return {
         message: "Link click recorded successfully",
-        linkClick: {
-          userLinkId: linkClick.userLinkId,
-          createdAt: linkClick.createdAt,
-        },
+        linkClick: { userLinkId: linkClick.userLinkId, createdAt: linkClick.createdAt },
       }
     }
 
