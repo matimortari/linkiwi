@@ -1,5 +1,6 @@
 import db from "#server/utils/db"
 import { getUserFromSession } from "#server/utils/helpers"
+import { CacheKeys, deleteCached } from "#server/utils/redis"
 import { updateUserLinkSchema } from "#shared/schemas/link-schema"
 
 export default defineEventHandler(async (event) => {
@@ -40,6 +41,10 @@ export default defineEventHandler(async (event) => {
       updatedAt: true,
     },
   })
+
+  // Invalidate links cache and user profile cache
+  const userData = await db.user.findUnique({ where: { id: user.id }, select: { slug: true } })
+  await deleteCached(CacheKeys.userLinks(user.id), CacheKeys.userProfile(userData?.slug || ""))
 
   return { link: updatedLink }
 })

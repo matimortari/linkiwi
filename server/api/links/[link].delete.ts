@@ -1,5 +1,6 @@
 import db from "#server/utils/db"
 import { getUserFromSession } from "#server/utils/helpers"
+import { CacheKeys, deleteCached } from "#server/utils/redis"
 
 export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
@@ -22,6 +23,10 @@ export default defineEventHandler(async (event) => {
   await db.userLink.delete({
     where: { id: linkId },
   })
+
+  // Invalidate links cache and user profile cache
+  const userData = await db.user.findUnique({ where: { id: user.id }, select: { slug: true } })
+  await deleteCached(CacheKeys.userLinks(user.id), CacheKeys.userProfile(userData?.slug || ""))
 
   return { success: true, message: "Link deleted successfully" }
 })

@@ -1,8 +1,16 @@
 import db from "#server/utils/db"
 import { getUserFromSession } from "#server/utils/helpers"
+import { CacheKeys, CacheTTL, getCached, setCached } from "#server/utils/redis"
 
 export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
+
+  // Try to get from cache first
+  const cacheKey = CacheKeys.userData(user.id)
+  const cached = await getCached<any>(cacheKey)
+  if (cached) {
+    return { userData: cached }
+  }
 
   const userData = await db.user.findUnique({
     where: { id: user.id },
@@ -15,6 +23,8 @@ export default defineEventHandler(async (event) => {
   if (!userData) {
     throw createError({ status: 404, statusText: "User not found" })
   }
+
+  await setCached(cacheKey, userData, CacheTTL.SHORT)
 
   return { userData }
 })

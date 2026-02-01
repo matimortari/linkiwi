@@ -16,7 +16,7 @@ export const CacheTTL = {
 /**
  * Gets or creates the Redis client instance.
  */
-export async function getRedisClient() {
+async function getRedisClient() {
   if (!redisClient) {
     redisClient = createClient({
       url: process.env.REDIS_URL,
@@ -46,6 +46,10 @@ export async function getRedisClient() {
 export async function getCached<T>(key: string): Promise<T | null> {
   try {
     const client = await getRedisClient()
+    if (!client) {
+      return null
+    }
+
     const data = await client.get(key)
     return data ? JSON.parse(data) : null
   }
@@ -61,6 +65,10 @@ export async function getCached<T>(key: string): Promise<T | null> {
 export async function setCached(key: string, value: any, ttl?: number): Promise<void> {
   try {
     const client = await getRedisClient()
+    if (!client) {
+      return
+    }
+
     if (ttl) {
       await client.setEx(key, ttl, JSON.stringify(value))
     }
@@ -83,9 +91,24 @@ export async function deleteCached(...keys: string[]): Promise<void> {
 
   try {
     const client = await getRedisClient()
+    if (!client) {
+      return
+    }
+
     await client.del(keys)
   }
   catch (err: any) {
     console.error(`Redis DEL error for keys ${keys.join(", ")}:`, err)
   }
 }
+
+/**
+ * Helper to generate cache keys for user-related data.
+ */
+export const CacheKeys = {
+  userData: (userId: string) => `user:data:${userId}`,
+  userProfile: (slug: string) => `user:profile:${slug}`,
+  userLinks: (userId: string) => `user:links:${userId}`,
+  userIcons: (userId: string) => `user:icons:${userId}`,
+  analytics: (userId: string) => `user:analytics:${userId}`,
+} as const

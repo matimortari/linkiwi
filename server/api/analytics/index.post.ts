@@ -1,5 +1,6 @@
 import db from "#server/utils/db"
 import { categorizeReferrer } from "#server/utils/helpers"
+import { CacheKeys, deleteCached } from "#server/utils/redis"
 import { analyticsRecordSchema } from "#shared/schemas/analytics-schema"
 
 export default defineEventHandler(async (event) => {
@@ -33,6 +34,10 @@ export default defineEventHandler(async (event) => {
       await db.pageView.create({
         data: { userId, referrer, source },
       })
+
+      // Invalidate analytics cache
+      await deleteCached(CacheKeys.analytics(userId))
+
       return { message: "Page view recorded successfully" }
     }
 
@@ -58,6 +63,10 @@ export default defineEventHandler(async (event) => {
           data: { clickCount: { increment: 1 } },
         }),
       ])
+
+      // Invalidate analytics and links cache (clickCount changed)
+      const userData = await db.user.findUnique({ where: { id: userId }, select: { slug: true } })
+      await deleteCached(CacheKeys.analytics(userId), CacheKeys.userLinks(userId), CacheKeys.userProfile(userData?.slug || ""))
 
       return {
         message: "Link click recorded successfully",
@@ -91,12 +100,13 @@ export default defineEventHandler(async (event) => {
         }),
       ])
 
+      // Invalidate analytics and icons cache (clickCount changed)
+      const userData = await db.user.findUnique({ where: { id: userId }, select: { slug: true } })
+      await deleteCached(CacheKeys.analytics(userId), CacheKeys.userIcons(userId), CacheKeys.userProfile(userData?.slug || ""))
+
       return {
         message: "Social icon click recorded successfully",
-        iconClick: {
-          userIconId: iconClick.userIconId,
-          createdAt: iconClick.createdAt,
-        },
+        iconClick: { userIconId: iconClick.userIconId, createdAt: iconClick.createdAt },
       }
     }
 

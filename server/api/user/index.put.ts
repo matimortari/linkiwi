@@ -1,5 +1,6 @@
 import db from "#server/utils/db"
 import { getUserFromSession } from "#server/utils/helpers"
+import { CacheKeys, deleteCached } from "#server/utils/redis"
 import { updateUserSchema } from "#shared/schemas/user-schema"
 
 export default defineEventHandler(async (event) => {
@@ -9,6 +10,12 @@ export default defineEventHandler(async (event) => {
   if (!result.success) {
     throw createError({ status: 400, statusText: result.error.issues[0]?.message || "Invalid input" })
   }
+
+  // Get old slug before update to invalidate old cache key
+  const oldUser = await db.user.findUnique({
+    where: { id: user.id },
+    select: { slug: true },
+  })
 
   const updatedUser = await db.user.update({
     where: { id: user.id },
@@ -29,6 +36,9 @@ export default defineEventHandler(async (event) => {
       updatedAt: true,
     },
   })
+
+  // Invalidate both old and new profile caches, plus user data cache
+  await deleteCached(CacheKeys.userData(user.id), CacheKeys.userProfile(oldUser?.slug || ""), CacheKeys.userProfile(updatedUser.slug))
 
   return { updatedUser }
 })

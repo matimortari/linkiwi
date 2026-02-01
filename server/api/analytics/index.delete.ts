@@ -1,5 +1,6 @@
 import db from "#server/utils/db"
 import { getUserFromSession } from "#server/utils/helpers"
+import { CacheKeys, deleteCached } from "#server/utils/redis"
 
 export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
@@ -81,6 +82,10 @@ export default defineEventHandler(async (event) => {
       })
     }
   }
+
+  // Invalidate analytics, links, and icons cache (clickCounts reset)
+  const userData = await db.user.findUnique({ where: { id: user.id }, select: { slug: true } })
+  await deleteCached(CacheKeys.analytics(user.id), CacheKeys.userLinks(user.id), CacheKeys.userIcons(user.id), CacheKeys.userProfile(userData?.slug || ""))
 
   return { success: true, message: `Successfully deleted ${deletedCount} analytics record${deletedCount === 1 ? "" : "s"}` }
 })

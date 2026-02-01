@@ -1,5 +1,6 @@
 import db from "#server/utils/db"
 import { getUserFromSession } from "#server/utils/helpers"
+import { CacheKeys, deleteCached } from "#server/utils/redis"
 
 export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
@@ -22,6 +23,10 @@ export default defineEventHandler(async (event) => {
   await db.userIcon.delete({
     where: { id: iconId },
   })
+
+  // Invalidate icons cache and user profile cache
+  const userData = await db.user.findUnique({ where: { id: user.id }, select: { slug: true } })
+  await deleteCached(CacheKeys.userIcons(user.id), CacheKeys.userProfile(userData?.slug || ""))
 
   return { success: true, message: "Icon deleted successfully" }
 })

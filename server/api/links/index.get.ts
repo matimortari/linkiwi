@@ -1,8 +1,16 @@
 import db from "#server/utils/db"
 import { getUserFromSession } from "#server/utils/helpers"
+import { CacheKeys, CacheTTL, getCached, setCached } from "#server/utils/redis"
 
 export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
+
+  // Try to get from cache first
+  const cacheKey = CacheKeys.userLinks(user.id)
+  const cached = await getCached<any>(cacheKey)
+  if (cached) {
+    return { links: cached }
+  }
 
   const links = await db.userLink.findMany({
     where: { userId: user.id },
@@ -17,6 +25,8 @@ export default defineEventHandler(async (event) => {
     },
     orderBy: { createdAt: "asc" },
   })
+
+  await setCached(cacheKey, links, CacheTTL.SHORT)
 
   return { links }
 })

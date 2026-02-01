@@ -1,5 +1,6 @@
 import db from "#server/utils/db"
 import { getUserFromSession } from "#server/utils/helpers"
+import { CacheKeys, deleteCached } from "#server/utils/redis"
 import { createUserIconSchema } from "#shared/schemas/icon-schema"
 
 export default defineEventHandler(async (event) => {
@@ -40,6 +41,10 @@ export default defineEventHandler(async (event) => {
       updatedAt: true,
     },
   })
+
+  // Invalidate icons cache and user profile cache
+  const userData = await db.user.findUnique({ where: { id: user.id }, select: { slug: true } })
+  await deleteCached(CacheKeys.userIcons(user.id), CacheKeys.userProfile(userData?.slug || ""))
 
   return { icon: newIcon }
 })

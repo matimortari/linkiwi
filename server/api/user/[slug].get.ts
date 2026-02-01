@@ -1,9 +1,17 @@
 import db from "#server/utils/db"
+import { CacheKeys, CacheTTL, getCached, setCached } from "#server/utils/redis"
 
 export default defineEventHandler(async (event) => {
   const slug = getRouterParam(event, "slug")
   if (!slug) {
     throw createError({ status: 400, statusText: "Slug is required" })
+  }
+
+  // Try to get from cache first
+  const cacheKey = CacheKeys.userProfile(slug)
+  const cached = await getCached<any>(cacheKey)
+  if (cached) {
+    return { userProfile: cached }
   }
 
   const userProfile = await db.user.findUnique({
@@ -21,6 +29,8 @@ export default defineEventHandler(async (event) => {
   if (!userProfile) {
     throw createError({ status: 404, statusText: `User '${slug}' not found` })
   }
+
+  await setCached(cacheKey, userProfile, CacheTTL.LONG)
 
   return { userProfile }
 })
