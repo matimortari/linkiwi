@@ -16,16 +16,20 @@ async function getRedisClient() {
     redisClient = createClient({
       url: process.env.REDIS_URL,
       socket: {
-        reconnectStrategy: (retries) => {
-          if (retries > 10) {
-            return new Error("Redis reconnection failed")
-          }
-          return Math.min(retries * 100, 3000)
-        },
+        connectTimeout: 5000, // 5 seconds
+        reconnectStrategy: () => false,
       },
     }) as RedisClientType
 
-    await redisClient.connect()
+    redisClient.on("error", () => {})
+
+    try {
+      await redisClient.connect()
+    }
+    catch {
+      redisClient = null
+      return null
+    }
   }
 
   return redisClient
@@ -44,8 +48,8 @@ export async function getCached<T>(key: string): Promise<T | null> {
     const data = await client.get(key)
     return data ? JSON.parse(data) : null
   }
-  catch (err: any) {
-    throw createError({ statusCode: 500, message: `Redis GET error for key ${key}`, data: { key, error: err instanceof Error ? err.message : String(err) } })
+  catch {
+    return null
   }
 }
 
@@ -66,8 +70,8 @@ export async function setCached(key: string, value: any, ttl?: number): Promise<
       await client.set(key, JSON.stringify(value))
     }
   }
-  catch (err: any) {
-    throw createError({ statusCode: 500, message: `Redis SET error for key ${key}`, data: { key, error: err instanceof Error ? err.message : String(err) } })
+  catch {
+    // Silently fail
   }
 }
 
@@ -87,8 +91,8 @@ export async function deleteCached(...keys: string[]): Promise<void> {
 
     await client.del(keys)
   }
-  catch (err: any) {
-    throw createError({ statusCode: 500, message: `Redis DEL error for keys ${keys.join(", ")}`, data: { keys, error: err instanceof Error ? err.message : String(err) } })
+  catch {
+    // Silently fail
   }
 }
 
