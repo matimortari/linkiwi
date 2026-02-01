@@ -176,7 +176,7 @@ Retrieves the authenticated user's profile information, including preferences, c
 
 > **GET** `/api/user/{slug}`
 
-Retrieves a user's public profile information by slug, including their links, social icons, and preferences.
+Retrieves a public user information by slug, including their links, social icons, and preferences.
 
 **Route Parameters:**
 
@@ -268,7 +268,7 @@ Uploads and updates the authenticated user's profile image. Replaces the existin
 
 > **PUT** `/api/user/preferences`
 
-Updates the authenticated user's profile customization preferences.
+Updates the authenticated user's profile preferences.
 
 **Request Body:** All fields are optional
 
@@ -292,7 +292,7 @@ Updates the authenticated user's profile customization preferences.
 
 > **DELETE** `/api/user`
 
-Permanently deletes the authenticated user's account and all associated data.
+Deletes the authenticated user's account and all associated data. This action cannot be undone.
 
 **Response:**
 
@@ -490,7 +490,7 @@ Deletes a social icon for the authenticated user.
 
 > **GET** `/api/analytics`
 
-Retrieves all analytics data for the authenticated user, including page views, link clicks, and icon clicks.
+Retrieves all analytics data for the authenticated user, including page views, link clicks, and social icon clicks.
 
 **Response:**
 
@@ -557,7 +557,7 @@ Retrieves referrer statistics for the authenticated user's page views, showing t
 
 > **POST** `/api/analytics`
 
-Records analytics data for page views, link clicks, or icon clicks. Does not record analytics for the user's own profile interactions.
+Records analytics data for page views, link clicks, or social icon clicks. Does not record analytics for the user's own profile interactions.
 
 **Request Body:**
 

@@ -5,7 +5,7 @@
     <span>{{ isPreviewOpen ? 'Close Preview' : 'Preview' }}</span>
   </button>
 
-  <div v-if="user" class="m-4 flex flex-1 items-center justify-center select-none md:h-150 md:min-w-[320px] 2xl:min-w-80">
+  <div v-if="user" class="mx-auto my-4 flex items-center select-none md:h-150 md:w-80 2xl:w-90">
     <!-- Mobile full-screen preview -->
     <transition name="slide">
       <div v-if="isPreviewOpen" class="fixed top-0 left-0 z-20 size-full overflow-y-auto p-12 md:hidden" :style="backgroundStyle">

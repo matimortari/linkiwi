@@ -1,7 +1,7 @@
 <template>
-  <div v-if="preset" class="my-20 -mb-60 flex w-[320px] items-center justify-center select-none md:w-1/2 md:justify-end 2xl:-mb-64">
+  <div v-if="preset" class="my-20 -mb-60 flex w-80 items-center justify-center select-none md:w-1/2 md:justify-end">
     <transition name="carousel" mode="out-in">
-      <div :key="preset.slug" class="relative flex h-150 w-[320px] flex-col overflow-hidden rounded-[2.5rem] border-4 shadow-lg">
+      <div :key="preset.slug" class="relative flex h-150 w-80 flex-col overflow-hidden rounded-[2.5rem] border-4 shadow-lg">
         <div class="absolute -top-1 z-10 w-full rounded-t-[2.5rem] bg-linear-to-r from-primary to-secondary pb-1">
           <div class="flex flex-row items-center justify-between rounded-t-[2.5rem] bg-[#111016] p-4 pb-2">
             <div class="navigation-group">
@@ -22,7 +22,7 @@
             {{ preset.description }}
           </p>
 
-          <ul class="my-2 navigation-group justify-center">
+          <ul class="my-2 flex w-full flex-row items-center justify-center gap-2">
             <li
               v-for="icon in preset.icons" :key="icon.id"
               class="flex size-10 items-center justify-center rounded-full" :style="iconStyle(iconHover[icon.id] ?? false)"
@@ -49,17 +49,7 @@
 
 <script setup lang="ts">
 const preset = getCarouselPreset(CAROUSEL_PRESETS, 3000)
-const {
-  backgroundStyle,
-  profilePictureStyle,
-  slugStyle,
-  descriptionStyle,
-  iconStyle,
-  iconInnerStyle,
-  linkStyle,
-  linkInnerStyle,
-} = useDynamicStyles(computed(() => preset.value?.preferences))
-
+const { backgroundStyle, profilePictureStyle, slugStyle, descriptionStyle, iconStyle, iconInnerStyle, linkStyle, linkInnerStyle } = useDynamicStyles(computed(() => preset.value?.preferences))
 const linkHover = reactive<Record<string, boolean>>({})
 const iconHover = reactive<Record<string, boolean>>({})
 const images = import.meta.glob("/assets/presets/*", { eager: true, import: "default" })
