@@ -1,6 +1,6 @@
 import db from "#server/utils/db"
 import { getUserFromSession } from "#server/utils/helpers"
-import { CacheKeys, CacheTTL, getCached, setCached } from "#server/utils/redis"
+import { CACHE_TTL, CacheKeys, getCached, setCached } from "#server/utils/redis"
 
 export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
@@ -27,7 +27,7 @@ export default defineEventHandler(async (event) => {
     orderBy: { createdAt: "asc" },
   })
 
-  await setCached(cacheKey, icons, CacheTTL.SHORT)
+  await setCached(cacheKey, icons, CACHE_TTL.SHORT)
 
   return { icons }
 })

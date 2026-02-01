@@ -1,5 +1,5 @@
 import db from "#server/utils/db"
-import { CacheKeys, CacheTTL, getCached, setCached } from "#server/utils/redis"
+import { CACHE_TTL, CacheKeys, getCached, setCached } from "#server/utils/redis"
 
 export default defineEventHandler(async (event) => {
   const slug = getRouterParam(event, "slug")
@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ status: 404, statusText: `User '${slug}' not found` })
   }
 
-  await setCached(cacheKey, userProfile, CacheTTL.LONG)
+  await setCached(cacheKey, userProfile, CACHE_TTL.LONG)
 
   return { userProfile }
 })

@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-8xl fixed top-2 left-1/2 z-50 w-[95%] -translate-x-1/2">
     <div class="flex flex-row items-center justify-between">
-      <div class="rounded-full p-2 backdrop-blur-xl">
+      <div class="rounded-full p-2.5 backdrop-blur-sm">
         <Logo />
       </div>
 

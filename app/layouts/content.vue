@@ -21,7 +21,7 @@
       <article
         v-motion :initial="{ opacity: 0, y: 10 }"
         :enter="{ opacity: 1, y: 0 }" :duration="600"
-        class="markdown mx-auto w-full max-w-6xl overflow-x-hidden px-4 py-12 md:p-24"
+        class="markdown mx-auto w-full max-w-6xl overflow-x-hidden px-4 py-24 md:px-24"
       >
         <slot />
       </article>

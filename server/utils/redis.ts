@@ -3,14 +3,9 @@ import { createClient } from "redis"
 
 let redisClient: RedisClientType | null = null
 
-/**
- * TTL constants (in seconds).
- */
-export const CacheTTL = {
-  SHORT: 300, // 5 minutes
-  LONG: 600, // 10 minutes
-  HOUR: 3600, // 1 hour
-  DAY: 86400, // 24 hours
+export const CACHE_TTL = {
+  SHORT: 60, // 1 minute
+  LONG: 300, // 5 minutes
 } as const
 
 /**
@@ -23,16 +18,12 @@ async function getRedisClient() {
       socket: {
         reconnectStrategy: (retries) => {
           if (retries > 10) {
-            console.error("Redis: Too many reconnection attempts, giving up")
             return new Error("Redis reconnection failed")
           }
           return Math.min(retries * 100, 3000)
         },
       },
     }) as RedisClientType
-
-    redisClient.on("error", err => console.error("Redis Client Error:", err))
-    redisClient.on("connect", () => console.log("Redis Client Connected"))
 
     await redisClient.connect()
   }
@@ -54,8 +45,7 @@ export async function getCached<T>(key: string): Promise<T | null> {
     return data ? JSON.parse(data) : null
   }
   catch (err: any) {
-    console.error(`Redis GET error for key ${key}:`, err)
-    return null
+    throw createError({ statusCode: 500, message: `Redis GET error for key ${key}`, data: { key, error: err instanceof Error ? err.message : String(err) } })
   }
 }
 
@@ -77,7 +67,7 @@ export async function setCached(key: string, value: any, ttl?: number): Promise<
     }
   }
   catch (err: any) {
-    console.error(`Redis SET error for key ${key}:`, err)
+    throw createError({ statusCode: 500, message: `Redis SET error for key ${key}`, data: { key, error: err instanceof Error ? err.message : String(err) } })
   }
 }
 
@@ -98,7 +88,7 @@ export async function deleteCached(...keys: string[]): Promise<void> {
     await client.del(keys)
   }
   catch (err: any) {
-    console.error(`Redis DEL error for keys ${keys.join(", ")}:`, err)
+    throw createError({ statusCode: 500, message: `Redis DEL error for keys ${keys.join(", ")}`, data: { keys, error: err instanceof Error ? err.message : String(err) } })
   }
 }
 

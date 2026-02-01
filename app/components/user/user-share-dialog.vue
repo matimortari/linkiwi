@@ -1,9 +1,13 @@
 <template>
   <Dialog :is-open="isOpen" title="Share Profile" @update:is-open="emit('close')">
-    <div class="flex flex-col items-center gap-4 p-2">
+    <div class="flex flex-col items-center gap-2 p-4">
+      <p class="text-caption">
+        Scan the QR code below or share your profile link:
+      </p>
+
       <div ref="qrContainer" class="overflow-hidden rounded-2xl border" />
 
-      <button class="text-caption navigation-group hover:underline" @click="copyPageUrl()">
+      <button class="text-caption hover:underline" @click="copyPageUrl()">
         <span>@{{ user?.slug }}</span>
       </button>
     </div>
@@ -16,6 +20,7 @@
       <div class="navigation-group">
         <div ref="dropdownRef" class="relative">
           <button class="btn" title="More sharing options" @click="toggleDropdown()">
+            <span>More Options</span>
             <icon name="mdi:dots-vertical" size="20" />
           </button>
 

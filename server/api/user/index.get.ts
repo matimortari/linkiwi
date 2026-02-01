@@ -1,6 +1,6 @@
 import db from "#server/utils/db"
 import { getUserFromSession } from "#server/utils/helpers"
-import { CacheKeys, CacheTTL, getCached, setCached } from "#server/utils/redis"
+import { CACHE_TTL, CacheKeys, getCached, setCached } from "#server/utils/redis"
 
 export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ status: 404, statusText: "User not found" })
   }
 
-  await setCached(cacheKey, userData, CacheTTL.SHORT)
+  await setCached(cacheKey, userData, CACHE_TTL.SHORT)
 
   return { userData }
 })

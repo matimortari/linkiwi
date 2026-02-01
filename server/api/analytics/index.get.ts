@@ -1,6 +1,6 @@
 import db from "#server/utils/db"
 import { getUserFromSession } from "#server/utils/helpers"
-import { CacheKeys, getCached, setCached } from "#server/utils/redis"
+import { CACHE_TTL, CacheKeys, getCached, setCached } from "#server/utils/redis"
 
 export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
@@ -37,7 +37,7 @@ export default defineEventHandler(async (event) => {
   ])
 
   const result = { pageViews, linkClicks, iconClicks }
-  await setCached(cacheKey, result, CacheTTL.SHORT)
+  await setCached(cacheKey, result, CACHE_TTL.SHORT)
 
   return result
 })
