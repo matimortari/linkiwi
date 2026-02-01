@@ -1,3 +1,5 @@
+import { useDebounceFn } from "@vueuse/core"
+
 export function useContent(options: { selector?: string, parseMethod?: boolean } = {}) {
   const { selector = "article", parseMethod = false } = options
   const route = useRoute()
@@ -5,9 +7,11 @@ export function useContent(options: { selector?: string, parseMethod?: boolean }
   const headers = ref<any[]>([])
   let observer: IntersectionObserver | null = null
 
+  const updateActiveSection = useDebounceFn((id: string) => activeSection.value = id, 50)
+
   async function extractHeaders() {
     await nextTick()
-
+    await new Promise(resolve => setTimeout(resolve, 100))
     const container = document.querySelector(selector)
     if (!container) {
       return
@@ -39,7 +43,7 @@ export function useContent(options: { selector?: string, parseMethod?: boolean }
     observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
         if (entry.isIntersecting) {
-          activeSection.value = entry.target.id
+          updateActiveSection(entry.target.id)
         }
       }
     }, { root: null, rootMargin: "0px 0px -70% 0px", threshold: 0 })
@@ -49,7 +53,7 @@ export function useContent(options: { selector?: string, parseMethod?: boolean }
     }
   }
 
-  function headerClasses(header: any) {
+  const headerClasses = computed(() => (header: any) => {
     const classes: string[] = []
     if (header.level === 2) {
       classes.push("ml-0 my-2 font-semibold")
@@ -64,7 +68,7 @@ export function useContent(options: { selector?: string, parseMethod?: boolean }
       classes.push("text-primary font-semibold border-l-2 border-primary pl-2")
     }
     return classes.join(" ")
-  }
+  })
 
   onMounted(extractHeaders)
   onBeforeUnmount(() => observer?.disconnect())
@@ -74,5 +78,5 @@ export function useContent(options: { selector?: string, parseMethod?: boolean }
     await extractHeaders()
   })
 
-  return { headers, headerClasses }
+  return { headers, headerClasses, activeSection }
 }
