@@ -1,12 +1,32 @@
 # AllLinks API Specification
 
-This document provides documentation for the AllLinks API.
+This document provides comprehensive documentation for the AllLinks REST API, which is used by the AllLinks web application to manage user profiles, links, social icons, and analytics. The AllLinks API is organized around REST principles with predictable resource-oriented URLs, JSON request/response bodies, and standard HTTP response codes.
 
 ## Overview
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum. Cras venenatis euismod malesuada.
+### Authentication
+
+The API uses OAuth 2.0 for user authentication via third-party providers (Google and GitHub). Sessions are managed using secure HTTP-only cookies.
+
+### Response Format
+
+All responses are returned in JSON format. Successful responses return a `2xx` status code. Error responses include an error message in the response body.
+
+### Error Handling
+
+The API uses standard HTTP response codes to indicate success or failure:
+
+- `200 OK` - Request succeeded
+- `400 Bad Request` - Invalid request parameters or validation error
+- `401 Unauthorized` - Authentication required or invalid credentials
+- `403 Forbidden` - Insufficient permissions
+- `404 Not Found` - Resource not found
+- `409 Conflict` - Resource conflict
+- `500 Internal Server Error` - Server error
 
 ---
+
+## Endpoints
 
 ### Authentication
 
@@ -49,7 +69,7 @@ Refreshes the authenticated user's session, extending it by 7 days.
 ```json
 {
   "success": true,
-  "expiresAt": "string"
+  "expiresAt": "Date"
 }
 ```
 
@@ -57,14 +77,14 @@ Refreshes the authenticated user's session, extending it by 7 days.
 
 > **POST** `/api/auth/validate`
 
-Validates the authenticated user's session and checks for inactivity timeout.
+Validates the authenticated user's session and checks for inactivity timeout. Updates the last activity timestamp.
 
 **Response:**
 
 ```json
 {
   "valid": true,
-  "expiresAt": "string"
+  "expiresAt": "Date"
 }
 ```
 
@@ -177,64 +197,16 @@ Retrieves a user's public profile information by slug, including their links, so
     "updatedAt": "string",
     "links": [
       {
-        "id": "string",
-        "userId": "string",
-        "url": "string",
-        "title": "string",
-        "clickCount": "number",
-        "createdAt": "string",
-        "updatedAt": "string"
+        // ... Link details
       }
     ],
     "icons": [
       {
-        "id": "string",
-        "userId": "string",
-        "url": "string",
-        "platform": "string",
-        "logo": "string",
-        "clickCount": "number",
-        "createdAt": "string",
-        "updatedAt": "string"
+        // ... Icon details
       }
     ],
     "preferences": {
-      "userId": "string",
-      "backgroundType": "FLAT | GRADIENT",
-      "backgroundColor": "string",
-      "backgroundGradientStart": "string",
-      "backgroundGradientEnd": "string",
-      "profilePictureRadius": "string",
-      "profilePictureBorderColor": "string",
-      "profilePictureBorderWidth": "string",
-      "slugTextColor": "string",
-      "slugTextWeight": "string",
-      "slugTextSize": "string",
-      "slugFontFamily": "string",
-      "headerTextColor": "string",
-      "headerTextWeight": "string",
-      "headerTextSize": "string",
-      "headerFontFamily": "string",
-      "linkBackgroundColor": "string",
-      "linkTextColor": "string",
-      "linkTextWeight": "string",
-      "linkTextSize": "string",
-      "linkFontFamily": "string",
-      "isLinkShadow": "boolean",
-      "linkShadowColor": "string",
-      "linkShadowWeight": "string",
-      "linkHoverBackgroundColor": "string",
-      "linkBorderRadius": "string",
-      "linkPadding": "string",
-      "showLinkCopyButton": "boolean",
-      "iconBackgroundColor": "string",
-      "isIconShadow": "boolean",
-      "iconShadowColor": "string",
-      "iconShadowWeight": "string",
-      "iconLogoColor": "string",
-      "iconHoverBackgroundColor": "string",
-      "supportBanner": "NONE | LGBTQ_RIGHTS | ANTI_RACISM | MENTAL_HEALTH | CLIMATE_ACTION",
-      "enableGuestbook": "boolean"
+      // ... Preferences details
     }
   }
 }
@@ -302,41 +274,7 @@ Updates the authenticated user's profile customization preferences.
 
 ```json
 {
-  "backgroundType": "FLAT | GRADIENT",
-  "backgroundColor": "string",
-  "backgroundGradientStart": "string",
-  "backgroundGradientEnd": "string",
-  "profilePictureRadius": "string",
-  "profilePictureBorderColor": "string",
-  "profilePictureBorderWidth": "string",
-  "slugTextColor": "string",
-  "slugTextWeight": "string",
-  "slugTextSize": "string",
-  "slugFontFamily": "string",
-  "headerTextColor": "string",
-  "headerTextWeight": "string",
-  "headerTextSize": "string",
-  "headerFontFamily": "string",
-  "linkBackgroundColor": "string",
-  "linkTextColor": "string",
-  "linkTextWeight": "string",
-  "linkTextSize": "string",
-  "linkFontFamily": "string",
-  "isLinkShadow": "boolean",
-  "linkShadowColor": "string",
-  "linkShadowWeight": "string",
-  "linkHoverBackgroundColor": "string",
-  "linkBorderRadius": "string",
-  "linkPadding": "string",
-  "showLinkCopyButton": "boolean",
-  "iconBackgroundColor": "string",
-  "isIconShadow": "boolean",
-  "iconShadowColor": "string",
-  "iconShadowWeight": "string",
-  "iconLogoColor": "string",
-  "iconHoverBackgroundColor": "string",
-  "supportBanner": "NONE | LGBTQ_RIGHTS | ANTI_RACISM | MENTAL_HEALTH | CLIMATE_ACTION",
-  "enableGuestbook": "boolean"
+  // ... All preference fields
 }
 ```
 
@@ -345,42 +283,7 @@ Updates the authenticated user's profile customization preferences.
 ```json
 {
   "updatedPreferences": {
-    "userId": "string",
-    "backgroundType": "FLAT | GRADIENT",
-    "backgroundColor": "string",
-    "backgroundGradientStart": "string",
-    "backgroundGradientEnd": "string",
-    "profilePictureRadius": "string",
-    "profilePictureBorderColor": "string",
-    "profilePictureBorderWidth": "string",
-    "slugTextColor": "string",
-    "slugTextWeight": "string",
-    "slugTextSize": "string",
-    "slugFontFamily": "string",
-    "headerTextColor": "string",
-    "headerTextWeight": "string",
-    "headerTextSize": "string",
-    "headerFontFamily": "string",
-    "linkBackgroundColor": "string",
-    "linkTextColor": "string",
-    "linkTextWeight": "string",
-    "linkTextSize": "string",
-    "linkFontFamily": "string",
-    "isLinkShadow": "boolean",
-    "linkShadowColor": "string",
-    "linkShadowWeight": "string",
-    "linkHoverBackgroundColor": "string",
-    "linkBorderRadius": "string",
-    "linkPadding": "string",
-    "showLinkCopyButton": "boolean",
-    "iconBackgroundColor": "string",
-    "isIconShadow": "boolean",
-    "iconShadowColor": "string",
-    "iconShadowWeight": "string",
-    "iconLogoColor": "string",
-    "iconHoverBackgroundColor": "string",
-    "supportBanner": "NONE | LGBTQ_RIGHTS | ANTI_RACISM | MENTAL_HEALTH | CLIMATE_ACTION",
-    "enableGuestbook": "boolean"
+    // ... Preferences details
   }
 }
 ```
@@ -448,13 +351,7 @@ Creates a new link for the authenticated user.
 ```json
 {
   "link": {
-    "id": "string",
-    "userId": "string",
-    "url": "string",
-    "title": "string",
-    "clickCount": "number",
-    "createdAt": "string",
-    "updatedAt": "string"
+    // ... Link details
   }
 }
 ```
@@ -483,13 +380,7 @@ Updates an existing link for the authenticated user.
 ```json
 {
   "link": {
-    "id": "string",
-    "userId": "string",
-    "url": "string",
-    "title": "string",
-    "clickCount": "number",
-    "createdAt": "string",
-    "updatedAt": "string"
+    // ... Link details
   }
 }
 ```
@@ -560,21 +451,14 @@ Creates a new social icon for the authenticated user. Only one icon per platform
 
 **Supported Platforms:**
 
-- Airbnb, Amazon, App Store, Apple Music, Apple Podcasts, Bandcamp, Behance, Bluesky, Calendly, CodePen, Discord, Dribbble, Etsy, Facebook, GitHub, Gmail, Goodreads, Google Maps, Google Play, Instagram, Kickstarter, Letterboxd, LinkedIn, Mastodon, Medium, Notion, Patreon, Pinterest, Reddit, ResearchGate, Shopify, Signal, Slack, Snapchat, SoundCloud, Spotify, Stack Overflow, Substack, Telegram, TikTok, Tripadvisor, Trello, Twitch, Vimeo, Whatsapp, X, Youtube
+- Airbnb, Amazon, App Store, Apple Music, Apple Podcasts, Bandcamp, Behance, Bluesky, Calendly, CodePen, Discord, Dribbble, Etsy, Facebook, GitHub, Gmail, Goodreads, Google Maps, Google Play, Instagram, Kickstarter, Letterboxd, LinkedIn, Mastodon, Medium, Notion, Patreon, Pinterest, Reddit, ResearchGate, Shopify, Signal, Slack, Snapchat, SoundCloud, Spotify, Stack Overflow, Substack, Telegram, TikTok, Tripadvisor, Trello, Twitch, Vimeo, Whatsapp, X, Yelp, Youtube
 
 **Response:**
 
 ```json
 {
   "icon": {
-    "id": "string",
-    "userId": "string",
-    "url": "string",
-    "platform": "string",
-    "logo": "string",
-    "clickCount": "number",
-    "createdAt": "string",
-    "updatedAt": "string"
+    // ... Icon details
   }
 }
 ```
@@ -626,13 +510,7 @@ Retrieves all analytics data for the authenticated user, including page views, l
       "userLinkId": "string",
       "createdAt": "string",
       "userLink": {
-        "id": "string",
-        "userId": "string",
-        "url": "string",
-        "title": "string",
-        "clickCount": "number",
-        "createdAt": "string",
-        "updatedAt": "string"
+        // ... Link details
       }
     }
   ],
@@ -641,14 +519,7 @@ Retrieves all analytics data for the authenticated user, including page views, l
       "userIconId": "string",
       "createdAt": "string",
       "userIcon": {
-        "id": "string",
-        "userId": "string",
-        "url": "string",
-        "platform": "string",
-        "logo": "string",
-        "clickCount": "number",
-        "createdAt": "string",
-        "updatedAt": "string"
+        // ... Icon details
       }
     }
   ]
@@ -731,6 +602,8 @@ Records analytics data for page views, link clicks, or icon clicks. Does not rec
 }
 ```
 
+**Note:** Analytics events are not recorded when users interact with their own profile.
+
 #### Create Guestbook Comment
 
 > **POST** `/api/analytics/comments`
@@ -783,5 +656,7 @@ Deletes analytics data for the authenticated user. Can be filtered by type and d
   "message": "Successfully deleted {count} analytics record(s)"
 }
 ```
+
+**Note:** The message will display the actual count of deleted records (e.g., "Successfully deleted 5 analytics records" or "Successfully deleted 1 analytics record").
 
 ---
