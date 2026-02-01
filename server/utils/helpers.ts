@@ -28,13 +28,13 @@ export async function generateSlug(base: string = ""): Promise<string> {
     .replaceAll(/-+/g, "-") // Collapse multiple hyphens
     .replaceAll(/^(-+)|(-+)$/g, "") // Trim leading/trailing hyphens
 
-  let slug: string
+  let slug = ""
   let exists = true
   let attempt = 0
 
   while (exists && attempt < 5) {
     const randomString = Math.random().toString(36).slice(2, 8)
-    slug = `${cleanedBase}-${randomString}`
+    slug = cleanedBase ? `${cleanedBase}-${randomString}` : randomString
     const existingUser = await db.user.findUnique({ where: { slug } })
     exists = !!existingUser
     attempt++

@@ -17,6 +17,16 @@ export default defineEventHandler(async (event) => {
     select: { slug: true },
   })
 
+  // Check if slug is being changed and if new slug is unique
+  if (result.data.slug && result.data.slug !== oldUser?.slug) {
+    const existingUser = await db.user.findUnique({
+      where: { slug: result.data.slug },
+    })
+    if (existingUser) {
+      throw createError({ status: 409, statusText: "This username is already taken. Please choose a different one." })
+    }
+  }
+
   const updatedUser = await db.user.update({
     where: { id: user.id },
     data: {

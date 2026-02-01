@@ -1,4 +1,5 @@
 import db from "#server/utils/db"
+import { CacheKeys, deleteCached } from "#server/utils/redis"
 import { createCommentSchema } from "#shared/schemas/analytics-schema"
 
 export default defineEventHandler(async (event) => {
@@ -11,10 +12,7 @@ export default defineEventHandler(async (event) => {
   const { userId, name, email, message } = result.data
 
   // Check if user has guestbook enabled
-  const user = await db.user.findUnique({
-    where: { id: userId },
-    include: { preferences: true },
-  })
+  const user = await db.user.findUnique({ where: { id: userId }, include: { preferences: true } })
   if (!user) {
     throw createError({ status: 404, statusText: "User not found" })
   }
@@ -30,6 +28,9 @@ export default defineEventHandler(async (event) => {
       message,
     },
   })
+
+  // Invalidate user data cache
+  await deleteCached(CacheKeys.userData(userId))
 
   return { comment }
 })

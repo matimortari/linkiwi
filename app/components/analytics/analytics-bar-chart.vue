@@ -70,7 +70,6 @@ const chartOptions: ChartOptions<"bar"> = {
     bar: {
       borderSkipped: false,
       backgroundColor: "de896d",
-      hoverBackgroundColor: "#c97859",
     },
   },
   animation: {

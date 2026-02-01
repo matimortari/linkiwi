@@ -12,10 +12,7 @@ export default defineEventHandler(async (event) => {
 
   const { type, userId, id } = analyticsData.data
 
-  const user = await db.user.findUnique({
-    where: { id: userId },
-    select: { id: true },
-  })
+  const user = await db.user.findUnique({ where: { id: userId }, select: { id: true } })
   if (!user) {
     throw createError({ status: 404, statusText: "User not found" })
   }

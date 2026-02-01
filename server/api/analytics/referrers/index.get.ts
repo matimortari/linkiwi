@@ -36,8 +36,5 @@ export default defineEventHandler(async (event) => {
     label: formatSourceLabel(stat.source || "unknown"),
   }))
 
-  return {
-    referrers: formattedStats,
-    totalViews,
-  }
+  return { referrers: formattedStats, totalViews }
 })
