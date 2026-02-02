@@ -9,12 +9,14 @@ export default defineEventHandler(async (event) => {
     throw createError({ status: 400, statusText: "No file uploaded" })
   }
 
+  const currentUser = await db.user.findUnique({ where: { id: user.id }, select: { image: true } })
+
   const imageUrl = await uploadFile({
     path: `alllinks-user-uploads/avatar/${user.id}`,
     file,
     maxSize: 2 * 1024 * 1024, // 2 MB
     allowedMimeTypes: ["image/png", "image/jpeg", "image/webp"],
-    oldFileUrl: user.image ?? undefined,
+    oldFileUrl: currentUser?.image ?? undefined,
   })
 
   await db.user.update({

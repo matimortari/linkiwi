@@ -13,7 +13,7 @@
     <div v-else-if="userProfile" class="flex w-full flex-1 flex-col items-center gap-4 py-12 text-center" :style="backgroundStyle">
       <UserSupportBanner v-if="profilePreferences.supportBanner !== 'NONE'" :preferences="profilePreferences" />
 
-      <img :src="userProfile.image ?? undefined" alt="Avatar" class="size-24 object-cover" :style="profilePictureStyle">
+      <img :src="userProfile.image || DEFAULT_AVATAR" alt="Avatar" class="size-24 object-cover" :style="profilePictureStyle">
       <p :style="slugStyle">
         {{ `@${userProfile.slug}` }}
       </p>

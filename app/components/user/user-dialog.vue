@@ -3,7 +3,7 @@
     <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
       <div class="flex flex-col items-center border-b pb-4">
         <div class="relative size-24">
-          <img v-if="form.image" :src="form.image" alt="Profile preview" class="size-full rounded-full border object-cover">
+          <img :src="form.image || DEFAULT_AVATAR" alt="Profile preview" class="size-full rounded-full border object-cover">
           <input
             id="image" type="file"
             accept="image/*" class="absolute top-0 left-0 size-full opacity-0"
@@ -77,18 +77,23 @@ async function handleSubmit() {
     return
   }
 
-  await userStore.updateUser({
-    name: form.value.name,
-    slug: form.value.slug,
-    description: form.value.description,
-  })
+  try {
+    await userStore.updateUser({
+      name: form.value.name,
+      slug: form.value.slug,
+      description: form.value.description,
+    })
 
-  await userStore.getUser()
-  emit("close")
+    await userStore.getUser()
+    emit("close")
+  }
+  catch {
+  }
 }
 
 watch(() => props.isOpen, (open) => {
   if (open && user.value) {
+    errors.value.updateUser = null
     form.value = {
       name: user.value.name ?? "",
       slug: user.value.slug ?? "",
@@ -97,6 +102,7 @@ watch(() => props.isOpen, (open) => {
     }
   }
   else {
+    errors.value.updateUser = null
     form.value = { name: "", slug: "", description: "", image: "" }
   }
 }, { immediate: true })

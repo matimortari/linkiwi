@@ -14,7 +14,7 @@
     <div class="flex h-full flex-col gap-8 px-12 md:px-0">
       <div v-if="user" class="navigation-group w-full gap-4!">
         <div class="relative size-12 shrink-0">
-          <img v-if="user.image" :src="user.image" alt="Avatar" class="size-full rounded-full border object-cover select-none">
+          <img :src="user.image || DEFAULT_AVATAR" alt="Avatar" class="size-full rounded-full border object-cover select-none">
 
           <button title="Edit Profile Information" class="btn-primary absolute -right-2 -bottom-2 p-1!" aria-label="Edit Profile Information" @click="isUserDialogOpen = true">
             <icon name="mdi:square-edit-outline" size="20" />
