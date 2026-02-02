@@ -24,7 +24,7 @@ export const useUserStore = defineStore("user", () => {
       return res
     }
     catch (err: any) {
-      errors.value.getUser = err.data?.message || "Failed to get user"
+      errors.value.getUser = getErrorMessage(err, "Failed to get user")
       console.error("getUser error:", err)
       throw err
     }
@@ -43,7 +43,7 @@ export const useUserStore = defineStore("user", () => {
       return res
     }
     catch (err: any) {
-      errors.value.getUserProfile = err.data?.message || "Failed to get user by slug"
+      errors.value.getUserProfile = getErrorMessage(err, "Failed to get user profile")
       console.error("getUserProfile error:", err)
       throw err
     }
@@ -62,7 +62,7 @@ export const useUserStore = defineStore("user", () => {
       return res
     }
     catch (err: any) {
-      errors.value.updateUser = err.data?.message || "Failed to update user"
+      errors.value.updateUser = getErrorMessage(err, "Failed to update user")
       console.error("updateUser error:", err)
       throw err
     }
@@ -86,7 +86,7 @@ export const useUserStore = defineStore("user", () => {
       return res
     }
     catch (err: any) {
-      errors.value.updateUserImage = err.data?.message || "Failed to update user image"
+      errors.value.updateUserImage = getErrorMessage(err, "Failed to update user image")
       console.error("updateUserImage error:", err)
       throw err
     }
@@ -107,7 +107,7 @@ export const useUserStore = defineStore("user", () => {
       return res
     }
     catch (err: any) {
-      errors.value.updatePreferences = err.data?.message || "Failed to update preferences"
+      errors.value.updatePreferences = getErrorMessage(err, "Failed to update preferences")
       console.error("updatePreferences error:", err)
       throw err
     }
@@ -125,7 +125,7 @@ export const useUserStore = defineStore("user", () => {
       user.value = null
     }
     catch (err: any) {
-      errors.value.deleteUser = err.data?.message || "Failed to delete user"
+      errors.value.deleteUser = getErrorMessage(err, "Failed to delete user")
       console.error("deleteUser error:", err)
       throw err
     }

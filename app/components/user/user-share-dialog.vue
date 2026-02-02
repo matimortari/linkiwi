@@ -7,7 +7,7 @@
 
       <div ref="qrContainer" class="overflow-hidden rounded-2xl border" />
 
-      <button class="text-caption hover:underline" @click="copyPageUrl()">
+      <button class="text-caption hover:underline" @click="handleCopy()">
         <span>@{{ user?.slug }}</span>
       </button>
     </div>
@@ -30,7 +30,7 @@
               class="overlay absolute right-0 z-50 flex flex-col gap-1"
               :class="[dropdownPosition === 'top' ? 'bottom-full mb-2' : 'top-full mt-2']"
             >
-              <button class="text-caption navigation-group w-full rounded-[5rem] p-2 hover:bg-muted" role="menuitem" @click="copyPageUrl()">
+              <button class="text-caption navigation-group w-full rounded-[5rem] p-2 hover:bg-muted" role="menuitem" @click="handleCopy()">
                 <icon name="mdi:link-variant" size="20" />
                 <span>Copy Link</span>
               </button>
@@ -105,7 +105,7 @@ function toggleDropdown() {
   }
 }
 
-async function copyPageUrl() {
+async function handleCopy() {
   await navigator.clipboard.writeText(pageUrl.value)
   isDropdownOpen.value = false
   copySuccess.value = "Copied to clipboard!"

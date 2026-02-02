@@ -17,12 +17,10 @@ export function formatDate(date?: string | Date | null): string {
 }
 
 /**
- * Copies the provided string value to the clipboard.
+ * Extracts the error message from various error formats (Nuxt/H3/Zod).
  */
-export function copyToClipboard(val: string) {
-  if (val) {
-    navigator.clipboard.writeText(val)
-  }
+export function getErrorMessage(err: any, fallback: string): string {
+  return err?.data?.statusMessage || err?.data?.message || err?.statusMessage || err?.message || fallback
 }
 
 /**

@@ -24,7 +24,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
       return res
     }
     catch (err: any) {
-      errors.value.getAnalytics = err.data?.message || "Failed to fetch analytics"
+      errors.value.getAnalytics = getErrorMessage(err, "Failed to fetch analytics")
       console.error("getAnalytics error:", err)
       throw err
     }
@@ -43,7 +43,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
       return res
     }
     catch (err: any) {
-      errors.value.getReferrerStats = err.data?.message || "Failed to get referrer stats"
+      errors.value.getReferrerStats = getErrorMessage(err, "Failed to get referrer stats")
       console.error("getReferrerStats error:", err)
       throw err
     }
@@ -60,7 +60,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
       await $fetch("/api/analytics", { method: "POST", body: { type: "pageView", userId, referrer }, credentials: "include" })
     }
     catch (err: any) {
-      errors.value.recordPageView = err.data?.message || "Failed to record page view"
+      errors.value.recordPageView = getErrorMessage(err, "Failed to record page view")
       console.error("recordPageView error:", err)
       throw err
     }
@@ -77,7 +77,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
       await $fetch("/api/analytics", { method: "POST", body: { type: "link", userId, id: linkId }, credentials: "include" })
     }
     catch (err: any) {
-      errors.value.recordLinkClick = err.data?.message || "Failed to record link click"
+      errors.value.recordLinkClick = getErrorMessage(err, "Failed to record link click")
       console.error("recordLinkClick error:", err)
       throw err
     }
@@ -94,7 +94,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
       await $fetch("/api/analytics", { method: "POST", body: { type: "icon", userId, id: iconId }, credentials: "include" })
     }
     catch (err: any) {
-      errors.value.recordIconClick = err.data?.message || "Failed to record icon click"
+      errors.value.recordIconClick = getErrorMessage(err, "Failed to record icon click")
       console.error("recordIconClick error:", err)
       throw err
     }
@@ -111,7 +111,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
       await $fetch("/api/analytics/comments", { method: "POST", body: data, credentials: "include" })
     }
     catch (err: any) {
-      errors.value.submitComment = err.data?.message || "Failed to submit comment"
+      errors.value.submitComment = getErrorMessage(err, "Failed to submit comment")
       console.error("submitComment error:", err)
       throw err
     }
@@ -139,7 +139,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
       await $fetch<{ success: boolean, message: string }>(params.toString() ? `/api/analytics?${params.toString()}` : "/api/analytics", { method: "DELETE", credentials: "include" })
     }
     catch (err: any) {
-      errors.value.deleteAnalytics = err.data?.message || "Failed to delete analytics"
+      errors.value.deleteAnalytics = getErrorMessage(err, "Failed to delete analytics")
       console.error("deleteAnalytics error:", err)
       throw err
     }
