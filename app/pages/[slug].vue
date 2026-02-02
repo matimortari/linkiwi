@@ -64,31 +64,23 @@ async function handleClick(itemId: string, type: "link" | "icon") {
   type === "link" ? await analyticsStore.recordLinkClick(userProfile.value.id, itemId) : await analyticsStore.recordIconClick(userProfile.value.id, itemId)
 }
 
-async function loadUserProfile(slug: string) {
-  await userStore.getUserProfile(slug)
-  const currentUser = userProfile.value
-  if (!currentUser?.id) {
+onMounted(async () => {
+  if (!slug.value) {
     return
   }
 
-  const referrer = (typeof document !== "undefined" ? document.referrer : "") || (route.query.ref as string) || ""
-  await analyticsStore.recordPageView(currentUser.id, referrer)
-}
-
-watch(slug, async (newSlug) => {
-  if (!newSlug) {
-    return
-  }
-
-  await loadUserProfile(newSlug)
+  await userStore.getUserProfile(slug.value)
   if (userProfile.value) {
     useHead({
       title: `@${userProfile.value.slug}`,
       link: [{ rel: "canonical", href: `https://alllinks-bio.vercel.app/${userProfile.value.slug}` }],
       meta: [{ name: "description", content: `@${userProfile.value.slug} profile on AllLinks.` }],
     })
+
+    const referrer = (typeof document !== "undefined" ? document.referrer : "") || (route.query.ref as string) || ""
+    await analyticsStore.recordPageView(userProfile.value.id, referrer)
   }
-}, { immediate: true })
+})
 
 definePageMeta({
   layout: "minimal",
