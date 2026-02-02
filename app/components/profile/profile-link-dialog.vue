@@ -68,10 +68,13 @@ async function handleCreateLink() {
     return
   }
 
-  const createData = form.value as CreateUserLinkInput
-  await linksStore.createLink(createData)
-
-  emit("close")
+  try {
+    const createData = form.value as CreateUserLinkInput
+    await linksStore.createLink(createData)
+    emit("close")
+  }
+  catch {
+  }
 }
 
 async function handleUpdateLink() {
@@ -98,13 +101,18 @@ async function handleUpdateLink() {
     return
   }
 
-  await linksStore.updateLink(props.selectedLink.id, validation.data)
-
-  emit("close")
+  try {
+    await linksStore.updateLink(props.selectedLink.id, validation.data)
+    emit("close")
+  }
+  catch {
+  }
 }
 
 watch(() => props.isOpen, (open) => {
   if (open) {
+    errors.value.createLink = null
+    errors.value.updateLink = null
     form.value = props.selectedLink ? { ...props.selectedLink } : { title: "", url: "" }
   }
 }, { immediate: true })

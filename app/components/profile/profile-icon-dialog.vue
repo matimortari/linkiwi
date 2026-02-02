@@ -67,6 +67,7 @@ async function handleSubmit() {
     errors.value.createIcon = "Platform and URL are required."
     return
   }
+
   if (icons.value.some((i: Icon) => i.platform === form.value.platform)) {
     errors.value.createIcon = "You have already a social icon for this platform."
     return
@@ -74,13 +75,20 @@ async function handleSubmit() {
 
   loading.value = true
 
-  await iconsStore.createIcon(form.value)
-  emit("close")
-  loading.value = false
+  try {
+    await iconsStore.createIcon(form.value)
+    emit("close")
+  }
+  catch {
+  }
+  finally {
+    loading.value = false
+  }
 }
 
 watch(() => props.isOpen, (open) => {
   if (open) {
+    errors.value.createIcon = null
     form.value = { platform: "" as keyof typeof SOCIAL_ICONS, logo: "" as typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS], url: "" }
   }
 }, { immediate: true })
