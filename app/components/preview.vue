@@ -5,7 +5,7 @@
     <span>{{ isPreviewOpen ? 'Close Preview' : 'Preview' }}</span>
   </button>
 
-  <div v-if="user" class="mx-auto my-4 flex items-center select-none md:h-150 md:w-80 2xl:w-90">
+  <div v-if="user" class="mx-auto flex justify-center select-none">
     <!-- Mobile full-screen preview -->
     <transition name="slide">
       <div v-if="isPreviewOpen" class="fixed top-0 left-0 z-20 size-full overflow-y-auto p-12 md:hidden" :style="backgroundStyle">
@@ -19,7 +19,7 @@
             {{ user.description }}
           </p>
 
-          <ul v-if="icons.length" class="my-2 flex w-full flex-row items-center justify-center gap-2">
+          <ul v-if="icons.length" class="my-2 navigation-group w-full justify-center">
             <UserIcon v-for="icon in icons" :key="icon.id" :item="icon" :preferences="preferences" />
           </ul>
 
@@ -38,7 +38,7 @@
     <div
       v-motion :initial="{ opacity: 0, x: 20 }"
       :visible="{ opacity: 1, x: 0 }" :duration="800"
-      :style="backgroundStyle" class="scroll-hide relative hidden h-150 w-full overflow-x-hidden rounded-[2.5rem] border-4 shadow-lg md:block"
+      :style="backgroundStyle" class="scroll-hide relative hidden h-150 w-80 overflow-x-hidden rounded-[2.5rem] border-4 shadow-lg md:my-4 md:block 2xl:w-90"
     >
       <div class="sticky top-2 left-1/2 z-10 h-2 w-24 -translate-x-1/2 rounded-full bg-black" />
       <div class="sticky top-2 z-10 w-full px-4">
@@ -59,7 +59,7 @@
         </p>
 
         <div class="my-2 w-full">
-          <ul v-if="icons.length" class="flex flex-row items-center justify-center gap-2">
+          <ul v-if="icons.length" class="navigation-group justify-center">
             <UserIcon v-for="icon in icons" :key="icon.id" :item="icon" :preferences="preferences" />
           </ul>
         </div>

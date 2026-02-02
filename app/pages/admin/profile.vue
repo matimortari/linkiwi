@@ -24,7 +24,7 @@
   </div>
 
   <div v-else class="flex h-[calc(100vh-8rem)] w-full items-center justify-center text-center">
-    <Spinner v-if="loading" />
+    <Loading v-if="loading" />
     <p class="text-caption" :class="{ 'text-danger!': errors.getUser || errors.getUserProfile }">
       {{ errors.getUser || errors.getUserProfile }}
     </p>

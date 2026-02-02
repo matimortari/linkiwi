@@ -4,9 +4,7 @@
       <img src="/assets/symbol.png" alt="Logo" width="30" class="absolute top-4 left-4 transition-transform hover:scale-105">
     </nuxt-link>
 
-    <div v-if="loading" class="absolute inset-0 z-50 flex items-center justify-center bg-background/60 backdrop-blur-sm">
-      <Spinner />
-    </div>
+    <Loading v-if="loading" class="absolute inset-0 flex items-center justify-center backdrop-blur-sm" />
 
     <Empty v-else-if="!userProfile" :message="`User @${slug} not found.`" icon-name="mdi:account-off" />
 

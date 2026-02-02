@@ -4,7 +4,7 @@
       Clicks by Item
     </h3>
 
-    <Spinner v-if="linksLoading || iconsLoading || analyticsLoading" />
+    <Loading v-if="linksLoading || iconsLoading || analyticsLoading" />
     <Empty v-if="!items.length" message="No links or social icons yet." icon-name="mdi:octagram-minus-outline" />
 
     <ul v-else class="grid grid-cols-1 gap-2 md:grid-cols-3">

@@ -28,7 +28,7 @@ The API uses standard HTTP response codes to indicate success or failure:
 
 ## Endpoints
 
-### Authentication
+### Authentication & Session
 
 #### Login with Provider
 

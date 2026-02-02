@@ -13,7 +13,7 @@ useSessionMonitor()
 useHead({
   htmlAttrs: { lang: "en" },
   link: [{ rel: "icon", href: "/favicon.svg" }],
-  titleTemplate: "%s - AllLinks",
+  titleTemplate: "%s – AllLinks",
   meta: [
     { name: "description", content: "Create your own landing page for sharing links to your social media profiles, websites, and more!" },
     { name: "viewport", content: "width=device-width, initial-scale=1" },

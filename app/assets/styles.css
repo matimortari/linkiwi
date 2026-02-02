@@ -337,7 +337,7 @@ input[type="radio"]:checked::after {
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--secondary) 50%, transparent);
+  background: color-mix(in srgb, var(--muted) 80%, transparent);
   color: var(--foreground);
 }
 

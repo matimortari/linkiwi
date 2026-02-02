@@ -1,5 +1,5 @@
 <template>
-  <footer class="w-full border-t bg-card">
+  <footer class="relative z-50 w-full bg-card">
     <div class="container mx-auto flex flex-col-reverse p-8 md:flex-row md:justify-between">
       <div class="flex flex-col justify-end gap-2 border-t py-4 md:border-0">
         <img :src="themeTitle" alt="Wordmark" width="100">
@@ -43,19 +43,17 @@ const { loggedIn } = useUserSession()
 
 const FOOTER_SECTIONS = [
   {
-    title: "Application",
+    title: "Product",
     links: [...(!loggedIn.value
       ? [
           { label: "Home", href: "/" },
           { label: "Features", href: "/#features" },
-          { label: "API Reference", href: "/api-spec" },
           { label: "Sign in", href: "/sign-in" },
         ]
       : [
           { label: "Profile", href: "/admin/profile" },
           { label: "Preferences", href: "/admin/preferences" },
           { label: "Analytics", href: "/admin/analytics" },
-          { label: "API Reference", href: "/api-spec" },
           { label: "Sign out", action: signOut },
         ]
     )],
@@ -63,6 +61,7 @@ const FOOTER_SECTIONS = [
   {
     title: "Resources",
     links: [
+      { label: "API Reference", href: "/api-spec" },
       { label: "Privacy Policy", href: "/legal/privacy" },
       { label: "Terms of Service", href: "/legal/terms" },
       { label: "Brand", href: "/brand" },

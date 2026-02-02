@@ -7,8 +7,6 @@ export function useContent(options: { selector?: string, parseMethod?: boolean }
   const headers = ref<any[]>([])
   let observer: IntersectionObserver | null = null
 
-  const updateActiveSection = useDebounceFn((id: string) => activeSection.value = id, 50)
-
   async function extractHeaders() {
     await nextTick()
     await new Promise(resolve => setTimeout(resolve, 100))
@@ -43,10 +41,10 @@ export function useContent(options: { selector?: string, parseMethod?: boolean }
     observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
         if (entry.isIntersecting) {
-          updateActiveSection(entry.target.id)
+          useDebounceFn(() => activeSection.value = entry.target.id, 50)()
         }
       }
-    }, { root: null, rootMargin: "0px 0px -70% 0px", threshold: 0 })
+    }, { root: container, rootMargin: "0px 0px -70% 0px", threshold: 0 })
 
     for (const heading of hElements) {
       observer!.observe(heading)
@@ -70,13 +68,48 @@ export function useContent(options: { selector?: string, parseMethod?: boolean }
     return classes.join(" ")
   })
 
-  onMounted(extractHeaders)
-  onBeforeUnmount(() => observer?.disconnect())
+  function scrollToSection(targetId: string) {
+    const targetElement = document.getElementById(targetId)
+    const container = document.querySelector(selector)
+    if (targetElement && container) {
+      const containerRect = container.getBoundingClientRect()
+      const targetRect = targetElement.getBoundingClientRect()
+      const offset = targetRect.top - containerRect.top + container.scrollTop - 20
+
+      container.scrollTo({ top: offset, behavior: "smooth" })
+    }
+  }
+
+  function handleAnchorClick(e: MouseEvent) {
+    const target = e.target as HTMLElement
+    const link = target.closest("a[href^=\"#\"]")
+    if (!link) {
+      return
+    }
+
+    e.preventDefault()
+    const href = link.getAttribute("href")
+    if (!href) {
+      return
+    }
+
+    scrollToSection(href.slice(1))
+  }
+
+  onMounted(() => {
+    extractHeaders()
+    document.addEventListener("click", handleAnchorClick)
+  })
+
+  onBeforeUnmount(() => {
+    observer?.disconnect()
+    document.removeEventListener("click", handleAnchorClick)
+  })
 
   watch(() => route.fullPath, async () => {
     observer?.disconnect()
     await extractHeaders()
   })
 
-  return { headers, headerClasses, activeSection }
+  return { headers, headerClasses, activeSection, scrollToSection }
 }

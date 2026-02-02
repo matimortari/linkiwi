@@ -5,7 +5,7 @@
     </h3>
 
     <div class="flex flex-col gap-2">
-      <Spinner v-if="loading" />
+      <Loading v-if="loading" />
       <Empty v-if="!icons.length" message="Your social icons help visitors connect with you. Add your first social icon!" icon-name="mdi:star-minus" />
 
       <ul v-else class="navigation-group">
