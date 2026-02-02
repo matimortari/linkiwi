@@ -8,10 +8,6 @@ export const updateUserSchema = z.object({
     .transform(val => val.trim())
     .refine(val => val.length > 0, { message: "Name cannot be empty" })
     .optional(),
-  image: z
-    .union([z.url(), z.literal(""), z.null()])
-    .transform(val => (val === "" ? null : val))
-    .optional(),
   slug: z
     .string()
     .min(3, "Slug must be at least 3 characters")

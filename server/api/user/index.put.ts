@@ -31,7 +31,6 @@ export default defineEventHandler(async (event) => {
     where: { id: user.id },
     data: {
       name: result.data.name,
-      image: result.data.image,
       slug: result.data.slug,
       description: result.data.description,
     },
