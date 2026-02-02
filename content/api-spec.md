@@ -574,7 +574,7 @@ Records analytics data for page views, link clicks, or social icon clicks. Does 
 
 ```json
 {
-  "message": "Page view recorded successfully"
+  "message": "Page view recorded"
 }
 ```
 
@@ -582,7 +582,7 @@ Records analytics data for page views, link clicks, or social icon clicks. Does 
 
 ```json
 {
-  "message": "Link click recorded successfully",
+  "message": "Link click recorded",
   "linkClick": {
     "userLinkId": "string",
     "createdAt": "string"
@@ -594,7 +594,7 @@ Records analytics data for page views, link clicks, or social icon clicks. Does 
 
 ```json
 {
-  "message": "Social icon click recorded successfully",
+  "message": "Social icon click recorded",
   "iconClick": {
     "userIconId": "string",
     "createdAt": "string"

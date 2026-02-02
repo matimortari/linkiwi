@@ -37,10 +37,7 @@ export default defineEventHandler(async (event: H3Event) => {
   }
 
   try {
-    const oauthHandler = {
-      google: defineOAuthGoogleEventHandler,
-      github: defineOAuthGitHubEventHandler,
-    }[provider]
+    const oauthHandler = { google: defineOAuthGoogleEventHandler, github: defineOAuthGitHubEventHandler }[provider]
     if (!oauthHandler) {
       throw createError({ status: 400, message: `OAuth handler not found for provider: ${provider}` })
     }
@@ -60,10 +57,7 @@ export default defineEventHandler(async (event: H3Event) => {
         throw createError({ status: 400, message: `Missing required user data from ${provider}` })
       }
 
-      return handleOAuthUser(event, {
-        ...userData,
-        provider,
-      })
+      return handleOAuthUser(event, { ...userData, provider })
     }, async onError(event: H3Event<EventHandlerRequest>) {
       return sendRedirect(event, `/sign-in?error=${provider}_oauth_failed`)
     } })(event)

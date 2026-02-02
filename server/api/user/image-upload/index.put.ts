@@ -16,13 +16,10 @@ export default defineEventHandler(async (event) => {
     file,
     maxSize: 2 * 1024 * 1024, // 2 MB
     allowedMimeTypes: ["image/png", "image/jpeg", "image/webp"],
-    oldFileUrl: currentUser?.image ?? undefined,
+    oldFile: currentUser?.image ?? undefined,
   })
 
-  await db.user.update({
-    where: { id: user.id },
-    data: { image: imageUrl },
-  })
+  await db.user.update({ where: { id: user.id }, data: { image: imageUrl } })
 
   return { imageUrl }
 })

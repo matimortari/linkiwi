@@ -16,14 +16,8 @@ export default defineEventHandler(async (event) => {
       source: { not: null }, // Exclude null sources to prevent data integrity issues
       ...(dateFrom || dateTo ? { createdAt: { ...(dateFrom && { gte: dateFrom }), ...(dateTo && { lte: dateTo }) } } : {}),
     },
-    _count: {
-      source: true,
-    },
-    orderBy: {
-      _count: {
-        source: "desc",
-      },
-    },
+    _count: { source: true },
+    orderBy: { _count: { source: "desc" } },
   })
 
   const totalViews = referrerStats.reduce((sum, stat) => sum + stat._count.source, 0)

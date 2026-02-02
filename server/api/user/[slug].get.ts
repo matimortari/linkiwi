@@ -7,7 +7,6 @@ export default defineEventHandler(async (event) => {
     throw createError({ status: 400, statusText: "Slug is required" })
   }
 
-  // Try to get from cache first
   const cacheKey = CacheKeys.userProfile(slug)
   const cached = await getCached<any>(cacheKey)
   if (cached) {
@@ -16,15 +15,7 @@ export default defineEventHandler(async (event) => {
 
   const userProfile = await db.user.findUnique({
     where: { slug },
-    include: {
-      links: {
-        orderBy: { createdAt: "asc" },
-      },
-      icons: {
-        orderBy: { createdAt: "asc" },
-      },
-      preferences: true,
-    },
+    include: { links: { orderBy: { createdAt: "asc" } }, icons: { orderBy: { createdAt: "asc" } }, preferences: true },
   })
   if (!userProfile) {
     throw createError({ status: 404, statusText: `User '${slug}' not found` })

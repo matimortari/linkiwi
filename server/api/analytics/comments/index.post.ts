@@ -9,10 +9,8 @@ export default defineEventHandler(async (event) => {
     throw createError({ status: 400, statusText: result.error.issues[0]?.message || "Invalid input" })
   }
 
-  const { userId, name, email, message } = result.data
-
   // Check if user has guestbook enabled
-  const user = await db.user.findUnique({ where: { id: userId }, include: { preferences: true } })
+  const user = await db.user.findUnique({ where: { id: result.data.userId }, include: { preferences: true } })
   if (!user) {
     throw createError({ status: 404, statusText: "User not found" })
   }
@@ -22,15 +20,15 @@ export default defineEventHandler(async (event) => {
 
   const comment = await db.comment.create({
     data: {
-      userId,
-      name,
-      email: email || null,
-      message,
+      userId: result.data.userId,
+      name: result.data.name,
+      email: result.data.email || null,
+      message: result.data.message,
     },
   })
 
   // Invalidate user data cache
-  await deleteCached(CacheKeys.userData(userId))
+  await deleteCached(CacheKeys.userData(result.data.userId))
 
   return { comment }
 })

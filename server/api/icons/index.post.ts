@@ -11,25 +11,13 @@ export default defineEventHandler(async (event) => {
     throw createError({ status: 400, statusText: result.error.issues[0]?.message || "Invalid input" })
   }
 
-  const { url, platform, logo } = result.data
-
-  const existingIcon = await db.userIcon.findFirst({
-    where: {
-      userId: user.id,
-      platform,
-    },
-  })
+  const existingIcon = await db.userIcon.findFirst({ where: { userId: user.id, platform: result.data.platform } })
   if (existingIcon) {
     throw createError({ status: 409, statusText: "Social icon for this platform already exists" })
   }
 
   const newIcon = await db.userIcon.create({
-    data: {
-      userId: user.id,
-      url,
-      platform,
-      logo,
-    },
+    data: { userId: user.id, url: result.data.url, platform: result.data.platform, logo: result.data.logo },
     select: {
       id: true,
       userId: true,

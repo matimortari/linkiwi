@@ -5,43 +5,41 @@ import { analyticsRecordSchema } from "#shared/schemas/analytics-schema"
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
-  const analyticsData = analyticsRecordSchema.safeParse(body)
-  if (!analyticsData.success) {
-    throw createError({ status: 400, statusText: analyticsData.error.issues[0]?.message })
+  const result = analyticsRecordSchema.safeParse(body)
+  if (!result.success) {
+    throw createError({ status: 400, statusText: result.error.issues[0]?.message })
   }
 
-  const { type, userId, id } = analyticsData.data
-
-  const user = await db.user.findUnique({ where: { id: userId }, select: { id: true } })
+  const user = await db.user.findUnique({ where: { id: result.data.userId }, select: { id: true } })
   if (!user) {
     throw createError({ status: 404, statusText: "User not found" })
   }
 
   // Do not record analytics for own profile views/clicks
   const session = await getUserSession(event)
-  if (session?.user?.id === userId) {
+  if (session?.user?.id === result.data.userId) {
     return
   }
 
-  switch (type) {
+  switch (result.data.type) {
     case "pageView": {
-      const referrer = analyticsData.data.referrer || getHeader(event, "referer") || null // The referrer header uses 'referer' due to a misspelling from the original HTTP spec that has been preserved for compatibility
+      const referrer = result.data.referrer || getHeader(event, "referer") || null // The referrer header uses 'referer' due to a misspelling from the original HTTP spec that has been preserved for compatibility
       const source = categorizeReferrer(referrer)
-      await db.pageView.create({ data: { userId, referrer, source } })
+      await db.pageView.create({ data: { userId: result.data.userId, referrer, source } })
 
       // Invalidate analytics cache
-      await deleteCached(CacheKeys.analytics(userId))
+      await deleteCached(CacheKeys.analytics(result.data.userId))
 
-      return { message: "Page view recorded successfully" }
+      return { message: "Page view recorded" }
     }
 
     case "link": {
-      if (!id) {
+      if (!result.data.id) {
         throw createError({ status: 400, statusText: "Link ID is required" })
       }
 
       const link = await db.userLink.findFirst({
-        where: { id, userId },
+        where: { id: result.data.id, userId: result.data.userId },
         select: { id: true, clicks: true },
       })
       if (!link) {
@@ -49,32 +47,24 @@ export default defineEventHandler(async (event) => {
       }
 
       const [linkClick] = await db.$transaction([
-        db.linkClick.create({
-          data: { userLinkId: id },
-        }),
-        db.userLink.update({
-          where: { id },
-          data: { clickCount: { increment: 1 } },
-        }),
+        db.linkClick.create({ data: { userLinkId: result.data.id } }),
+        db.userLink.update({ where: { id: result.data.id }, data: { clickCount: { increment: 1 } } }),
       ])
 
       // Invalidate analytics and links cache (clickCount changed)
-      const userData = await db.user.findUnique({ where: { id: userId }, select: { slug: true } })
-      await deleteCached(CacheKeys.analytics(userId), CacheKeys.userLinks(userId), CacheKeys.userProfile(userData?.slug || ""))
+      const userData = await db.user.findUnique({ where: { id: result.data.userId }, select: { slug: true } })
+      await deleteCached(CacheKeys.analytics(result.data.userId), CacheKeys.userLinks(result.data.userId), CacheKeys.userProfile(userData?.slug || ""))
 
-      return {
-        message: "Link click recorded successfully",
-        linkClick: { userLinkId: linkClick.userLinkId, createdAt: linkClick.createdAt },
-      }
+      return { message: "Link click recorded", linkClick: { userLinkId: linkClick.userLinkId, createdAt: linkClick.createdAt } }
     }
 
     case "icon": {
-      if (!id) {
+      if (!result.data.id) {
         throw createError({ status: 400, statusText: "Icon ID is required" })
       }
 
       const icon = await db.userIcon.findFirst({
-        where: { id, userId },
+        where: { id: result.data.id, userId: result.data.userId },
         select: { id: true, clicks: true },
       })
       if (!icon) {
@@ -82,23 +72,15 @@ export default defineEventHandler(async (event) => {
       }
 
       const [iconClick] = await db.$transaction([
-        db.iconClick.create({
-          data: { userIconId: id },
-        }),
-        db.userIcon.update({
-          where: { id },
-          data: { clickCount: { increment: 1 } },
-        }),
+        db.iconClick.create({ data: { userIconId: result.data.id } }),
+        db.userIcon.update({ where: { id: result.data.id }, data: { clickCount: { increment: 1 } } }),
       ])
 
       // Invalidate analytics and icons cache (clickCount changed)
-      const userData = await db.user.findUnique({ where: { id: userId }, select: { slug: true } })
-      await deleteCached(CacheKeys.analytics(userId), CacheKeys.userIcons(userId), CacheKeys.userProfile(userData?.slug || ""))
+      const userData = await db.user.findUnique({ where: { id: result.data.userId }, select: { slug: true } })
+      await deleteCached(CacheKeys.analytics(result.data.userId), CacheKeys.userIcons(result.data.userId), CacheKeys.userProfile(userData?.slug || ""))
 
-      return {
-        message: "Social icon click recorded successfully",
-        iconClick: { userIconId: iconClick.userIconId, createdAt: iconClick.createdAt },
-      }
+      return { message: "Social icon click recorded", iconClick: { userIconId: iconClick.userIconId, createdAt: iconClick.createdAt } }
     }
 
     default:

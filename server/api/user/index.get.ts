@@ -5,7 +5,6 @@ import { CACHE_TTL, CacheKeys, getCached, setCached } from "#server/utils/redis"
 export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
 
-  // Try to get from cache first
   const cacheKey = CacheKeys.userData(user.id)
   const cached = await getCached<any>(cacheKey)
   if (cached) {

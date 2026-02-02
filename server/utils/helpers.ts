@@ -19,28 +19,17 @@ export async function getUserFromSession(event: H3Event<EventHandlerRequest>) {
  * Generates a unique slug based on the provided base string.
  */
 export async function generateSlug(base: string = ""): Promise<string> {
-  const cleanedBase = base
-    .normalize("NFKD")
-    .replaceAll(/[\u0300-\u036F]/g, "") // Remove diacritics
-    .toLowerCase()
-    .replaceAll(/\s+/g, "-") // Replace one or more whitespace with hyphen
-    .replaceAll(/[^a-z0-9-]/g, "") // Remove invalid characters
-    .replaceAll(/-+/g, "-") // Collapse multiple hyphens
-    .replaceAll(/^(-+)|(-+)$/g, "") // Trim leading/trailing hyphens
-
-  let slug = ""
-  let exists = true
-  let attempt = 0
-
-  while (exists && attempt < 5) {
+  const cleanedBase = base.normalize("NFKD").replace(/[\u0300-\u036F]/g, "").toLowerCase().replace(/[^\w-]/g, "").replace(/[-\s]+/g, "-").replace(/^-+|-+$/g, "")
+  for (let attempt = 0; attempt < 5; attempt++) {
     const randomString = Math.random().toString(36).slice(2, 8)
-    slug = cleanedBase ? `${cleanedBase}-${randomString}` : randomString
+    const slug = cleanedBase ? `${cleanedBase}-${randomString}` : randomString
     const existingUser = await db.user.findUnique({ where: { slug } })
-    exists = !!existingUser
-    attempt++
+    if (!existingUser) {
+      return slug
+    }
   }
 
-  return slug!
+  return Math.random().toString(36).slice(2, 8)
 }
 
 /**
@@ -52,8 +41,7 @@ export function categorizeReferrer(referrer: string | null | undefined): string 
     return "direct"
   }
 
-  const url = referrer.toLowerCase().trim()
-  if (url.includes(process.env.NUXT_PUBLIC_BASE_URL?.toLowerCase() || "")) {
+  if (referrer.toLowerCase().trim().includes(process.env.NUXT_PUBLIC_BASE_URL?.toLowerCase() || "")) {
     return "direct"
   }
 
@@ -66,21 +54,16 @@ export function categorizeReferrer(referrer: string | null | undefined): string 
     [["tiktok.com"], "tiktok"],
     [["pinterest.com", "pin.it"], "pinterest"],
     [["youtube.com", "youtu.be"], "youtube"],
-    [["snapchat.com"], "snapchat"],
     [["whatsapp.com", "wa.me"], "whatsapp"],
     [["telegram.org", "t.me"], "telegram"],
     [["discord.com", "discord.gg"], "discord"],
-    [["threads.net"], "threads"],
     [["mastodon"], "mastodon"],
     [["bluesky.social", "bsky.app"], "bluesky"],
     [["google."], "google"],
     [["bing.com", "bing."], "bing"],
     [["yahoo.com", "yahoo."], "yahoo"],
     [["duckduckgo.com"], "duckduckgo"],
-    [["baidu.com"], "baidu"],
     [["yandex.com", "yandex.ru", "yandex."], "yandex"],
-    [["ecosia.org"], "ecosia"],
-    [["ask.com"], "ask"],
     [["slack.com"], "slack"],
     [["teams.microsoft.com"], "teams"],
     [["github.com"], "github"],
@@ -88,9 +71,8 @@ export function categorizeReferrer(referrer: string | null | undefined): string 
     [["medium.com"], "medium"],
     [["substack.com"], "substack"],
   ]
-
   for (const [patterns, name] of sources) {
-    if (patterns.some(pattern => url.includes(pattern))) {
+    if (patterns.some(pattern => referrer.toLowerCase().trim().includes(pattern))) {
       return name
     }
   }
@@ -110,28 +92,23 @@ export function formatSourceLabel(source: string | null | undefined): string {
   const labels: Record<string, string> = {
     direct: "Direct",
     facebook: "Facebook",
-    twitter: "Twitter / X",
+    twitter: "X",
     instagram: "Instagram",
     linkedin: "LinkedIn",
     reddit: "Reddit",
     tiktok: "TikTok",
     youtube: "YouTube",
     pinterest: "Pinterest",
-    snapchat: "Snapchat",
     whatsapp: "WhatsApp",
     telegram: "Telegram",
     discord: "Discord",
-    threads: "Threads",
     mastodon: "Mastodon",
     bluesky: "Bluesky",
     google: "Google",
     bing: "Bing",
     yahoo: "Yahoo",
     duckduckgo: "DuckDuckGo",
-    baidu: "Baidu",
     yandex: "Yandex",
-    ecosia: "Ecosia",
-    ask: "Ask",
     slack: "Slack",
     teams: "Microsoft Teams",
     github: "GitHub",
@@ -148,13 +125,7 @@ export function formatSourceLabel(source: string | null | undefined): string {
  * Uploads a file to Blob storage and removes the previous file if provided.
  * Validates file size and MIME type before upload.
  */
-export async function uploadFile({ path, file, maxSize, allowedMimeTypes, oldFileUrl }: {
-  path: string
-  file: File
-  maxSize: number
-  allowedMimeTypes: string[]
-  oldFileUrl?: string
-}) {
+export async function uploadFile({ path, file, maxSize, allowedMimeTypes, oldFile }: { path: string, file: File, maxSize: number, allowedMimeTypes: string[], oldFile?: string }) {
   if (!file || !(file instanceof File)) {
     throw createError({ status: 400, statusText: "No file uploaded" })
   }
@@ -165,10 +136,9 @@ export async function uploadFile({ path, file, maxSize, allowedMimeTypes, oldFil
     throw createError({ status: 413, statusText: "File too large" })
   }
 
-  const ext = file.name.split(".").pop()?.toLowerCase()
-  const blob = await put(`${path}/${Date.now()}.${ext}`, file, { access: "public" })
-  if (oldFileUrl?.includes("blob.vercel-storage.com")) {
-    await del(oldFileUrl).catch(() => {})
+  const blob = await put(`${path}/${Date.now()}.${file.name.split(".").pop()?.toLowerCase()}`, file, { access: "public" })
+  if (oldFile?.includes("blob.vercel-storage.com")) {
+    await del(oldFile).catch(() => {})
   }
 
   return blob.url

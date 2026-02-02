@@ -151,7 +151,6 @@ function getSourceIcon(source: string): string {
     pinterest: "simple-icons:pinterest",
     github: "simple-icons:github",
     discord: "simple-icons:discord",
-    threads: "simple-icons:threads",
     bluesky: "simple-icons:bluesky",
     internal: "mdi:home",
     external: "mdi:web",

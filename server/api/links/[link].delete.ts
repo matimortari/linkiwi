@@ -9,10 +9,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ status: 400, statusText: "Link ID is required" })
   }
 
-  const linkData = await db.userLink.findUnique({
-    where: { id: linkId },
-    select: { id: true, userId: true },
-  })
+  const linkData = await db.userLink.findUnique({ where: { id: linkId }, select: { id: true, userId: true } })
   if (!linkData) {
     throw createError({ status: 404, statusText: "Link not found" })
   }
@@ -20,9 +17,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ status: 403, statusText: "You don't have permission to delete this link" })
   }
 
-  await db.userLink.delete({
-    where: { id: linkId },
-  })
+  await db.userLink.delete({ where: { id: linkId } })
 
   // Invalidate links cache and user profile cache
   const userData = await db.user.findUnique({ where: { id: user.id }, select: { slug: true } })

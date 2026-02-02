@@ -15,12 +15,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ status: 400, statusText: result.error.issues[0]?.message || "Invalid input" })
   }
 
-  const { url, title } = result.data
-
-  const linkData = await db.userLink.findUnique({
-    where: { id: linkId },
-    select: { id: true, userId: true },
-  })
+  const linkData = await db.userLink.findUnique({ where: { id: linkId }, select: { id: true, userId: true } })
   if (!linkData) {
     throw createError({ status: 404, statusText: "Link not found" })
   }
@@ -30,7 +25,7 @@ export default defineEventHandler(async (event) => {
 
   const updatedLink = await db.userLink.update({
     where: { id: linkId },
-    data: { url, title },
+    data: { url: result.data.url, title: result.data.title },
     select: {
       id: true,
       userId: true,

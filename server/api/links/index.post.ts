@@ -11,14 +11,8 @@ export default defineEventHandler(async (event) => {
     throw createError({ status: 400, statusText: result.error.issues[0]?.message || "Invalid input" })
   }
 
-  const { url, title } = result.data
-
   const newLink = await db.userLink.create({
-    data: {
-      userId: user.id,
-      url,
-      title,
-    },
+    data: { userId: user.id, url: result.data.url, title: result.data.title },
     select: {
       id: true,
       userId: true,

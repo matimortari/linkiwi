@@ -11,10 +11,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ status: 400, statusText: result.error.issues[0]?.message || "Invalid input" })
   }
 
-  const updatedPreferences = await db.userPreferences.update({
-    where: { userId: user.id },
-    data: result.data,
-  })
+  const updatedPreferences = await db.userPreferences.update({ where: { userId: user.id }, data: result.data })
 
   // Invalidate user data cache and profile cache
   const userData = await db.user.findUnique({ where: { id: user.id }, select: { slug: true } })

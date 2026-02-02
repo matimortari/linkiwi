@@ -12,16 +12,9 @@ export default defineEventHandler(async (event) => {
   }
 
   // Get old slug before update to invalidate old cache key
-  const oldUser = await db.user.findUnique({
-    where: { id: user.id },
-    select: { slug: true },
-  })
-
-  // Check if slug is being changed and if new slug is unique
+  const oldUser = await db.user.findUnique({ where: { id: user.id }, select: { slug: true } })
   if (result.data.slug && result.data.slug !== oldUser?.slug) {
-    const existingUser = await db.user.findUnique({
-      where: { slug: result.data.slug },
-    })
+    const existingUser = await db.user.findUnique({ where: { slug: result.data.slug } })
     if (existingUser) {
       throw createError({ status: 409, statusText: "This username is already taken. Please choose a different one." })
     }
@@ -29,11 +22,7 @@ export default defineEventHandler(async (event) => {
 
   const updatedUser = await db.user.update({
     where: { id: user.id },
-    data: {
-      name: result.data.name,
-      slug: result.data.slug,
-      description: result.data.description,
-    },
+    data: { name: result.data.name, slug: result.data.slug, description: result.data.description },
     select: {
       id: true,
       email: true,

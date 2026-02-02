@@ -88,6 +88,7 @@ async function handleSubmit() {
     emit("close")
   }
   catch {
+    // Silently fail
   }
 }
 

@@ -11,11 +11,7 @@ export default defineEventHandler(async (event) => {
   }
 
   // Delete the user (cascade will handle related records)
-  await db.user.delete({
-    where: { id: user.id },
-  })
-
-  // Clear the session
+  await db.user.delete({ where: { id: user.id } })
   await clearUserSession(event)
 
   return { success: true, message: "User deleted successfully" }

@@ -1,33 +1,38 @@
 import { z } from "zod"
 
-export const analyticsRecordSchema = z.object({
-  type: z.enum(["pageView", "link", "icon"]),
-  userId: z.cuid(),
-  id: z.cuid().optional(),
-  referrer: z.string().optional().nullable().transform((val) => {
-    if (!val || typeof val !== "string" || val.trim() === "") {
-      return null
-    }
-    try {
-      new URL(val)
-      return val
-    }
-    catch {
-      return null
-    }
-  }),
-  createdAt: z.string().optional(),
-}).refine((data) => {
-  if ((data.type === "link" || data.type === "icon") && !data.id) {
-    return false
+const referrerSchema = z.string().nullable().optional().transform((val) => {
+  if (!val || val.trim() === "") {
+    return null
   }
-  return true
-}, { message: "ID is required for link and social icon analytics", path: ["id"] })
+
+  try {
+    new URL(val)
+    return val
+  }
+  catch {
+    return null
+  }
+})
+
+export const analyticsRecordSchema = z.discriminatedUnion("type", [
+  z.object({ userId: z.cuid(), referrer: referrerSchema, createdAt: z.string().optional() }).extend({
+    type: z.literal("pageView"),
+    id: z.cuid().optional(),
+  }),
+  z.object({ userId: z.cuid(), referrer: referrerSchema, createdAt: z.string().optional() }).extend({
+    type: z.literal("link"),
+    id: z.cuid(),
+  }),
+  z.object({ userId: z.cuid(), referrer: referrerSchema, createdAt: z.string().optional() }).extend({
+    type: z.literal("icon"),
+    id: z.cuid(),
+  }),
+])
 
 export const createCommentSchema = z.object({
   userId: z.cuid("Invalid user ID"),
   name: z.string().min(1, "Name is required").max(100).trim(),
-  email: z.email("Invalid email address").max(100).optional().or(z.literal("")).transform(val => val || undefined),
+  email: z.email("Invalid email address").max(100).or(z.literal("")).transform(val => val || undefined),
   message: z.string().min(1, "Message is required").max(500).trim(),
 })
 

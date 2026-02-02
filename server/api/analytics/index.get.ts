@@ -5,7 +5,6 @@ import { CACHE_TTL, CacheKeys, getCached, setCached } from "#server/utils/redis"
 export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
 
-  // Try to get from cache first
   const cacheKey = CacheKeys.analytics(user.id)
   const cached = await getCached<any>(cacheKey)
   if (cached) {
@@ -16,13 +15,7 @@ export default defineEventHandler(async (event) => {
     db.pageView.findMany({
       where: { userId: user.id },
       orderBy: { createdAt: "desc" },
-      select: {
-        id: true,
-        userId: true,
-        createdAt: true,
-        referrer: true,
-        source: true,
-      },
+      select: { id: true, userId: true, createdAt: true, referrer: true, source: true },
     }),
     db.linkClick.findMany({
       where: { userLink: { userId: user.id } },
@@ -36,8 +29,7 @@ export default defineEventHandler(async (event) => {
     }),
   ])
 
-  const result = { pageViews, linkClicks, iconClicks }
-  await setCached(cacheKey, result, CACHE_TTL.SHORT)
+  await setCached(cacheKey, { pageViews, linkClicks, iconClicks }, CACHE_TTL.SHORT)
 
-  return result
+  return { pageViews, linkClicks, iconClicks }
 })

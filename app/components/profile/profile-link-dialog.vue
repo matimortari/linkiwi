@@ -74,6 +74,7 @@ async function handleCreateLink() {
     emit("close")
   }
   catch {
+    // Silently fail
   }
 }
 
@@ -106,6 +107,7 @@ async function handleUpdateLink() {
     emit("close")
   }
   catch {
+    // Silently fail
   }
 }
 

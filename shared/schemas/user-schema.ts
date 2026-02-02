@@ -14,10 +14,7 @@ export const updateUserSchema = z.object({
     .max(50, "Slug must be at most 50 characters")
     .regex(/^[a-z0-9-]+$/, "Slug can only contain lowercase letters, numbers, and hyphens")
     .optional(),
-  description: z
-    .string()
-    .max(300)
-    .optional(),
+  description: z.string().max(300).optional(),
 })
 
 const hexColorSchema = z.string().regex(/^#([A-F0-9]{6}|[A-F0-9]{3})$/i, "Invalid hex color")
