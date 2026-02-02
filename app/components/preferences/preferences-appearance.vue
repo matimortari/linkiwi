@@ -36,21 +36,26 @@
 <script setup lang="ts">
 const { createActionHandler } = useActionIcon()
 const userStore = useUserStore()
-const { preferences } = storeToRefs(userStore)
+const { user } = storeToRefs(userStore)
 const activeTab = ref("background")
-
+const preferences = ref<UserPreferences>({ ...DEFAULT_PREFERENCES })
 const saveAction = createActionHandler("mdi:content-save-check")
 const resetAction = createActionHandler("mdi:close")
 
 async function handleUpdatePreferences() {
-  await userStore.updatePreferences(preferences.value!)
-  await userStore.getUser()
+  await userStore.updatePreferences(preferences.value)
   saveAction.triggerSuccess()
 }
 
 async function handleResetPreferences() {
-  await userStore.updatePreferences(DEFAULT_PREFERENCES)
-  await userStore.getUser()
+  preferences.value = { ...DEFAULT_PREFERENCES }
+  await userStore.updatePreferences(preferences.value)
   resetAction.triggerSuccess()
 }
+
+watch(() => user.value?.preferences, (newPrefs) => {
+  if (newPrefs) {
+    preferences.value = { ...newPrefs }
+  }
+}, { immediate: true, deep: true })
 </script>

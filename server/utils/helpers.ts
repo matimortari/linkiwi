@@ -53,6 +53,10 @@ export function categorizeReferrer(referrer: string | null | undefined): string 
   }
 
   const url = referrer.toLowerCase().trim()
+  if (url.includes(process.env.NUXT_PUBLIC_BASE_URL?.toLowerCase() || "")) {
+    return "direct"
+  }
+
   const sources: [string[], string][] = [
     [["facebook.com", "fb.com", "fb.me", "fbcdn.net"], "facebook"],
     [["twitter.com", "x.com", "t.co"], "twitter"],
