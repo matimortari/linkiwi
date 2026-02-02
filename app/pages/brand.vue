@@ -111,8 +111,7 @@ const wordmarkActions = WORDMARKS.map(() => createActionHandler("mdi:download"))
 const colorActions = COLORS.map(() => createActionHandler("mdi:content-copy"))
 
 function handleDownloadImage(logo: { name: string, image: string }, index: number, actions: ReturnType<typeof createActionHandler>[]) {
-  const action = actions[index]
-  if (!action) {
+  if (!actions[index]) {
     return
   }
 
@@ -120,12 +119,11 @@ function handleDownloadImage(logo: { name: string, image: string }, index: numbe
   link.href = logo.image
   link.download = logo.name.replace(/\s+/g, "-").toLowerCase()
   link.click()
-  action.triggerSuccess()
+  actions[index].triggerSuccess()
 }
 
 async function handleCopyColor(colorVar: string, index: number) {
-  const action = colorActions[index]
-  if (!action) {
+  if (!colorActions[index]) {
     return
   }
 
@@ -134,14 +132,12 @@ async function handleCopyColor(colorVar: string, index: number) {
     return
   }
 
-  await action.triggerCopy(value)
+  await colorActions[index].triggerCopy(value)
 }
 
 function updateColors() {
-  const styles = getComputedStyle(document.documentElement)
   for (const color of COLORS) {
-    const value = styles.getPropertyValue(color.var).trim()
-    colorValues.value[color.var] = value || "—"
+    colorValues.value[color.var] = getComputedStyle(document.documentElement).getPropertyValue(color.var).trim() || "—"
   }
 }
 

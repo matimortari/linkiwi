@@ -7,7 +7,7 @@
       <input
         :id="id" type="color"
         :value="value" :disabled="disabled"
-        @input="$emit('update:value', ($event.target as HTMLInputElement)?.value)"
+        @input="emit('update:value', ($event.target as HTMLInputElement)?.value)"
       >
     </div>
   </div>
@@ -27,5 +27,5 @@ defineProps({
   },
 })
 
-defineEmits<(e: "update:value", value: string) => void>()
+const emit = defineEmits<(e: "update:value", value: string) => void>()
 </script>

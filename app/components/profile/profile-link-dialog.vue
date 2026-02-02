@@ -16,7 +16,7 @@
           {{ isUpdateMode ? errors.updateLink || '' : errors.createLink || '' }}
         </p>
 
-        <div class="flex flex-row items-center gap-2">
+        <div class="navigation-group">
           <button class="btn-danger" aria-label="Cancel" :disabled="loading" @click="emit('close')">
             Cancel
           </button>
@@ -30,9 +30,6 @@
 </template>
 
 <script setup lang="ts">
-import type { CreateUserLinkInput, UpdateUserLinkInput } from "#shared/schemas/link-schema"
-import { updateUserLinkSchema } from "#shared/schemas/link-schema"
-
 const props = defineProps<{
   isOpen: boolean
   selectedLink?: Link | null
@@ -42,10 +39,7 @@ const emit = defineEmits<(e: "close") => void>()
 
 const linksStore = useLinksStore()
 const { errors, loading } = storeToRefs(linksStore)
-const form = ref<CreateUserLinkInput | UpdateUserLinkInput>({
-  title: "",
-  url: "",
-})
+const form = ref<Parameters<typeof linksStore.createLink>[0] | Parameters<typeof linksStore.updateLink>[1]>({ title: "", url: "" })
 const isUpdateMode = computed(() => !!(props.selectedLink?.id))
 
 async function handleSubmit() {
@@ -63,14 +57,8 @@ async function handleSubmit() {
 }
 
 async function handleCreateLink() {
-  if (!form.value.title || !form.value.url) {
-    errors.value.createLink = "Please check your input and try again."
-    return
-  }
-
   try {
-    const createData = form.value as CreateUserLinkInput
-    await linksStore.createLink(createData)
+    await linksStore.createLink(form.value as Parameters<typeof linksStore.createLink>[0])
     emit("close")
   }
   catch {
@@ -80,11 +68,10 @@ async function handleCreateLink() {
 
 async function handleUpdateLink() {
   if (!props.selectedLink?.id) {
-    errors.value.updateLink = "Link ID is required for updates."
     return
   }
 
-  const updateData: UpdateUserLinkInput = {}
+  const updateData: Parameters<typeof linksStore.updateLink>[1] = {}
   if (form.value.title !== props.selectedLink.title) {
     updateData.title = form.value.title
   }
@@ -96,14 +83,8 @@ async function handleUpdateLink() {
     return
   }
 
-  const validation = updateUserLinkSchema.safeParse(updateData)
-  if (!validation.success) {
-    errors.value.updateLink = "Please check your input and try again."
-    return
-  }
-
   try {
-    await linksStore.updateLink(props.selectedLink.id, validation.data)
+    await linksStore.updateLink(props.selectedLink.id, updateData)
     emit("close")
   }
   catch {

@@ -39,8 +39,6 @@
 </template>
 
 <script setup lang="ts">
-import type { CreateUserIconInput } from "#shared/schemas/icon-schema"
-
 const props = defineProps<{
   isOpen: boolean
 }>()
@@ -48,13 +46,8 @@ const props = defineProps<{
 const emit = defineEmits<(e: "close") => void>()
 
 const iconsStore = useIconsStore()
-const { icons, errors, loading } = storeToRefs(iconsStore)
-const form = ref<CreateUserIconInput>({
-  platform: "" as keyof typeof SOCIAL_ICONS,
-  logo: "" as typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS],
-  url: "",
-})
-
+const { errors, loading } = storeToRefs(iconsStore)
+const form = ref<Parameters<typeof iconsStore.createIcon>[0]>({ platform: "" as keyof typeof SOCIAL_ICONS, logo: "" as typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS], url: "" })
 const socialIconEntries = computed(() => Object.entries(SOCIAL_ICONS) as [keyof typeof SOCIAL_ICONS, (typeof SOCIAL_ICONS)[keyof typeof SOCIAL_ICONS]][])
 
 function selectIcon(label: keyof typeof SOCIAL_ICONS, iconName: typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS]) {
@@ -63,27 +56,12 @@ function selectIcon(label: keyof typeof SOCIAL_ICONS, iconName: typeof SOCIAL_IC
 }
 
 async function handleSubmit() {
-  if (!form.value.platform || !form.value.url) {
-    errors.value.createIcon = "Platform and URL are required."
-    return
-  }
-
-  if (icons.value.some((i: Icon) => i.platform === form.value.platform)) {
-    errors.value.createIcon = "You have already a social icon for this platform."
-    return
-  }
-
-  loading.value = true
-
   try {
     await iconsStore.createIcon(form.value)
     emit("close")
   }
   catch {
     // Silently fail
-  }
-  finally {
-    loading.value = false
   }
 }
 

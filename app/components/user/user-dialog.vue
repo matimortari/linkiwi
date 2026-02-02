@@ -72,18 +72,9 @@ async function handleSubmit() {
   if (!user.value?.id) {
     return
   }
-  if (!form.value.name || form.value.name.trim().length === 0) {
-    errors.value.updateUser = "User name cannot be empty."
-    return
-  }
 
   try {
-    await userStore.updateUser({
-      name: form.value.name,
-      slug: form.value.slug,
-      description: form.value.description,
-    })
-
+    await userStore.updateUser({ name: form.value.name, slug: form.value.slug, description: form.value.description })
     await userStore.getUser()
     emit("close")
   }
@@ -103,7 +94,6 @@ watch(() => props.isOpen, (open) => {
     }
   }
   else {
-    errors.value.updateUser = null
     form.value = { name: "", slug: "", description: "", image: "" }
   }
 }, { immediate: true })

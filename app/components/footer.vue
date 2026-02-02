@@ -16,7 +16,7 @@
       </div>
 
       <div class="grid grid-cols-3 gap-8 py-4">
-        <div v-for="(section, index) in footerSections" :key="index">
+        <div v-for="(section, index) in FOOTER_SECTIONS" :key="index">
           <p class="mb-4 font-semibold">
             {{ section.title }}
           </p>
@@ -41,9 +41,8 @@
 const { themeTitle } = useTheme()
 const { loggedIn } = useUserSession()
 
-const footerSections = [
+const FOOTER_SECTIONS = [
   {
-    // Auth-aware section for everything related to the application
     title: "Application",
     links: [...(!loggedIn.value
       ? [
@@ -62,7 +61,6 @@ const footerSections = [
     )],
   },
   {
-    // Informational and support links
     title: "Resources",
     links: [
       { label: "Privacy Policy", href: "/legal/privacy" },

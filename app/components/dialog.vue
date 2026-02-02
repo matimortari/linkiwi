@@ -1,14 +1,14 @@
 <template>
   <teleport to="body">
     <transition name="fade">
-      <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80" @mousedown.self="closeDialog">
+      <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80" @mousedown.self="emit('update:isOpen', false)">
         <div class="overlay min-w-100 space-y-4">
           <header class="flex flex-row items-center justify-between gap-4">
             <h3>
               {{ title }}
             </h3>
 
-            <button aria-label="Close Dialog" @mousedown="closeDialog">
+            <button aria-label="Close Dialog" @mousedown="emit('update:isOpen', false)">
               <icon name="mdi:close" size="20" class="text-muted-foreground transition-transform hover:scale-110" />
             </button>
           </header>
@@ -34,15 +34,12 @@ const props = defineProps({
 const emit = defineEmits<{ (e: "update:isOpen", value: boolean): void, (e: "confirm"): void }>()
 
 const dialogRef = ref<HTMLElement | null>(null)
+
 useClickOutside(dialogRef, () => {
   if (props.isOpen) {
-    closeDialog()
+    emit("update:isOpen", false)
   }
 }, { escapeKey: true })
-
-function closeDialog() {
-  emit("update:isOpen", false)
-}
 </script>
 
 <style scoped>

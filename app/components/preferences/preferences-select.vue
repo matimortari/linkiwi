@@ -5,7 +5,7 @@
     <select
       :id="id" :value="value"
       :disabled="disabled" class="cursor-pointer bg-transparent p-2 text-end text-xs font-medium tracking-tight text-muted-foreground disabled:opacity-50"
-      @change="$emit('update:value', ($event.target && ($event.target as HTMLSelectElement).value) ?? '')"
+      @change="emit('update:value', ($event.target && ($event.target as HTMLSelectElement).value) ?? '')"
     >
       <option v-for="option in options" :key="option.value" :value="option.value">
         {{ option.label }}
@@ -23,5 +23,5 @@ defineProps<{
   disabled?: boolean
 }>()
 
-defineEmits<(e: "update:value", value: string) => void>()
+const emit = defineEmits<(e: "update:value", value: string) => void>()
 </script>
