@@ -92,7 +92,7 @@ export function formatSourceLabel(source: string | null | undefined): string {
   const labels: Record<string, string> = {
     direct: "Direct",
     facebook: "Facebook",
-    twitter: "X",
+    twitter: "Twitter/X",
     instagram: "Instagram",
     linkedin: "LinkedIn",
     reddit: "Reddit",

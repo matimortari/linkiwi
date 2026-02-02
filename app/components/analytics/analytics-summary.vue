@@ -142,7 +142,7 @@ function getSourceIcon(source: string): string {
     direct: "mdi:link-variant",
     google: "simple-icons:google",
     facebook: "simple-icons:facebook",
-    twitter: "simple-icons:twitter",
+    twitter: "simple-icons:x",
     instagram: "simple-icons:instagram",
     linkedin: "simple-icons:linkedin",
     reddit: "simple-icons:reddit",

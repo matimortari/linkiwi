@@ -43,7 +43,7 @@
 
               <button class="text-caption navigation-group w-full rounded-[5rem] p-2 hover:bg-muted" role="menuitem" @click="shareToSocial('twitter')">
                 <icon name="simple-icons:x" size="20" />
-                <span>Share on X</span>
+                <span>Share on X/Twitter</span>
               </button>
               <button class="text-caption navigation-group w-full rounded-[5rem] p-2 hover:bg-muted" role="menuitem" @click="shareToSocial('facebook')">
                 <icon name="simple-icons:facebook" size="20" />

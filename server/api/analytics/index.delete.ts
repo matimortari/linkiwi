@@ -34,17 +34,17 @@ export default defineEventHandler(async (event) => {
         deletedCount += result.count
 
         // Only reset clickCount if deleting all clicks with no date filter
-        if (!hasDateFilter) {
-          await tx.userLink.updateMany({
-            where: { userId: user.id, id: { in: userLinks.map(link => link.id) } },
-            data: { clickCount: 0 },
-          })
-        }
-        else {
+        if (hasDateFilter) {
           for (const link of userLinks) {
             const remainingClicks = await tx.linkClick.count({ where: { userLinkId: link.id } })
             await tx.userLink.update({ where: { id: link.id }, data: { clickCount: remainingClicks } })
           }
+        }
+        else {
+          await tx.userLink.updateMany({
+            where: { userId: user.id, id: { in: userLinks.map(link => link.id) } },
+            data: { clickCount: 0 },
+          })
         }
       }
     }
@@ -56,17 +56,17 @@ export default defineEventHandler(async (event) => {
         deletedCount += result.count
 
         // Only reset clickCount if deleting all clicks with no date filter
-        if (!hasDateFilter) {
-          await tx.userIcon.updateMany({
-            where: { userId: user.id, id: { in: userIcons.map(icon => icon.id) } },
-            data: { clickCount: 0 },
-          })
-        }
-        else {
+        if (hasDateFilter) {
           for (const icon of userIcons) {
             const remainingClicks = await tx.iconClick.count({ where: { userIconId: icon.id } })
             await tx.userIcon.update({ where: { id: icon.id }, data: { clickCount: remainingClicks } })
           }
+        }
+        else {
+          await tx.userIcon.updateMany({
+            where: { userId: user.id, id: { in: userIcons.map(icon => icon.id) } },
+            data: { clickCount: 0 },
+          })
         }
       }
     }

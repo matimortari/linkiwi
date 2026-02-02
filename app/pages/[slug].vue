@@ -77,7 +77,7 @@ onMounted(async () => {
       meta: [{ name: "description", content: `@${userProfile.value.slug} profile on AllLinks.` }],
     })
 
-    const referrer = (typeof document !== "undefined" ? document.referrer : "") || (route.query.ref as string) || ""
+    const referrer = (typeof document === "undefined" ? "" : document.referrer) || (route.query.ref as string) || ""
     await analyticsStore.recordPageView(userProfile.value.id, referrer)
   }
 })
