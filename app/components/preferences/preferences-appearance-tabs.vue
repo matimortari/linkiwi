@@ -85,13 +85,17 @@ const emit = defineEmits<{
   (e: "update:activeTab", value: string): void
 }>()
 
-const localPrefs = reactive({ ...props.preferences })
-const isBackgroundFlat = computed(() => localPrefs.backgroundType === "FLAT")
-const isBackgroundGradient = computed(() => localPrefs.backgroundType === "GRADIENT")
-const isLinkShadowDisabled = computed(() => !localPrefs.isLinkShadow)
-const isIconShadowDisabled = computed(() => !localPrefs.isIconShadow)
+const localPrefs = ref({ ...toRaw(props.preferences) })
+const isBackgroundFlat = computed(() => localPrefs.value.backgroundType === "FLAT")
+const isBackgroundGradient = computed(() => localPrefs.value.backgroundType === "GRADIENT")
+const isLinkShadowDisabled = computed(() => !localPrefs.value.isLinkShadow)
+const isIconShadowDisabled = computed(() => !localPrefs.value.isIconShadow)
 
 watch(localPrefs, (newVal) => {
   emit("update:preferences", { ...newVal })
+}, { deep: true })
+
+watch(() => props.preferences, (newPrefs) => {
+  localPrefs.value = { ...toRaw(newPrefs) }
 }, { deep: true })
 </script>

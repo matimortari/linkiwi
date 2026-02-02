@@ -28,61 +28,53 @@
 const linksStore = useLinksStore()
 const iconsStore = useIconsStore()
 const analyticsStore = useAnalyticsStore()
-const items = ref<Array<any>>([])
-const clicksMap = ref<Record<string, number>>({})
 const { loading: linksLoading } = storeToRefs(linksStore)
 const { loading: iconsLoading } = storeToRefs(iconsStore)
 const { loading: analyticsLoading } = storeToRefs(analyticsStore)
 
-onMounted(async () => {
-  linksLoading.value = true
-  iconsLoading.value = true
-  analyticsLoading.value = true
+// Merge links and social icons into a single items array
+const items = computed(() => [
+  ...linksStore.links.map(l => ({
+    id: l.id!,
+    type: "link" as const,
+    title: l.title,
+    url: l.url,
+  })),
+  ...iconsStore.icons.map(i => ({
+    id: i.id!,
+    type: "icon" as const,
+    logo: i.logo,
+    platform: i.platform,
+    url: i.url,
+  })),
+])
 
-  await Promise.all([
-    linksStore.getLinks(),
-    iconsStore.getIcons(),
-    analyticsStore.getAnalytics(),
-  ])
-
-  // Merge links and icons with a type marker
-  items.value = [
-    ...linksStore.links.map(l => ({
-      id: l.id!,
-      type: "link",
-      title: l.title,
-      url: l.url,
-    })),
-    ...iconsStore.icons.map(i => ({
-      id: i.id!,
-      type: "icon",
-      logo: i.logo,
-      platform: i.platform,
-      url: i.url,
-    })),
-  ]
-
-  // Get analytics and aggregate clicks
-  const res = analyticsStore.analytics
+// Create a map of item ID to click counts
+const clicksMap = computed(() => {
   const counts: Record<string, number> = {}
 
-  for (const click of res?.linkClicks ?? []) {
+  for (const click of analyticsStore.analytics?.linkClicks ?? []) {
     const id = click.userLinkId
     if (id) {
       counts[id] = (counts[id] ?? 0) + 1
     }
   }
 
-  for (const click of res?.iconClicks ?? []) {
+  for (const click of analyticsStore.analytics?.iconClicks ?? []) {
     const id = click.userIconId
     if (id) {
       counts[id] = (counts[id] ?? 0) + 1
     }
   }
 
-  clicksMap.value = counts
-  linksLoading.value = false
-  iconsLoading.value = false
-  analyticsLoading.value = false
+  return counts
+})
+
+onMounted(async () => {
+  await Promise.all([
+    linksStore.getLinks(),
+    iconsStore.getIcons(),
+    analyticsStore.getAnalytics(),
+  ])
 })
 </script>

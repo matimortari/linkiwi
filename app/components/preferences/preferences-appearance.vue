@@ -44,12 +44,13 @@ const resetAction = createActionHandler("mdi:close")
 
 async function handleUpdatePreferences() {
   await userStore.updatePreferences(preferences.value!)
+  await userStore.getUser()
   saveAction.triggerSuccess()
 }
 
 async function handleResetPreferences() {
   await userStore.updatePreferences(DEFAULT_PREFERENCES)
-  Object.assign(preferences.value, DEFAULT_PREFERENCES)
+  await userStore.getUser()
   resetAction.triggerSuccess()
 }
 </script>

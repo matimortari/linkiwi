@@ -17,7 +17,7 @@
               <button aria-label="Update Link" class="flex items-center transition-transform hover:scale-110" @click="handleUpdateLink(link)">
                 <icon name="mdi:circle-edit-outline" size="25" class="text-primary" />
               </button>
-              <button aria-label="Delete Link" class="flex items-center transition-transform hover:scale-110" @click="linksStore.deleteLink(link.id!)">
+              <button aria-label="Delete Link" class="flex items-center transition-transform hover:scale-110" @click="handleDeleteLink(link.id!)">
                 <icon name="mdi:remove-circle-outline" size="25" class="text-danger" />
               </button>
             </div>
@@ -48,5 +48,13 @@ const selectedLink = ref<Link | null>(null)
 function handleUpdateLink(link: Link) {
   selectedLink.value = link
   isDialogOpen.value = true
+}
+
+async function handleDeleteLink(linkId: string) {
+  if (!confirm("Are you sure you want to delete this link?")) {
+    return
+  }
+
+  await linksStore.deleteLink(linkId)
 }
 </script>

@@ -172,6 +172,7 @@ async function handleDeleteAnalytics() {
     analyticsStore.getAnalytics(),
     analyticsStore.getReferrerStats(),
   ])
+
   resetAction.triggerSuccess()
 }
 
