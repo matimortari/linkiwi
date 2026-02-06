@@ -8,7 +8,7 @@
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=matimortari_alllinks&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=matimortari_alllinks)
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat&colorA=0d1117)](https://opensource.org/licenses/MIT)
 
-[**AllLinks**](https://alllinks-bio.vercel.app) is a link aggregation platform that lets users and businesses create a customizable landing page for sharing their links and information in one place.
+[**AllLinks**](https://alllinks-bio.vercel.app) is a landing page builder that allows users and businesses to centralize and share their links and online presence in one place. It offers various customization options, link management, and profile analytics.
 
 </div>
 
@@ -25,6 +25,7 @@
 - **Nuxt.js** with **Vue** composition API and **Nitro** server engine.
 - **OAuth** authentication with Google or GitHub.
 - **Prisma** for **PostgreSQL** database management.
+- **Redis** for caching.
 - **Pinia** for state management.
 - **Zod** for schema validation.
 - **Chart.js** for graph visualization.
