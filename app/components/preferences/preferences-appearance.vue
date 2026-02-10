@@ -53,6 +53,7 @@ async function handleResetPreferences() {
   resetAction.triggerSuccess()
 }
 
+// Watch for changes in user preferences and update local state accordingly
 watch(() => user.value?.preferences, (newPrefs) => {
   if (newPrefs) {
     preferences.value = { ...newPrefs }

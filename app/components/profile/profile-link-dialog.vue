@@ -92,17 +92,13 @@ async function handleUpdateLink() {
   }
 }
 
-watch(() => props.isOpen, (open) => {
+// Reset form and clear errors when dialog is opened or when selectedLink changes
+watch([() => props.isOpen, () => props.selectedLink], ([open]) => {
   if (open) {
+    form.value.title = props.selectedLink?.title || ""
+    form.value.url = props.selectedLink?.url || ""
     errors.value.createLink = null
     errors.value.updateLink = null
-    form.value = props.selectedLink ? { ...props.selectedLink } : { title: "", url: "" }
   }
-}, { immediate: true })
-
-watch(() => props.selectedLink, () => {
-  if (props.isOpen) {
-    form.value = props.selectedLink ? { ...props.selectedLink } : { title: "", url: "" }
-  }
-}, { deep: true })
+}, { immediate: true, deep: true })
 </script>

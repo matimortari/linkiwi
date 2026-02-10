@@ -111,7 +111,6 @@ const analyticsStore = useAnalyticsStore()
 const userStore = useUserStore()
 const { totalViews, totalClicks, clickRate, joinedAt, pageViewsChartData, linkClicksChartData, iconClicksChartData, referrerChartData } = useAnalyticsData()
 const referrerStats = computed(() => analyticsStore.referrerStats?.referrers || [])
-
 const resetAction = createActionHandler("mdi:close")
 
 const summaryItems = computed(() => [

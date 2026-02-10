@@ -75,7 +75,6 @@ const { clear } = useUserSession()
 const userStore = useUserStore()
 const { preferences } = storeToRefs(userStore)
 const comments = computed(() => userStore.user?.comments ?? [])
-
 const saveAction = createActionHandler("mdi:content-save-check")
 
 async function handleSubmit() {

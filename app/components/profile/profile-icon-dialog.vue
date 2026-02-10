@@ -65,10 +65,15 @@ async function handleSubmit() {
   }
 }
 
+// Reset form and clear errors when dialog is opened
 watch(() => props.isOpen, (open) => {
   if (open) {
-    errors.value.createIcon = null
-    form.value = { platform: "" as keyof typeof SOCIAL_ICONS, logo: "" as typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS], url: "" }
+    form.value.platform = "" as keyof typeof SOCIAL_ICONS
+    form.value.logo = "" as typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS]
+    form.value.url = ""
+    if (errors.value.createIcon) {
+      errors.value.createIcon = null
+    }
   }
 }, { immediate: true })
 </script>

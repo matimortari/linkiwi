@@ -88,7 +88,6 @@ const isBackgroundGradient = computed(() => localPrefs.backgroundType === "GRADI
 const isLinkShadowDisabled = computed(() => !localPrefs.isLinkShadow)
 const isIconShadowDisabled = computed(() => !localPrefs.isIconShadow)
 
-watch(localPrefs, (newVal) => {
-  emit("update:preferences", { ...newVal })
-}, { deep: true })
+// Emit updated preferences whenever localPrefs changes
+watch(localPrefs, v => emit("update:preferences", { ...v }), { deep: true })
 </script>

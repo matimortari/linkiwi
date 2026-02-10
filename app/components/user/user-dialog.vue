@@ -83,18 +83,16 @@ async function handleSubmit() {
   }
 }
 
+// Reset form and clear errors when dialog is opened
 watch(() => props.isOpen, (open) => {
   if (open && user.value) {
-    errors.value.updateUser = null
     form.value = {
       name: user.value.name ?? "",
       slug: user.value.slug ?? "",
       description: user.value.description ?? "",
       image: user.value.image ?? "",
     }
-  }
-  else {
-    form.value = { name: "", slug: "", description: "", image: "" }
+    errors.value.updateUser = null
   }
 }, { immediate: true })
 </script>
