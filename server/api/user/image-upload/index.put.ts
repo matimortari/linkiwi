@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
   const currentUser = await db.user.findUnique({ where: { id: user.id }, select: { image: true } })
 
   const imageUrl = await uploadFile({
-    path: `alllinks-user-uploads/avatar/${user.id}`,
+    path: `alllinks/user-avatars/${user.id}`,
     file,
     maxSize: 2 * 1024 * 1024, // 2 MB
     allowedMimeTypes: ["image/png", "image/jpeg", "image/webp"],

@@ -42,13 +42,21 @@ export async function getCached<T>(key: string): Promise<T | null> {
   try {
     const client = await getRedisClient()
     if (!client) {
+      console.warn("[Cache] Redis unavailable")
       return null
     }
 
     const data = await client.get(key)
-    return data ? JSON.parse(data) : null
+    if (data) {
+      console.info(`[Cache HIT] ${key}`)
+      return JSON.parse(data)
+    }
+
+    console.info(`[Cache MISS] ${key}`)
+    return null
   }
-  catch {
+  catch (err: any) {
+    console.error(`[Cache ERROR] ${key}`, err)
     return null
   }
 }

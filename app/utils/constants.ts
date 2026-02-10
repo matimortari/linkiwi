@@ -74,7 +74,7 @@ export const MOCK_REFERRALS = [
 ]
 
 export const OAUTH_PROVIDERS = [
-  { name: "github", label: "Sign In With Github", icon: "simple-icons:github" },
+  { name: "github", label: "Sign In With GitHub", icon: "simple-icons:github" },
   { name: "google", label: "Sign In With Google", icon: "simple-icons:google" },
 ]
 
