@@ -1,20 +1,18 @@
 <template>
-  <div class="container mx-auto grid min-h-screen grid-cols-1 items-center gap-6 p-24 md:grid-cols-2 md:gap-12">
-    <div class="flex flex-col items-center gap-4 text-center md:items-start md:text-start">
-      <p class="text-4xl font-semibold md:text-5xl md:whitespace-nowrap">
-        {{ error.status }} – {{ error.statusText || "An unexpected error has occurred." }}
-      </p>
+  <div class="flex min-h-screen flex-col items-center justify-center gap-4 p-4 text-center md:items-start md:p-12 md:text-start">
+    <h2>
+      {{ error.status }} – {{ error.statusText || "An unexpected error has occurred." }}
+    </h2>
 
-      <p class="flex flex-col text-lg text-muted-foreground">
-        <span class="text-lg">Please try going back to the homepage or refreshing the page.</span>
-        <span class="font-mono text-sm">{{ error.message }}</span>
-      </p>
+    <p class="flex flex-col gap-2 text-lg/6 text-muted-foreground">
+      <span>Please try going back to the homepage or refreshing the page.</span>
+      <span class="font-mono text-sm">{{ error.message }}</span>
+    </p>
 
-      <button class="flex flex-row items-center gap-4 font-semibold" @click="() => clearError({ redirect: '/' })">
-        <icon name="mdi:arrow-left" size="25" />
-        <span>Go Back</span>
-      </button>
-    </div>
+    <button class="navigation-group font-semibold" @click="() => clearError({ redirect: '/' })">
+      <icon name="mdi:arrow-left" size="25" />
+      <span>Go Back</span>
+    </button>
   </div>
 </template>
 
