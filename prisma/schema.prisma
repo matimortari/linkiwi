@@ -1,10 +1,10 @@
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+generator client {
+  provider = "prisma-client"
+  output   = ".generated"
 }
 
-generator client {
-  provider = "prisma-client-js"
+datasource db {
+  provider = "postgresql"
 }
 
 enum BackgroundType {
@@ -148,7 +148,7 @@ model Comment {
   userId    String
   name      String
   email     String?
-  message   String   @db.Text
+  message   String
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
