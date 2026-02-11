@@ -14,7 +14,7 @@ export const useIconsStore = defineStore("icons", () => {
     errors.value.getIcons = null
 
     try {
-      const res = await $fetch<{ icons: Icon[] }>("/api/icons", { method: "GET", credentials: "include" })
+      const res = await $fetch<{ icons: Icon[] }>("/api/social-icons", { method: "GET", credentials: "include" })
       icons.value = res.icons.map(i => Object.freeze(i))
       return res
     }
@@ -33,7 +33,7 @@ export const useIconsStore = defineStore("icons", () => {
     errors.value.createIcon = null
 
     try {
-      const res = await $fetch<{ icon: Icon }>("/api/icons", { method: "POST", body: data, credentials: "include" })
+      const res = await $fetch<{ icon: Icon }>("/api/social-icons", { method: "POST", body: data, credentials: "include" })
       icons.value.push(Object.freeze(res.icon))
       return res
     }
@@ -52,7 +52,7 @@ export const useIconsStore = defineStore("icons", () => {
     errors.value.deleteIcon = null
 
     try {
-      await $fetch(`/api/icons/${id}`, { method: "DELETE", credentials: "include" })
+      await $fetch(`/api/social-icons/${id}`, { method: "DELETE", credentials: "include" })
       icons.value = icons.value.filter(icon => icon.id !== id)
     }
     catch (err: any) {

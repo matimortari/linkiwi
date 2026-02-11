@@ -410,7 +410,7 @@ Deletes a link for the authenticated user.
 
 #### Get User Social Icons
 
-> **GET** `/api/icons`
+> **GET** `/api/social-icons`
 
 Retrieves all social icons for the authenticated user.
 
@@ -435,7 +435,7 @@ Retrieves all social icons for the authenticated user.
 
 #### Create Social Icon
 
-> **POST** `/api/icons`
+> **POST** `/api/social-icons`
 
 Creates a new social icon for the authenticated user. Only one icon per platform is allowed.
 
@@ -465,7 +465,7 @@ Creates a new social icon for the authenticated user. Only one icon per platform
 
 #### Delete Social Icon
 
-> **DELETE** `/api/icons/{icon}`
+> **DELETE** `/api/social-icons/{icon}`
 
 Deletes a social icon for the authenticated user.
 
