@@ -2,16 +2,17 @@
   <section
     id="hero" v-motion
     :initial="{ opacity: 0, y: -40 }" :visible="{ opacity: 1, y: 0 }"
-    :duration="800" class="flex min-h-[90%] w-full flex-col items-center justify-center overflow-hidden border-b-2 px-4 py-40 md:flex-row md:p-24"
+    :duration="800" class="flex min-h-screen w-full flex-col items-center justify-between gap-8 overflow-hidden bg-card px-4 py-32 md:flex-row md:px-40"
   >
     <header class="flex flex-col items-center gap-4 text-center md:items-start md:text-start">
-      <h1 class="max-w-md font-display text-5xl! leading-16 md:text-6xl!">
+      <h1>
         Keep all your stuff together!
       </h1>
       <p class="text-lead">
         Welcome to <span class="font-semibold text-secondary">AllLinks</span>! Your links, profiles, contact info, and more
         in one place. Create and customize your page and share it with your audience.
       </p>
+
       <nuxt-link to="/sign-in" class="btn-primary">
         <span>Get Started Now!</span>
         <icon name="mdi:arrow-right" size="25" />
@@ -24,7 +25,7 @@
   <section
     id="product" v-motion
     :initial="{ opacity: 0, y: 20 }" :visible="{ opacity: 1, y: 0 }"
-    :duration="800" class="relative flex w-full flex-col items-center justify-center gap-12 p-12 text-center md:p-32"
+    :duration="800" class="relative flex w-full flex-col items-center justify-center gap-12 border-t p-12 text-center md:p-32"
   >
     <h2>
       Create Your Page In Minutes
@@ -39,11 +40,11 @@
             <icon name="mdi:link-variant" size="60" class="my-4 shrink-0 text-primary" />
 
             <div class="flex flex-row items-center gap-2">
-              <span v-for="i in 3" :key="i" class="size-8 rounded-full bg-muted">{{ '' }}</span>
+              <span v-for="i in 3" :key="i" class="size-6 rounded-full bg-muted">{{ '' }}</span>
             </div>
 
             <div class="flex w-full flex-col items-center gap-2">
-              <span v-for="i in 3" :key="i" class="min-h-6 w-32 animate-pulse truncate rounded-full bg-muted p-2 text-center text-sm select-none" />
+              <span v-for="i in 3" :key="i" class="h-5 w-32 rounded-full bg-muted" />
             </div>
           </div>
         </div>
@@ -68,7 +69,7 @@
   <section
     id="analytics" v-motion
     :initial="{ opacity: 0, y: 20 }" :visible="{ opacity: 1, y: 0 }"
-    :duration="800" class="relative flex w-full flex-col items-center justify-center gap-12 bg-muted/30 p-12 text-center md:p-32"
+    :duration="800" class="relative flex w-full flex-col items-center justify-center gap-12 border-t bg-muted/30 p-12 text-center md:p-32"
   >
     <h2>
       Track Your Performance
@@ -157,6 +158,17 @@ definePageMeta({
 </script>
 
 <style scoped>
+h1 {
+  font-family: var(--font-display);
+  line-height: 4rem;
+  max-width: 24rem;
+}
+@media (min-width: 768px) {
+  h1 {
+    font-size: 3.5rem;
+  }
+}
+
 .cta-wrapper-grid {
   position: absolute;
   inset: 0;

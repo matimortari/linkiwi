@@ -1,5 +1,5 @@
 <template>
-  <div v-if="preset" class="my-20 -mb-60 flex w-80 items-center justify-center select-none md:w-1/2 md:justify-end">
+  <div v-if="preset" class="-mb-80 flex items-center justify-center select-none md:w-1/2 md:justify-end">
     <transition name="carousel" mode="out-in">
       <div :key="preset.slug" class="relative flex h-150 w-80 flex-col overflow-hidden rounded-[2.5rem] border-4 shadow-lg">
         <div class="absolute -top-1 z-10 w-full rounded-t-[2.5rem] bg-linear-to-r from-primary to-secondary pb-1">
