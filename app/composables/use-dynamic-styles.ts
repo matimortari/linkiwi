@@ -29,7 +29,7 @@ export function useDynamicStyles(preferences: UserPreferences | null | Ref<UserP
 
   function iconStyle(isHovered: boolean) {
     if (!pref.value) {
-      return
+      return {}
     }
 
     const shadowMap: Record<string, string> = {
@@ -53,7 +53,7 @@ export function useDynamicStyles(preferences: UserPreferences | null | Ref<UserP
 
   function linkStyle(isHovered: boolean) {
     if (!pref.value) {
-      return
+      return {}
     }
 
     const shadowMap: Record<string, string> = {

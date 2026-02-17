@@ -4,7 +4,7 @@
       <span class="mx-2 inline-block truncate px-4 text-center" :style="linkInnerStyle">{{ item.title }}</span>
     </nuxt-link>
 
-    <button v-if="preferences.showLinkCopyButton" class="absolute right-2 shrink-0 transition-transform hover:scale-110" aria-label="Copy Link" @click.stop="handleCopy(item.url)">
+    <button v-if="preferences.showLinkCopyButton" class="absolute right-2 shrink-0 transition-transform hover:scale-110" aria-label="Copy Link" @click.stop="copyAction.triggerCopy(item.url)">
       <icon :name="copyAction.icon.value" size="15" :style="{ color: preferences.linkTextColor }" />
     </button>
   </li>
@@ -16,7 +16,7 @@ const props = defineProps<{
   preferences: UserPreferences
 }>()
 
-const emit = defineEmits<(e: "click") => void>()
+const emit = defineEmits<{ click: [] }>()
 
 const { createActionHandler } = useActionIcon()
 const { linkStyle, linkInnerStyle } = useDynamicStyles(toRef(props, "preferences"))
@@ -28,9 +28,5 @@ async function handleClick(event: MouseEvent) {
   emit("click")
   await nextTick()
   window.open(props.item.url, "_blank", "noopener,noreferrer")
-}
-
-async function handleCopy(url: string) {
-  await copyAction.triggerCopy(url)
 }
 </script>

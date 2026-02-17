@@ -43,7 +43,7 @@ const props = defineProps<{
   isOpen: boolean
 }>()
 
-const emit = defineEmits<(e: "close") => void>()
+const emit = defineEmits<{ close: [] }>()
 
 const iconsStore = useIconsStore()
 const { errors, loading } = storeToRefs(iconsStore)

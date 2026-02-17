@@ -1,9 +1,9 @@
 <template>
   <div class="mx-auto w-full max-w-5xl space-y-8 px-4 py-32">
     <header class="flex flex-col items-center gap-2 text-center">
-      <h2>
+      <h1>
         Brand Assets
-      </h2>
+      </h1>
       <p class="text-caption">
         Visual language and assets for AllLinks, including logos and color palette.
       </p>

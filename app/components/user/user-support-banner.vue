@@ -29,7 +29,7 @@ const props = defineProps<{
 }>()
 
 const showBanner = ref(true)
-let lastScrollY = window.scrollY
+let lastScrollY = 0
 
 const activeBanner = computed<Exclude<BannerOption, "NONE"> | null>(() => {
   const value = props.preferences.supportBanner
@@ -51,13 +51,16 @@ const banner = computed(() => {
 })
 
 function handleScroll() {
-  const current = window.scrollY
-  showBanner.value = current < lastScrollY || current < 10
-  lastScrollY = current
+  showBanner.value = window.scrollY < lastScrollY || window.scrollY < 10
+  lastScrollY = window.scrollY
 }
 
-onMounted(() => addEventListener("scroll", handleScroll))
-onBeforeUnmount(() => removeEventListener("scroll", handleScroll))
+onMounted(() => {
+  lastScrollY = window.scrollY
+  window.addEventListener("scroll", handleScroll)
+})
+
+onBeforeUnmount(() => window.removeEventListener("scroll", handleScroll))
 </script>
 
 <style scoped>

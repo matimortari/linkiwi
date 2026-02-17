@@ -82,7 +82,7 @@ defineProps<{
   isOpen: boolean
 }>()
 
-const emit = defineEmits<(e: "update:isOpen", value: boolean) => void>()
+const emit = defineEmits<{ "update:isOpen": [value: boolean] }>()
 
 const { toggleTheme, themeIcon } = useTheme()
 const route = useRoute()

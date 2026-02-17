@@ -48,7 +48,7 @@ const props = defineProps<{
   isOpen: boolean
 }>()
 
-const emit = defineEmits<(e: "close") => void>()
+const emit = defineEmits<{ close: [] }>()
 
 const userStore = useUserStore()
 const { user, errors } = storeToRefs(userStore)

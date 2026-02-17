@@ -24,6 +24,13 @@ export function getErrorMessage(err: any, fallback: string): string {
 }
 
 /**
+ * Signs in the user by redirecting to the provider's authentication endpoint.
+ */
+export function signIn(provider: string) {
+  navigateTo(`/api/auth/${provider}`, { external: true })
+}
+
+/**
   Signs out the current user by calling the logout endpoint and clearing the session.
  */
 export async function signOut() {

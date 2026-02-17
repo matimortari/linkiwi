@@ -29,9 +29,7 @@ const chartOptions: ChartOptions<"line"> = {
       backgroundColor: "rgba(0, 0, 0, 0.8)",
       padding: 12,
       cornerRadius: 8,
-      titleFont: {
-        size: 14,
-      },
+      titleFont: { size: 14 },
       callbacks: {
         label(context: any) {
           return `Views: ${context.parsed.y}`
@@ -55,13 +53,9 @@ const chartOptions: ChartOptions<"line"> = {
   },
   scales: {
     x: {
-      grid: {
-        display: false,
-      },
+      grid: { display: false },
       ticks: {
-        font: {
-          size: 10,
-        },
+        font: { size: 10 },
         maxRotation: 45,
         minRotation: 0,
       },
@@ -69,9 +63,7 @@ const chartOptions: ChartOptions<"line"> = {
     y: {
       beginAtZero: false,
       ticks: {
-        font: {
-          size: 10,
-        },
+        font: { size: 10 },
         precision: 0,
         padding: 8,
       },

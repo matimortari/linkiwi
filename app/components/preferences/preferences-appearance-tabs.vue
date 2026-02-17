@@ -80,7 +80,7 @@ const props = defineProps<{
   activeTab: string
 }>()
 
-const emit = defineEmits<{ (e: "update:preferences", value: UserPreferences): void, (e: "update:activeTab", value: string): void }>()
+const emit = defineEmits<{ "update:preferences": [value: UserPreferences], "update:activeTab": [value: string] }>()
 
 const localPrefs = reactive({ ...props.preferences })
 const isBackgroundFlat = computed(() => localPrefs.backgroundType === "FLAT")

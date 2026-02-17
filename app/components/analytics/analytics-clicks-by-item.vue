@@ -5,7 +5,7 @@
     </h3>
 
     <Loading v-if="linksLoading || iconsLoading || analyticsLoading" />
-    <Empty v-if="!items.length" message="No links or social icons yet." icon-name="mdi:octagram-minus-outline" />
+    <Empty v-else-if="!items.length" message="No links or social icons yet." icon-name="mdi:octagram-minus-outline" />
 
     <ul v-else class="grid grid-cols-1 gap-2 md:grid-cols-3">
       <li v-for="item in items" :key="item.id" class="card flex flex-col gap-2">
@@ -70,11 +70,5 @@ const clicksMap = computed(() => {
   return counts
 })
 
-onMounted(async () => {
-  await Promise.all([
-    linksStore.getLinks(),
-    iconsStore.getIcons(),
-    analyticsStore.getAnalytics(),
-  ])
-})
+onMounted(async () => await Promise.all([analyticsStore.getAnalytics(), analyticsStore.getReferrerStats()]))
 </script>

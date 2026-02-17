@@ -99,13 +99,13 @@ h1 {
   font-weight: 700;
 }
 h2 {
-  font-size: 2.25rem;
-  line-height: 2.25rem;
+  font-size: 2rem;
+  line-height: 2rem;
   font-weight: 700;
 }
 h3 {
-  font-size: 1.75rem;
-  line-height: 1.75rem;
+  font-size: 1.5rem;
+  line-height: 1.5rem;
   font-weight: 700;
 }
 h4 {
@@ -231,7 +231,6 @@ input[type="radio"]::after {
   background-color: var(--muted);
   border-radius: 100%;
   transform: translate(-50%, -50%) scale(0);
-  transition: transform 0.2s ease-in-out;
 }
 input[type="radio"]:checked::after {
   transform: translate(-50%, -50%) scale(1);

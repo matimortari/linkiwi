@@ -12,7 +12,7 @@ const props = defineProps<{
   preferences: UserPreferences
 }>()
 
-const emit = defineEmits<(e: "click") => void>()
+const emit = defineEmits<{ click: [] }>()
 
 const isHovered = ref(false)
 

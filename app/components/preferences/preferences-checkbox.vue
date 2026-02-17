@@ -9,14 +9,13 @@
 </template>
 
 <script setup lang="ts">
-defineProps({
-  id: String,
-  label: String,
-  value: {
-    type: Boolean,
-    default: false,
-  },
+withDefaults(defineProps<{
+  id?: string
+  label?: string
+  value?: boolean
+}>(), {
+  value: false,
 })
 
-const emit = defineEmits<(e: "update:value", value: boolean) => void>()
+const emit = defineEmits<{ "update:value": [value: boolean] }>()
 </script>

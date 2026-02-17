@@ -23,5 +23,5 @@ defineProps<{
   disabled?: boolean
 }>()
 
-const emit = defineEmits<(e: "update:value", value: string) => void>()
+const emit = defineEmits<{ "update:value": [value: string] }>()
 </script>

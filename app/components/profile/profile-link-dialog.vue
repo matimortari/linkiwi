@@ -35,7 +35,7 @@ const props = defineProps<{
   selectedLink?: Link | null
 }>()
 
-const emit = defineEmits<(e: "close") => void>()
+const emit = defineEmits<{ close: [] }>()
 
 const linksStore = useLinksStore()
 const { errors, loading } = storeToRefs(linksStore)

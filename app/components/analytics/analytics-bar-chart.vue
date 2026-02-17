@@ -29,9 +29,7 @@ const chartOptions: ChartOptions<"bar"> = {
       backgroundColor: "rgba(0, 0, 0, 0.8)",
       padding: 12,
       cornerRadius: 8,
-      titleFont: {
-        size: 14,
-      },
+      titleFont: { size: 14 },
       callbacks: {
         label(context: any) {
           return `Count: ${context.parsed.y}`
@@ -41,26 +39,18 @@ const chartOptions: ChartOptions<"bar"> = {
   },
   scales: {
     x: {
-      grid: {
-        display: false,
-      },
+      grid: { display: false },
       ticks: {
-        font: {
-          size: 10,
-        },
+        font: { size: 10 },
         maxRotation: 45,
         minRotation: 0,
       },
     },
     y: {
       beginAtZero: false,
-      grid: {
-        color: "rgba(0, 0, 0, 0.05)",
-      },
+      grid: { color: "rgba(0, 0, 0, 0.05)" },
       ticks: {
-        font: {
-          size: 10,
-        },
+        font: { size: 10 },
         precision: 0,
         padding: 8,
       },

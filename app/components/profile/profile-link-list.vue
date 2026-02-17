@@ -6,7 +6,7 @@
 
     <div class="flex flex-col gap-2">
       <Loading v-if="loading" />
-      <Empty v-if="!links.length" message="Your links help visitors discover more about you. Add your first link!" icon-name="mdi:link-variant-minus" />
+      <Empty v-else-if="!links.length" message="Your links help visitors discover more about you. Add your first link!" icon-name="mdi:link-variant-minus" />
 
       <ul v-else class="grid grid-cols-1 gap-2 md:grid-cols-2">
         <li v-for="link in links" :key="link.id" class="card flex flex-col gap-2">

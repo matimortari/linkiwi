@@ -166,19 +166,10 @@ async function handleDeleteAnalytics() {
   }
 
   await analyticsStore.deleteAnalytics()
-  await Promise.all([
-    analyticsStore.getAnalytics(),
-    analyticsStore.getReferrerStats(),
-  ])
+  await Promise.all([analyticsStore.getAnalytics(), analyticsStore.getReferrerStats()])
 
   resetAction.triggerSuccess()
 }
 
-onMounted(async () => {
-  await Promise.all([
-    analyticsStore.getAnalytics(),
-    analyticsStore.getReferrerStats(),
-    userStore.getUser(),
-  ])
-})
+onMounted(async () => await Promise.all([analyticsStore.getAnalytics(), analyticsStore.getReferrerStats(), userStore.getUser()]))
 </script>

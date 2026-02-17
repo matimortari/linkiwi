@@ -6,7 +6,7 @@
 
     <div class="flex flex-col gap-2">
       <Loading v-if="loading" />
-      <Empty v-if="!icons.length" message="Your social icons help visitors connect with you. Add your first social icon!" icon-name="mdi:star-minus" />
+      <Empty v-else-if="!icons.length" message="Your social icons help visitors connect with you. Add your first social icon!" icon-name="mdi:star-minus" />
 
       <ul v-else class="navigation-group">
         <li v-for="icon in icons" :key="icon.id" class="card relative flex size-20 items-center justify-center">

@@ -31,7 +31,7 @@
     </div>
 
     <!-- Right side image for desktop -->
-    <div class="hidden border-l-2 md:block md:w-1/2">
+    <div class="hidden border-l md:block md:w-1/2">
       <img src="/assets/sign-in-image.png" alt="Sign In Background" class="size-full object-cover">
     </div>
 
@@ -58,10 +58,6 @@ const errorMessage = computed(() => {
 
   return messages[error] || "Authentication failed. Please try again."
 })
-
-function signIn(provider: string) {
-  navigateTo(`/api/auth/${provider}`, { external: true })
-}
 
 useHead({
   title: "Sign In",

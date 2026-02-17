@@ -4,6 +4,7 @@
 
 <script setup lang="ts">
 const pageContent = await queryCollection("content").path("/api-spec").first()
+
 provide("contentHeaders", useContent({ selector: ".markdown", parseMethod: true }))
 
 useHead({

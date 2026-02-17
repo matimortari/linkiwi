@@ -23,23 +23,23 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps({
-  isOpen: Boolean,
-  title: {
-    type: String,
-    default: "Dialog Title",
-  },
+const props = withDefaults(defineProps<{
+  isOpen: boolean
+  title?: string
+}>(), {
+  title: "Dialog Title",
 })
 
-const emit = defineEmits<{ (e: "update:isOpen", value: boolean): void, (e: "confirm"): void }>()
+const emit = defineEmits<{ "update:isOpen": [value: boolean] }>()
 
-const dialogRef = ref<HTMLElement | null>(null)
-
-useClickOutside(dialogRef, () => {
-  if (props.isOpen) {
+function onEscape(e: KeyboardEvent) {
+  if (e.key === "Escape" && props.isOpen) {
     emit("update:isOpen", false)
   }
-}, { escapeKey: true })
+}
+
+onMounted(() => document.addEventListener("keydown", onEscape))
+onBeforeUnmount(() => document.removeEventListener("keydown", onEscape))
 </script>
 
 <style scoped>

@@ -2,7 +2,7 @@
   <section
     id="hero" v-motion
     :initial="{ opacity: 0, y: -40 }" :visible="{ opacity: 1, y: 0 }"
-    :duration="800" class="flex min-h-screen w-full flex-col items-center justify-between gap-8 overflow-hidden bg-card px-4 py-32 md:flex-row md:px-40"
+    :duration="800" class="flex min-h-screen w-full flex-col items-center justify-between gap-8 overflow-hidden border-b bg-card px-4 py-32 md:flex-row md:px-40"
   >
     <header class="flex flex-col items-center gap-4 text-center md:items-start md:text-start">
       <h1>
@@ -25,7 +25,7 @@
   <section
     id="product" v-motion
     :initial="{ opacity: 0, y: 20 }" :visible="{ opacity: 1, y: 0 }"
-    :duration="800" class="relative flex w-full flex-col items-center justify-center gap-12 border-t p-12 text-center md:p-32"
+    :duration="800" class="relative flex w-full flex-col items-center justify-center gap-12 p-12 text-center md:p-32"
   >
     <h2>
       Create Your Page In Minutes
@@ -69,7 +69,7 @@
   <section
     id="analytics" v-motion
     :initial="{ opacity: 0, y: 20 }" :visible="{ opacity: 1, y: 0 }"
-    :duration="800" class="relative flex w-full flex-col items-center justify-center gap-12 border-t bg-muted/30 p-12 text-center md:p-32"
+    :duration="800" class="relative flex w-full flex-col items-center justify-center gap-12 border-y bg-muted/30 p-12 text-center md:p-32"
   >
     <h2>
       Track Your Performance
@@ -124,7 +124,7 @@
     </div>
   </section>
 
-  <section id="cta" class="relative z-10 flex min-h-[50vh] w-full flex-col items-center justify-center gap-8 border-y bg-card p-20 text-center md:p-32">
+  <section id="cta" class="relative z-10 flex min-h-[50vh] w-full flex-col items-center justify-center gap-8 bg-card p-20 text-center md:p-32">
     <div class="cta-wrapper-grid" />
     <div class="cta-wrapper-vignette" />
 
@@ -162,6 +162,10 @@ h1 {
   font-family: var(--font-display);
   line-height: 4rem;
   max-width: 24rem;
+}
+h2 {
+  font-size: 2.25rem;
+  line-height: 2.25rem;
 }
 @media (min-width: 768px) {
   h1 {

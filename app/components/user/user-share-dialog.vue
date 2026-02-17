@@ -69,11 +69,11 @@
 import qrcode from "qrcode-generator"
 import logoImage from "~/assets/symbol.png"
 
-defineProps({
-  isOpen: Boolean,
-})
+defineProps<{
+  isOpen: boolean
+}>()
 
-const emit = defineEmits<(e: "close" | "update:isOpen") => void>()
+const emit = defineEmits<{ "close": [], "update:isOpen": [] }>()
 
 const { user } = storeToRefs(useUserStore())
 const dropdownRef = ref<HTMLElement | null>(null)
@@ -81,28 +81,27 @@ const qrContainer = ref<HTMLElement | null>(null)
 const isDropdownOpen = ref(false)
 const dropdownPosition = ref<"top" | "bottom">("bottom")
 const copySuccess = ref<string | null>(null)
-const logoBase64 = ref<string>("")
-const pageUrl = computed(() => `${BASE_URL}/${user?.value?.slug}`)
+const logoBase64 = ref("")
+const pageUrl = computed(() => `${BASE_URL}/${user.value?.slug}`)
 
 useClickOutside(dropdownRef, () => {
-  if (isDropdownOpen.value) {
-    isDropdownOpen.value = false
-  }
+  isDropdownOpen.value = false
 }, { escapeKey: true })
 
 function toggleDropdown() {
   isDropdownOpen.value = !isDropdownOpen.value
-  if (isDropdownOpen.value && dropdownRef.value) {
-    nextTick(() => {
-      const button = dropdownRef.value?.querySelector("button")
-      if (!button) {
-        return
-      }
-
-      const spaceBelow = window.innerHeight - button.getBoundingClientRect().bottom
-      dropdownPosition.value = spaceBelow < 400 ? "top" : "bottom"
-    })
+  if (!isDropdownOpen.value || !dropdownRef.value) {
+    return
   }
+
+  nextTick(() => {
+    const button = dropdownRef.value?.querySelector("button")
+    if (!button) {
+      return
+    }
+    const spaceBelow = window.innerHeight - button.getBoundingClientRect().bottom
+    dropdownPosition.value = spaceBelow < 400 ? "top" : "bottom"
+  })
 }
 
 async function handleCopy() {
@@ -112,21 +111,13 @@ async function handleCopy() {
 }
 
 function downloadQRCode() {
-  if (!qrContainer.value) {
+  const svg = qrContainer.value?.querySelector("svg")
+  if (!svg) {
     return
   }
 
-  const svgElement = qrContainer.value.querySelector("svg")
-  if (!svgElement) {
-    return
-  }
-
-  const svgData = new XMLSerializer().serializeToString(svgElement)
-  const svgBlob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" })
-  const url = URL.createObjectURL(svgBlob)
-  const link = document.createElement("a")
-  link.href = url
-  link.download = `${user.value?.slug}-qr-code.svg`
+  const url = URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(svg)], { type: "image/svg+xml;charset=utf-8" }))
+  const link = Object.assign(document.createElement("a"), { href: url, download: `${user.value?.slug}-qr-code.svg` })
   document.body.appendChild(link)
   link.click()
   link.remove()
@@ -136,16 +127,16 @@ function downloadQRCode() {
 }
 
 function shareToSocial(platform: "twitter" | "facebook" | "linkedin" | "whatsapp") {
-  const url = pageUrl.value
-  const shareUrls: Record<string, string> = {
-    twitter: `https://x.com/intent/tweet?text=${encodeURIComponent(`🚀 Check out my #AllLinks profile! 🌟\n\n🔗 ${url}`)}`,
-    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
-    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
-    whatsapp: `https://wa.me/?text=${encodeURIComponent(`Check out my AllLinks profile: ${url}`)}`,
+  const url = encodeURIComponent(pageUrl.value)
+
+  const shareUrls = {
+    twitter: `https://x.com/intent/tweet?text=${encodeURIComponent(`🚀 Check out my #AllLinks profile! 🌟\n\n🔗 ${pageUrl.value}`)}`,
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${url}`,
+    whatsapp: `https://wa.me/?text=${encodeURIComponent(`Check out my AllLinks profile: ${pageUrl.value}`)}`,
   }
 
-  const shareUrl = shareUrls[platform]
-  window.open(shareUrl, "_blank")
+  window.open(shareUrls[platform], "_blank")
   isDropdownOpen.value = false
 }
 
@@ -158,44 +149,26 @@ watchEffect(() => {
   qr.addData(pageUrl.value)
   qr.make()
   const moduleCount = qr.getModuleCount()
-
-  const isCenterArea = (row: number, col: number) => {
-    const radius = (moduleCount * 0.25) / 2
-    return Math.abs(row - (moduleCount / 2)) < radius && Math.abs(col - (moduleCount / 2)) < radius
-  }
-
   const padding = 2
   const viewBoxSize = moduleCount + 2 * padding
-  const svgParts: string[] = [
-    "<svg xmlns=\"http://www.w3.org/2000/svg\" ",
-    "width=\"200\" ",
-    "height=\"200\" ",
-    `viewBox="0 0 ${viewBoxSize} ${viewBoxSize}">`,
-    "<rect width=\"100%\" height=\"100%\" fill=\"#ffffff\"/>",
-  ]
+  const radius = (moduleCount * 0.25) / 2
 
-  for (let row = 0; row < moduleCount; row++) {
-    for (let col = 0; col < moduleCount; col++) {
-      if (qr.isDark(row, col) && !isCenterArea(row, col)) {
-        const cx = col + padding + 0.5
-        const cy = row + padding + 0.5
-        const radius = 0.5
-        svgParts.push(`<circle cx="${cx}" cy="${cy}" r="${radius}" fill="#000000"/>`)
+  const circles = Array.from({ length: moduleCount }, (_, row) =>
+    Array.from({ length: moduleCount }, (_, col) => {
+      if (!qr.isDark(row, col) || (Math.abs(row - moduleCount / 2) < radius && Math.abs(col - moduleCount / 2) < radius)) {
+        return ""
       }
-    }
-  }
 
-  // Add logo image using base64 data URL
-  const logoImgSize = (moduleCount * 0.2) * 0.85
-  const logoImgPos = (moduleCount / 2 + padding) - (logoImgSize / 2)
-  svgParts.push(`<image href="${logoBase64.value}" x="${logoImgPos}" y="${logoImgPos}" width="${logoImgSize}" height="${logoImgSize}"/>`, "</svg>")
-  qrContainer.value.innerHTML = svgParts.join("")
+      return `<circle cx="${col + padding + 0.5}" cy="${row + padding + 0.5}" r="0.5" fill="#000000"/>`
+    }).join("")).join("")
+
+  const logoSize = moduleCount * 0.2 * 0.85
+  const logoPos = moduleCount / 2 + padding - logoSize / 2
+  qrContainer.value.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 ${viewBoxSize} ${viewBoxSize}"><rect width="100%" height="100%" fill="#ffffff"/>${circles}<image href="${logoBase64.value}" x="${logoPos}" y="${logoPos}" width="${logoSize}" height="${logoSize}"/></svg>`
 })
 
-// Convert logo to base64 on mount
 onMounted(async () => {
-  const response = await fetch(logoImage)
-  const blob = await response.blob()
+  const blob = await fetch(logoImage).then(r => r.blob())
   const reader = new FileReader()
   reader.onloadend = () => logoBase64.value = reader.result as string
   reader.readAsDataURL(blob)

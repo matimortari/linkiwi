@@ -22,11 +22,8 @@ const isLoading = ref(true)
 
 onMounted(async () => {
   try {
-    await Promise.all([
-      userStore.getUser(),
-      linksStore.getLinks(),
-      iconsStore.getIcons(),
-    ])
+    await userStore.getUser()
+    await Promise.all([linksStore.getLinks(), iconsStore.getIcons()])
   }
   catch {
     await navigateTo("/sign-in")
