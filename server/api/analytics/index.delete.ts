@@ -3,8 +3,9 @@ import { promises as fs } from "node:fs"
 import os from "node:os"
 import path from "node:path"
 import db from "#server/utils/db"
-import { getUserFromSession, uploadFile } from "#server/utils/helpers"
+import { getUserFromSession } from "#server/utils/helpers"
 import { CacheKeys, deleteCached } from "#server/utils/redis"
+import { uploadFile } from "#server/utils/storage"
 import parquet from "parquetjs"
 
 export default defineEventHandler(async (event) => {
@@ -148,9 +149,9 @@ export default defineEventHandler(async (event) => {
   // Upload all records to cold storage
   for (const file of archiveFiles) {
     await uploadFile({
-      path: `linkiosk/archive/user_${user.id}`,
+      path: `archive/user_${user.id}`,
       file,
-      maxSize: 50 * 1024 * 1024,
+      maxSize: 50 * 1024 * 1024, // 50 MB
       allowedMimeTypes: ["application/vnd.apache.parquet", "application/octet-stream"],
     })
   }

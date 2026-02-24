@@ -1,5 +1,6 @@
 import db from "#server/utils/db"
-import { getUserFromSession, uploadFile } from "#server/utils/helpers"
+import { getUserFromSession } from "#server/utils/helpers"
+import { uploadFile } from "#server/utils/storage"
 
 export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
@@ -12,7 +13,7 @@ export default defineEventHandler(async (event) => {
   const currentUser = await db.user.findUnique({ where: { id: user.id }, select: { image: true } })
 
   const imageUrl = await uploadFile({
-    path: `linkiosk/user-avatars/${user.id}`,
+    path: `user-avatars/${user.id}`,
     file,
     maxSize: 2 * 1024 * 1024, // 2 MB
     allowedMimeTypes: ["image/png", "image/jpeg", "image/webp"],

@@ -15,6 +15,7 @@
     "db:reset": "prisma db push --force-reset"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "3.996.0",
     "@nuxt/content": "3.11.2",
     "@nuxt/fonts": "0.14.0",
     "@nuxt/icon": "2.2.1",
@@ -23,8 +24,6 @@
     "@prisma/adapter-pg": "7.4.0",
     "@prisma/client": "7.4.0",
     "@tailwindcss/vite": "4.2.1",
-    "@vercel/analytics": "1.6.1",
-    "@vercel/blob": "2.3.0",
     "@vueuse/motion": "3.0.3",
     "better-sqlite3": "12.6.2",
     "chart.js": "4.5.1",

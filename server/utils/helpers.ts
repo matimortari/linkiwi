@@ -1,6 +1,5 @@
 import type { EventHandlerRequest, H3Event } from "h3"
 import db from "#server/utils/db"
-import { del, put } from "@vercel/blob"
 
 /**
  * Retrieves the authenticated user from the current session.
@@ -119,27 +118,4 @@ export function formatSourceLabel(source: string | null | undefined): string {
   }
 
   return labels[normalizedSource] || normalizedSource.charAt(0).toUpperCase() + normalizedSource.slice(1)
-}
-
-/**
- * Uploads a file to Blob storage and removes the previous file if provided.
- * Validates file size and MIME type before upload.
- */
-export async function uploadFile({ path, file, maxSize, allowedMimeTypes, oldFile }: { path: string, file: File, maxSize: number, allowedMimeTypes: string[], oldFile?: string }) {
-  if (!file || !(file instanceof File)) {
-    throw createError({ status: 400, statusText: "No file uploaded" })
-  }
-  if (allowedMimeTypes.length && !allowedMimeTypes.includes(file.type)) {
-    throw createError({ status: 415, statusText: `Unsupported file type: ${file.type}` })
-  }
-  if (file.size > maxSize) {
-    throw createError({ status: 413, statusText: "File too large" })
-  }
-
-  const blob = await put(`${path}/${Date.now()}.${file.name.split(".").pop()?.toLowerCase()}`, file, { access: "public" })
-  if (oldFile?.includes("blob.vercel-storage.com")) {
-    await del(oldFile).catch(() => {})
-  }
-
-  return blob.url
 }
