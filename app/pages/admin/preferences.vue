@@ -36,7 +36,7 @@ const { user, loading, errors } = storeToRefs(useUserStore())
 
 useHead({
   title: "Preferences",
-  link: [{ rel: "canonical", href: "https://linkiosk.vercel.app/admin/preferences" }],
+  link: [{ rel: "canonical", href: `${BASE_URL}/admin/preferences` }],
   meta: [{ name: "description", content: "LinKiosk preferences page." }],
 })
 

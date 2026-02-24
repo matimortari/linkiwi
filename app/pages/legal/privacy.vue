@@ -7,7 +7,7 @@ const pageContent = await queryCollection("content").path("/privacy-policy").fir
 
 useHead({
   title: "Privacy Policy",
-  link: [{ rel: "canonical", href: "https://linkiosk.vercel.app/legal/privacy" }],
+  link: [{ rel: "canonical", href: `${BASE_URL}/legal/privacy` }],
   meta: [{ name: "description", content: "LinKiosk Privacy Policy." }],
 })
 

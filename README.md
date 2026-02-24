@@ -8,7 +8,7 @@
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=matimortari_linkiosk&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=matimortari_linkiosk)
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat&colorA=0d1117)](https://opensource.org/licenses/MIT)
 
-[**LinKiosk**](https://linkiosk.vercel.app) is a landing page builder that allows users and businesses to centralize and share their links and online presence in one place. It offers various customization options, link management, and profile analytics.
+[**LinKiosk**](https://linkiosk.up.railway.app) is a landing page builder that allows users and businesses to centralize and share their links and online presence in one place. It offers various customization options, link management, and profile analytics.
 
 </div>
 
@@ -33,7 +33,6 @@
 - **ESLint**.
 - **Tailwind CSS**.
 - **Framer Motion**.
-- **Vercel** for deployment, blob storage and website analytics.
 
 ## Contact
 

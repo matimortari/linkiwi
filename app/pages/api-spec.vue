@@ -9,7 +9,7 @@ provide("contentHeaders", useContent({ selector: ".markdown", parseMethod: true 
 
 useHead({
   title: "API Specification",
-  link: [{ rel: "canonical", href: "https://linkiosk.vercel.app/api-spec" }],
+  link: [{ rel: "canonical", href: `${BASE_URL}/api-spec` }],
   meta: [{ name: "description", content: "LinKiosk API Specification." }],
 })
 

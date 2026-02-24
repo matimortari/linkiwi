@@ -148,7 +148,7 @@
 <script setup lang="ts">
 useHead({
   title: "Your Link-in-Bio Page!",
-  link: [{ rel: "canonical", href: "https://linkiosk.vercel.app" }],
+  link: [{ rel: "canonical", href: `${BASE_URL}` }],
   meta: [{ name: "description", content: "Create your own landing page for sharing links to your social media profiles, websites, and more!" }],
 })
 

@@ -147,7 +147,7 @@ watch(colorMode, () => updateColors(), { flush: "post" })
 
 useHead({
   title: "Brand",
-  link: [{ rel: "canonical", href: "https://linkiosk.vercel.app/brand" }],
+  link: [{ rel: "canonical", href: `${BASE_URL}/brand` }],
   meta: [{ name: "description", content: "LinKiosk Brand Assets." }],
 })
 </script>

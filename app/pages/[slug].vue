@@ -71,7 +71,7 @@ onMounted(async () => {
   if (userProfile.value) {
     useHead({
       title: `@${userProfile.value.slug}`,
-      link: [{ rel: "canonical", href: `https://linkiosk.vercel.app/${userProfile.value.slug}` }],
+      link: [{ rel: "canonical", href: `${BASE_URL}/${userProfile.value.slug}` }],
       meta: [{ name: "description", content: `@${userProfile.value.slug} profile on LinKiosk.` }],
     })
 
