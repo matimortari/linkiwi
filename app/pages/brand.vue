@@ -5,7 +5,7 @@
         Brand Assets
       </h1>
       <p class="text-caption">
-        Visual language and assets for AllLinks, including logos and color palette.
+        Visual language and assets for LinKiosk, including logos and color palette.
       </p>
     </header>
 
@@ -147,7 +147,7 @@ watch(colorMode, () => updateColors(), { flush: "post" })
 
 useHead({
   title: "Brand",
-  link: [{ rel: "canonical", href: "https://alllinks-bio.vercel.app/brand" }],
-  meta: [{ name: "description", content: "AllLinks Brand Assets." }],
+  link: [{ rel: "canonical", href: "https://linkiosk.vercel.app/brand" }],
+  meta: [{ name: "description", content: "LinKiosk Brand Assets." }],
 })
 </script>

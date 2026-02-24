@@ -130,10 +130,10 @@ function shareToSocial(platform: "twitter" | "facebook" | "linkedin" | "whatsapp
   const url = encodeURIComponent(pageUrl.value)
 
   const shareUrls = {
-    twitter: `https://x.com/intent/tweet?text=${encodeURIComponent(`🚀 Check out my #AllLinks profile! 🌟\n\n🔗 ${pageUrl.value}`)}`,
+    twitter: `https://x.com/intent/tweet?text=${encodeURIComponent(`🚀 Check out my #linkiosk profile! 🌟\n\n🔗 ${pageUrl.value}`)}`,
     facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
     linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${url}`,
-    whatsapp: `https://wa.me/?text=${encodeURIComponent(`Check out my AllLinks profile: ${pageUrl.value}`)}`,
+    whatsapp: `https://wa.me/?text=${encodeURIComponent(`Check out my LinKiosk profile: ${pageUrl.value}`)}`,
   }
 
   window.open(shareUrls[platform], "_blank")

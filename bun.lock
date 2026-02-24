@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "alllinks",
+      "name": "linkiosk",
       "dependencies": {
         "@nuxt/content": "3.11.2",
         "@nuxt/fonts": "0.14.0",

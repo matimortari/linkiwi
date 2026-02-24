@@ -1,4 +1,4 @@
-export const BASE_URL = "https://alllinks-bio.vercel.app"
+export const BASE_URL = "https://linkiosk.vercel.app"
 
 export const DEFAULT_AVATAR = "/assets/default-avatar.svg"
 

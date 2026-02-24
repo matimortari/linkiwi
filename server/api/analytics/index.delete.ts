@@ -148,7 +148,7 @@ export default defineEventHandler(async (event) => {
   // Upload all records to cold storage
   for (const file of archiveFiles) {
     await uploadFile({
-      path: `alllinks/archive/user_${user.id}`,
+      path: `linkiosk/archive/user_${user.id}`,
       file,
       maxSize: 50 * 1024 * 1024,
       allowedMimeTypes: ["application/vnd.apache.parquet", "application/octet-stream"],

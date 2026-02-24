@@ -61,6 +61,6 @@ const errorMessage = computed(() => {
 
 useHead({
   title: "Sign In",
-  meta: [{ name: "description", content: "AllLinks Sign In page" }],
+  meta: [{ name: "description", content: "LinKiosk Sign In page" }],
 })
 </script>

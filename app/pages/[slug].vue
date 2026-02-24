@@ -71,8 +71,8 @@ onMounted(async () => {
   if (userProfile.value) {
     useHead({
       title: `@${userProfile.value.slug}`,
-      link: [{ rel: "canonical", href: `https://alllinks-bio.vercel.app/${userProfile.value.slug}` }],
-      meta: [{ name: "description", content: `@${userProfile.value.slug} profile on AllLinks.` }],
+      link: [{ rel: "canonical", href: `https://linkiosk.vercel.app/${userProfile.value.slug}` }],
+      meta: [{ name: "description", content: `@${userProfile.value.slug} profile on LinKiosk.` }],
     })
 
     const referrer = (typeof document === "undefined" ? "" : document.referrer) || (route.query.ref as string) || ""

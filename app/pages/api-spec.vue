@@ -9,8 +9,8 @@ provide("contentHeaders", useContent({ selector: ".markdown", parseMethod: true 
 
 useHead({
   title: "API Specification",
-  link: [{ rel: "canonical", href: "https://alllinks-bio.vercel.app/api-spec" }],
-  meta: [{ name: "description", content: "AllLinks API Specification." }],
+  link: [{ rel: "canonical", href: "https://linkiosk.vercel.app/api-spec" }],
+  meta: [{ name: "description", content: "LinKiosk API Specification." }],
 })
 
 definePageMeta({

@@ -9,7 +9,7 @@
         Keep all your stuff together!
       </h1>
       <p class="text-lead">
-        Welcome to <span class="font-semibold text-secondary">AllLinks</span>! Your links, profiles, contact info, and more
+        Welcome to <span class="font-semibold text-secondary">LinKiosk</span>! Your links, profiles, contact info, and more
         in one place. Create and customize your page and share it with your audience.
       </p>
 
@@ -39,7 +39,7 @@
           <div class="overlay relative flex size-full flex-col items-center gap-4">
             <icon name="mdi:link-variant" size="60" class="my-4 shrink-0 text-primary" />
 
-            <div class="flex flex-row items-center gap-2">
+            <div class="navigation-group">
               <span v-for="i in 3" :key="i" class="size-6 rounded-full bg-muted">{{ '' }}</span>
             </div>
 
@@ -53,7 +53,7 @@
       <div class="order-2 flex flex-col gap-4 text-start">
         <p class="text-lead">
           Customize your page with your own style and share your unique URL with your audience.
-          Whether you're a creator, business, or influencer, AllLinks makes it easy to connect all your online presence in one place.
+          Whether you're a creator, business, or influencer, LinKiosk makes it easy to connect all your online presence in one place.
         </p>
 
         <div class="flex flex-col gap-2">
@@ -148,7 +148,7 @@
 <script setup lang="ts">
 useHead({
   title: "Your Link-in-Bio Page!",
-  link: [{ rel: "canonical", href: "https://alllinks-bio.vercel.app" }],
+  link: [{ rel: "canonical", href: "https://linkiosk.vercel.app" }],
   meta: [{ name: "description", content: "Create your own landing page for sharing links to your social media profiles, websites, and more!" }],
 })
 
