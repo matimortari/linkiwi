@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "nuxt dev",
-    "build": "prisma generate && nuxt build",
-    "postinstall": "nuxt prepare",
+    "build": "nuxt build",
+    "postinstall": "prisma generate && nuxt prepare",
     "typecheck": "nuxt typecheck",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

@@ -3,12 +3,12 @@
     <img src="public/logo-light.png" alt="Logo" width="300"/>
 </h1>
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=matimortari_alllinks&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=matimortari_alllinks)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=matimortari_alllinks&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=matimortari_alllinks)
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=matimortari_alllinks&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=matimortari_alllinks)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=matimortari_linkiosk&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=matimortari_linkiosk)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=matimortari_linkiosk&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=matimortari_linkiosk)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=matimortari_linkiosk&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=matimortari_linkiosk)
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat&colorA=0d1117)](https://opensource.org/licenses/MIT)
 
-[**AllLinks**](https://alllinks-bio.vercel.app) is a landing page builder that allows users and businesses to centralize and share their links and online presence in one place. It offers various customization options, link management, and profile analytics.
+[**LinKiosk**](https://linkiosk.vercel.app) is a landing page builder that allows users and businesses to centralize and share their links and online presence in one place. It offers various customization options, link management, and profile analytics.
 
 </div>
 

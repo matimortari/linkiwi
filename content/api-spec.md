@@ -1,6 +1,6 @@
-# AllLinks API Specification
+# LinKiosk API Specification
 
-This document provides comprehensive documentation for the AllLinks REST API, which is used by the AllLinks web application to manage user profiles, links, social icons, and analytics. The AllLinks API is organized around REST principles with predictable resource-oriented URLs, JSON request/response bodies, and standard HTTP response codes.
+This document provides comprehensive documentation for the LinKiosk REST API, which is used by the LinKiosk web application to manage user profiles, links, social icons, and analytics. The LinKiosk API is organized around REST principles with predictable resource-oriented URLs, JSON request/response bodies, and standard HTTP response codes.
 
 ## Overview
 
