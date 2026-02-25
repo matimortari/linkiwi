@@ -8,7 +8,7 @@
         <p class="text-caption">
           Choose a provider to continue.
         </p>
-        <span v-if="errorMessage" class="text-danger">{{ errorMessage }}</span>
+        <span v-if="errorMessage" class="text-caption-danger">{{ errorMessage }}</span>
       </header>
 
       <div class="flex w-full max-w-xs flex-col gap-2">

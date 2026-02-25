@@ -1,5 +1,5 @@
 <template>
-  <div class="navigation-group w-full justify-between rounded-[5rem] border p-2">
+  <div class="navigation-group w-full justify-between rounded-[5rem] border p-2 transition-colors hover:bg-muted/30">
     <label :for="id" class="text-sm font-medium">{{ label }}</label>
 
     <div class="flex cursor-pointer flex-row items-center">

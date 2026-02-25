@@ -23,7 +23,7 @@
 
   <div v-else class="flex h-[calc(100vh-8rem)] w-full items-center justify-center text-center">
     <Loading v-if="loading" />
-    <p class="text-caption" :class="{ 'text-danger!': errors.getUser || errors.getUserProfile }">
+    <p class="text-caption" :class="{ 'text-caption-danger!': errors.getUser || errors.getUserProfile }">
       {{ errors.getUser || errors.getUserProfile }}
     </p>
   </div>

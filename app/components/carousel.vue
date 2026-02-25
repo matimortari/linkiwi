@@ -1,7 +1,7 @@
 <template>
   <div v-if="preset" class="-mb-80 flex items-center justify-center select-none md:w-1/2 md:justify-end">
     <transition name="carousel" mode="out-in">
-      <div :key="preset.slug" class="relative flex h-150 w-80 flex-col overflow-hidden rounded-[2.5rem] border-4 shadow-lg">
+      <div :key="preset.slug" class="relative flex h-150 w-80 flex-col overflow-hidden rounded-[2.5rem] border-4 shadow-lg md:my-4 md:block 2xl:w-96">
         <div class="absolute -top-1 z-10 w-full rounded-t-[2.5rem] bg-linear-to-r from-primary to-secondary pb-1">
           <div class="flex flex-row items-center justify-between rounded-t-[2.5rem] bg-[#111016] p-4 pb-2">
             <div class="navigation-group">
@@ -12,7 +12,7 @@
           </div>
         </div>
 
-        <div class="scroll-hide flex flex-1 flex-col items-center gap-2 overflow-y-auto px-4 py-24 text-center" :style="backgroundStyle">
+        <div class="scroll-hide flex h-full flex-1 flex-col items-center gap-2 overflow-y-auto px-4 py-24 text-center" :style="backgroundStyle">
           <img :src="getPresetImage(preset.image || '')" :alt="preset.slug" :style="profilePictureStyle" class="size-24">
           <p :style="slugStyle">
             /{{ preset.slug }}
@@ -22,7 +22,7 @@
             {{ preset.description }}
           </p>
 
-          <ul class="my-2 flex w-full flex-row items-center justify-center gap-2">
+          <ul class="my-2 navigation-group w-full justify-center">
             <li
               v-for="icon in preset.icons" :key="icon.id"
               class="flex size-10 items-center justify-center rounded-full" :style="iconStyle(iconHover[icon.id] ?? false)"

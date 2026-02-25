@@ -1,10 +1,10 @@
 <template>
   <Masthead />
 
-  <div class="flex w-full flex-col items-center gap-4 overflow-x-hidden md:flex-row md:items-start">
+  <div class="flex flex-col items-center gap-4 overflow-x-hidden md:flex-row md:items-start">
     <Sidebar :is-open="isSidebarOpen" @update:is-open="isSidebarOpen = $event" />
 
-    <main class="flex-1 overflow-x-hidden">
+    <main class="w-full flex-1 overflow-x-hidden">
       <Loading v-if="isLoading" class="flex min-h-screen items-center justify-center" />
       <slot v-else />
     </main>

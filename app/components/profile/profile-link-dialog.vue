@@ -12,7 +12,7 @@
       </div>
 
       <footer class="flex flex-row items-center justify-between">
-        <p class="text-danger">
+        <p class="text-caption-danger">
           {{ isUpdateMode ? errors.updateLink || '' : errors.createLink || '' }}
         </p>
 
@@ -20,7 +20,7 @@
           <button class="btn-danger" aria-label="Cancel" :disabled="loading" @click="emit('close')">
             Cancel
           </button>
-          <button class="btn-primary" type="submit" :disabled="loading || !form.title || !form.url">
+          <button class="btn-success" type="submit" :disabled="loading || !form.title || !form.url">
             Confirm
           </button>
         </div>

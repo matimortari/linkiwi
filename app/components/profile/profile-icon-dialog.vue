@@ -21,7 +21,7 @@
       </div>
 
       <footer class="flex flex-row items-center justify-between">
-        <p class="text-danger">
+        <p class="text-caption-danger">
           {{ errors.createIcon || '' }}
         </p>
 

@@ -31,11 +31,11 @@
       </div>
 
       <footer class="flex flex-row items-center justify-between">
-        <p class="text-danger">
+        <p class="text-caption-danger">
           {{ errors.updateUser || '' }}
         </p>
 
-        <button class="btn-primary" type="submit">
+        <button class="btn-success" type="submit">
           Update Profile
         </button>
       </footer>

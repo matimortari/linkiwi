@@ -4,20 +4,6 @@
   Base styles
 */
 :root {
-  --background: #f9fafb;
-  --foreground: #262626;
-  --card: #f3f4f6;
-  --input: #e5e7eb;
-  --muted: #d1d5db;
-  --muted-foreground: #4b5563;
-  --surface-foreground: #e5e7eb;
-
-  /* Surfaces */
-  --primary: #91a173;
-  --secondary: #de896d;
-  --danger: #991b1b;
-  --success: #064e3b;
-
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-default);
@@ -28,8 +14,25 @@
 }
 
 /*
-  Dark theme overrides
+  Base color tokens
 */
+:root {
+  --background: #f9fafb;
+  --foreground: #262626;
+  --card: #f3f4f6;
+  --input: #e5e7eb;
+  --muted: #d1d5db;
+  --muted-foreground: #4b5563;
+  --surface-foreground: #eeeeee;
+  --primary: #91a173;
+  --secondary: #de896d;
+  --danger: #b91c1c;
+  --success: #14532d;
+
+  --border-style: 1px solid var(--muted);
+  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 html.dark {
   --background: #030712;
   --foreground: #e5e7eb;
@@ -37,18 +40,13 @@ html.dark {
   --input: #1f2937;
   --muted: #374151;
   --muted-foreground: #9ca3af;
-  --surface-foreground: #e5e7eb;
-
-  /* Surfaces */
+  --surface-foreground: #eeeeee;
   --primary: #91a173;
   --secondary: #de896d;
-  --danger: #991b1b;
-  --success: #064e3b;
+  --danger: #b91c1c;
+  --success: #14532d;
 }
 
-/*
-  Color and font theme tokens
-*/
 @theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -65,6 +63,11 @@ html.dark {
   --font-default: "Poppins", sans-serif;
   --font-display: "Spicy Rice", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
+
+  --border-radius: 1rem;
+
+  --default-transition-duration: 200ms;
+  --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /*
@@ -86,7 +89,7 @@ html.dark {
 
   *:focus-visible {
     outline: solid 2px var(--muted);
-    border-radius: 1rem;
+    border-radius: 0.25rem;
   }
 }
 
@@ -125,14 +128,20 @@ h6 {
 }
 
 .text-caption,
-.text-danger,
-.text-success {
+.text-caption-success,
+.text-caption-danger {
   font-size: 0.875rem;
-  line-height: 1rem;
-  font-weight: 600;
+  line-height: 1.25rem;
+  font-weight: 500;
 }
 .text-caption {
   color: var(--muted-foreground);
+}
+.text-caption-success {
+  color: var(--success);
+}
+.text-caption-danger {
+  color: var(--danger);
 }
 
 /*
@@ -140,15 +149,19 @@ h6 {
 */
 .card {
   background-color: var(--card);
-  border: 1px solid var(--muted);
-  border-radius: 1rem;
+  border: var(--border-style);
+  border-radius: var(--border-radius);
   padding: 1rem;
+  transition: box-shadow var(--transition);
+}
+.card:hover {
+  box-shadow: 0 2px 4px 0px rgba(0, 0, 0, 0.2);
 }
 
 .overlay {
   background-color: var(--card);
-  border: 1px solid var(--muted);
-  border-radius: 1.25rem;
+  border: var(--border-style);
+  border-radius: var(--border-radius);
   padding: 1rem;
   z-index: 40;
   box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, 0.4);
@@ -163,12 +176,12 @@ select {
   appearance: none;
   background-color: var(--input);
   color: var(--muted-foreground);
-  border: 1px solid var(--muted);
+  border: var(--border-style);
   accent-color: var(--muted);
   border-radius: 5rem;
   padding: 0.5rem;
   font-size: 0.875rem;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all var(--transition);
 }
 
 input:hover,
@@ -189,7 +202,7 @@ input[type="color"] {
   width: 2rem;
   height: 2rem;
   padding: 0.25rem;
-  border-radius: 100%;
+  border-radius: 5rem;
   cursor: pointer;
 }
 
@@ -199,14 +212,14 @@ input[type="checkbox"]:checked::before {
   justify-content: center;
   align-items: center;
   font-size: 1.5rem;
-  color: var(--secondary);
+  color: var(--success);
   width: 100%;
   height: 100%;
 }
 
 input[type="color"]::-webkit-color-swatch {
   border: none;
-  border-radius: 100%;
+  border-radius: 5rem;
 }
 input[type="color"]::-webkit-color-swatch-wrapper {
   padding: 0;
@@ -218,8 +231,8 @@ input[type="radio"] {
   -moz-appearance: none;
   position: relative;
   background-color: transparent;
-  border: 1px solid var(--muted);
-  border-radius: 100%;
+  border: var(--border-style);
+  border-radius: 5rem;
   padding: 0.75rem;
   cursor: pointer;
 }
@@ -228,8 +241,8 @@ input[type="radio"]::after {
   position: absolute;
   width: 0.75rem;
   height: 0.75rem;
-  background-color: var(--muted);
-  border-radius: 100%;
+  background-color: var(--primary);
+  border-radius: 5rem;
   transform: translate(-50%, -50%) scale(0);
 }
 input[type="radio"]:checked::after {
@@ -243,7 +256,8 @@ input[type="radio"]:checked::after {
 .btn-primary,
 .btn-secondary,
 .btn-danger,
-.btn-success {
+.btn-success,
+.btn-ghost {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -252,11 +266,11 @@ input[type="radio"]:checked::after {
   gap: 0.5rem;
   font-size: 0.875rem;
   font-weight: 600;
-  border: 2px solid var(--muted);
+  border: var(--border-style);
   border-radius: 5rem;
   white-space: nowrap;
   user-select: none;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all var(--transition);
 }
 
 .btn:hover,
@@ -264,21 +278,28 @@ input[type="radio"]:checked::after {
 .btn-secondary:hover,
 .btn-danger:hover,
 .btn-success:hover,
+.btn-ghost:hover {
+  transform: scale(1.02);
+  filter: brightness(0.9);
+}
+
 .btn:active,
 .btn-primary:active,
 .btn-secondary:active,
 .btn-danger:active,
-.btn-success:active {
-  transform: scale(1.02);
-  filter: brightness(0.8);
+.btn-success:active,
+.btn-ghost:active {
+  transform: scale(1);
+  filter: brightness(0.6);
 }
 
 .btn:disabled,
 .btn-primary:disabled,
 .btn-secondary:disabled,
 .btn-danger:disabled,
-.btn-success:disabled {
-  filter: brightness(0.8);
+.btn-success:disabled,
+.btn-ghost:disabled {
+  filter: brightness(0.6);
   cursor: not-allowed;
 }
 
@@ -302,12 +323,21 @@ input[type="radio"]:checked::after {
   --btn-bg: var(--success);
   --btn-fg: var(--surface-foreground);
 }
+.btn-ghost {
+  --btn-bg: transparent;
+  --btn-fg: var(--foreground);
+  border-color: transparent;
+}
+.btn-ghost:hover {
+  background-color: color-mix(in srgb, var(--muted) 60%, transparent);
+}
 
 .btn,
 .btn-primary,
 .btn-secondary,
 .btn-danger,
-.btn-success {
+.btn-success,
+.btn-ghost {
   background-color: var(--btn-bg);
   color: var(--btn-fg);
 }
@@ -315,13 +345,6 @@ input[type="radio"]:checked::after {
 /*
   Utilities
 */
-.navigation-group {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5rem;
-}
-
 .scroll-area {
   scrollbar-width: thin;
   scrollbar-color: var(--muted) var(--background);

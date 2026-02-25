@@ -1,5 +1,5 @@
 <template>
-  <div class="scroll-area grid h-72 grid-cols-2 gap-2 overflow-auto pr-1 md:grid-cols-3">
+  <div class="scroll-area grid h-72 grid-cols-2 gap-2 overflow-auto pr-1 md:grid-cols-3 2xl:grid-cols-4">
     <div v-for="(theme, index) in THEMES" :key="theme.title" class="flex flex-col items-center gap-2">
       <button
         :title="theme.title" aria-label="Select Theme"
@@ -7,7 +7,7 @@
         :class="{ 'opacity-80': selectedTheme !== theme.title }" :style="themeStyles[index]?.backgroundStyle.value ?? {}"
         @click="handleThemeSelection(theme.title)"
       >
-        <div class="flex flex-row items-center gap-2">
+        <div class="navigation-group">
           <span v-for="i in 3" :key="i" class="size-8 rounded-full" :style="themeStyles[index]?.iconStyle(false) ?? {}">{{ '' }}</span>
         </div>
 

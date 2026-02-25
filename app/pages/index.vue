@@ -2,7 +2,7 @@
   <section
     id="hero" v-motion
     :initial="{ opacity: 0, y: -40 }" :visible="{ opacity: 1, y: 0 }"
-    :duration="800" class="flex min-h-screen w-full flex-col items-center justify-between gap-8 overflow-hidden border-b bg-card px-4 py-32 md:flex-row md:px-40"
+    :duration="800" class="flex min-h-screen w-full flex-col items-center justify-between gap-8 overflow-hidden border-b bg-card px-4 py-32 md:flex-row md:px-40 2xl:min-h-[80vh]"
   >
     <header class="flex flex-col items-center gap-4 text-center md:items-start md:text-start">
       <h1>
@@ -139,7 +139,7 @@
 
       <nuxt-link to="/sign-in" class="btn-secondary">
         <span>Get Started</span>
-        <icon name="mdi:arrow-right" size="20" />
+        <icon name="mdi:arrow-right" size="25" />
       </nuxt-link>
     </div>
   </section>

@@ -13,7 +13,7 @@
     </div>
 
     <footer class="flex flex-row items-center justify-between">
-      <p class="text-success">
+      <p class="text-caption-success">
         {{ copySuccess || '' }}
       </p>
 

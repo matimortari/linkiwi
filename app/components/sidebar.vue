@@ -8,7 +8,7 @@
   <div v-if="isOpen" class="fixed inset-0 z-20 bg-black/50 md:hidden" @click="emit('update:isOpen', false)" />
 
   <aside
-    class="fixed top-0 left-0 z-40 size-full bg-card px-4 py-12 transition-transform duration-300 ease-in-out md:static md:block md:w-56 md:translate-x-0 md:bg-transparent md:py-8 2xl:w-64"
+    class="fixed top-0 left-0 z-40 size-full bg-card px-4 py-8 transition-transform ease-in-out md:static md:block md:w-56 md:translate-x-0 md:bg-transparent 2xl:w-64 2xl:py-12"
     :class="[isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0']"
   >
     <div class="flex h-full flex-col gap-8 px-12 md:px-0">
@@ -36,18 +36,13 @@
 
         <nuxt-link
           v-for="link in SIDEBAR_NAV_LINKS" :key="link.url"
-          :to="link.url" class="navigation-group w-full rounded-[5rem] p-2 font-semibold hover:bg-muted/30"
-          :class="{ 'bg-card': route.path === link.url }" aria-label="Navigate to {{ link.label }}"
+          :to="link.url" class="navigation-group w-full rounded-[5rem] p-2 font-semibold hover:bg-muted/60"
+          :class="{ 'bg-muted': route.path === link.url }" aria-label="Navigate to {{ link.label }}"
           @click="emit('update:isOpen', false)"
         >
           <icon :name="link.icon" size="25" />
           <span>{{ link.label }}</span>
         </nuxt-link>
-
-        <button class="navigation-group w-full rounded-[5rem] p-2 font-semibold hover:bg-muted/30" aria-label="Share Profile" @click="isShareDialogOpen = true">
-          <icon name="mdi:share-variant-outline" size="25" />
-          <span>Share</span>
-        </button>
       </nav>
 
       <div class="border-t md:flex-1" />
@@ -57,18 +52,22 @@
           Actions
         </p>
 
+        <button class="navigation-group w-full rounded-[5rem] p-2 font-semibold hover:bg-muted/60" aria-label="Share Profile" @click="isShareDialogOpen = true">
+          <icon name="mdi:share-variant-outline" size="25" />
+          <span>Share</span>
+        </button>
         <button class="navigation-group w-full rounded-[5rem] p-2 font-semibold whitespace-nowrap hover:bg-muted/30" aria-label="Toggle Theme" @click="toggleTheme">
           <icon :name="themeIcon" size="25" />
           <span>Toggle Theme</span>
         </button>
         <button class="navigation-group w-full rounded-[5rem] p-2 font-semibold whitespace-nowrap hover:bg-muted/30" aria-label="Sign Out" @click="signOut">
-          <icon name="mdi:logout" size="25" class="text-danger" />
+          <icon name="mdi:logout" size="25" class="text-caption-danger" />
           <span>Sign Out</span>
         </button>
       </nav>
     </div>
 
-    <div class="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-row items-center gap-2 select-none md:hidden">
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 select-none md:hidden">
       <Logo />
     </div>
   </aside>

@@ -64,7 +64,7 @@
                   <td class="px-4 py-2 text-sm">
                     <div class="navigation-group">
                       <div class="rounded-full bg-muted p-1">
-                        <icon :name="getSourceIcon(stat.source)" size="18" />
+                        <icon :name="getSourceIcon(stat.source)" size="20" />
                       </div>
                       <span class="font-semibold">{{ stat.label }}</span>
                     </div>

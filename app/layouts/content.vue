@@ -28,7 +28,7 @@
 
       <aside
         id="table-of-contents" :class="isSidebarOpen ? 'translate-x-0' : 'translate-x-full'"
-        class="fixed inset-y-0 right-0 z-40 h-screen w-3/4 bg-card p-4 pt-20 transition-transform duration-300 md:w-1/4 xl:translate-x-0"
+        class="fixed inset-y-0 right-0 z-40 h-screen w-3/4 bg-card p-4 pt-20 transition-transform md:w-1/4 xl:translate-x-0"
       >
         <div class="flex h-full flex-col">
           <p class="flex items-center gap-1 border-b py-2 font-semibold text-muted-foreground uppercase">

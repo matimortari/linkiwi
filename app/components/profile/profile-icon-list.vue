@@ -10,11 +10,11 @@
 
       <ul v-else class="navigation-group">
         <li v-for="icon in icons" :key="icon.id" class="card relative flex size-20 items-center justify-center">
-          <nuxt-link :to="icon.url" class="transition-transform hover:scale-110">
+          <nuxt-link :to="icon.url" class="btn-ghost">
             <icon :name="icon.logo" :size="30" />
           </nuxt-link>
 
-          <button class="absolute right-0 bottom-0 flex items-center p-1 transition-transform hover:scale-110" aria-label="Delete Social Icon" @click="handleDeleteIcon(icon.id!)">
+          <button class="btn-ghost absolute right-0 bottom-0 flex items-center p-0.5!" aria-label="Delete Social Icon" @click="handleDeleteIcon(icon.id!)">
             <icon name="mdi:remove-circle-outline" size="25" class="text-danger" />
           </button>
         </li>

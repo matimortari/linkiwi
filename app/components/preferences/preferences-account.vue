@@ -56,7 +56,7 @@
         <h4>
           Delete Account
         </h4>
-        <p class="text-danger">
+        <p class="text-caption-danger">
           This action is irreversible. All data will be lost.
         </p>
 

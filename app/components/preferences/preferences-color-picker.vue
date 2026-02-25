@@ -1,8 +1,8 @@
 <template>
-  <div class="navigation-group w-full justify-between rounded-[5rem] border p-2" :class="disabled ? 'cursor-not-allowed line-through opacity-50' : ''">
+  <div class="navigation-group w-full justify-between rounded-[5rem] border p-2 transition-colors hover:bg-muted/30" :class="disabled ? 'cursor-not-allowed line-through opacity-50' : ''">
     <label :for="id" class="text-sm font-medium">{{ label }}</label>
 
-    <div class="flex flex-row items-center gap-2">
+    <div class="navigation-group">
       <span class="text-sm font-medium tracking-tight text-muted-foreground">{{ value }}</span>
       <input
         :id="id" type="color"
