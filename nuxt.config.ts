@@ -24,6 +24,9 @@ export default defineNuxtConfig({
   vite: {
     plugins: [tailwindcss() as any],
   },
+  app: {
+    head: { script: [{ "src": "https://static.cloudflareinsights.com/beacon.min.js", "defer": true, "data-cf-beacon": "{\"token\": \"b4dc08cba4284faba9ee0304cd378bd3\"}" }] },
+  },
   css: ["~/assets/styles.css"],
   devtools: {
     enabled: true,
