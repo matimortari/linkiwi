@@ -2,37 +2,53 @@ import type { RedisClientType } from "redis"
 import { createClient } from "redis"
 
 let redisClient: RedisClientType | null = null
+let connecting = false
 
 export const CACHE_TTL = {
-  SHORT: 60, // 1 minute
-  LONG: 300, // 5 minutes
+  SHORT: 60,
+  LONG: 300,
 } as const
 
 /**
  * Gets or creates the Redis client instance.
  */
 async function getRedisClient() {
-  if (!redisClient) {
-    redisClient = createClient({
+  if (redisClient?.isOpen) {
+    return redisClient
+  }
+  if (connecting) {
+    return null
+  }
+
+  connecting = true
+
+  try {
+    const client = createClient({
       url: process.env.REDIS_URL,
       socket: {
         connectTimeout: 5000, // 5 seconds
-        reconnectStrategy: () => false,
+        reconnectStrategy: (retries) => {
+          if (retries > 3) {
+            return false
+          }
+          return retries * 500
+        },
       },
     }) as RedisClientType
 
-    redisClient.on("error", () => {})
+    client.on("error", () => {})
 
-    try {
-      await redisClient.connect()
-    }
-    catch {
-      redisClient = null
-      return null
-    }
+    await client.connect()
+    redisClient = client
+    return redisClient
   }
-
-  return redisClient
+  catch {
+    redisClient = null
+    return null
+  }
+  finally {
+    connecting = false
+  }
 }
 
 /**
