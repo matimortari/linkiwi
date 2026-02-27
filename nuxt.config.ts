@@ -39,21 +39,12 @@ export default defineNuxtConfig({
     fallback: "light",
     storageKey: "nuxt-color-mode",
   },
-  content: {
-    _localDatabase: {
-      type: "sqlite",
-      filename: ".nuxt/content/local.db",
-    },
-  },
   fonts: {
     processCSSVariables: true,
     families: [
-      // Base fonts (default, display, mono)
       { name: "Poppins", provider: "google", weights: ["300 800"] },
       { name: "Spicy Rice", provider: "google", weights: ["400"] },
       { name: "JetBrains Mono", provider: "google", weights: ["400"] },
-
-      // Dynamic fonts for user preferences
       { name: "Roboto", provider: "google", global: true, weights: ["300 800"] },
       { name: "Noto Sans", provider: "google", global: true, weights: ["300 800"] },
       { name: "Montserrat", provider: "google", global: true, weights: ["300 800"] },
@@ -69,8 +60,6 @@ export default defineNuxtConfig({
   },
   icon: {
     mode: "svg",
-    clientBundle: {
-      scan: true,
-    },
+    clientBundle: { scan: true },
   },
 })
