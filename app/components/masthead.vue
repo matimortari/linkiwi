@@ -18,8 +18,9 @@
 </template>
 
 <script setup lang="ts">
+const { public: { baseURL } } = useRuntimeConfig()
 const route = useRoute()
 const { user } = storeToRefs(useUserStore())
 const showPreview = computed(() => route.path !== "/admin/analytics")
-const pageUrl = computed(() => `${BASE_URL.replace(/^https?:\/\//, "")}/${user?.value?.slug}`)
+const pageUrl = computed(() => `${baseURL.replace(/^https?:\/\//, "")}/${user?.value?.slug}`)
 </script>

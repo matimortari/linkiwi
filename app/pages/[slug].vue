@@ -11,7 +11,7 @@
     <div v-else-if="userProfile" class="flex w-full flex-1 flex-col items-center gap-4 py-12 text-center" :style="backgroundStyle">
       <UserSupportBanner v-if="profilePreferences.supportBanner !== 'NONE'" :preferences="profilePreferences" />
 
-      <img :src="userProfile.image || DEFAULT_AVATAR" alt="Avatar" class="size-24 object-cover" :style="profilePictureStyle">
+      <img :src="userProfile.image" alt="Avatar" class="size-24 object-cover" :style="profilePictureStyle">
       <p :style="slugStyle">
         {{ `@${userProfile.slug}` }}
       </p>
@@ -46,6 +46,7 @@
 </template>
 
 <script setup lang="ts">
+const { public: { baseURL } } = useRuntimeConfig()
 const route = useRoute()
 const slug = computed(() => route.params.slug as string)
 const userStore = useUserStore()
@@ -71,7 +72,7 @@ onMounted(async () => {
   if (userProfile.value) {
     useHead({
       title: `@${userProfile.value.slug}`,
-      link: [{ rel: "canonical", href: `${BASE_URL}/${userProfile.value.slug}` }],
+      link: [{ rel: "canonical", href: `${baseURL}/${userProfile.value.slug}` }],
       meta: [{ name: "description", content: `@${userProfile.value.slug} profile on LinKiosk.` }],
     })
 

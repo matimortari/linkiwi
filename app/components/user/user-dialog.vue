@@ -3,7 +3,7 @@
     <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
       <div class="flex flex-col items-center border-b pb-4">
         <div class="relative size-24">
-          <img :src="form.image || DEFAULT_AVATAR" alt="Profile preview" class="size-full rounded-full border object-cover">
+          <img :src="form.image" alt="Profile preview" class="size-full rounded-full border object-cover">
           <input
             id="image" type="file"
             accept="image/*" class="absolute top-0 left-0 size-full opacity-0"

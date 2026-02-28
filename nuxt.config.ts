@@ -11,6 +11,9 @@ export default defineNuxtConfig({
     "nuxt-auth-utils",
   ],
   runtimeConfig: {
+    public: {
+      baseURL: process.env.NUXT_PUBLIC_BASE_URL,
+    },
     session: {
       maxAge: 60 * 60 * 24 * 7, // 7 days
       password: process.env.NUXT_SESSION_PASSWORD!,

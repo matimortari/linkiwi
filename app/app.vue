@@ -5,6 +5,7 @@
 </template>
 
 <script setup lang="ts">
+const { public: { baseURL } } = useRuntimeConfig()
 useSessionMonitor()
 
 useHead({
@@ -15,7 +16,7 @@ useHead({
     { name: "description", content: "Create your own landing page for sharing links to your social media profiles, websites, and more!" },
     { name: "viewport", content: "width=device-width, initial-scale=1" },
     { property: "og:type", content: "website" },
-    { property: "og:image", content: `${BASE_URL}/og-image.png` },
+    { property: "og:image", content: `${baseURL}/og-image.png` },
     { name: "google-site-verification", content: "ek-IcOQaYofyH-JDVxvCdqxC-Ys0QpMOpKy9FGe3XnQ" },
   ],
 })

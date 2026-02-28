@@ -32,11 +32,12 @@
 </template>
 
 <script setup lang="ts">
+const { public: { baseURL } } = useRuntimeConfig()
 const { user, loading, errors } = storeToRefs(useUserStore())
 
 useHead({
   title: "Profile",
-  link: [{ rel: "canonical", href: `${BASE_URL}/admin/profile` }],
+  link: [{ rel: "canonical", href: `${baseURL}/admin/profile` }],
   meta: [{ name: "description", content: "LinKiosk profile page." }],
 })
 

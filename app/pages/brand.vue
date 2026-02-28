@@ -78,6 +78,7 @@ import Symbol from "~/assets/symbol.png"
 import WordmarkDark from "~/assets/wordmark-dark.png"
 import WordmarkLight from "~/assets/wordmark-light.png"
 
+const { public: { baseURL } } = useRuntimeConfig()
 const { createActionHandler } = useActionIcon()
 const { colorMode } = useTheme()
 const colorValues = ref<Record<string, string>>({})
@@ -147,7 +148,7 @@ watch(colorMode, () => updateColors(), { flush: "post" })
 
 useHead({
   title: "Brand",
-  link: [{ rel: "canonical", href: `${BASE_URL}/brand` }],
+  link: [{ rel: "canonical", href: `${baseURL}/brand` }],
   meta: [{ name: "description", content: "LinKiosk Brand Assets." }],
 })
 </script>

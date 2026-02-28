@@ -75,6 +75,7 @@ defineProps<{
 
 const emit = defineEmits<{ "close": [], "update:isOpen": [] }>()
 
+const { public: { baseURL } } = useRuntimeConfig()
 const { user } = storeToRefs(useUserStore())
 const dropdownRef = ref<HTMLElement | null>(null)
 const qrContainer = ref<HTMLElement | null>(null)
@@ -82,7 +83,7 @@ const isDropdownOpen = ref(false)
 const dropdownPosition = ref<"top" | "bottom">("bottom")
 const copySuccess = ref<string | null>(null)
 const logoBase64 = ref("")
-const pageUrl = computed(() => `${BASE_URL}/${user.value?.slug}`)
+const pageUrl = computed(() => `${baseURL}/${user.value?.slug}`)
 
 useClickOutside(dropdownRef, () => {
   isDropdownOpen.value = false

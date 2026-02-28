@@ -1,7 +1,3 @@
-export const BASE_URL = "https://linkiosk.up.railway.app"
-
-export const DEFAULT_AVATAR = "/assets/default-avatar.svg"
-
 export const PRODUCT_BULLETS = [
   {
     description: "Design your own personalized link page",
