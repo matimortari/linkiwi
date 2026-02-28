@@ -1,5 +1,3 @@
-import db from "#server/utils/db"
-import { CacheKeys, deleteCached } from "#server/utils/redis"
 import { createCommentSchema } from "#shared/schemas/analytics-schema"
 
 export default defineEventHandler(async (event) => {

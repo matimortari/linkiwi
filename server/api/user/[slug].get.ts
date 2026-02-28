@@ -1,6 +1,3 @@
-import db from "#server/utils/db"
-import { CACHE_TTL, CacheKeys, getCached, setCached } from "#server/utils/redis"
-
 export default defineEventHandler(async (event) => {
   const slug = getRouterParam(event, "slug")
   if (!slug) {

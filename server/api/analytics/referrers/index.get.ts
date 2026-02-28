@@ -1,6 +1,3 @@
-import db from "#server/utils/db"
-import { formatSourceLabel, getUserFromSession } from "#server/utils/helpers"
-
 export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
   const query = getQuery(event)

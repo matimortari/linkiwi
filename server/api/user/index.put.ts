@@ -1,6 +1,3 @@
-import db from "#server/utils/db"
-import { getUserFromSession } from "#server/utils/helpers"
-import { CacheKeys, deleteCached } from "#server/utils/redis"
 import { updateUserSchema } from "#shared/schemas/user-schema"
 
 export default defineEventHandler(async (event) => {

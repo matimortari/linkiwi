@@ -1,5 +1,4 @@
 import type { EventHandlerRequest, H3Event } from "h3"
-import db from "#server/utils/db"
 
 /**
  * Retrieves the authenticated user from the current session.

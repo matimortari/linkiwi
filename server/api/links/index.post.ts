@@ -1,6 +1,3 @@
-import db from "#server/utils/db"
-import { getUserFromSession } from "#server/utils/helpers"
-import { CacheKeys, deleteCached } from "#server/utils/redis"
 import { createUserLinkSchema } from "#shared/schemas/link-schema"
 
 export default defineEventHandler(async (event) => {

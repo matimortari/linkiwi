@@ -1,6 +1,3 @@
-import db from "#server/utils/db"
-import { getUserFromSession } from "#server/utils/helpers"
-import { CacheKeys, deleteCached } from "#server/utils/redis"
 import { createUserIconSchema } from "#shared/schemas/icon-schema"
 
 export default defineEventHandler(async (event) => {

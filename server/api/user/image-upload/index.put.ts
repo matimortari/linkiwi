@@ -1,7 +1,3 @@
-import db from "#server/utils/db"
-import { getUserFromSession } from "#server/utils/helpers"
-import { uploadFile } from "#server/utils/storage"
-
 export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
   const form = await readFormData(event)

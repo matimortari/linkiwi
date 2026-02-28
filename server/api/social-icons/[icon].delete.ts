@@ -1,7 +1,3 @@
-import db from "#server/utils/db"
-import { getUserFromSession } from "#server/utils/helpers"
-import { CacheKeys, deleteCached } from "#server/utils/redis"
-
 export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
   const iconId = getRouterParam(event, "icon")
