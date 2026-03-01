@@ -6,6 +6,7 @@ export default defineNuxtConfig({
     "@nuxt/fonts",
     "@nuxt/icon",
     "@nuxtjs/color-mode",
+    "@nuxtjs/seo",
     "@pinia/nuxt",
     "@vueuse/motion/nuxt",
     "nuxt-auth-utils",
@@ -27,12 +28,24 @@ export default defineNuxtConfig({
   vite: {
     plugins: [tailwindcss() as any],
   },
+  nitro: {
+    externals: {
+      inline: ["unhead"],
+    },
+  },
   app: {
     head: {
       script: process.env.NODE_ENV === "production" ? [{ "src": "https://static.cloudflareinsights.com/beacon.min.js", "defer": true, "data-cf-beacon": "{\"token\": \"59e0cb447ba54c72bf6a994997bea0e9\"}" }] : [],
     },
   },
   css: ["~/assets/styles.css"],
+  site: {
+    url: process.env.NUXT_PUBLIC_BASE_URL,
+    name: "LinKiosk",
+  },
+  robots: {
+    disallow: ["/admin"],
+  },
   colorMode: {
     classSuffix: "",
     preference: "system",
