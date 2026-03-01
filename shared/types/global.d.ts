@@ -57,3 +57,10 @@ interface Comment {
   message: string
   createdAt: Date | string
 }
+
+interface Toast {
+  id: string
+  message: string
+  type: "success" | "error"
+  duration?: number
+}
