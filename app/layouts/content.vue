@@ -5,46 +5,49 @@
     <div v-if="isSidebarOpen" class="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm xl:hidden" @click="isSidebarOpen = false" />
 
     <div class="flex flex-1 flex-col xl:flex-row">
-      <div class="btn fixed bottom-4 left-1/2 z-50 flex -translate-x-1/2 gap-4! rounded-full! md:hidden!">
-        <button @click="isSidebarOpen = !isSidebarOpen">
-          <icon :name="isSidebarOpen ? 'mdi:close' : 'mdi:menu'" size="30" />
+      <div class="btn fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 gap-2 shadow-lg md:hidden!">
+        <button class="transition-transform hover:scale-110" @click="isSidebarOpen = !isSidebarOpen">
+          <icon :name="isSidebarOpen ? 'mdi:close' : 'mdi:menu'" size="25" />
         </button>
-        <button @click="scrollToTop">
+        <div class="bg-border h-6 w-px" />
+        <button class="transition-transform hover:scale-110" @click="scrollToTop">
           <icon name="mdi:arrow-up" size="25" />
         </button>
       </div>
 
-      <button class="btn fixed bottom-4 left-4 z-50 hidden! md:block!" @click="scrollToTop">
+      <button class="btn fixed bottom-6 left-6 z-50 hidden! transition-transform md:flex!" @click="scrollToTop">
         <icon name="mdi:arrow-up" size="25" />
       </button>
 
       <article
         v-motion :initial="{ opacity: 0, y: 10 }"
         :enter="{ opacity: 1, y: 0 }" :duration="600"
-        class="markdown mx-auto my-20 w-full overflow-x-hidden px-4 md:px-20 xl:pr-[calc(25%+1rem)]"
+        class="markdown mx-auto w-full max-w-4xl px-4 py-20 md:px-20 xl:mr-[25%] xl:max-w-5xl"
       >
         <slot />
       </article>
 
       <aside
         id="table-of-contents" :class="isSidebarOpen ? 'translate-x-0' : 'translate-x-full'"
-        class="fixed inset-y-0 right-0 z-40 h-screen w-3/4 bg-card p-4 pt-20 transition-transform md:w-1/4 xl:translate-x-0"
+        class="fixed inset-y-0 right-0 z-40 flex h-screen w-3/4 flex-col border-l bg-card shadow-xl transition-transform md:w-80 xl:w-1/4 xl:translate-x-0 xl:shadow-none"
       >
-        <div class="flex h-full flex-col">
-          <p class="flex items-center gap-1 border-b py-2 font-semibold text-muted-foreground uppercase">
-            <icon name="mdi:table-of-contents" size="25" />
-            <span>On this page</span>
-          </p>
+        <div class="flex h-full flex-col p-4 pt-24">
+          <div class="flex items-center gap-1 border-b py-2 font-semibold text-muted-foreground uppercase">
+            <icon name="mdi:table-of-contents" size="20" class="text-primary" />
+            <p class="text-sm font-bold tracking-wide text-muted-foreground uppercase">
+              On this page
+            </p>
+          </div>
 
-          <nav class="scroll-area flex-1 space-y-1 overflow-y-auto">
+          <nav class="scroll-area flex-1 space-y-0.5 overflow-y-auto pr-2">
             <nuxt-link
               v-for="header in headers" :key="header.id"
               :to="`#${header.id}`" :class="headerClasses(header)"
-              class="block transition-colors hover:text-primary" @click.prevent="scrollToHeader(header.id)"
+              class="block transition-all hover:bg-muted/50 hover:text-primary" @click.prevent="scrollToHeader(header.id)"
             >
               <div class="navigation-group">
                 <span v-if="header.method" :class="REST_METHOD_LABELS[header.method as keyof typeof REST_METHOD_LABELS]">{{ header.method }}</span>
-                <span class="wrap-break-words">{{ header.text }}</span>
+                <span class="wrap-break-words leading-tight">{{ header.text }}</span>
               </div>
             </nuxt-link>
           </nav>
@@ -57,12 +60,15 @@
 </template>
 
 <script setup lang="ts">
-const props = useRoute().meta.layoutProps ?? {}
+const props = defineProps<{
+  parseMethod?: boolean
+}>()
+
 const { headers, headerClasses, scrollToSection } = useContent({ selector: ".markdown", ...props })
 const isSidebarOpen = ref(false)
 
 function scrollToTop() {
-  document.querySelector(".markdown")?.scrollTo({ top: 0, behavior: "smooth" })
+  window.scrollTo({ top: 0, behavior: "smooth" })
 }
 
 function scrollToHeader(id: string) {

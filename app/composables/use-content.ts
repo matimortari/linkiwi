@@ -44,7 +44,7 @@ export function useContent(options: { selector?: string, parseMethod?: boolean }
           useDebounceFn(() => activeSection.value = entry.target.id, 50)()
         }
       }
-    }, { root: container, rootMargin: "0px 0px -70% 0px", threshold: 0 })
+    }, { root: null, rootMargin: "-100px 0px -66% 0px", threshold: 0 })
 
     for (const heading of hElements) {
       observer!.observe(heading)
@@ -53,30 +53,30 @@ export function useContent(options: { selector?: string, parseMethod?: boolean }
 
   const headerClasses = computed(() => (header: any) => {
     const classes: string[] = []
+    const isActive = activeSection.value === header.id
     if (header.level === 2) {
-      classes.push("ml-0 my-2 font-semibold")
+      classes.push("ml-0 my-2 font-semibold py-1")
     }
     if (header.level === 3) {
-      classes.push("ml-2 my-2 text-sm font-medium")
+      classes.push("ml-4 my-1.5 text-sm font-medium py-1")
     }
     if (header.level === 4) {
-      classes.push("ml-4 text-xs font-medium")
+      classes.push("ml-8 my-1 text-xs font-medium py-0.5")
     }
-    if (activeSection.value === header.id) {
-      classes.push("text-primary font-semibold border-l-2 border-primary pl-2")
+    if (isActive) {
+      classes.push("text-primary font-bold border-l-2 border-primary pl-2 -ml-0.5")
+    }
+    else {
+      classes.push("text-muted-foreground border-l-2 border-transparent pl-2")
     }
     return classes.join(" ")
   })
 
   function scrollToSection(targetId: string) {
     const targetElement = document.getElementById(targetId)
-    const container = document.querySelector(selector)
-    if (targetElement && container) {
-      const containerRect = container.getBoundingClientRect()
-      const targetRect = targetElement.getBoundingClientRect()
-      const offset = targetRect.top - containerRect.top + container.scrollTop - 20
-
-      container.scrollTo({ top: offset, behavior: "smooth" })
+    if (targetElement) {
+      const offset = targetElement.getBoundingClientRect().top + window.scrollY - 100
+      window.scrollTo({ top: offset, behavior: "smooth" })
     }
   }
 
