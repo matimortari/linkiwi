@@ -24,7 +24,7 @@
           </nuxt-link>
 
           <button :aria-label="icon.isVisible ? 'Hide Icon' : 'Show Icon'" class="btn-ghost absolute top-0 right-0 flex items-center p-0.5!" @click="handleToggleVisibility(icon.id!, icon.isVisible ?? true)">
-            <icon :name="icon.isVisible !== false ? 'mdi:eye-outline' : 'mdi:eye-off-outline'" size="20" class="text-muted-foreground" />
+            <icon :name="icon.isVisible !== false ? 'mdi:eye-outline' : 'mdi:eye-off-outline'" size="25" class="text-muted-foreground" />
           </button>
 
           <button class="btn-ghost absolute right-0 bottom-0 flex items-center p-0.5!" aria-label="Delete Social Icon" @click="handleDeleteIcon(icon.id!)">

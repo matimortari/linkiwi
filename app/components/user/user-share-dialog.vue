@@ -25,9 +25,9 @@
           Copy your profile link with tracking parameters to see where your visitors are coming from.
         </p>
 
-        <div class="card grid grid-cols-4 gap-2 md:grid-cols-3">
+        <div class="card grid gap-2 md:grid-cols-3">
           <button v-for="source in trackingSources" :key="source.id" class="btn-ghost justify-start!" @click="handleCopyWithTracking(source.id)">
-            <icon :name="source.icon" size="25" />
+            <icon :name="source.icon" size="25" class="shrink-0" />
             <span>{{ source.label }}</span>
           </button>
         </div>
@@ -53,19 +53,19 @@
 
         <div class="card grid grid-cols-2 gap-2">
           <button class="btn-ghost justify-start!" @click="shareToSocial('twitter')">
-            <icon name="simple-icons:x" size="25" />
+            <icon name="simple-icons:x" size="25" class="shrink-0" />
             <span>Share on X / Twitter</span>
           </button>
           <button class="btn-ghost justify-start!" @click="shareToSocial('facebook')">
-            <icon name="simple-icons:facebook" size="25" />
+            <icon name="simple-icons:facebook" size="25" class="shrink-0" />
             <span>Share on Facebook</span>
           </button>
           <button class="btn-ghost justify-start!" @click="shareToSocial('linkedin')">
-            <icon name="simple-icons:linkedin" size="25" />
+            <icon name="simple-icons:linkedin" size="25" class="shrink-0" />
             <span>Share on LinkedIn</span>
           </button>
           <button class="btn-ghost justify-start!" @click="shareToSocial('whatsapp')">
-            <icon name="simple-icons:whatsapp" size="25" />
+            <icon name="simple-icons:whatsapp" size="25" class="shrink-0" />
             <span>Send via WhatsApp</span>
           </button>
         </div>

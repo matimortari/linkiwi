@@ -8,7 +8,7 @@
 
     <Loading v-if="loading" class="absolute inset-0 flex items-center justify-center backdrop-blur-sm" />
 
-    <Empty v-else-if="!userProfile" :message="`User @${slug} not found.`" icon-name="mdi:account-off" />
+    <Empty v-else-if="!userProfile && errors.getUserProfile" :message="`User @${slug} not found.`" icon-name="mdi:account-off" />
 
     <div v-else-if="userProfile" class="flex w-full flex-1 flex-col items-center gap-4 py-12 text-center" :style="backgroundStyle">
       <UserSupportBanner v-if="profilePreferences.supportBanner !== 'NONE'" :preferences="profilePreferences" />
@@ -53,7 +53,7 @@ const route = useRoute()
 const slug = computed(() => route.params.slug as string)
 const userStore = useUserStore()
 const analyticsStore = useAnalyticsStore()
-const { userProfile, loading } = storeToRefs(userStore)
+const { userProfile, loading, errors } = storeToRefs(userStore)
 const profilePreferences = computed(() => userProfile.value?.preferences ?? DEFAULT_PREFERENCES)
 const { backgroundStyle, profilePictureStyle, slugStyle, descriptionStyle } = useDynamicStyles(profilePreferences)
 const visibleLinks = computed(() => userProfile.value?.links?.filter(link => link.isVisible !== false) ?? [])
