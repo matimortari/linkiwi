@@ -29,14 +29,14 @@
         </li>
       </ul>
 
-      <button class="btn-primary self-end" aria-label="Add Link" @click="isDialogOpen = true">
+      <button class="btn-primary self-end" aria-label="Add Link" @click="handleAddLink">
         <icon name="mdi:link-variant-plus" size="25" />
         <span>Add Link</span>
       </button>
     </div>
   </div>
 
-  <ProfileLinkDialog :is-open="isDialogOpen" :selected-link="selectedLink" @close="isDialogOpen = false ; selectedLink = null" />
+  <ProfileLinkDialog :is-open="isDialogOpen" :selected-link="selectedLink" @close="handleCloseDialog" />
 </template>
 
 <script setup lang="ts">
@@ -45,9 +45,19 @@ const { links, loading } = storeToRefs(linksStore)
 const isDialogOpen = ref(false)
 const selectedLink = ref<Link | null>(null)
 
+function handleAddLink() {
+  selectedLink.value = null
+  isDialogOpen.value = true
+}
+
 function handleUpdateLink(link: Link) {
   selectedLink.value = link
   isDialogOpen.value = true
+}
+
+function handleCloseDialog() {
+  isDialogOpen.value = false
+  selectedLink.value = null
 }
 
 async function handleDeleteLink(linkId: string) {

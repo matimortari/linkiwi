@@ -40,7 +40,8 @@ const emit = defineEmits<{ close: [] }>()
 const linksStore = useLinksStore()
 const { errors, loading } = storeToRefs(linksStore)
 const form = ref<Parameters<typeof linksStore.createLink>[0] | Parameters<typeof linksStore.updateLink>[1]>({ title: "", url: "" })
-const isUpdateMode = computed(() => !!(props.selectedLink?.id))
+const editingLinkId = ref<string | null>(null)
+const isUpdateMode = computed(() => !!editingLinkId.value)
 
 async function handleSubmit() {
   if (!form.value.title || !form.value.url) {
@@ -67,24 +68,12 @@ async function handleCreateLink() {
 }
 
 async function handleUpdateLink() {
-  if (!props.selectedLink?.id) {
-    return
-  }
-
-  const updateData: Parameters<typeof linksStore.updateLink>[1] = {}
-  if (form.value.title !== props.selectedLink.title) {
-    updateData.title = form.value.title
-  }
-  if (form.value.url !== props.selectedLink.url) {
-    updateData.url = form.value.url
-  }
-  if (Object.keys(updateData).length === 0) {
-    emit("close")
+  if (!editingLinkId.value) {
     return
   }
 
   try {
-    await linksStore.updateLink(props.selectedLink.id, updateData)
+    await linksStore.updateLink(editingLinkId.value, { title: form.value.title, url: form.value.url })
     emit("close")
   }
   catch {
@@ -95,6 +84,7 @@ async function handleUpdateLink() {
 // Reset form and clear errors when dialog is opened or when selectedLink changes
 watch([() => props.isOpen, () => props.selectedLink], ([open]) => {
   if (open) {
+    editingLinkId.value = props.selectedLink?.id || null
     form.value.title = props.selectedLink?.title || ""
     form.value.url = props.selectedLink?.url || ""
     errors.value.createLink = null
