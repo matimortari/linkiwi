@@ -20,11 +20,7 @@
         <input id="url" v-model="form.url" type="url" placeholder="https://example.com">
       </div>
 
-      <footer class="flex flex-row items-center justify-between">
-        <p class="text-caption-danger">
-          {{ errors.createIcon || '' }}
-        </p>
-
+      <footer class="flex flex-row items-center justify-end">
         <div class="navigation-group">
           <button class="btn-danger" aria-label="Cancel" :disabled="loading" @click="emit('close')">
             Cancel
@@ -46,7 +42,7 @@ const props = defineProps<{
 const emit = defineEmits<{ close: [] }>()
 
 const iconsStore = useIconsStore()
-const { errors, loading } = storeToRefs(iconsStore)
+const { loading } = storeToRefs(iconsStore)
 const form = ref<Parameters<typeof iconsStore.createIcon>[0]>({ platform: "" as keyof typeof SOCIAL_ICONS, logo: "" as typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS], url: "" })
 const socialIconEntries = computed(() => Object.entries(SOCIAL_ICONS) as [keyof typeof SOCIAL_ICONS, (typeof SOCIAL_ICONS)[keyof typeof SOCIAL_ICONS]][])
 
@@ -65,15 +61,12 @@ async function handleSubmit() {
   }
 }
 
-// Reset form and clear errors when dialog is opened
+// Reset form when dialog is opened
 watch(() => props.isOpen, (open) => {
   if (open) {
     form.value.platform = "" as keyof typeof SOCIAL_ICONS
     form.value.logo = "" as typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS]
     form.value.url = ""
-    if (errors.value.createIcon) {
-      errors.value.createIcon = null
-    }
   }
 }, { immediate: true })
 </script>

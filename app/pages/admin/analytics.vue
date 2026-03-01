@@ -23,15 +23,12 @@
 
   <div v-else class="flex h-[calc(100vh-8rem)] w-full items-center justify-center text-center">
     <Loading v-if="loading" />
-    <p class="text-caption" :class="{ 'text-caption-danger!': errors.getUser || errors.getUserProfile }">
-      {{ errors.getUser || errors.getUserProfile }}
-    </p>
   </div>
 </template>
 
 <script setup lang="ts">
 const { public: { baseURL } } = useRuntimeConfig()
-const { user, loading, errors } = storeToRefs(useUserStore())
+const { user, loading } = storeToRefs(useUserStore())
 
 useHead({
   title: "Analytics",

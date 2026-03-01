@@ -1,22 +1,14 @@
 import type { UpdateUserInput, UpdateUserPreferencesInput } from "#shared/schemas/user-schema"
 
 export const useUserStore = defineStore("user", () => {
+  const toast = useToast()
   const user = ref<User | null>(null)
   const userProfile = ref<User | null>(null)
   const preferences = computed(() => user.value?.preferences ?? DEFAULT_PREFERENCES)
   const loading = ref(false)
-  const errors = ref<Record<string, string | null>>({
-    getUser: null,
-    getUserProfile: null,
-    updateUser: null,
-    updateUserImage: null,
-    updatePreferences: null,
-    deleteUser: null,
-  })
 
   async function getUser() {
     loading.value = true
-    errors.value.getUser = null
 
     try {
       const res = await $fetch<{ userData: User }>("/api/user", { method: "GET", credentials: "include" })
@@ -24,7 +16,8 @@ export const useUserStore = defineStore("user", () => {
       return res
     }
     catch (err: any) {
-      errors.value.getUser = getErrorMessage(err, "Failed to get user")
+      const message = getErrorMessage(err, "Failed to get user")
+      toast.error(message)
       console.error("getUser error:", err)
       throw err
     }
@@ -35,7 +28,6 @@ export const useUserStore = defineStore("user", () => {
 
   async function getUserProfile(slug: string) {
     loading.value = true
-    errors.value.getUserProfile = null
 
     try {
       const res = await $fetch<{ userProfile: User }>(`/api/user/${slug}`, { method: "GET" })
@@ -43,7 +35,8 @@ export const useUserStore = defineStore("user", () => {
       return res
     }
     catch (err: any) {
-      errors.value.getUserProfile = getErrorMessage(err, "Failed to get user profile")
+      const message = getErrorMessage(err, "Failed to get user profile")
+      toast.error(message)
       console.error("getUserProfile error:", err)
       throw err
     }
@@ -54,7 +47,6 @@ export const useUserStore = defineStore("user", () => {
 
   async function updateUser(data: UpdateUserInput) {
     loading.value = true
-    errors.value.updateUser = null
 
     try {
       const res = await $fetch<{ updatedUser: User }>("/api/user", { method: "PUT", body: data, credentials: "include" })
@@ -62,7 +54,8 @@ export const useUserStore = defineStore("user", () => {
       return res
     }
     catch (err: any) {
-      errors.value.updateUser = getErrorMessage(err, "Failed to update user")
+      const message = getErrorMessage(err, "Failed to update user")
+      toast.error(message)
       console.error("updateUser error:", err)
       throw err
     }
@@ -73,7 +66,6 @@ export const useUserStore = defineStore("user", () => {
 
   async function updateUserImage(file: File) {
     loading.value = true
-    errors.value.updateUserImage = null
 
     try {
       const formData = new FormData()
@@ -86,7 +78,8 @@ export const useUserStore = defineStore("user", () => {
       return res
     }
     catch (err: any) {
-      errors.value.updateUserImage = getErrorMessage(err, "Failed to update user image")
+      const message = getErrorMessage(err, "Failed to update user image")
+      toast.error(message)
       console.error("updateUserImage error:", err)
       throw err
     }
@@ -97,7 +90,6 @@ export const useUserStore = defineStore("user", () => {
 
   async function updatePreferences(data: UpdateUserPreferencesInput) {
     loading.value = true
-    errors.value.updatePreferences = null
 
     try {
       const res = await $fetch<{ updatedPreferences: UpdateUserPreferencesInput }>("/api/user/preferences", { method: "PUT", body: data, credentials: "include" })
@@ -107,7 +99,8 @@ export const useUserStore = defineStore("user", () => {
       return res
     }
     catch (err: any) {
-      errors.value.updatePreferences = getErrorMessage(err, "Failed to update preferences")
+      const message = getErrorMessage(err, "Failed to update preferences")
+      toast.error(message)
       console.error("updatePreferences error:", err)
       throw err
     }
@@ -118,14 +111,14 @@ export const useUserStore = defineStore("user", () => {
 
   async function deleteUser() {
     loading.value = true
-    errors.value.deleteUser = null
 
     try {
       await $fetch("/api/user", { method: "DELETE", credentials: "include" })
       user.value = null
     }
     catch (err: any) {
-      errors.value.deleteUser = getErrorMessage(err, "Failed to delete user")
+      const message = getErrorMessage(err, "Failed to delete user")
+      toast.error(message)
       console.error("deleteUser error:", err)
       throw err
     }
@@ -136,7 +129,6 @@ export const useUserStore = defineStore("user", () => {
 
   return {
     loading,
-    errors,
     user,
     userProfile,
     preferences,

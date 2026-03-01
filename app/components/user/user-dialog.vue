@@ -30,11 +30,7 @@
         <input id="description" v-model="form.description" type="text" placeholder="Enter your description">
       </div>
 
-      <footer class="flex flex-row items-center justify-between">
-        <p class="text-caption-danger">
-          {{ errors.updateUser || '' }}
-        </p>
-
+      <footer class="flex flex-row items-center justify-end">
         <button class="btn-success" type="submit">
           Update Profile
         </button>
@@ -51,7 +47,7 @@ const props = defineProps<{
 const emit = defineEmits<{ close: [] }>()
 
 const userStore = useUserStore()
-const { user, errors } = storeToRefs(userStore)
+const { user } = storeToRefs(userStore)
 const form = ref({ name: "", slug: "", description: "", image: "" })
 
 async function handleUpdateImage(event: Event) {
@@ -83,7 +79,7 @@ async function handleSubmit() {
   }
 }
 
-// Reset form and clear errors when dialog is opened
+// Reset form when dialog is opened
 watch(() => props.isOpen, (open) => {
   if (open && user.value) {
     form.value = {
@@ -92,7 +88,6 @@ watch(() => props.isOpen, (open) => {
       description: user.value.description ?? "",
       image: user.value.image ?? "",
     }
-    errors.value.updateUser = null
   }
 }, { immediate: true })
 </script>

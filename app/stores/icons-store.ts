@@ -1,18 +1,12 @@
 import type { CreateUserIconInput, UpdateUserIconInput } from "#shared/schemas/icon-schema"
 
 export const useIconsStore = defineStore("icons", () => {
+  const toast = useToast()
   const icons = ref<Icon[]>([])
   const loading = ref(false)
-  const errors = ref<Record<string, string | null>>({
-    getIcons: null,
-    createIcon: null,
-    updateIcon: null,
-    deleteIcon: null,
-  })
 
   async function getIcons() {
     loading.value = true
-    errors.value.getIcons = null
 
     try {
       const res = await $fetch<{ icons: Icon[] }>("/api/social-icons", { method: "GET", credentials: "include" })
@@ -20,7 +14,8 @@ export const useIconsStore = defineStore("icons", () => {
       return res
     }
     catch (err: any) {
-      errors.value.getIcons = getErrorMessage(err, "Failed to get icons")
+      const message = getErrorMessage(err, "Failed to get icons")
+      toast.error(message)
       console.error("getIcons error:", err)
       throw err
     }
@@ -31,7 +26,6 @@ export const useIconsStore = defineStore("icons", () => {
 
   async function createIcon(data: CreateUserIconInput) {
     loading.value = true
-    errors.value.createIcon = null
 
     try {
       const res = await $fetch<{ icon: Icon }>("/api/social-icons", { method: "POST", body: data, credentials: "include" })
@@ -39,7 +33,8 @@ export const useIconsStore = defineStore("icons", () => {
       return res
     }
     catch (err: any) {
-      errors.value.createIcon = getErrorMessage(err, "Failed to create icon")
+      const message = getErrorMessage(err, "Failed to create icon")
+      toast.error(message)
       console.error("createIcon error:", err)
       throw err
     }
@@ -50,7 +45,6 @@ export const useIconsStore = defineStore("icons", () => {
 
   async function updateIcon(id: string, data: UpdateUserIconInput) {
     loading.value = true
-    errors.value.updateIcon = null
 
     try {
       const res = await $fetch<{ icon: Icon }>(`/api/social-icons/${id}`, { method: "PUT", body: data, credentials: "include" })
@@ -61,7 +55,8 @@ export const useIconsStore = defineStore("icons", () => {
       return res
     }
     catch (err: any) {
-      errors.value.updateIcon = getErrorMessage(err, "Failed to update icon")
+      const message = getErrorMessage(err, "Failed to update icon")
+      toast.error(message)
       console.error("updateIcon error:", err)
       throw err
     }
@@ -72,14 +67,14 @@ export const useIconsStore = defineStore("icons", () => {
 
   async function deleteIcon(id: string) {
     loading.value = true
-    errors.value.deleteIcon = null
 
     try {
       await $fetch(`/api/social-icons/${id}`, { method: "DELETE", credentials: "include" })
       icons.value = icons.value.filter(icon => icon.id !== id)
     }
     catch (err: any) {
-      errors.value.deleteIcon = getErrorMessage(err, "Failed to delete icon")
+      const message = getErrorMessage(err, "Failed to delete icon")
+      toast.error(message)
       console.error("deleteIcon error:", err)
       throw err
     }
@@ -90,7 +85,6 @@ export const useIconsStore = defineStore("icons", () => {
 
   return {
     loading,
-    errors,
     icons,
     getIcons,
     createIcon,

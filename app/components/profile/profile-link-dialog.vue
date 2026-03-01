@@ -11,11 +11,7 @@
         <input id="url" v-model="form.url" type="url" placeholder="https://example.com">
       </div>
 
-      <footer class="flex flex-row items-center justify-between">
-        <p class="text-caption-danger">
-          {{ isUpdateMode ? errors.updateLink || '' : errors.createLink || '' }}
-        </p>
-
+      <footer class="flex flex-row items-center justify-end">
         <div class="navigation-group">
           <button class="btn-danger" aria-label="Cancel" :disabled="loading" @click="emit('close')">
             Cancel
@@ -38,14 +34,13 @@ const props = defineProps<{
 const emit = defineEmits<{ close: [] }>()
 
 const linksStore = useLinksStore()
-const { errors, loading } = storeToRefs(linksStore)
+const { loading } = storeToRefs(linksStore)
 const form = ref<Parameters<typeof linksStore.createLink>[0] | Parameters<typeof linksStore.updateLink>[1]>({ title: "", url: "" })
 const editingLinkId = ref<string | null>(null)
 const isUpdateMode = computed(() => !!editingLinkId.value)
 
 async function handleSubmit() {
   if (!form.value.title || !form.value.url) {
-    errors.value[isUpdateMode.value ? "updateLink" : "createLink"] = "Title and URL are required."
     return
   }
 
@@ -81,14 +76,12 @@ async function handleUpdateLink() {
   }
 }
 
-// Reset form and clear errors when dialog is opened or when selectedLink changes
+// Reset form when dialog is opened or when selectedLink changes
 watch([() => props.isOpen, () => props.selectedLink], ([open]) => {
   if (open) {
     editingLinkId.value = props.selectedLink?.id || null
     form.value.title = props.selectedLink?.title || ""
     form.value.url = props.selectedLink?.url || ""
-    errors.value.createLink = null
-    errors.value.updateLink = null
   }
 }, { immediate: true, deep: true })
 </script>

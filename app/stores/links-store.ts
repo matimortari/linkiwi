@@ -1,18 +1,12 @@
 import type { CreateUserLinkInput, UpdateUserLinkInput } from "#shared/schemas/link-schema"
 
 export const useLinksStore = defineStore("links", () => {
+  const toast = useToast()
   const links = ref<Link[]>([])
   const loading = ref(false)
-  const errors = ref<Record<string, string | null>>({
-    getLinks: null,
-    createLink: null,
-    updateLink: null,
-    deleteLink: null,
-  })
 
   async function getLinks() {
     loading.value = true
-    errors.value.getLinks = null
 
     try {
       const res = await $fetch<{ links: Link[] }>("/api/links", { method: "GET", credentials: "include" })
@@ -20,7 +14,8 @@ export const useLinksStore = defineStore("links", () => {
       return res
     }
     catch (err: any) {
-      errors.value.getLinks = getErrorMessage(err, "Failed to get links")
+      const message = getErrorMessage(err, "Failed to get links")
+      toast.error(message)
       console.error("getLinks error:", err)
       throw err
     }
@@ -31,7 +26,6 @@ export const useLinksStore = defineStore("links", () => {
 
   async function createLink(data: CreateUserLinkInput) {
     loading.value = true
-    errors.value.createLink = null
 
     try {
       const res = await $fetch<{ link: Link }>("/api/links", { method: "POST", body: data, credentials: "include" })
@@ -39,7 +33,8 @@ export const useLinksStore = defineStore("links", () => {
       return res
     }
     catch (err: any) {
-      errors.value.createLink = getErrorMessage(err, "Failed to create link")
+      const message = getErrorMessage(err, "Failed to create link")
+      toast.error(message)
       console.error("createLink error:", err)
       throw err
     }
@@ -50,7 +45,6 @@ export const useLinksStore = defineStore("links", () => {
 
   async function updateLink(id: string, data: UpdateUserLinkInput) {
     loading.value = true
-    errors.value.updateLink = null
 
     try {
       const res = await $fetch<{ link: Link }>(`/api/links/${id}`, { method: "PUT", body: data, credentials: "include" })
@@ -61,7 +55,8 @@ export const useLinksStore = defineStore("links", () => {
       return res
     }
     catch (err: any) {
-      errors.value.updateLink = getErrorMessage(err, "Failed to update link")
+      const message = getErrorMessage(err, "Failed to update link")
+      toast.error(message)
       console.error("updateLink error:", err)
       throw err
     }
@@ -72,14 +67,14 @@ export const useLinksStore = defineStore("links", () => {
 
   async function deleteLink(id: string) {
     loading.value = true
-    errors.value.deleteLink = null
 
     try {
       await $fetch(`/api/links/${id}`, { method: "DELETE", credentials: "include" })
       links.value = links.value.filter(link => link.id !== id)
     }
     catch (err: any) {
-      errors.value.deleteLink = getErrorMessage(err, "Failed to delete link")
+      const message = getErrorMessage(err, "Failed to delete link")
+      toast.error(message)
       console.error("deleteLink error:", err)
       throw err
     }
@@ -90,7 +85,6 @@ export const useLinksStore = defineStore("links", () => {
 
   return {
     loading,
-    errors,
     links,
     getLinks,
     createLink,

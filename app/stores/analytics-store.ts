@@ -1,22 +1,13 @@
 import type { CreateCommentInput } from "#shared/schemas/analytics-schema"
 
 export const useAnalyticsStore = defineStore("analytics", () => {
+  const toast = useToast()
   const analytics = ref<any>(null)
   const referrerStats = ref<any>(null)
   const loading = ref(false)
-  const errors = ref<Record<string, string | null>>({
-    getAnalytics: null,
-    getReferrerStats: null,
-    recordPageView: null,
-    recordLinkClick: null,
-    recordIconClick: null,
-    submitComment: null,
-    deleteAnalytics: null,
-  })
 
   async function getAnalytics() {
     loading.value = true
-    errors.value.getAnalytics = null
 
     try {
       const res = await $fetch("/api/analytics", { method: "GET", credentials: "include" })
@@ -24,7 +15,8 @@ export const useAnalyticsStore = defineStore("analytics", () => {
       return res
     }
     catch (err: any) {
-      errors.value.getAnalytics = getErrorMessage(err, "Failed to fetch analytics")
+      const message = getErrorMessage(err, "Failed to fetch analytics")
+      toast.error(message)
       console.error("getAnalytics error:", err)
       throw err
     }
@@ -35,7 +27,6 @@ export const useAnalyticsStore = defineStore("analytics", () => {
 
   async function getReferrerStats() {
     loading.value = true
-    errors.value.getReferrerStats = null
 
     try {
       const res = await $fetch("/api/analytics/referrers", { method: "GET", credentials: "include" })
@@ -43,7 +34,8 @@ export const useAnalyticsStore = defineStore("analytics", () => {
       return res
     }
     catch (err: any) {
-      errors.value.getReferrerStats = getErrorMessage(err, "Failed to get referrer stats")
+      const message = getErrorMessage(err, "Failed to get referrer stats")
+      toast.error(message)
       console.error("getReferrerStats error:", err)
       throw err
     }
@@ -54,13 +46,13 @@ export const useAnalyticsStore = defineStore("analytics", () => {
 
   async function recordPageView(userId: string, referrer?: string) {
     loading.value = true
-    errors.value.recordPageView = null
 
     try {
       await $fetch("/api/analytics", { method: "POST", body: { type: "pageView", userId, referrer }, credentials: "include" })
     }
     catch (err: any) {
-      errors.value.recordPageView = getErrorMessage(err, "Failed to record page view")
+      const message = getErrorMessage(err, "Failed to record page view")
+      toast.error(message)
       console.error("recordPageView error:", err)
       throw err
     }
@@ -71,13 +63,13 @@ export const useAnalyticsStore = defineStore("analytics", () => {
 
   async function recordLinkClick(userId: string, linkId: string) {
     loading.value = true
-    errors.value.recordLinkClick = null
 
     try {
       await $fetch("/api/analytics", { method: "POST", body: { type: "link", userId, id: linkId }, credentials: "include" })
     }
     catch (err: any) {
-      errors.value.recordLinkClick = getErrorMessage(err, "Failed to record link click")
+      const message = getErrorMessage(err, "Failed to record link click")
+      toast.error(message)
       console.error("recordLinkClick error:", err)
       throw err
     }
@@ -88,13 +80,13 @@ export const useAnalyticsStore = defineStore("analytics", () => {
 
   async function recordIconClick(userId: string, iconId: string) {
     loading.value = true
-    errors.value.recordIconClick = null
 
     try {
       await $fetch("/api/analytics", { method: "POST", body: { type: "icon", userId, id: iconId }, credentials: "include" })
     }
     catch (err: any) {
-      errors.value.recordIconClick = getErrorMessage(err, "Failed to record icon click")
+      const message = getErrorMessage(err, "Failed to record social icon click")
+      toast.error(message)
       console.error("recordIconClick error:", err)
       throw err
     }
@@ -105,13 +97,13 @@ export const useAnalyticsStore = defineStore("analytics", () => {
 
   async function submitComment(data: CreateCommentInput) {
     loading.value = true
-    errors.value.submitComment = null
 
     try {
       await $fetch("/api/analytics/comments", { method: "POST", body: data, credentials: "include" })
     }
     catch (err: any) {
-      errors.value.submitComment = getErrorMessage(err, "Failed to submit comment")
+      const message = getErrorMessage(err, "Failed to submit comment")
+      toast.error(message)
       console.error("submitComment error:", err)
       throw err
     }
@@ -122,7 +114,6 @@ export const useAnalyticsStore = defineStore("analytics", () => {
 
   async function deleteAnalytics(options?: { type?: "pageView" | "linkClick" | "iconClick", dateFrom?: string, dateTo?: string }) {
     loading.value = true
-    errors.value.deleteAnalytics = null
 
     try {
       const params = new URLSearchParams()
@@ -139,7 +130,8 @@ export const useAnalyticsStore = defineStore("analytics", () => {
       await $fetch<{ success: boolean, message: string }>(params.toString() ? `/api/analytics?${params.toString()}` : "/api/analytics", { method: "DELETE", credentials: "include" })
     }
     catch (err: any) {
-      errors.value.deleteAnalytics = getErrorMessage(err, "Failed to delete analytics")
+      const message = getErrorMessage(err, "Failed to delete analytics")
+      toast.error(message)
       console.error("deleteAnalytics error:", err)
       throw err
     }
@@ -150,7 +142,6 @@ export const useAnalyticsStore = defineStore("analytics", () => {
 
   return {
     loading,
-    errors,
     analytics,
     referrerStats,
     getAnalytics,
