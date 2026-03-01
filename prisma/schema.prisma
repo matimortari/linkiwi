@@ -95,6 +95,7 @@ model UserLink {
   url        String
   title      String
   order      Int         @default(0)
+  isVisible  Boolean     @default(true)
   clickCount Int         @default(0)
   clicks     LinkClick[]
   user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -111,6 +112,7 @@ model UserIcon {
   platform   String
   logo       String
   order      Int         @default(0)
+  isVisible  Boolean     @default(true)
   clickCount Int         @default(0)
   clicks     IconClick[]
   user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)

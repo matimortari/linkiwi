@@ -17,6 +17,7 @@ export default defineEventHandler(async (event) => {
       logo: true,
       order: true,
       clickCount: true,
+      isVisible: true,
       createdAt: true,
       updatedAt: true,
     },

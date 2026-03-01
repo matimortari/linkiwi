@@ -9,7 +9,8 @@ export const createUserIconSchema = z.object({
 }).transform(data => ({ ...data, logo: SOCIAL_ICONS[data.platform as keyof typeof SOCIAL_ICONS] }))
 
 export const updateUserIconSchema = z.object({
-  order: z.number().int("Order must be an integer").min(0, "Order must be non-negative"),
+  order: z.number().int("Order must be an integer").min(0, "Order must be non-negative").optional(),
+  isVisible: z.boolean().optional(),
 })
 
 export type CreateUserIconInput = z.infer<typeof createUserIconSchema>

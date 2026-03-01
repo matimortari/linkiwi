@@ -21,6 +21,7 @@ interface Link {
   title: string
   order: number
   clickCount: number
+  isVisible?: boolean
   clicks?: { userLinkId: string, createdAt: string | Date }[]
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -34,6 +35,7 @@ interface Icon {
   logo: string
   order: number
   clickCount: number
+  isVisible?: boolean
   clicks?: { userIconId: string, createdAt: string | Date }[]
   createdAt?: Date | string
   updatedAt?: Date | string

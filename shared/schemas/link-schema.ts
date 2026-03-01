@@ -11,6 +11,7 @@ export const updateUserLinkSchema = z.object({
   url: urlSchema.transform(val => val.trim()).optional(),
   title: z.string().min(1, "Title is required").max(100).transform(val => val.trim()).optional(),
   order: z.number().int("Order must be an integer").min(0, "Order must be non-negative").optional(),
+  isVisible: z.boolean().optional(),
 })
 
 export type CreateUserLinkInput = z.infer<typeof createUserLinkSchema>
