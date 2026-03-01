@@ -5,9 +5,14 @@ const referrerSchema = z.string().nullable().optional().transform((val) => {
     return null
   }
 
+  const normalized = val.trim()
+  if (!normalized.includes("://") && !normalized.includes(".")) {
+    return normalized
+  }
+
   try {
-    new URL(val)
-    return val
+    new URL(normalized)
+    return normalized
   }
   catch {
     return null

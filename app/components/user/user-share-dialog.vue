@@ -1,66 +1,79 @@
 <template>
   <Dialog :is-open="isOpen" title="Share Profile" @update:is-open="emit('close')">
-    <div class="flex flex-col items-center gap-2 p-4">
-      <p class="text-caption">
-        Scan the QR code below or share your profile link:
-      </p>
+    <div class="flex flex-col gap-2">
+      <div class="navigation-group flex-wrap justify-center">
+        <button
+          v-for="tab in shareTabs" :key="tab.value"
+          class="btn-ghost justify-start! text-muted-foreground!" :class="{ 'bg-muted!': activeTab === tab.value }"
+          @click="activeTab = tab.value"
+        >
+          <span>{{ tab.label }}</span>
+        </button>
+      </div>
 
-      <div ref="qrContainer" class="overflow-hidden rounded-2xl border" />
+      <div v-if="activeTab === 'qr'" class="flex flex-col items-center gap-2">
+        <div ref="qrContainer" class="overflow-hidden rounded-2xl border shadow-sm" />
 
-      <button class="text-caption hover:underline" @click="handleCopy()">
-        <span>@{{ user?.slug }}</span>
-      </button>
-    </div>
+        <button class="btn-ghost" @click="downloadQRCode()">
+          <icon :name="downloadAction.icon.value" size="20" />
+          <span>Download QR Code</span>
+        </button>
+      </div>
 
-    <footer class="flex flex-row items-center justify-between">
-      <p class="text-caption-success">
-        {{ copySuccess || '' }}
-      </p>
+      <div v-if="activeTab === 'tracking'" class="flex flex-col gap-2">
+        <p class="text-caption text-center">
+          Copy your profile link with tracking parameters to see where your visitors are coming from.
+        </p>
 
-      <div class="navigation-group">
-        <div ref="dropdownRef" class="relative">
-          <button class="btn" title="More sharing options" @click="toggleDropdown()">
-            <span>More Options</span>
-            <icon name="mdi:dots-vertical" size="20" />
+        <div class="card grid grid-cols-4 gap-2 md:grid-cols-3">
+          <button v-for="source in trackingSources" :key="source.id" class="btn-ghost justify-start!" @click="handleCopyWithTracking(source.id)">
+            <icon :name="source.icon" size="25" />
+            <span>{{ source.label }}</span>
           </button>
+        </div>
 
-          <transition name="dropdown-fade">
-            <div
-              v-if="isDropdownOpen" role="menu"
-              class="overlay absolute right-0 z-50 flex flex-col gap-1"
-              :class="[dropdownPosition === 'top' ? 'bottom-full mb-2' : 'top-full mt-2']"
-            >
-              <button class="btn-ghost justify-start! text-muted-foreground!" role="menuitem" @click="handleCopy()">
-                <icon name="mdi:link-variant" size="20" />
-                <span>Copy Link</span>
-              </button>
-              <button class="btn-ghost justify-start! text-muted-foreground!" role="menuitem" @click="downloadQRCode()">
-                <icon name="mdi:download" size="20" />
-                <span>Download QR Code</span>
-              </button>
-
-              <div class="h-px w-full bg-muted" />
-
-              <button class="btn-ghost justify-start! text-muted-foreground!" role="menuitem" @click="shareToSocial('twitter')">
-                <icon name="simple-icons:x" size="20" />
-                <span>Share on X/Twitter</span>
-              </button>
-              <button class="btn-ghost justify-start! text-muted-foreground!" role="menuitem" @click="shareToSocial('facebook')">
-                <icon name="simple-icons:facebook" size="20" />
-                <span>Share on Facebook</span>
-              </button>
-              <button class="btn-ghost justify-start! text-muted-foreground!" role="menuitem" @click="shareToSocial('linkedin')">
-                <icon name="simple-icons:linkedin" size="20" />
-                <span>Share on LinkedIn</span>
-              </button>
-              <button class="btn-ghost justify-start! text-muted-foreground!" role="menuitem" @click="shareToSocial('whatsapp')">
-                <icon name="simple-icons:whatsapp" size="20" />
-                <span>Share on WhatsApp</span>
-              </button>
-            </div>
-          </transition>
+        <div class="flex gap-2">
+          <input
+            v-model="customTag" type="text"
+            placeholder="Custom tag (e.g., newsletter)" class="flex-1"
+            @keyup.enter="handleCopyWithTracking(customTag)"
+          >
+          <button class="btn" :disabled="!customTag.trim()" @click="handleCopyWithTracking(customTag)">
+            <icon :name="copyAction.icon.value" size="20" />
+            <span>Copy</span>
+          </button>
         </div>
       </div>
+
+      <!-- Share to Socials Tab -->
+      <div v-if="activeTab === 'social'" class="flex flex-col gap-2">
+        <p class="text-caption text-center">
+          Share your profile directly to social media platforms.
+        </p>
+
+        <div class="card grid grid-cols-2 gap-2">
+          <button class="btn-ghost justify-start!" @click="shareToSocial('twitter')">
+            <icon name="simple-icons:x" size="25" />
+            <span>Share on X / Twitter</span>
+          </button>
+          <button class="btn-ghost justify-start!" @click="shareToSocial('facebook')">
+            <icon name="simple-icons:facebook" size="25" />
+            <span>Share on Facebook</span>
+          </button>
+          <button class="btn-ghost justify-start!" @click="shareToSocial('linkedin')">
+            <icon name="simple-icons:linkedin" size="25" />
+            <span>Share on LinkedIn</span>
+          </button>
+          <button class="btn-ghost justify-start!" @click="shareToSocial('whatsapp')">
+            <icon name="simple-icons:whatsapp" size="25" />
+            <span>Send via WhatsApp</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <footer v-if="copySuccess" class="text-caption-success py-2 text-center">
+      {{ copySuccess }}
     </footer>
   </Dialog>
 </template>
@@ -77,38 +90,46 @@ const emit = defineEmits<{ "close": [], "update:isOpen": [] }>()
 
 const { public: { baseURL } } = useRuntimeConfig()
 const { user } = storeToRefs(useUserStore())
-const dropdownRef = ref<HTMLElement | null>(null)
+const { createActionHandler } = useActionIcon()
 const qrContainer = ref<HTMLElement | null>(null)
-const isDropdownOpen = ref(false)
-const dropdownPosition = ref<"top" | "bottom">("bottom")
 const copySuccess = ref<string | null>(null)
 const logoBase64 = ref("")
+const customTag = ref("")
+const activeTab = ref("qr")
 const pageUrl = computed(() => `${baseURL}/${user.value?.slug}`)
+const downloadAction = createActionHandler("mdi:download")
+const copyAction = createActionHandler("mdi:content-copy")
 
-useClickOutside(dropdownRef, () => {
-  isDropdownOpen.value = false
-}, { escapeKey: true })
+const shareTabs = [
+  { label: "QR Code", value: "qr" },
+  { label: "Link Tracking", value: "tracking" },
+  { label: "Share to Socials", value: "social" },
+]
 
-function toggleDropdown() {
-  isDropdownOpen.value = !isDropdownOpen.value
-  if (!isDropdownOpen.value || !dropdownRef.value) {
+const trackingSources = [
+  { id: "instagram", label: "Instagram", icon: "simple-icons:instagram" },
+  { id: "twitter", label: "X / Twitter", icon: "simple-icons:x" },
+  { id: "tiktok", label: "TikTok", icon: "simple-icons:tiktok" },
+  { id: "youtube", label: "YouTube", icon: "simple-icons:youtube" },
+  { id: "linkedin", label: "LinkedIn", icon: "simple-icons:linkedin" },
+  { id: "facebook", label: "Facebook", icon: "simple-icons:facebook" },
+  { id: "reddit", label: "Reddit", icon: "simple-icons:reddit" },
+  { id: "discord", label: "Discord", icon: "simple-icons:discord" },
+  { id: "email", label: "Email", icon: "mdi:email-outline" },
+]
+
+async function handleCopyWithTracking(source: string) {
+  const sanitizedSource = source.toLowerCase().trim().replace(/[^a-z0-9-_]/g, "")
+  if (!sanitizedSource) {
     return
   }
 
-  nextTick(() => {
-    const button = dropdownRef.value?.querySelector("button")
-    if (!button) {
-      return
-    }
-    const spaceBelow = window.innerHeight - button.getBoundingClientRect().bottom
-    dropdownPosition.value = spaceBelow < 400 ? "top" : "bottom"
-  })
-}
-
-async function handleCopy() {
-  await navigator.clipboard.writeText(pageUrl.value)
-  isDropdownOpen.value = false
-  copySuccess.value = "Copied to clipboard!"
+  await copyAction.triggerCopy(`${pageUrl.value}?ref=${encodeURIComponent(sanitizedSource)}`)
+  copySuccess.value = `Copied! Tracking: ${sanitizedSource}`
+  setTimeout(() => copySuccess.value = null, 3000)
+  if (source === customTag.value) {
+    customTag.value = ""
+  }
 }
 
 function downloadQRCode() {
@@ -123,22 +144,24 @@ function downloadQRCode() {
   link.click()
   link.remove()
   URL.revokeObjectURL(url)
-  isDropdownOpen.value = false
+  downloadAction.triggerSuccess()
   copySuccess.value = "QR code downloaded!"
+  setTimeout(() => copySuccess.value = null, 3000)
 }
 
 function shareToSocial(platform: "twitter" | "facebook" | "linkedin" | "whatsapp") {
-  const url = encodeURIComponent(pageUrl.value)
+  const trackedUrl = `${pageUrl.value}?ref=${platform}`
 
   const shareUrls = {
-    twitter: `https://x.com/intent/tweet?text=${encodeURIComponent(`🚀 Check out my #linkiosk profile! 🌟\n\n🔗 ${pageUrl.value}`)}`,
-    facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
-    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${url}`,
-    whatsapp: `https://wa.me/?text=${encodeURIComponent(`Check out my LinKiosk profile: ${pageUrl.value}`)}`,
+    twitter: `https://x.com/intent/tweet?text=${encodeURIComponent(`🚀 Check out my #linkiosk profile! 🌟\n\n🔗 ${trackedUrl}`)}`,
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(trackedUrl)}`,
+    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(trackedUrl)}`,
+    whatsapp: `https://wa.me/?text=${encodeURIComponent(`Check out my LinKiosk profile: ${trackedUrl}`)}`,
   }
 
   window.open(shareUrls[platform], "_blank")
-  isDropdownOpen.value = false
+  copySuccess.value = "Opening share dialog..."
+  setTimeout(() => copySuccess.value = null, 3000)
 }
 
 watchEffect(() => {
@@ -175,17 +198,3 @@ onMounted(async () => {
   reader.readAsDataURL(blob)
 })
 </script>
-
-<style scoped>
-.dropdown-fade-enter-active,
-.dropdown-fade-leave-active {
-  transition:
-    opacity 0.2s,
-    transform 0.2s;
-}
-.dropdown-fade-enter-from,
-.dropdown-fade-leave-to {
-  opacity: 0;
-  transform: translateY(10px) scale(0.9);
-}
-</style>

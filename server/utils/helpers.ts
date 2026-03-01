@@ -33,13 +33,18 @@ export async function generateSlug(base: string = ""): Promise<string> {
 /**
  * Categorizes a referrer URL into a known source type.
  * Returns 'direct' if no referrer, or a specific platform/source name.
+ * Handles both full URLs and simple ref tags (e.g., "newsletter", "twitter").
  */
 export function categorizeReferrer(referrer: string | null | undefined): string {
   if (!referrer || typeof referrer !== "string" || referrer.trim() === "") {
     return "direct"
   }
 
-  if (referrer.toLowerCase().trim().includes(process.env.NUXT_PUBLIC_BASE_URL?.toLowerCase() || "")) {
+  const normalized = referrer.toLowerCase().trim()
+  if (!normalized.includes(".") && !normalized.includes("://") && !normalized.includes("/")) {
+    return normalized
+  }
+  if (normalized.includes(process.env.NUXT_PUBLIC_BASE_URL?.toLowerCase() || "")) {
     return "direct"
   }
 
@@ -70,7 +75,7 @@ export function categorizeReferrer(referrer: string | null | undefined): string 
     [["substack.com"], "substack"],
   ]
   for (const [patterns, name] of sources) {
-    if (patterns.some(pattern => referrer.toLowerCase().trim().includes(pattern))) {
+    if (patterns.some(pattern => normalized.includes(pattern))) {
       return name
     }
   }
@@ -113,6 +118,8 @@ export function formatSourceLabel(source: string | null | undefined): string {
     gitlab: "GitLab",
     medium: "Medium",
     substack: "Substack",
+    email: "Email",
+    newsletter: "Newsletter",
     unknown: "Unknown",
   }
 

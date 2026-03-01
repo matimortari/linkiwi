@@ -78,7 +78,7 @@ onMounted(async () => {
       meta: [{ name: "description", content: `@${userProfile.value.slug} profile on LinKiosk.` }],
     })
 
-    const referrer = (typeof document === "undefined" ? "" : document.referrer) || (route.query.ref as string) || ""
+    const referrer = (route.query.ref as string) || (typeof document === "undefined" ? "" : document.referrer) || ""
     await analyticsStore.recordPageView(userProfile.value.id, referrer)
   }
 })
