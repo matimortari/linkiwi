@@ -14,7 +14,7 @@ export const s3 = new S3Client({
  * Uploads a file to Blob storage and removes the previous file if provided.
  * Validates file size and MIME type before upload.
  */
-export async function uploadFile({ path, file, maxSize, allowedMimeTypes }: { path: string, file: File, maxSize: number, allowedMimeTypes: string[], oldFile?: string }) {
+export async function uploadFile({ path, file, maxSize, allowedMimeTypes, oldFile }: { path: string, file: File, maxSize: number, allowedMimeTypes: string[], oldFile?: string }) {
   if (!file || !(file instanceof File)) {
     throw createError({ status: 400, statusText: "No file uploaded" })
   }
@@ -35,6 +35,9 @@ export async function uploadFile({ path, file, maxSize, allowedMimeTypes }: { pa
     Body: Buffer.from(buffer),
     ContentType: file.type,
   }))
+  if (oldFile) {
+    await deleteFile(oldFile).catch(() => {})
+  }
 
   return `${process.env.R2_PUBLIC_URL}/${key}`
 }

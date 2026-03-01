@@ -33,9 +33,6 @@ export default defineNuxtConfig({
     },
   },
   css: ["~/assets/styles.css"],
-  devtools: {
-    enabled: true,
-  },
   colorMode: {
     classSuffix: "",
     preference: "system",
