@@ -22,17 +22,17 @@
         {{ userProfile.description }}
       </p>
 
-      <ul v-if="userProfile.icons?.length" class="my-2 navigation-group justify-center">
+      <ul v-if="visibleIcons.length" class="my-2 navigation-group justify-center">
         <UserIcon
-          v-for="icon in userProfile.icons" :key="icon.id"
+          v-for="icon in visibleIcons" :key="icon.id"
           :item="icon" :preferences="profilePreferences"
           @click="handleClick(icon.id ?? '', 'icon')"
         />
       </ul>
 
-      <ul v-if="userProfile.links?.length" class="flex w-full flex-col items-center gap-4">
+      <ul v-if="visibleLinks.length" class="flex w-full flex-col items-center gap-4">
         <UserLink
-          v-for="link in userProfile.links" :key="link.id"
+          v-for="link in visibleLinks" :key="link.id"
           :item="link" :preferences="profilePreferences"
           @click="handleClick(link.id ?? '', 'link')"
         />
@@ -56,6 +56,8 @@ const analyticsStore = useAnalyticsStore()
 const { userProfile, loading } = storeToRefs(userStore)
 const profilePreferences = computed(() => userProfile.value?.preferences ?? DEFAULT_PREFERENCES)
 const { backgroundStyle, profilePictureStyle, slugStyle, descriptionStyle } = useDynamicStyles(profilePreferences)
+const visibleLinks = computed(() => userProfile.value?.links?.filter(link => link.isVisible !== false) ?? [])
+const visibleIcons = computed(() => userProfile.value?.icons?.filter(icon => icon.isVisible !== false) ?? [])
 
 async function handleClick(itemId: string, type: "link" | "icon") {
   if (!userProfile.value?.id) {

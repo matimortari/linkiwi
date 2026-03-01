@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
 
   const updatedIcon = await db.userIcon.update({
     where: { id: iconId },
-    data: { order: result.data.order },
+    data: { order: result.data.order, isVisible: result.data.isVisible },
     select: {
       id: true,
       userId: true,
@@ -31,6 +31,7 @@ export default defineEventHandler(async (event) => {
       logo: true,
       order: true,
       clickCount: true,
+      isVisible: true,
       createdAt: true,
       updatedAt: true,
     },

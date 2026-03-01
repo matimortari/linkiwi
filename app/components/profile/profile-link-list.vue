@@ -14,16 +14,19 @@
         handle=".drag-handle" :animation="150"
         @end="handleReorderLink"
       >
-        <li v-for="link in orderedLinks" :key="link.id" class="card flex flex-col gap-2">
+        <li v-for="link in orderedLinks" :key="link.id" class="card flex flex-col gap-2" :class="{ 'border-dashed! opacity-60': !link.isVisible }">
           <div class="flex flex-row items-center justify-between font-semibold">
             <div class="navigation-group">
               <button class="drag-handle btn-ghost cursor-move p-0.5!" aria-label="Drag to reorder">
                 <icon name="mdi:drag-vertical" size="25" class="text-muted" />
               </button>
-              <span>{{ link.title }}</span>
+              <span :class="{ 'text-muted-foreground': !link.isVisible }">{{ link.title }}</span>
             </div>
 
             <div class="flex flex-row items-center gap-1">
+              <button :aria-label="link.isVisible ? 'Hide Link' : 'Show Link'" class="btn-ghost p-0.5!" @click="handleToggleVisibility(link.id!, link.isVisible ?? true)">
+                <icon :name="link.isVisible !== false ? 'mdi:eye-outline' : 'mdi:eye-off-outline'" size="25" class="text-muted-foreground" />
+              </button>
               <button aria-label="Update Link" class="btn-ghost p-0.5!" @click="handleUpdateLink(link)">
                 <icon name="mdi:circle-edit-outline" size="25" class="text-primary" />
               </button>
@@ -91,6 +94,10 @@ async function handleDeleteLink(linkId: string) {
   }
 
   await linksStore.deleteLink(linkId)
+}
+
+async function handleToggleVisibility(linkId: string, currentVisibility: boolean) {
+  await linksStore.updateLink(linkId, { isVisible: !currentVisibility })
 }
 
 // Sync store links to local orderedLinks

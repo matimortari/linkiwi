@@ -14,7 +14,7 @@
         handle=".drag-handle" :animation="150"
         @end="handleReorderIcon"
       >
-        <li v-for="icon in orderedIcons" :key="icon.id" class="card relative flex size-20 items-center justify-center">
+        <li v-for="icon in orderedIcons" :key="icon.id" class="card relative flex size-20 items-center justify-center" :class="{ 'border-dashed! opacity-60': !icon.isVisible }">
           <button class="drag-handle btn-ghost absolute top-0 left-0 cursor-move p-0.5!" aria-label="Drag to reorder">
             <icon name="mdi:drag-vertical" size="20" class="text-muted" />
           </button>
@@ -22,6 +22,10 @@
           <nuxt-link :to="icon.url" class="btn-ghost">
             <icon :name="icon.logo" :size="30" />
           </nuxt-link>
+
+          <button :aria-label="icon.isVisible ? 'Hide Icon' : 'Show Icon'" class="btn-ghost absolute top-0 right-0 flex items-center p-0.5!" @click="handleToggleVisibility(icon.id!, icon.isVisible ?? true)">
+            <icon :name="icon.isVisible !== false ? 'mdi:eye-outline' : 'mdi:eye-off-outline'" size="20" class="text-muted-foreground" />
+          </button>
 
           <button class="btn-ghost absolute right-0 bottom-0 flex items-center p-0.5!" aria-label="Delete Social Icon" @click="handleDeleteIcon(icon.id!)">
             <icon name="mdi:remove-circle-outline" size="25" class="text-danger" />
@@ -65,6 +69,10 @@ async function handleDeleteIcon(iconId: string) {
   }
 
   await iconStore.deleteIcon(iconId)
+}
+
+async function handleToggleVisibility(iconId: string, currentVisibility: boolean) {
+  await iconStore.updateIcon(iconId, { isVisible: !currentVisibility })
 }
 
 // Sync store icons to local orderedIcons
