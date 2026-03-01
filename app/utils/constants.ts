@@ -1,10 +1,10 @@
 export const PRODUCT_BULLETS = [
   {
-    description: "Design your own personalized link page",
+    description: "Design your own landing page",
     icon: "mdi:cards-playing-heart-outline",
   },
   {
-    description: "Add unlimited links and social profiles",
+    description: "Add unlimited links and social icons",
     icon: "mdi:link-variant-plus",
   },
   {

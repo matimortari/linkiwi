@@ -1,9 +1,11 @@
 <template>
   <section
     id="hero" v-motion
-    :initial="{ opacity: 0, y: -40 }" :visible="{ opacity: 1, y: 0 }"
+    :initial="{ opacity: 0, y: -40 }" :visible-once="{ opacity: 1, y: 0 }"
     :duration="800" class="flex min-h-screen w-full flex-col items-center justify-between gap-8 overflow-hidden border-b bg-card px-4 py-32 md:flex-row md:px-40 2xl:min-h-[80vh]"
   >
+    <img src="/assets/hero-backdrop.svg" alt="Hero background" class="wave-bg" aria-hidden="true">
+
     <header class="flex flex-col items-center gap-4 text-center md:items-start md:text-start">
       <h1>
         Keep all your stuff together!
@@ -24,14 +26,14 @@
 
   <section
     id="product" v-motion
-    :initial="{ opacity: 0, y: 20 }" :visible="{ opacity: 1, y: 0 }"
-    :duration="800" class="relative flex w-full flex-col items-center justify-center gap-12 p-12 text-center md:p-32"
+    :initial="{ opacity: 0, y: 20 }" :visible-once="{ opacity: 1, y: 0 }"
+    :duration="800" class="relative flex w-full flex-col items-center justify-center gap-12 px-12 py-24 text-center"
   >
     <h2>
       Create Your Page In Minutes
     </h2>
 
-    <div class="container mx-auto grid w-full grid-cols-1 items-center gap-12 md:grid-cols-2">
+    <div class="container mx-auto grid w-full grid-cols-1 items-center justify-items-center gap-8 md:grid-cols-2">
       <div class="order-1 flex items-center justify-center">
         <div class="relative h-80 w-64">
           <div class="absolute inset-0 animate-pulse rounded-2xl bg-linear-to-br from-primary to-secondary opacity-20 blur-2xl" />
@@ -68,14 +70,14 @@
 
   <section
     id="analytics" v-motion
-    :initial="{ opacity: 0, y: 20 }" :visible="{ opacity: 1, y: 0 }"
-    :duration="800" class="relative flex w-full flex-col items-center justify-center gap-12 border-y bg-muted/30 p-12 text-center md:p-32"
+    :initial="{ opacity: 0, y: 20 }" :visible-once="{ opacity: 1, y: 0 }"
+    :duration="800" class="relative flex w-full flex-col items-center justify-center gap-12 border-y bg-muted/30 px-12 py-24 text-center"
   >
     <h2>
       Track Your Performance
     </h2>
 
-    <div class="container mx-auto grid w-full grid-cols-1 items-center gap-12 md:grid-cols-2">
+    <div class="container mx-auto grid w-full grid-cols-1 items-center justify-items-center gap-8 md:grid-cols-2">
       <div class="order-2 flex flex-col gap-4 text-start md:order-1">
         <p class="text-lead">
           Get insights into how your audience engages with your content.
@@ -124,7 +126,7 @@
     </div>
   </section>
 
-  <section id="cta" class="relative z-10 flex min-h-[50vh] w-full flex-col items-center justify-center gap-8 bg-card p-20 text-center md:p-32">
+  <section id="cta" class="relative z-10 flex min-h-[50vh] w-full flex-col items-center justify-center gap-8 bg-card px-12 py-24 text-center">
     <div class="cta-wrapper-grid" />
     <div class="cta-wrapper-vignette" />
 
@@ -163,7 +165,7 @@ definePageMeta({
 h1 {
   font-family: var(--font-display);
   line-height: 4rem;
-  max-width: 24rem;
+  max-width: 30rem;
 }
 h2 {
   font-size: 2.25rem;
@@ -173,6 +175,21 @@ h2 {
   h1 {
     font-size: 3.5rem;
   }
+}
+
+.wave-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Ensure hero content sits above the wave */
+#hero > *:not(.wave-bg) {
+  position: relative;
+  z-index: 1;
 }
 
 .cta-wrapper-grid {

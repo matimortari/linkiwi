@@ -1,8 +1,10 @@
 <template>
   <div class="relative flex min-h-screen flex-col items-center justify-center overflow-hidden">
-    <nuxt-link to="/">
-      <img src="/assets/symbol.png" alt="Logo" width="30" class="absolute top-4 left-4 transition-transform hover:scale-105">
-    </nuxt-link>
+    <ClientOnly>
+      <nuxt-link to="/">
+        <img src="/assets/symbol.png" alt="Logo" width="30" class="absolute top-4 left-4 transition-transform hover:scale-105">
+      </nuxt-link>
+    </ClientOnly>
 
     <Loading v-if="loading" class="absolute inset-0 flex items-center justify-center backdrop-blur-sm" />
 

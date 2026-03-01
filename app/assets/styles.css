@@ -24,7 +24,7 @@
   --muted: #d1d5db;
   --muted-foreground: #4b5563;
   --surface-foreground: #eeeeee;
-  --primary: #91a173;
+  --primary: #6c7952;
   --secondary: #de896d;
   --danger: #b91c1c;
   --success: #14532d;
@@ -41,7 +41,7 @@ html.dark {
   --muted: #374151;
   --muted-foreground: #9ca3af;
   --surface-foreground: #eeeeee;
-  --primary: #91a173;
+  --primary: #6c7952;
   --secondary: #de896d;
   --danger: #b91c1c;
   --success: #14532d;
@@ -61,7 +61,7 @@ html.dark {
   --color-success: var(--success);
 
   --font-default: "Poppins", sans-serif;
-  --font-display: "Spicy Rice", sans-serif;
+  --font-display: "Suez One", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
   --border-radius: 1rem;
@@ -97,13 +97,13 @@ html.dark {
   Typography
 */
 h1 {
-  font-size: 3.25rem;
-  line-height: 3.25rem;
+  font-size: 2.5rem;
+  line-height: 2.5rem;
   font-weight: 700;
 }
 h2 {
-  font-size: 2rem;
-  line-height: 2rem;
+  font-size: 1.875rem;
+  line-height: 1.875rem;
   font-weight: 700;
 }
 h3 {

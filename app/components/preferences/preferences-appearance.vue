@@ -9,7 +9,7 @@
         <div class="navigation-group flex-wrap md:gap-1">
           <button
             v-for="t in APPEARANCE_TABS" :key="t.value"
-            class="btn" :class="{ 'bg-muted!': activeTab === t.value }"
+            class="btn-ghost justify-start! text-muted-foreground!" :class="{ 'bg-muted!': activeTab === t.value }"
             @click="activeTab = t.value"
           >
             {{ t.label }}

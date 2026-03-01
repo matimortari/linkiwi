@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <filter id="wf1"><feGaussianBlur stdDeviation="22"/></filter>
+    <filter id="wf2"><feGaussianBlur stdDeviation="12"/></filter>
+  </defs>
+
+  <!-- Blobs -->
+  <ellipse cx="1200" cy="200" rx="380" ry="150" fill="#de896d" opacity="0.14" filter="url(#wf1)" transform="rotate(10 1200 200)"/>
+  <ellipse cx="750" cy="500" rx="320" ry="120" fill="#6c7952" opacity="0.09" filter="url(#wf1)" transform="rotate(-4 750 500)"/>
+  <ellipse cx="400" cy="180" rx="260" ry="100" fill="#de896d" opacity="0.08" filter="url(#wf1)" transform="rotate(-6 400 180)"/>
+  <ellipse cx="1050" cy="680" rx="300" ry="110" fill="#6c7952" opacity="0.10" filter="url(#wf1)" transform="rotate(5 1050 680)"/>
+
+  <!-- Bottom fill waves -->
+  <path d="M -100 860 C 200 790, 400 900, 660 830 C 900 760, 1080 870, 1300 800 C 1420 765, 1480 820, 1540 790 L 1540 900 L -100 900 Z" fill="#6c7952" opacity="0.08"/>
+  <path d="M -100 780 C 150 700, 380 820, 620 740 C 860 660, 1020 790, 1260 720 C 1380 690, 1460 740, 1540 710 L 1540 900 L -100 900 Z" fill="#de896d" opacity="0.07"/>
+
+  <!-- Line waves - upper zone -->
+  <path d="M -60 200 C 160 120, 360 250, 600 160 C 820 75, 1020 220, 1240 130 C 1380 70, 1460 175, 1520 125" stroke="#6c7952" stroke-width="2" fill="none" opacity="0.15"/>
+  <path d="M -60 240 C 180 155, 380 285, 620 195 C 840 110, 1040 255, 1260 165 C 1390 105, 1468 205, 1520 160" stroke="#de896d" stroke-width="1.5" fill="none" opacity="0.12"/>
+
+  <!-- Line waves - mid zone primary -->
+  <path d="M -40 490 C 100 410, 260 535, 460 448 C 650 365, 790 498, 1000 412 C 1180 335, 1320 460, 1500 388" stroke="#6c7952" stroke-width="2.5" fill="none" opacity="0.28"/>
+  <path d="M -40 520 C 120 438, 300 565, 500 472 C 700 385, 840 522, 1060 432 C 1240 358, 1360 482, 1500 418" stroke="#6c7952" stroke-width="1.5" fill="none" opacity="0.18"/>
+  <path d="M -40 548 C 140 462, 320 592, 530 498 C 730 408, 870 545, 1080 458 C 1255 380, 1375 505, 1500 444" stroke="#6c7952" stroke-width="1" fill="none" opacity="0.12"/>
+
+  <!-- Line waves - mid zone secondary -->
+  <path d="M -60 582 C 160 492, 360 625, 580 528 C 780 438, 960 578, 1160 488 C 1320 415, 1420 535, 1520 475" stroke="#de896d" stroke-width="1.5" fill="none" opacity="0.18"/>
+  <path d="M -60 608 C 180 515, 380 650, 600 552 C 800 460, 980 600, 1180 510 C 1340 438, 1440 558, 1520 500" stroke="#de896d" stroke-width="1" fill="none" opacity="0.12"/>
+
+  <!-- Line waves - bottom detail -->
+  <path d="M -40 728 C 160 660, 360 732, 580 668 C 780 608, 980 682, 1200 618 C 1360 570, 1450 642, 1540 600" stroke="#6c7952" stroke-width="2" fill="none" opacity="0.20"/>
+  <path d="M -40 755 C 180 685, 380 758, 600 692 C 800 630, 980 705, 1200 642 C 1360 595, 1452 668, 1540 625" stroke="#de896d" stroke-width="1.5" fill="none" opacity="0.15"/>
+  <path d="M -40 780 C 200 708, 400 782, 620 715 C 820 652, 1000 728, 1220 664 C 1380 617, 1460 692, 1540 650" stroke="#6c7952" stroke-width="1" fill="none" opacity="0.12"/>
+</svg>

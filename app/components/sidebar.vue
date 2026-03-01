@@ -36,7 +36,7 @@
 
         <nuxt-link
           v-for="link in SIDEBAR_NAV_LINKS" :key="link.url"
-          :to="link.url" class="navigation-group w-full rounded-[5rem] p-2 font-semibold hover:bg-muted/60"
+          :to="link.url" class="btn-ghost justify-start! text-base!"
           :class="{ 'bg-muted': route.path === link.url }" aria-label="Navigate to {{ link.label }}"
           @click="emit('update:isOpen', false)"
         >
@@ -52,15 +52,15 @@
           Actions
         </p>
 
-        <button class="navigation-group w-full rounded-[5rem] p-2 font-semibold hover:bg-muted/60" aria-label="Share Profile" @click="isShareDialogOpen = true">
+        <button class="btn-ghost justify-start! text-base!" aria-label="Share Profile" @click="isShareDialogOpen = true">
           <icon name="mdi:share-variant-outline" size="25" />
           <span>Share</span>
         </button>
-        <button class="navigation-group w-full rounded-[5rem] p-2 font-semibold whitespace-nowrap hover:bg-muted/30" aria-label="Toggle Theme" @click="toggleTheme">
+        <button class="btn-ghost justify-start! text-base!" aria-label="Toggle Theme" @click="toggleTheme">
           <icon :name="themeIcon" size="25" />
           <span>Toggle Theme</span>
         </button>
-        <button class="navigation-group w-full rounded-[5rem] p-2 font-semibold whitespace-nowrap hover:bg-muted/30" aria-label="Sign Out" @click="signOut">
+        <button class="btn-ghost justify-start! text-base!" aria-label="Sign Out" @click="signOut">
           <icon name="mdi:logout" size="25" class="text-caption-danger" />
           <span>Sign Out</span>
         </button>

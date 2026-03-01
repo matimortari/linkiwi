@@ -1,6 +1,6 @@
 <template>
   <!-- Mobile toggle -->
-  <button class="btn fixed bottom-4 left-1/2 z-50 -translate-x-1/2 md:hidden!" aria-label="Toggle Mobile Preview" @click="isPreviewOpen = !isPreviewOpen">
+  <button class="btn fixed bottom-4 left-1/2 z-60 -translate-x-1/2 md:hidden!" aria-label="Toggle Mobile Preview" @click="isPreviewOpen = !isPreviewOpen">
     <icon :name="isPreviewOpen ? 'mdi:eye-off' : 'mdi:eye'" size="25" />
     <span>{{ isPreviewOpen ? 'Close Preview' : 'Preview' }}</span>
   </button>

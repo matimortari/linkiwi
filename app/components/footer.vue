@@ -2,7 +2,9 @@
   <footer class="relative z-50 w-full border-t bg-card">
     <div class="container mx-auto flex flex-col-reverse p-8 md:flex-row md:justify-between">
       <div class="flex flex-col justify-end gap-2 border-t py-4 md:border-0">
-        <img :src="themeTitle" alt="Wordmark" width="100">
+        <ClientOnly>
+          <img :src="themeTitle" alt="Wordmark" width="100">
+        </ClientOnly>
 
         <div class="flex flex-row items-center justify-between gap-4">
           <p class="text-caption whitespace-nowrap">

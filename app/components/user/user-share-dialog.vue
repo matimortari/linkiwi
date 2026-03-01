@@ -30,30 +30,30 @@
               class="overlay absolute right-0 z-50 flex flex-col gap-1"
               :class="[dropdownPosition === 'top' ? 'bottom-full mb-2' : 'top-full mt-2']"
             >
-              <button class="text-caption navigation-group w-full rounded-[5rem] p-2 hover:bg-muted" role="menuitem" @click="handleCopy()">
+              <button class="btn-ghost justify-start! text-muted-foreground!" role="menuitem" @click="handleCopy()">
                 <icon name="mdi:link-variant" size="20" />
                 <span>Copy Link</span>
               </button>
-              <button class="text-caption navigation-group w-full rounded-[5rem] p-2 hover:bg-muted" role="menuitem" @click="downloadQRCode()">
+              <button class="btn-ghost justify-start! text-muted-foreground!" role="menuitem" @click="downloadQRCode()">
                 <icon name="mdi:download" size="20" />
                 <span>Download QR Code</span>
               </button>
 
               <div class="h-px w-full bg-muted" />
 
-              <button class="text-caption navigation-group w-full rounded-[5rem] p-2 hover:bg-muted" role="menuitem" @click="shareToSocial('twitter')">
+              <button class="btn-ghost justify-start! text-muted-foreground!" role="menuitem" @click="shareToSocial('twitter')">
                 <icon name="simple-icons:x" size="20" />
                 <span>Share on X/Twitter</span>
               </button>
-              <button class="text-caption navigation-group w-full rounded-[5rem] p-2 hover:bg-muted" role="menuitem" @click="shareToSocial('facebook')">
+              <button class="btn-ghost justify-start! text-muted-foreground!" role="menuitem" @click="shareToSocial('facebook')">
                 <icon name="simple-icons:facebook" size="20" />
                 <span>Share on Facebook</span>
               </button>
-              <button class="text-caption navigation-group w-full rounded-[5rem] p-2 hover:bg-muted" role="menuitem" @click="shareToSocial('linkedin')">
+              <button class="btn-ghost justify-start! text-muted-foreground!" role="menuitem" @click="shareToSocial('linkedin')">
                 <icon name="simple-icons:linkedin" size="20" />
                 <span>Share on LinkedIn</span>
               </button>
-              <button class="text-caption navigation-group w-full rounded-[5rem] p-2 whitespace-nowrap hover:bg-muted" role="menuitem" @click="shareToSocial('whatsapp')">
+              <button class="btn-ghost justify-start! text-muted-foreground!" role="menuitem" @click="shareToSocial('whatsapp')">
                 <icon name="simple-icons:whatsapp" size="20" />
                 <span>Share on WhatsApp</span>
               </button>

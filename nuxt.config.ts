@@ -46,7 +46,7 @@ export default defineNuxtConfig({
     processCSSVariables: true,
     families: [
       { name: "Poppins", provider: "google", weights: ["300 800"] },
-      { name: "Spicy Rice", provider: "google", weights: ["400"] },
+      { name: "Suez One", provider: "google", weights: ["400"] },
       { name: "JetBrains Mono", provider: "google", weights: ["400"] },
       { name: "Roboto", provider: "google", global: true, weights: ["300 800"] },
       { name: "Noto Sans", provider: "google", global: true, weights: ["300 800"] },
