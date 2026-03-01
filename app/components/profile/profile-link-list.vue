@@ -94,7 +94,7 @@ async function handleDeleteLink(linkId: string) {
 }
 
 // Sync store links to local orderedLinks
-watch(links, (newLinks) => {
+watch(() => links.value, (newLinks) => {
   orderedLinks.value = [...newLinks]
-}, { immediate: true })
+}, { immediate: true, deep: true })
 </script>

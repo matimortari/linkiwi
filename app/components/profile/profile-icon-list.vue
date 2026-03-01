@@ -68,7 +68,7 @@ async function handleDeleteIcon(iconId: string) {
 }
 
 // Sync store icons to local orderedIcons
-watch(icons, (newIcons) => {
+watch(() => icons.value, (newIcons) => {
   orderedIcons.value = [...newIcons]
-}, { immediate: true })
+}, { immediate: true, deep: true })
 </script>
