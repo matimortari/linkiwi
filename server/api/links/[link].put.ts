@@ -2,6 +2,10 @@ import { updateUserLinkSchema } from "#shared/schemas/link-schema"
 
 export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
+
+  // Rate limit: 50 requests per hour per user
+  await enforceRateLimit(event, `links:update:${user.id}`, 50, 60 * 60 * 1000)
+
   const linkId = getRouterParam(event, "link")
   if (!linkId) {
     throw createError({ status: 400, statusText: "Link ID is required" })

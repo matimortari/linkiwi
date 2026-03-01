@@ -2,6 +2,10 @@ import { createUserLinkSchema } from "#shared/schemas/link-schema"
 
 export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
+
+  // Rate limit: 50 requests per hour per user
+  await enforceRateLimit(event, `links:create:${user.id}`, 50, 60 * 60 * 1000)
+
   const body = await readBody(event)
   const result = createUserLinkSchema.safeParse(body)
   if (!result.success) {
@@ -37,3 +41,4 @@ export default defineEventHandler(async (event) => {
 
   return { link: newLink }
 })
+

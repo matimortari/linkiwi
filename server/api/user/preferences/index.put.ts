@@ -2,6 +2,10 @@ import { updateUserPreferencesSchema } from "#shared/schemas/user-schema"
 
 export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
+
+  // Rate limit: 30 requests per hour per user
+  await enforceRateLimit(event, `user:preferences:${user.id}`, 30, 60 * 60 * 1000)
+
   const body = await readBody(event)
   const result = updateUserPreferencesSchema.safeParse(body)
   if (!result.success) {

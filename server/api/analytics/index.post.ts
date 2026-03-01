@@ -1,6 +1,10 @@
 import { analyticsRecordSchema } from "#shared/schemas/analytics-schema"
 
 export default defineEventHandler(async (event) => {
+  // Rate limit: 100 requests per hour per IP
+  const ip = getRequestIP(event, { xForwardedFor: true }) || "unknown"
+  await enforceRateLimit(event, `analytics:${ip}`, 100, 60 * 60 * 1000)
+
   const body = await readBody(event)
   const result = analyticsRecordSchema.safeParse(body)
   if (!result.success) {

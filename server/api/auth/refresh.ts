@@ -1,4 +1,8 @@
 export default defineEventHandler(async (event) => {
+  // Rate limit: 60 requests per hour per IP
+  const ip = getRequestIP(event, { xForwardedFor: true }) || "unknown"
+  await enforceRateLimit(event, `auth:refresh:${ip}`, 60, 60 * 60 * 1000)
+
   const session = await getUserSession(event)
   if (!session.user || !session.expiresAt || !session.lastActivityAt) {
     throw createError({ status: 401, message: "Not authenticated" })

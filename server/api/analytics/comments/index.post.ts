@@ -1,6 +1,10 @@
 import { createCommentSchema } from "#shared/schemas/analytics-schema"
 
 export default defineEventHandler(async (event) => {
+  // Rate limit: 10 requests per hour per IP
+  const ip = getRequestIP(event, { xForwardedFor: true }) || "unknown"
+  await enforceRateLimit(event, `comments:${ip}`, 10, 60 * 60 * 1000)
+
   const body = await readBody(event)
   const result = createCommentSchema.safeParse(body)
   if (!result.success) {

@@ -1,5 +1,9 @@
 export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
+
+  // Rate limit: 10 requests per hour per user
+  await enforceRateLimit(event, `user:image-upload:${user.id}`, 10, 60 * 60 * 1000)
+
   const form = await readFormData(event)
   const file = form.get("file")
   if (!file || !(file instanceof File)) {

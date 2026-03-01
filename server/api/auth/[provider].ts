@@ -30,6 +30,10 @@ const extractUserData: Record<string, (user: any) => any> = {
 }
 
 export default defineEventHandler(async (event: H3Event) => {
+  // Rate limit: 5 requests per minute per IP
+  const ip = getRequestIP(event, { xForwardedFor: true }) || "unknown"
+  await enforceRateLimit(event, `auth:${ip}`, 5, 60 * 1000)
+
   const provider = event.context.params?.provider
   if (!provider || !configs[provider]) {
     throw createError({ status: 400, message: "Unknown OAuth provider" })
