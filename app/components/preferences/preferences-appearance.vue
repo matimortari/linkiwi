@@ -39,6 +39,7 @@ const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
 const activeTab = ref("background")
 const preferences = ref<UserPreferences>({ ...DEFAULT_PREFERENCES })
+const localPreferences = inject<Ref<UserPreferences | null>>("localPreferences", ref(null))
 const saveAction = createActionHandler("mdi:content-save-check")
 const resetAction = createActionHandler("mdi:close")
 
@@ -59,4 +60,11 @@ watch(() => user.value?.preferences, (newPrefs) => {
     preferences.value = { ...newPrefs }
   }
 }, { immediate: true, deep: true })
+
+// Sync local changes to parent's localPreferences for live preview
+watch(preferences, (newPrefs) => {
+  if (localPreferences.value) {
+    localPreferences.value = { ...newPrefs }
+  }
+}, { deep: true })
 </script>
