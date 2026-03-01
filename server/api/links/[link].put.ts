@@ -22,12 +22,13 @@ export default defineEventHandler(async (event) => {
 
   const updatedLink = await db.userLink.update({
     where: { id: linkId },
-    data: { url: result.data.url, title: result.data.title },
+    data: { url: result.data.url, title: result.data.title, order: result.data.order },
     select: {
       id: true,
       userId: true,
       url: true,
       title: true,
+      order: true,
       clickCount: true,
       createdAt: true,
       updatedAt: true,

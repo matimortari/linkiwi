@@ -13,14 +13,23 @@ export default defineEventHandler(async (event) => {
     throw createError({ status: 409, statusText: "Social icon for this platform already exists" })
   }
 
+  // Get the max order value to append new icon at the end
+  const maxOrderIcon = await db.userIcon.findFirst({
+    where: { userId: user.id },
+    orderBy: { order: "desc" },
+    select: { order: true },
+  })
+  const nextOrder = (maxOrderIcon?.order ?? -1) + 1
+
   const newIcon = await db.userIcon.create({
-    data: { userId: user.id, url: result.data.url, platform: result.data.platform, logo: result.data.logo },
+    data: { userId: user.id, url: result.data.url, platform: result.data.platform, logo: result.data.logo, order: nextOrder },
     select: {
       id: true,
       userId: true,
       url: true,
       platform: true,
       logo: true,
+      order: true,
       clickCount: true,
       createdAt: true,
       updatedAt: true,

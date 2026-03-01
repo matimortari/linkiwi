@@ -1,4 +1,4 @@
-import type { CreateUserIconInput } from "#shared/schemas/icon-schema"
+import type { CreateUserIconInput, UpdateUserIconInput } from "#shared/schemas/icon-schema"
 
 export const useIconsStore = defineStore("icons", () => {
   const icons = ref<Icon[]>([])
@@ -6,6 +6,7 @@ export const useIconsStore = defineStore("icons", () => {
   const errors = ref<Record<string, string | null>>({
     getIcons: null,
     createIcon: null,
+    updateIcon: null,
     deleteIcon: null,
   })
 
@@ -47,6 +48,28 @@ export const useIconsStore = defineStore("icons", () => {
     }
   }
 
+  async function updateIcon(id: string, data: UpdateUserIconInput) {
+    loading.value = true
+    errors.value.updateIcon = null
+
+    try {
+      const res = await $fetch<{ icon: Icon }>(`/api/social-icons/${id}`, { method: "PUT", body: data, credentials: "include" })
+      const index = icons.value.findIndex(icon => icon.id === id)
+      if (index !== -1) {
+        icons.value[index] = Object.freeze(res.icon)
+      }
+      return res
+    }
+    catch (err: any) {
+      errors.value.updateIcon = getErrorMessage(err, "Failed to update icon")
+      console.error("updateIcon error:", err)
+      throw err
+    }
+    finally {
+      loading.value = false
+    }
+  }
+
   async function deleteIcon(id: string) {
     loading.value = true
     errors.value.deleteIcon = null
@@ -71,6 +94,7 @@ export const useIconsStore = defineStore("icons", () => {
     icons,
     getIcons,
     createIcon,
+    updateIcon,
     deleteIcon,
   }
 })

@@ -8,13 +8,22 @@ export default defineEventHandler(async (event) => {
     throw createError({ status: 400, statusText: result.error.issues[0]?.message || "Invalid input" })
   }
 
+  // Get the max order value to append new link at the end
+  const maxOrderLink = await db.userLink.findFirst({
+    where: { userId: user.id },
+    orderBy: { order: "desc" },
+    select: { order: true },
+  })
+  const nextOrder = (maxOrderLink?.order ?? -1) + 1
+
   const newLink = await db.userLink.create({
-    data: { userId: user.id, url: result.data.url, title: result.data.title },
+    data: { userId: user.id, url: result.data.url, title: result.data.title, order: nextOrder },
     select: {
       id: true,
       userId: true,
       url: true,
       title: true,
+      order: true,
       clickCount: true,
       createdAt: true,
       updatedAt: true,
