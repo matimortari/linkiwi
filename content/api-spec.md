@@ -323,6 +323,7 @@ Retrieves all links for the authenticated user.
       "userId": "string",
       "url": "string",
       "title": "string",
+      "order": "number",
       "clickCount": "number",
       "createdAt": "string",
       "updatedAt": "string"
@@ -360,7 +361,7 @@ Creates a new link for the authenticated user.
 
 > **PUT** `/api/links/{link}`
 
-Updates an existing link for the authenticated user.
+Updates an existing link for the authenticated user. This endpoint can be used to update the link's content or reorder it.
 
 **Route Parameters:**
 
@@ -371,7 +372,8 @@ Updates an existing link for the authenticated user.
 ```json
 {
   "url": "string", // Optional: valid URL starting with http:// or https://
-  "title": "string" // Optional: 1-100 characters
+  "title": "string", // Optional: 1-100 characters
+  "order": "number" // Optional: non-negative integer for reordering
 }
 ```
 
@@ -425,6 +427,7 @@ Retrieves all social icons for the authenticated user.
       "url": "string",
       "platform": "string",
       "logo": "string",
+      "order": "number",
       "clickCount": "number",
       "createdAt": "string",
       "updatedAt": "string"
@@ -452,6 +455,34 @@ Creates a new social icon for the authenticated user. Only one icon per platform
 **Supported Platforms:**
 
 - Airbnb, Amazon, App Store, Apple Music, Apple Podcasts, Bandcamp, Behance, Bluesky, Calendly, CodePen, Discord, Dribbble, Etsy, Facebook, GitHub, Gmail, Goodreads, Google Maps, Google Play, Instagram, Kickstarter, Letterboxd, LinkedIn, Mastodon, Medium, Notion, Patreon, Pinterest, Reddit, ResearchGate, Shopify, Signal, Slack, Snapchat, SoundCloud, Spotify, Stack Overflow, Substack, Telegram, TikTok, Tripadvisor, Trello, Twitch, Vimeo, Whatsapp, X, Yelp, Youtube
+
+**Response:**
+
+```json
+{
+  "icon": {
+    // ... Icon details
+  }
+}
+```
+
+#### Update Social Icon
+
+> **PUT** `/api/social-icons/{icon}`
+
+Updates an existing social icon for the authenticated user. This endpoint can be used to reorder icons.
+
+**Route Parameters:**
+
+- `icon`: Social icon ID (required).
+
+**Request Body:**
+
+```json
+{
+  "order": "number" // Required: non-negative integer for reordering
+}
+```
 
 **Response:**
 
