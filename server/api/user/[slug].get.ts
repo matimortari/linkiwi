@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
 
   const userProfile = await db.user.findUnique({
     where: { slug },
-    include: { links: { orderBy: { createdAt: "asc" } }, icons: { orderBy: { createdAt: "asc" } }, preferences: true },
+    include: { links: { orderBy: { order: "asc" } }, icons: { orderBy: { order: "asc" } }, preferences: true },
   })
   if (!userProfile) {
     throw createError({ status: 404, statusText: `User '${slug}' not found` })

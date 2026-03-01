@@ -94,11 +94,14 @@ model UserLink {
   userId     String
   url        String
   title      String
+  order      Int         @default(0)
   clickCount Int         @default(0)
   clicks     LinkClick[]
   user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
+
+  @@index([userId, order])
 }
 
 model UserIcon {
@@ -107,11 +110,14 @@ model UserIcon {
   url        String
   platform   String
   logo       String
+  order      Int         @default(0)
   clickCount Int         @default(0)
   clicks     IconClick[]
   user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
+
+  @@index([userId, order])
 }
 
 model PageView {

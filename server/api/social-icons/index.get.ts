@@ -15,11 +15,12 @@ export default defineEventHandler(async (event) => {
       url: true,
       platform: true,
       logo: true,
+      order: true,
       clickCount: true,
       createdAt: true,
       updatedAt: true,
     },
-    orderBy: { createdAt: "asc" },
+    orderBy: { order: "asc" },
   })
 
   await setCached(cacheKey, icons, CACHE_TTL.SHORT)

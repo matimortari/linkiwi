@@ -19,6 +19,7 @@ interface Link {
   userId: string
   url: string
   title: string
+  order: number
   clickCount: number
   clicks?: { userLinkId: string, createdAt: string | Date }[]
   createdAt?: Date | string
@@ -31,6 +32,7 @@ interface Icon {
   url: string
   platform: string
   logo: string
+  order: number
   clickCount: number
   clicks?: { userIconId: string, createdAt: string | Date }[]
   createdAt?: Date | string
