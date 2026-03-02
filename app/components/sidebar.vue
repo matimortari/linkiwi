@@ -1,6 +1,6 @@
 <template>
   <!-- Mobile toggle -->
-  <button class="btn fixed top-4 right-4 z-50 md:hidden!" :aria-label="isOpen ? 'Close menu' : 'Open menu'" @click="emit('update:isOpen', !isOpen)">
+  <button class="btn fixed top-4 right-4 z-40 md:hidden!" :aria-label="isOpen ? 'Close menu' : 'Open menu'" @click="emit('update:isOpen', !isOpen)">
     <icon :name="isOpen ? 'mdi:close' : 'mdi:menu'" size="25" :class="isOpen ? 'text-muted-foreground' : ''" />
   </button>
 
@@ -8,7 +8,7 @@
   <div v-if="isOpen" class="fixed inset-0 z-20 bg-black/50 md:hidden" @click="emit('update:isOpen', false)" />
 
   <aside
-    class="fixed top-0 left-0 z-40 size-full bg-card px-4 py-8 transition-transform ease-in-out md:static md:block md:w-56 md:translate-x-0 md:bg-transparent 2xl:w-64 2xl:py-12"
+    class="fixed top-0 left-0 z-30 size-full bg-card px-4 py-8 transition-transform ease-in-out md:static md:block md:w-56 md:translate-x-0 md:bg-transparent 2xl:w-64 2xl:py-12"
     :class="[isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0']"
   >
     <div class="flex h-full flex-col gap-8 px-12 md:px-0">

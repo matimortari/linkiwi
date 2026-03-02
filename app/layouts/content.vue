@@ -2,12 +2,12 @@
   <Navbar />
 
   <div class="flex min-h-screen overflow-x-hidden border-b">
-    <div v-if="isSidebarOpen" class="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm xl:hidden" @click="isSidebarOpen = false" />
+    <div v-if="isOpen" class="fixed inset-0 z-20 bg-black/50 backdrop-blur-sm xl:hidden" @click="isOpen = false" />
 
     <div class="flex flex-1 flex-col xl:flex-row">
-      <div class="btn fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 gap-2 shadow-lg md:hidden!">
-        <button class="transition-transform hover:scale-110" @click="isSidebarOpen = !isSidebarOpen">
-          <icon :name="isSidebarOpen ? 'mdi:close' : 'mdi:menu'" size="25" />
+      <div class="btn fixed bottom-6 left-1/2 z-30 flex -translate-x-1/2 gap-2 shadow-lg md:hidden!">
+        <button class="transition-transform hover:scale-110" @click="isOpen = !isOpen">
+          <icon :name="isOpen ? 'mdi:close' : 'mdi:menu'" size="25" />
         </button>
         <div class="bg-border h-6 w-px" />
         <button class="transition-transform hover:scale-110" @click="scrollToTop">
@@ -15,28 +15,34 @@
         </button>
       </div>
 
-      <button class="btn fixed bottom-6 left-6 z-50 hidden! transition-transform md:flex!" @click="scrollToTop">
+      <button class="btn fixed bottom-6 left-6 z-30 hidden! transition-transform md:flex!" @click="scrollToTop">
         <icon name="mdi:arrow-up" size="25" />
       </button>
 
       <article
         v-motion :initial="{ opacity: 0, y: 10 }"
         :enter="{ opacity: 1, y: 0 }" :duration="600"
-        class="markdown mx-auto w-full max-w-4xl px-4 py-20 md:px-20 xl:mr-[25%] xl:max-w-5xl"
+        class="markdown mx-auto w-full px-4 py-20 md:px-20 xl:mr-[25%]"
       >
         <slot />
       </article>
 
       <aside
-        id="table-of-contents" :class="isSidebarOpen ? 'translate-x-0' : 'translate-x-full'"
-        class="fixed inset-y-0 right-0 z-40 flex h-screen w-3/4 flex-col border-l bg-card shadow-xl transition-transform md:w-80 xl:w-1/4 xl:translate-x-0 xl:shadow-none"
+        id="table-of-contents" :class="isOpen ? 'translate-y-0 md:translate-x-0' : 'translate-y-full md:translate-x-full'"
+        class="fixed inset-x-0 bottom-0 z-40 flex h-[80vh] w-full flex-col border-t bg-card shadow-xl transition-transform md:inset-y-0 md:right-0 md:left-auto md:z-20 md:h-screen md:w-80 md:translate-y-0 md:border-t-0 md:border-l xl:w-1/4 xl:translate-x-0 xl:shadow-none"
       >
-        <div class="flex h-full flex-col p-4 pt-24">
-          <div class="flex items-center gap-1 border-b py-2 font-semibold text-muted-foreground uppercase">
-            <icon name="mdi:table-of-contents" size="20" class="text-primary" />
-            <p class="text-sm font-bold tracking-wide text-muted-foreground uppercase">
-              On this page
-            </p>
+        <div class="flex h-full flex-col p-4 md:pt-24">
+          <div class="flex items-center justify-between border-b py-2 font-semibold text-muted-foreground uppercase">
+            <div class="flex items-center gap-1">
+              <icon name="mdi:table-of-contents" size="25" class="text-primary" />
+              <p class="font-semibold tracking-wide text-muted-foreground uppercase">
+                On this page
+              </p>
+            </div>
+
+            <button class="btn md:hidden!" @click="isOpen = false">
+              <icon name="mdi:close" size="25" />
+            </button>
           </div>
 
           <nav class="scroll-area flex-1 space-y-0.5 overflow-y-auto pr-2">
@@ -65,7 +71,7 @@ const props = defineProps<{
 }>()
 
 const { headers, headerClasses, scrollToSection } = useContent({ selector: ".markdown", ...props })
-const isSidebarOpen = ref(false)
+const isOpen = ref(false)
 
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: "smooth" })
@@ -73,7 +79,7 @@ function scrollToTop() {
 
 function scrollToHeader(id: string) {
   scrollToSection(id)
-  isSidebarOpen.value = false
+  isOpen.value = false
 }
 </script>
 

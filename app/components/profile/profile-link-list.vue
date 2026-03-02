@@ -10,7 +10,7 @@
 
       <VueDraggable
         v-else v-model="orderedLinks"
-        tag="ul" class="grid grid-cols-1 gap-2 md:grid-cols-2"
+        tag="ul" class="grid grid-cols-1 gap-2 md:grid-cols-2 2xl:grid-cols-3"
         handle=".drag-handle" :animation="150"
         @end="handleReorderLink"
       >

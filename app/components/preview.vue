@@ -1,14 +1,14 @@
 <template>
   <!-- Mobile toggle -->
-  <button class="btn fixed bottom-4 left-1/2 z-60 -translate-x-1/2 md:hidden!" aria-label="Toggle Mobile Preview" @click="isPreviewOpen = !isPreviewOpen">
-    <icon :name="isPreviewOpen ? 'mdi:eye-off' : 'mdi:eye'" size="25" />
-    <span>{{ isPreviewOpen ? 'Close Preview' : 'Preview' }}</span>
+  <button class="btn fixed bottom-4 left-1/2 z-50 -translate-x-1/2 md:hidden!" aria-label="Toggle Mobile Preview" @click="isOpen = !isOpen">
+    <icon :name="isOpen ? 'mdi:eye-off' : 'mdi:eye'" size="25" />
+    <span>{{ isOpen ? 'Close Preview' : 'Preview' }}</span>
   </button>
 
   <div v-if="user" class="mx-auto flex justify-center select-none">
     <!-- Mobile full-screen preview -->
     <transition name="slide">
-      <div v-if="isPreviewOpen" class="fixed top-0 left-0 z-20 size-full overflow-y-auto p-12 md:hidden" :style="backgroundStyle">
+      <div v-if="isOpen" class="fixed top-0 left-0 z-40 size-full overflow-y-auto p-12 md:hidden" :style="backgroundStyle">
         <div class="flex max-h-full flex-col items-center justify-start gap-4 overflow-y-auto p-4 text-center">
           <img :src="user.image" alt="Avatar" class="size-24 object-cover" :style="profilePictureStyle">
           <p class="line-clamp-3 max-w-sm truncate whitespace-break-spaces" :style="slugStyle">
@@ -40,8 +40,8 @@
       :visible="{ opacity: 1, x: 0 }" :duration="800"
       :style="backgroundStyle" class="scroll-hide relative hidden h-150 w-80 overflow-x-hidden rounded-[2.5rem] border-4 shadow-lg md:my-4 md:block 2xl:w-96"
     >
-      <div class="sticky top-2 left-1/2 z-10 h-2 w-24 -translate-x-1/2 rounded-full bg-black" />
-      <div class="sticky top-2 z-10 w-full px-4">
+      <div class="sticky top-2 left-1/2 h-2 w-24 -translate-x-1/2 rounded-full bg-black" />
+      <div class="sticky top-2 w-full px-4">
         <div class="flex justify-end gap-2 text-black">
           <icon name="mdi:signal" size="15" />
           <icon name="mdi:wifi" size="15" />
@@ -82,7 +82,7 @@
 const { user, preferences: storePreferences } = storeToRefs(useUserStore())
 const { links } = storeToRefs(useLinksStore())
 const { icons } = storeToRefs(useIconsStore())
-const isPreviewOpen = ref(false)
+const isOpen = ref(false)
 const localPreferences = inject<Ref<UserPreferences | null>>("localPreferences", ref(null))
 const preferences = computed(() => localPreferences.value || storePreferences.value)
 const visibleLinks = computed(() => links.value.filter(link => link.isVisible !== false))
