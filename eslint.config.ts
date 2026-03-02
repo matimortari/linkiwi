@@ -37,6 +37,15 @@ export default antfu({
       ImportDeclaration: { multiline: false, consistent: true },
       ExportDeclaration: { multiline: false, consistent: true },
     }],
+    ...eslintPluginBetterTailwindcss.configs["recommended-warn"].rules,
+    "better-tailwindcss/no-unregistered-classes": "off",
+    "better-tailwindcss/no-unknown-classes": "off",
+    "better-tailwindcss/enforce-consistent-line-wrapping": "off",
+    "markdown/fenced-code-language": "off",
+  },
+}, {
+  files: ["**/*.vue"],
+  rules: {
     "vue/object-curly-newline": ["error", {
       ObjectExpression: { multiline: false, consistent: true },
       ObjectPattern: { multiline: false, consistent: true },
@@ -66,9 +75,5 @@ export default antfu({
       singleline: { max: 4 },
       multiline: { max: 2 },
     }],
-    ...eslintPluginBetterTailwindcss.configs["recommended-warn"].rules,
-    "better-tailwindcss/no-unregistered-classes": "off",
-    "better-tailwindcss/no-unknown-classes": "off",
-    "better-tailwindcss/enforce-consistent-line-wrapping": "off",
   },
 })
