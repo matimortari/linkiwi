@@ -25,7 +25,7 @@
           Copy your profile link with tracking parameters to see where your visitors are coming from.
         </p>
 
-        <div class="card grid gap-2 md:grid-cols-3">
+        <div class="card grid grid-cols-2 gap-2 md:grid-cols-3">
           <button v-for="source in trackingSources" :key="source.id" class="btn-ghost justify-start!" @click="handleCopyWithTracking(source.id)">
             <icon :name="source.icon" size="25" class="shrink-0" />
             <span>{{ source.label }}</span>
@@ -54,19 +54,19 @@
         <div class="card grid grid-cols-2 gap-2">
           <button class="btn-ghost justify-start!" @click="shareToSocial('twitter')">
             <icon name="simple-icons:x" size="25" class="shrink-0" />
-            <span>Share on X / Twitter</span>
+            <span>X / Twitter</span>
           </button>
           <button class="btn-ghost justify-start!" @click="shareToSocial('facebook')">
             <icon name="simple-icons:facebook" size="25" class="shrink-0" />
-            <span>Share on Facebook</span>
+            <span>Facebook</span>
           </button>
           <button class="btn-ghost justify-start!" @click="shareToSocial('linkedin')">
             <icon name="simple-icons:linkedin" size="25" class="shrink-0" />
-            <span>Share on LinkedIn</span>
+            <span>LinkedIn</span>
           </button>
           <button class="btn-ghost justify-start!" @click="shareToSocial('whatsapp')">
             <icon name="simple-icons:whatsapp" size="25" class="shrink-0" />
-            <span>Send via WhatsApp</span>
+            <span>WhatsApp</span>
           </button>
         </div>
       </div>
@@ -116,6 +116,7 @@ const trackingSources = [
   { id: "reddit", label: "Reddit", icon: "simple-icons:reddit" },
   { id: "discord", label: "Discord", icon: "simple-icons:discord" },
   { id: "email", label: "Email", icon: "mdi:email-outline" },
+  { id: "whatsapp", label: "WhatsApp", icon: "simple-icons:whatsapp" },
 ]
 
 async function handleCopyWithTracking(source: string) {

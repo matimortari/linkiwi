@@ -16,7 +16,7 @@ export function useContent(options: { selector?: string, parseMethod?: boolean }
     }
 
     const hElements = container.querySelectorAll("h2, h3, h4")
-    headers.value = Array.from(hElements).map((el) => {
+    headers.value = Array.from(hElements, (el) => {
       const text = el.textContent?.trim() || ""
       let method: string | undefined
       if (parseMethod) {

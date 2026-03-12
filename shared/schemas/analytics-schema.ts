@@ -10,11 +10,10 @@ const referrerSchema = z.string().nullable().optional().transform((val) => {
     return normalized
   }
 
-  try {
-    new URL(normalized)
+  if (URL.canParse(normalized)) {
     return normalized
   }
-  catch {
+  else {
     return null
   }
 })

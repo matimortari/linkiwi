@@ -30,9 +30,9 @@ export function useAnalyticsData() {
     const viewsByDate = groupByDate(pageViews.value, "createdAt")
     const linksByDate = groupByDate(linkClicks.value, "createdAt")
     const iconsByDate = groupByDate(iconClicks.value, "createdAt")
-    const allDates = Array.from(new Set([...Object.keys(viewsByDate), ...Object.keys(linksByDate), ...Object.keys(iconsByDate)])).sort()
+    const allDates = [...new Set([...Object.keys(viewsByDate), ...Object.keys(linksByDate), ...Object.keys(iconsByDate)])].toSorted()
 
-    return allDates.map(date => ({
+    return allDates.map((date: string) => ({
       date,
       pageViews: viewsByDate[date] ?? 0,
       linkClicks: linksByDate[date] ?? 0,

@@ -47,4 +47,3 @@ export default defineEventHandler(async (event) => {
 
   return { icon: newIcon }
 })
-

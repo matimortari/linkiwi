@@ -8,7 +8,7 @@ export function useToast() {
 
     toasts.value.push(toast)
     if (duration > 0) {
-      setTimeout(() => dismiss(id), duration)
+      setTimeout(dismiss, duration, id)
     }
 
     return id
