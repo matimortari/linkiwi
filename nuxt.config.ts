@@ -25,7 +25,17 @@ export default defineNuxtConfig({
       },
     },
   },
+  devServer: {
+    host: "0.0.0.0",
+  },
   vite: {
+    server: {
+      hmr: {
+        protocol: "wss",
+        host: "dev.local",
+        clientPort: 443,
+      },
+    },
     plugins: [tailwindcss() as any],
   },
   nitro: {
@@ -35,7 +45,7 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
-      script: process.env.NODE_ENV === "production" ? [{ "src": "https://static.cloudflareinsights.com/beacon.min.js", "defer": true, "data-cf-beacon": "{\"token\": \"59e0cb447ba54c72bf6a994997bea0e9\"}" }] : [],
+      script: process.env.NODE_ENV === "production" ? [{ "src": "https://static.cloudflareinsights.com/beacon.min.js", "defer": true, "data-cf-beacon": `{"token": "${process.env.NUXT_CF_BEACON_TOKEN}"}` }] : [],
     },
   },
   css: ["~/assets/styles.css"],
