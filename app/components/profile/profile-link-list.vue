@@ -82,10 +82,11 @@ async function handleReorderLink() {
     try {
       await linksStore.updateLink(id, { order })
     }
-    catch (error) {
-      console.error(`Failed to update order for link ${id}:`, error)
+    catch {
+      // Silently fail
     }
   }
+  linksStore.links.sort((a, b) => a.order - b.order)
 }
 
 async function handleDeleteLink(linkId: string) {

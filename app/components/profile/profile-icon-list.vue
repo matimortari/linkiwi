@@ -57,10 +57,11 @@ async function handleReorderIcon() {
     try {
       await iconStore.updateIcon(id, { order })
     }
-    catch (error) {
-      console.error(`Failed to update order for icon ${id}:`, error)
+    catch {
+      // Silently fail
     }
   }
+  iconStore.icons.sort((a, b) => a.order - b.order)
 }
 
 async function handleDeleteIcon(iconId: string) {
