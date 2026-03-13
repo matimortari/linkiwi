@@ -1,6 +1,6 @@
 export default defineEventHandler(async (event) => {
-  const handle = getRouterParam(event, "handle")
-  if (!handle) {
+  const { handle } = getQuery(event)
+  if (!handle || typeof handle !== "string") {
     throw createError({ status: 400, statusText: "GitHub handle is required" })
   }
 

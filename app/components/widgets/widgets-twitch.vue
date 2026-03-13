@@ -57,7 +57,7 @@ async function fetchData() {
   loading.value = true
   error.value = false
   try {
-    data.value = await $fetch(`/api/widgets/fetch/twitch/${props.handle}`)
+    data.value = await $fetch(`/api/widgets/fetch/twitch`, { query: { handle: props.handle } })
   }
   catch {
     error.value = true

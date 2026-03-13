@@ -56,7 +56,7 @@ async function fetchData() {
   loading.value = true
   error.value = false
   try {
-    data.value = await $fetch(`/api/widgets/fetch/spotify/${props.handle}`)
+    data.value = await $fetch(`/api/widgets/fetch/spotify`, { query: { handle: props.handle } })
   }
   catch {
     error.value = true
