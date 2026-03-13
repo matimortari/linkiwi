@@ -17,13 +17,14 @@
 const userStore = useUserStore()
 const linksStore = useLinksStore()
 const iconsStore = useIconsStore()
+const widgetsStore = useWidgetsStore()
 const isSidebarOpen = ref(false)
 const isLoading = ref(true)
 
 onMounted(async () => {
   try {
     await userStore.getUser()
-    await Promise.all([linksStore.getLinks(), iconsStore.getIcons()])
+    await Promise.all([linksStore.getLinks(), iconsStore.getIcons(), widgetsStore.getWidgets()])
   }
   catch {
     await navigateTo("/sign-in")
