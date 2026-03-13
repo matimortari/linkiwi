@@ -59,6 +59,7 @@ export const CacheKeys = {
   userProfile: (slug: string) => `user:profile:${slug}`,
   userLinks: (userId: string) => `user:links:${userId}`,
   userIcons: (userId: string) => `user:icons:${userId}`,
+  userWidgets: (userId: string) => `user:widgets:${userId}`,
   analytics: (userId: string) => `user:analytics:${userId}`,
   rateLimit: (identifier: string) => `ratelimit:${identifier}`,
 } as const

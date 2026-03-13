@@ -17,6 +17,7 @@ export async function handleOAuthUser(event: H3Event, userData: OAuthUserData) {
         preferences: true,
         links: true,
         icons: true,
+        widgets: true,
         views: true,
         comments: true,
       },
@@ -39,6 +40,7 @@ export async function handleOAuthUser(event: H3Event, userData: OAuthUserData) {
         preferences: true,
         links: true,
         icons: true,
+        widgets: true,
         views: true,
         comments: true,
       },
@@ -65,6 +67,7 @@ export async function handleOAuthUser(event: H3Event, userData: OAuthUserData) {
     preferences: user.preferences ?? {},
     links: user.links ?? [],
     icons: user.icons ?? [],
+    widgets: user.widgets ?? [],
     views: user.views ?? [],
     comments: user.comments ?? [],
   }
