@@ -10,22 +10,16 @@ export default defineEventHandler(async (event) => {
     return cached
   }
 
-  const [userRes, reposRes] = await Promise.allSettled([
-    $fetch<any>(`https://api.github.com/users/${handle}`, {
-      headers: { Accept: "application/vnd.github+json" },
-    }),
-    $fetch<any[]>(`https://api.github.com/users/${handle}/repos`, {
-      headers: { Accept: "application/vnd.github+json" },
-      query: { sort: "updated", per_page: 4, type: "owner" },
-    }),
-  ])
-
+  const [userRes, reposRes] = (await Promise.allSettled<any>([
+    $fetch<any>(`https://api.github.com/users/${handle}`, { headers: { Accept: "application/vnd.github+json" } }),
+    $fetch<any[]>(`https://api.github.com/users/${handle}/repos`, { headers: { Accept: "application/vnd.github+json" }, query: { sort: "updated", per_page: 6, type: "owner" } }),
+  ])) as any[]
   if (userRes.status === "rejected") {
     throw createError({ status: 404, statusText: `GitHub user '${handle}' not found` })
   }
 
-  const user = userRes.value
-  const repos = reposRes.status === "fulfilled" ? reposRes.value : []
+  const user: any = userRes.value
+  const repos: any[] = reposRes.status === "fulfilled" ? reposRes.value : []
 
   const data = {
     handle,
@@ -46,5 +40,5 @@ export default defineEventHandler(async (event) => {
 
   await setCached(cacheKey, data, 60 * 60)
 
-  return data
+  return { data }
 })

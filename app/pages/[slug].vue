@@ -42,12 +42,11 @@
         No links yet.
       </p>
 
-      <div v-if="visibleWidgets.length" class="w-full max-w-sm px-4">
-        <template v-for="widget in visibleWidgets" :key="widget.id">
-          <WidgetsGithub v-if="widget.type === 'GITHUB'" :handle="widget.handle" />
-          <WidgetsYoutube v-else-if="widget.type === 'YOUTUBE'" :handle="widget.handle" />
-          <WidgetsSpotify v-else-if="widget.type === 'SPOTIFY'" :handle="widget.handle" />
-        </template>
+      <div v-if="visibleWidgets.length" class="flex w-full max-w-2xl flex-col items-center gap-4">
+        <div v-for="widget in visibleWidgets" :key="widget.id">
+          <UserWidgetGithub v-if="widget.type === 'GITHUB'" :handle="widget.handle" />
+          <UserWidgetYoutube v-else-if="widget.type === 'YOUTUBE'" :handle="widget.handle" />
+        </div>
       </div>
     </div>
 

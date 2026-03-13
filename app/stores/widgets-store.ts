@@ -83,6 +83,42 @@ export const useWidgetsStore = defineStore("widgets", () => {
     }
   }
 
+  async function getGitHubData(handle: string) {
+    loading.value = true
+
+    try {
+      const res = await $fetch<{ data: any }>("/api/widgets/fetch/github", { method: "GET", query: { handle } })
+      return res
+    }
+    catch (err: any) {
+      const message = getErrorMessage(err, "Failed to fetch GitHub data")
+      toast.error(message)
+      console.error("getGitHubData error:", err)
+      throw err
+    }
+    finally {
+      loading.value = false
+    }
+  }
+
+  async function getYouTubeData(handle: string) {
+    loading.value = true
+
+    try {
+      const res = await $fetch<{ data: any }>("/api/widgets/fetch/youtube", { method: "GET", query: { handle } })
+      return res
+    }
+    catch (err: any) {
+      const message = getErrorMessage(err, "Failed to fetch YouTube data")
+      toast.error(message)
+      console.error("getYouTubeData error:", err)
+      throw err
+    }
+    finally {
+      loading.value = false
+    }
+  }
+
   return {
     loading,
     widgets,
@@ -90,5 +126,7 @@ export const useWidgetsStore = defineStore("widgets", () => {
     createWidget,
     updateWidget,
     deleteWidget,
+    getGitHubData,
+    getYouTubeData,
   }
 })

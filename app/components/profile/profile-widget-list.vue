@@ -12,10 +12,10 @@
         <li v-for="widget in widgets" :key="widget.id" class="flex flex-col gap-2">
           <div class="card navigation-group justify-between" :class="{ 'border-dashed! opacity-60': !widget.isVisible }">
             <div class="navigation-group min-w-0">
-              <icon :name="WIDGET_ICONS[widget.type as WidgetType]" size="20" class="shrink-0" />
+              <icon :name="WIDGET_ICONS[widget.type]" size="30" class="shrink-0" />
               <div class="flex min-w-0 flex-col">
                 <span class="text-sm font-semibold" :class="{ 'text-muted-foreground': !widget.isVisible }">
-                  {{ WIDGET_LABELS[widget.type as WidgetType] }}
+                  {{ WIDGET_LABELS[widget.type] }}
                 </span>
                 <span class="text-caption truncate">{{ widget.handle }}</span>
               </div>
@@ -36,10 +36,11 @@
 
           <div v-if="editingId === widget.id" class="card flex flex-col gap-3 border-primary!">
             <p class="text-sm font-medium">
-              {{ WIDGET_META[widget.type as WidgetType].label }}
+              {{ WIDGET_META[widget.type].label }}
             </p>
-            <div class="flex gap-2">
-              <input v-model="editHandle" type="text" class="flex-1" :placeholder="WIDGET_META[widget.type as WidgetType].placeholder">
+
+            <div class="navigation-group">
+              <input v-model="editHandle" type="text" class="flex-1" :placeholder="WIDGET_META[widget.type].placeholder">
               <button class="btn-success shrink-0" :disabled="!editHandle || loading" @click="handleUpdate(widget.id)">
                 <icon name="mdi:check" size="20" />
                 <span>Save</span>
@@ -48,8 +49,9 @@
                 <icon name="mdi:close" size="20" />
               </button>
             </div>
+
             <p class="text-caption text-xs">
-              {{ WIDGET_META[widget.type as WidgetType].hint }}
+              {{ WIDGET_META[widget.type].hint }}
             </p>
           </div>
         </li>
@@ -66,43 +68,41 @@
             class="card navigation-group p-2! hover:bg-muted!" :class="{ 'bg-muted!': newType === option.type, 'cursor-not-allowed! opacity-40': existingTypes.includes(option.type) }"
             :disabled="existingTypes.includes(option.type)" @click="newType = option.type"
           >
-            <icon :name="option.icon" size="18" class="shrink-0" />
+            <icon :name="option.icon" size="20" class="shrink-0" />
             <span class="text-sm font-medium">{{ option.label }}</span>
           </button>
         </div>
 
-        <template v-if="newType">
-          <div class="flex flex-col gap-1">
-            <p class="text-sm font-medium">
-              {{ WIDGET_META[newType].label }}
-            </p>
+        <div v-if="newType" class="flex flex-col gap-1">
+          <p class="text-sm font-medium">
+            {{ WIDGET_META[newType].label }}
+          </p>
 
-            <div class="flex gap-2">
-              <input v-model="newHandle" type="text" class="flex-1" :placeholder="WIDGET_META[newType].placeholder">
-              <button class="btn-success shrink-0" :disabled="!newHandle || loading" @click="handleCreate">
-                <icon name="mdi:check" size="20" />
-                <span>Add</span>
-              </button>
-              <button class="btn-ghost shrink-0" @click="cancelAdd">
-                <icon name="mdi:close" size="20" />
-              </button>
-            </div>
-
-            <p class="text-caption text-xs">
-              {{ WIDGET_META[newType].hint }}
-            </p>
+          <div class="navigation-group">
+            <input v-model="newHandle" type="text" class="flex-1" :placeholder="WIDGET_META[newType].placeholder">
+            <button class="btn-success shrink-0" :disabled="!newHandle || loading" @click="handleCreate">
+              <icon name="mdi:check" size="20" />
+              <span>Add</span>
+            </button>
+            <button class="btn-ghost shrink-0" @click="cancelAdd">
+              <icon name="mdi:close" size="20" />
+            </button>
           </div>
-        </template>
+
+          <p class="text-caption text-xs">
+            {{ WIDGET_META[newType].hint }}
+          </p>
+        </div>
 
         <div v-if="!newType" class="flex justify-end">
-          <button class="btn-ghost" @click="cancelAdd">
+          <button class="btn-danger" @click="cancelAdd">
             <icon name="mdi:close" size="20" />
             <span>Cancel</span>
           </button>
         </div>
       </div>
 
-      <button v-if="!isAdding" class="btn-primary self-end" :disabled="widgets.length >= 4" @click="startAdd">
+      <button v-if="!isAdding" class="btn-primary self-end" :disabled="widgets.length >= 2" @click="startAdd">
         <icon name="mdi:widgets-outline" size="25" />
         <span>Add Widget</span>
       </button>
@@ -116,42 +116,18 @@ import type { WidgetType } from "#shared/schemas/widget-schema"
 const WIDGET_OPTIONS: { type: WidgetType, label: string, icon: string }[] = [
   { type: "GITHUB", label: "GitHub", icon: "simple-icons:github" },
   { type: "YOUTUBE", label: "YouTube", icon: "simple-icons:youtube" },
-  { type: "SPOTIFY", label: "Spotify", icon: "simple-icons:spotify" },
 ]
 
-const WIDGET_ICONS: Record<WidgetType, string> = {
-  GITHUB: "simple-icons:github",
-  YOUTUBE: "simple-icons:youtube",
-  SPOTIFY: "simple-icons:spotify",
-}
-
-const WIDGET_LABELS: Record<WidgetType, string> = {
-  GITHUB: "GitHub",
-  YOUTUBE: "YouTube",
-  SPOTIFY: "Spotify",
-}
-
+const WIDGET_ICONS: Record<WidgetType, string> = { GITHUB: "simple-icons:github", YOUTUBE: "simple-icons:youtube" }
+const WIDGET_LABELS: Record<WidgetType, string> = { GITHUB: "GitHub", YOUTUBE: "YouTube" }
 const WIDGET_META: Record<WidgetType, { label: string, placeholder: string, hint: string }> = {
-  GITHUB: {
-    label: "GitHub Username",
-    placeholder: "e.g. torvalds",
-    hint: "Your GitHub username as it appears in your profile URL.",
-  },
-  YOUTUBE: {
-    label: "YouTube Handle or Channel ID",
-    placeholder: "e.g. @mkbhd or UCBcRF18a7Qf58cCRy5xuWwQ",
-    hint: "Your @handle or the channel ID from your YouTube URL.",
-  },
-  SPOTIFY: {
-    label: "Spotify User ID",
-    placeholder: "e.g. abc123xyz",
-    hint: "Found in your Spotify profile URL: open.spotify.com/user/YOUR_ID",
-  },
+  GITHUB: { label: "GitHub Username", placeholder: "e.g. torvalds", hint: "Your GitHub username as it appears in your profile URL." },
+  YOUTUBE: { label: "YouTube Handle or Channel ID", placeholder: "e.g. @mkbhd or UCBcRF18a7Qf58cCRy5xuWwQ", hint: "Your @handle or the channel ID from your YouTube URL." },
 }
 
 const widgetsStore = useWidgetsStore()
 const { widgets, loading } = storeToRefs(widgetsStore)
-const existingTypes = computed(() => widgets.value.map(w => w.type as WidgetType))
+const existingTypes = computed(() => widgets.value.map(w => w.type))
 const isAdding = ref(false)
 const newType = ref<WidgetType | null>(null)
 const newHandle = ref("")
