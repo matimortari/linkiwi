@@ -12,6 +12,11 @@ enum BackgroundType {
   GRADIENT
 }
 
+enum WidgetType {
+  GITHUB
+  YOUTUBE
+}
+
 enum SupportBanner {
   NONE
   LGBTQ_RIGHTS
@@ -47,6 +52,7 @@ model User {
   accounts    Account[]
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
+  widgets     Widget[]
 }
 
 model UserPreferences {
@@ -118,6 +124,20 @@ model UserIcon {
   user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
+
+  @@index([userId, order])
+}
+
+model Widget {
+  id        String     @id @default(cuid())
+  userId    String
+  type      WidgetType
+  handle    String
+  order     Int        @default(0)
+  isVisible Boolean    @default(true)
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 
   @@index([userId, order])
 }

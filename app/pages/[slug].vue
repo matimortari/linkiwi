@@ -41,6 +41,14 @@
       <p v-else :style="descriptionStyle">
         No links yet.
       </p>
+
+      <div v-if="visibleWidgets.length" class="w-full max-w-sm px-4">
+        <template v-for="widget in visibleWidgets" :key="widget.id">
+          <WidgetsGithub v-if="widget.type === 'GITHUB'" :handle="widget.handle" />
+          <WidgetsYoutube v-else-if="widget.type === 'YOUTUBE'" :handle="widget.handle" />
+          <WidgetsSpotify v-else-if="widget.type === 'SPOTIFY'" :handle="widget.handle" />
+        </template>
+      </div>
     </div>
 
     <UserGuestbook v-if="profilePreferences?.enableGuestbook" :user-id="userProfile?.id" />
@@ -58,6 +66,7 @@ const profilePreferences = computed(() => userProfile.value?.preferences ?? DEFA
 const { backgroundStyle, profilePictureStyle, slugStyle, descriptionStyle } = useDynamicStyles(profilePreferences)
 const visibleLinks = computed(() => userProfile.value?.links?.filter(link => link.isVisible !== false) ?? [])
 const visibleIcons = computed(() => userProfile.value?.icons?.filter(icon => icon.isVisible !== false) ?? [])
+const visibleWidgets = computed(() => userProfile.value?.widgets?.filter(w => w.isVisible) ?? [])
 
 async function handleClick(itemId: string, type: "link" | "icon") {
   if (!userProfile.value?.id) {

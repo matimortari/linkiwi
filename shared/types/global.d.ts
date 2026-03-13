@@ -8,6 +8,7 @@ interface User {
   preferences: UserPreferences
   links?: Link[]
   icons?: Icon[]
+  widgets?: Widget[]
   views?: PageView[]
   comments?: Comment[]
   createdAt?: Date | string
@@ -37,6 +38,17 @@ interface Icon {
   clickCount: number
   isVisible?: boolean
   clicks?: { userIconId: string, createdAt: string | Date }[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+interface Widget {
+  id: string
+  userId: string
+  type: "GITHUB" | "YOUTUBE"
+  handle: string
+  order: number
+  isVisible: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
