@@ -117,21 +117,18 @@ const WIDGET_OPTIONS: { type: WidgetType, label: string, icon: string }[] = [
   { type: "GITHUB", label: "GitHub", icon: "simple-icons:github" },
   { type: "YOUTUBE", label: "YouTube", icon: "simple-icons:youtube" },
   { type: "SPOTIFY", label: "Spotify", icon: "simple-icons:spotify" },
-  { type: "TWITCH", label: "Twitch", icon: "simple-icons:twitch" },
 ]
 
 const WIDGET_ICONS: Record<WidgetType, string> = {
   GITHUB: "simple-icons:github",
   YOUTUBE: "simple-icons:youtube",
   SPOTIFY: "simple-icons:spotify",
-  TWITCH: "simple-icons:twitch",
 }
 
 const WIDGET_LABELS: Record<WidgetType, string> = {
   GITHUB: "GitHub",
   YOUTUBE: "YouTube",
   SPOTIFY: "Spotify",
-  TWITCH: "Twitch",
 }
 
 const WIDGET_META: Record<WidgetType, { label: string, placeholder: string, hint: string }> = {
@@ -149,11 +146,6 @@ const WIDGET_META: Record<WidgetType, { label: string, placeholder: string, hint
     label: "Spotify User ID",
     placeholder: "e.g. abc123xyz",
     hint: "Found in your Spotify profile URL: open.spotify.com/user/YOUR_ID",
-  },
-  TWITCH: {
-    label: "Twitch Username",
-    placeholder: "e.g. shroud",
-    hint: "Your Twitch username as it appears in your channel URL.",
   },
 }
 

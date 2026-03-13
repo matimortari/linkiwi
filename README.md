@@ -18,6 +18,7 @@
 - **Admin Dashboard:** Manage your links, profile settings, and customization options from the dedicated admin interface.
 - **Custom Profile Page:** Design your landing page with your key links and information. Pick from many themes, and feel free to customize colors, fonts, and layouts to match your style.
 - **Link Management:** Add, edit, and organize links to your social profiles, websites, and other online resources. You can pin social icons to enhance visibility for your most important platforms.
+- **Platform Widgets:** Embed live data from GitHub and YouTube directly on your profile page.
 - **Analytics Dashboard:** Monitor insights for your profile page, such as total views and clicks on individual links.
 
 ## Stack

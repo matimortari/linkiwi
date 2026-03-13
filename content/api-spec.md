@@ -176,7 +176,7 @@ Retrieves the authenticated user's profile information, including preferences, c
 
 > **GET** `/api/user/{slug}`
 
-Retrieves a public user information by slug, including their links, social icons, and preferences.
+Retrieves a public user information by slug, including their links, social icons, and preferences. This endpoint is public and does not require authentication.
 
 **Route Parameters:**
 
@@ -510,6 +510,183 @@ Deletes a social icon for the authenticated user.
 {
   "success": true,
   "message": "Icon deleted successfully"
+}
+```
+
+---
+
+### Widgets
+
+#### Get User Widgets
+
+> **GET** `/api/widgets`
+
+Retrieves all widgets for the authenticated user.
+
+**Response:**
+
+```json
+{
+  "widgets": [
+    {
+      "id": "string",
+      "userId": "string",
+      "type": "GITHUB | YOUTUBE",
+      "handle": "string",
+      "order": "number",
+      "isVisible": "boolean",
+      "createdAt": "string",
+      "updatedAt": "string"
+    }
+  ]
+}
+```
+
+#### Create Widget
+
+> **POST** `/api/widgets`
+
+Creates a new widget for the authenticated user. Only one widget per platform type is allowed.
+
+**Request Body:**
+
+```json
+{
+  "type": "GITHUB | YOUTUBE", // Required: widget platform type
+  "handle": "string" // Required: 1-100 characters
+}
+```
+
+**Response:**
+
+```json
+{
+  "widget": {
+    "id": "string",
+    "userId": "string",
+    "type": "GITHUB | YOUTUBE",
+    "handle": "string",
+    "order": "number",
+    "isVisible": "boolean",
+    "createdAt": "string",
+    "updatedAt": "string"
+  }
+}
+```
+
+#### Update Widget
+
+> **PUT** `/api/widgets/{widget}`
+
+Updates an existing widget for the authenticated user.
+
+**Route Parameters:**
+
+- `widget`: Widget ID (required).
+
+**Request Body:** All fields are optional
+
+```json
+{
+  "handle": "string", // Optional: 1-100 characters
+  "order": "number", // Optional: non-negative integer for reordering
+  "isVisible": "boolean" // Optional: toggle widget visibility
+}
+```
+
+**Response:**
+
+```json
+{
+  "widget": {
+    // ... Widget details
+  }
+}
+```
+
+#### Delete Widget
+
+> **DELETE** `/api/widgets/{widget}`
+
+Deletes a widget for the authenticated user.
+
+**Route Parameters:**
+
+- `widget`: Widget ID (required).
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "message": "Widget deleted successfully"
+}
+```
+
+---
+
+#### Fetch GitHub Data
+
+> **GET** `/api/widgets/fetch/github`
+
+Fetches public profile and repository data for a GitHub user. This endpoint is public and does not require authentication.
+
+**Query Parameters:**
+
+- `handle`: GitHub username (required).
+
+**Response:**
+
+```json
+{
+  "handle": "string",
+  "name": "string",
+  "avatar": "string",
+  "bio": "string | null",
+  "followers": "number",
+  "publicRepos": "number",
+  "profileUrl": "string",
+  "repos": [
+    {
+      "name": "string",
+      "description": "string | null",
+      "stars": "number",
+      "language": "string | null",
+      "url": "string"
+    }
+  ]
+}
+```
+
+#### Fetch YouTube Data
+
+> **GET** `/api/widgets/fetch/youtube`
+
+Fetches public channel data and latest video for a YouTube channel. This endpoint is public and does not require authentication.
+
+**Query Parameters:**
+
+- `handle`: YouTube `@handle` or channel ID starting with `UC` (required).
+
+**Response:**
+
+```json
+{
+  "handle": "string",
+  "channelId": "string",
+  "name": "string",
+  "description": "string",
+  "avatar": "string | null",
+  "subscribers": "number",
+  "videoCount": "number",
+  "profileUrl": "string",
+  "latestVideo": {
+    "id": "string",
+    "title": "string",
+    "thumbnail": "string",
+    "publishedAt": "string",
+    "url": "string"
+  }
 }
 ```
 
