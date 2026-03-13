@@ -1,13 +1,13 @@
 <template>
-  <div class="fixed right-4 bottom-4 z-40 flex flex-col items-end gap-3">
+  <div class="fixed top-4 right-4 z-40 flex flex-col items-end gap-2">
     <transition name="slide-fade">
-      <div v-if="isOpen" class="overlay flex w-80 flex-col gap-2 md:w-96">
+      <div v-if="isOpen" class="overlay absolute top-4 right-4 flex w-80 flex-col gap-2 md:w-96">
         <div class="flex items-center justify-between border-b pb-2">
           <h5>
             Leave a message
           </h5>
           <button class="flex items-center transition-transform hover:scale-110" aria-label="Close guestbook" @click="isOpen = false">
-            <icon name="mdi:close" size="24" />
+            <icon name="mdi:close" size="20" />
           </button>
         </div>
 

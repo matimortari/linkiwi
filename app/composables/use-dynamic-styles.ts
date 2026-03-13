@@ -27,7 +27,11 @@ export function useDynamicStyles(preferences: UserPreferences | null | Ref<UserP
     fontFamily: pref.value?.headerFontFamily,
   }))
 
-  function iconStyle(isHovered: boolean) {
+  const widgetTextStyle = computed(() => ({
+    color: pref.value?.headerTextColor,
+  }))
+
+  function iconStyle(isHovered?: boolean) {
     if (!pref.value) {
       return {}
     }
@@ -51,7 +55,7 @@ export function useDynamicStyles(preferences: UserPreferences | null | Ref<UserP
     }
   })
 
-  function linkStyle(isHovered: boolean) {
+  function linkStyle(isHovered?: boolean) {
     if (!pref.value) {
       return {}
     }
@@ -82,6 +86,7 @@ export function useDynamicStyles(preferences: UserPreferences | null | Ref<UserP
     profilePictureStyle,
     slugStyle,
     descriptionStyle,
+    widgetTextStyle,
     iconStyle,
     iconInnerStyle,
     linkStyle,

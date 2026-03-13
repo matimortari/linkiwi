@@ -10,25 +10,34 @@
 
     <Empty v-else-if="!userProfile && !loading" :message="`User @${slug} not found.`" icon-name="mdi:account-off" />
 
-    <div v-else-if="userProfile" class="flex w-full flex-1 flex-col items-center gap-4 py-12 text-center" :style="backgroundStyle">
+    <div v-else-if="userProfile" class="flex w-full flex-1 flex-col items-center gap-4 pt-4 pb-32 text-center" :style="backgroundStyle">
       <UserSupportBanner v-if="profilePreferences.supportBanner !== 'NONE'" :preferences="profilePreferences" />
 
-      <img :src="userProfile.image" alt="Avatar" class="size-24 object-cover" :style="profilePictureStyle">
-      <p :style="slugStyle">
-        {{ `@${userProfile.slug}` }}
-      </p>
+      <div class="flex flex-col items-center gap-2">
+        <img :src="userProfile.image" alt="Avatar" class="size-24 object-cover" :style="profilePictureStyle">
+        <p :style="slugStyle">
+          {{ `@${userProfile.slug}` }}
+        </p>
 
-      <p class="max-w-sm leading-4 whitespace-break-spaces" :style="descriptionStyle">
-        {{ userProfile.description }}
-      </p>
+        <p v-if="userProfile.description" class="max-w-sm leading-4 whitespace-break-spaces" :style="descriptionStyle">
+          {{ userProfile.description }}
+        </p>
+      </div>
 
-      <ul v-if="visibleIcons.length" class="my-2 navigation-group justify-center">
+      <ul v-if="visibleIcons.length" class="navigation-group justify-center">
         <UserIcon
           v-for="icon in visibleIcons" :key="icon.id"
           :item="icon" :preferences="profilePreferences"
           @click="handleClick(icon.id ?? '', 'icon')"
         />
       </ul>
+
+      <div v-if="visibleWidgets.length" class="flex w-full flex-col items-center gap-4 px-4">
+        <div v-for="widget in visibleWidgets" :key="widget.id" class="w-full max-w-xl">
+          <UserWidgetGithub v-if="widget.type === 'GITHUB'" :handle="widget.handle" :preferences="profilePreferences" />
+          <UserWidgetYoutube v-else-if="widget.type === 'YOUTUBE'" :handle="widget.handle" :preferences="profilePreferences" />
+        </div>
+      </div>
 
       <ul v-if="visibleLinks.length" class="flex w-full flex-col items-center gap-4">
         <UserLink
@@ -41,13 +50,6 @@
       <p v-else :style="descriptionStyle">
         No links yet.
       </p>
-
-      <div v-if="visibleWidgets.length" class="flex w-full max-w-2xl flex-col items-center gap-4">
-        <div v-for="widget in visibleWidgets" :key="widget.id">
-          <UserWidgetGithub v-if="widget.type === 'GITHUB'" :handle="widget.handle" />
-          <UserWidgetYoutube v-else-if="widget.type === 'YOUTUBE'" :handle="widget.handle" />
-        </div>
-      </div>
     </div>
 
     <UserGuestbook v-if="profilePreferences?.enableGuestbook" :user-id="userProfile?.id" />

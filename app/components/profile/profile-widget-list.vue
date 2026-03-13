@@ -6,7 +6,7 @@
 
     <div class="flex flex-col gap-2">
       <Loading v-if="loading" />
-      <Empty v-else-if="!widgets.length && !isAdding" message="Widgets display your content from other platforms directly on your profile." icon-name="mdi:widgets-outline" />
+      <Empty v-else-if="!widgets.length && !isAdding" message="Widgets display your content from other platforms directly on your profile." icon-name="mdi:shape" />
 
       <ul v-else class="flex flex-col gap-2">
         <li v-for="widget in widgets" :key="widget.id" class="flex flex-col gap-2">
@@ -34,7 +34,7 @@
             </div>
           </div>
 
-          <div v-if="editingId === widget.id" class="card flex flex-col gap-3 border-primary!">
+          <div v-if="editingId === widget.id" class="card flex flex-col gap-2">
             <p class="text-sm font-medium">
               {{ WIDGET_META[widget.type].label }}
             </p>
@@ -57,7 +57,7 @@
         </li>
       </ul>
 
-      <div v-if="isAdding" class="card flex flex-col gap-3 border-primary!">
+      <div v-if="isAdding" class="card flex flex-col gap-2">
         <p class="text-sm font-medium">
           Select Platform
         </p>
@@ -103,7 +103,7 @@
       </div>
 
       <button v-if="!isAdding" class="btn-primary self-end" :disabled="widgets.length >= 2" @click="startAdd">
-        <icon name="mdi:widgets-outline" size="25" />
+        <icon name="mdi:shape-plus" size="25" />
         <span>Add Widget</span>
       </button>
     </div>

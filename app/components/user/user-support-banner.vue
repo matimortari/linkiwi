@@ -1,24 +1,25 @@
 <template>
   <transition name="banner-slide-up">
     <div v-if="showBanner && banner" class="fixed bottom-0 z-30 flex w-screen flex-col items-center justify-between gap-2 p-4 text-[#ebe8e8] md:flex-row md:gap-2" :class="banner.class">
-      <div class="navigation-group md:flex-col md:items-start">
-        <div class="flex flex-col gap-2 text-start">
+      <div class="navigation-group w-full justify-between md:flex-col md:items-start">
+        <div class="flex w-full flex-col justify-between gap-2 text-start">
           <div class="navigation-group">
             <icon :name="banner.icon" size="35" class="hidden shrink-0 text-[#ebe8e8] md:block" />
             <h5>
               {{ banner.message }}
             </h5>
+
+            <nuxt-link :to="banner.link" class="btn ml-auto">
+              <span>Learn More</span>
+              <icon name="mdi:arrow-right" size="20" />
+            </nuxt-link>
           </div>
+
           <p class="text-xs/4 md:text-sm">
             {{ banner.description }}
           </p>
         </div>
       </div>
-
-      <nuxt-link :to="banner.link" class="btn self-end md:self-center">
-        <span>Learn More</span>
-        <icon name="mdi:arrow-right" size="20" />
-      </nuxt-link>
     </div>
   </transition>
 </template>
