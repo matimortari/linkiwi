@@ -35,6 +35,7 @@
         <div v-for="widget in visibleWidgets" :key="widget.id" class="w-full max-w-xl">
           <UserWidgetGithub v-if="widget.type === 'GITHUB'" :handle="widget.handle" :preferences="profilePreferences" />
           <UserWidgetYoutube v-else-if="widget.type === 'YOUTUBE'" :handle="widget.handle" :preferences="profilePreferences" />
+          <UserWidgetSpotify v-else-if="widget.type === 'SPOTIFY'" :handle="widget.handle" :preferences="profilePreferences" />
         </div>
       </div>
 

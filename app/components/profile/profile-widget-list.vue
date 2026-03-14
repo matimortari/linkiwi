@@ -111,25 +111,11 @@
 </template>
 
 <script setup lang="ts">
-import type { WidgetType } from "#shared/schemas/widget-schema"
-
-const WIDGET_OPTIONS: { type: WidgetType, label: string, icon: string }[] = [
-  { type: "GITHUB", label: "GitHub", icon: "simple-icons:github" },
-  { type: "YOUTUBE", label: "YouTube", icon: "simple-icons:youtube" },
-]
-
-const WIDGET_ICONS: Record<WidgetType, string> = { GITHUB: "simple-icons:github", YOUTUBE: "simple-icons:youtube" }
-const WIDGET_LABELS: Record<WidgetType, string> = { GITHUB: "GitHub", YOUTUBE: "YouTube" }
-const WIDGET_META: Record<WidgetType, { label: string, placeholder: string, hint: string }> = {
-  GITHUB: { label: "GitHub Username", placeholder: "e.g. torvalds", hint: "Enter your GitHub username and display your top repositories." },
-  YOUTUBE: { label: "YouTube Handle or Channel ID", placeholder: "e.g. @mkbhd or UCBcRF18a7Qf58cCRy5xuWwQ", hint: "Enter your @handle or the channel ID to display your latest videos." },
-}
-
 const widgetsStore = useWidgetsStore()
 const { widgets, loading } = storeToRefs(widgetsStore)
 const existingTypes = computed(() => widgets.value.map(w => w.type))
 const isAdding = ref(false)
-const newType = ref<WidgetType | null>(null)
+const newType = ref<"GITHUB" | "YOUTUBE" | "SPOTIFY" | null>(null)
 const newHandle = ref("")
 const editingId = ref<string | null>(null)
 const editHandle = ref("")

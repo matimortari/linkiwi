@@ -132,3 +132,39 @@ export const DEFAULT_PREFERENCES = {
   supportBanner: "NONE" as const,
   enableGuestbook: false,
 }
+
+export const WIDGET_OPTIONS: { type: "GITHUB" | "YOUTUBE" | "SPOTIFY", label: string, icon: string }[] = [
+  { type: "GITHUB", label: "GitHub", icon: "simple-icons:github" },
+  { type: "YOUTUBE", label: "YouTube", icon: "simple-icons:youtube" },
+  { type: "SPOTIFY", label: "Spotify", icon: "simple-icons:spotify" },
+]
+
+export const WIDGET_ICONS: Record<"GITHUB" | "YOUTUBE" | "SPOTIFY", string> = {
+  GITHUB: "simple-icons:github",
+  YOUTUBE: "simple-icons:youtube",
+  SPOTIFY: "simple-icons:spotify",
+}
+
+export const WIDGET_LABELS: Record<"GITHUB" | "YOUTUBE" | "SPOTIFY", string> = {
+  GITHUB: "GitHub",
+  YOUTUBE: "YouTube",
+  SPOTIFY: "Spotify",
+}
+
+export const WIDGET_META: Record<"GITHUB" | "YOUTUBE" | "SPOTIFY", { label: string, placeholder: string, hint: string }> = {
+  GITHUB: {
+    label: "GitHub Username",
+    placeholder: "e.g. torvalds",
+    hint: "Enter your GitHub username and display your top repositories.",
+  },
+  YOUTUBE: {
+    label: "YouTube Handle or Channel ID",
+    placeholder: "e.g. @mkbhd or UCBcRF18a7Qf58cCRy5xuWwQ",
+    hint: "Enter your @handle or the channel ID to display your latest videos.",
+  },
+  SPOTIFY: {
+    label: "Spotify Link",
+    placeholder: "e.g. https://open.spotify.com/track/...",
+    hint: "Paste a Spotify URL for a track, album, playlist, episode, or podcast.",
+  },
+}
