@@ -45,7 +45,7 @@ interface Icon {
 interface Widget {
   id: string
   userId: string
-  type: "GITHUB" | "YOUTUBE"
+  type: "GITHUB" | "YOUTUBE" | "SPOTIFY"
   handle: string
   order: number
   isVisible: boolean

@@ -15,6 +15,7 @@ enum BackgroundType {
 enum WidgetType {
   GITHUB
   YOUTUBE
+  SPOTIFY
 }
 
 enum SupportBanner {

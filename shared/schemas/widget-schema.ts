@@ -1,10 +1,8 @@
 import { z } from "zod"
 
-export const WIDGET_TYPES = ["GITHUB", "YOUTUBE"] as const
+export const WIDGET_TYPES = ["GITHUB", "YOUTUBE", "SPOTIFY"] as const
 export type WidgetType = typeof WIDGET_TYPES[number]
-
-// Handle validation per platform — kept intentionally loose since usernames/channel IDs vary widely per platform. Trimmed and non-empty.
-const handleSchema = z.string().min(1, "Handle is required").max(100, "Handle is too long").transform(val => val.trim())
+const handleSchema = z.string().min(1, "Handle is required").max(300, "Handle is too long").transform(val => val.trim())
 
 export const createWidgetSchema = z.object({
   type: z.enum(WIDGET_TYPES, { error: "Invalid widget type" }),
