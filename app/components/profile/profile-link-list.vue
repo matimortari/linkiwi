@@ -42,7 +42,7 @@
         </li>
       </VueDraggable>
 
-      <button class="btn-primary self-end" aria-label="Add Link" @click="handleAddLink">
+      <button class="btn-primary self-end" @click="handleAddLink">
         <icon name="mdi:link-variant-plus" size="25" />
         <span>Add Link</span>
       </button>

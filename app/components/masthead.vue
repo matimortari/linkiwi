@@ -4,11 +4,7 @@
       <Logo />
 
       <div class="hidden h-8 md:flex md:items-center">
-        <nuxt-link
-          v-if="user" :to="`/${user.slug}`"
-          class="btn bg-muted/50! p-1! text-xs! text-muted-foreground!"
-          target="_blank" title="Go to your profile page"
-        >
+        <nuxt-link v-if="user" :to="`/${user.slug}`" class="btn bg-muted/50! p-1! text-xs! text-muted-foreground!" target="_blank">
           <icon name="mdi:arrow-top-right" size="20" class="text-secondary" />
           <span class="truncate">{{ pageUrl }}</span>
         </nuxt-link>

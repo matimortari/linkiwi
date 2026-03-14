@@ -28,7 +28,7 @@
 
             <div class="flex w-full items-center justify-between p-2">
               <span class="text-sm font-medium">{{ asset.name }}</span>
-              <button :title="`Download ${asset.name}`" class="transition-transform hover:scale-110" @click="handleDownloadImage(asset, index, category.actions)">
+              <button :aria-label="`Download ${asset.name}`" class="transition-transform hover:scale-110" @click="handleDownloadImage(asset, index, category.actions)">
                 <icon :name="category.actions[index]!.icon.value" size="20" />
               </button>
             </div>
@@ -48,7 +48,7 @@
             <div class="flex w-full flex-col p-2">
               <div class="flex w-full items-center justify-between">
                 <span class="text-sm font-medium">{{ color.name }}</span>
-                <button :title="`Copy ${color.name}`" class="transition-transform hover:scale-110" @click="handleCopyColor(color.var, index, category.actions)">
+                <button :aria-label="`Copy ${color.name}`" class="transition-transform hover:scale-110" @click="handleCopyColor(color.var, index, category.actions)">
                   <icon :name="category.actions[index]!.icon.value" size="20" />
                 </button>
               </div>
@@ -78,7 +78,9 @@ const activeSection = ref("symbols")
 const SECTIONS = [
   { id: "symbols", label: "Symbols" },
   { id: "wordmarks", label: "Wordmarks" },
-  { id: "colors", label: "Colors" },
+  { id: "brand", label: "Brand Colors" },
+  { id: "base", label: "Base Colors" },
+  { id: "accent", label: "Accent Colors" },
 ]
 
 const SYMBOLS = [

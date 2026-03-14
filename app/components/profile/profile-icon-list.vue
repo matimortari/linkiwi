@@ -19,7 +19,7 @@
             <icon name="mdi:drag-vertical" size="20" class="text-muted" />
           </button>
 
-          <nuxt-link :to="icon.url" class="btn-ghost">
+          <nuxt-link :to="icon.url" class="btn-ghost" :aria-label="icon.platform">
             <icon :name="icon.logo" :size="30" />
           </nuxt-link>
 
@@ -33,7 +33,7 @@
         </li>
       </VueDraggable>
 
-      <button class="btn-primary self-end" aria-label="Add Social Icon" @click="isDialogOpen = true">
+      <button class="btn-primary self-end" @click="isDialogOpen = true">
         <icon name="mdi:star-plus" size="25" />
         <span>Add Social Icon</span>
       </button>

@@ -43,9 +43,9 @@
               <input v-model="editHandle" type="text" class="flex-1" :placeholder="WIDGET_META[widget.type].placeholder">
               <button class="btn-success shrink-0" :disabled="!editHandle || loading" @click="handleUpdate(widget.id)">
                 <icon name="mdi:check" size="20" />
-                <span>Save</span>
+                <span class="hidden md:inline">Save</span>
               </button>
-              <button class="btn-danger shrink-0" @click="cancelEdit">
+              <button class="btn-ghost shrink-0" @click="cancelEdit">
                 <icon name="mdi:close" size="20" />
               </button>
             </div>
@@ -82,7 +82,7 @@
             <input v-model="newHandle" type="text" class="flex-1" :placeholder="WIDGET_META[newType].placeholder">
             <button class="btn-success shrink-0" :disabled="!newHandle || loading" @click="handleCreate">
               <icon name="mdi:check" size="20" />
-              <span>Add</span>
+              <span class="hidden md:inline">Add</span>
             </button>
             <button class="btn-ghost shrink-0" @click="cancelAdd">
               <icon name="mdi:close" size="20" />
@@ -121,8 +121,8 @@ const WIDGET_OPTIONS: { type: WidgetType, label: string, icon: string }[] = [
 const WIDGET_ICONS: Record<WidgetType, string> = { GITHUB: "simple-icons:github", YOUTUBE: "simple-icons:youtube" }
 const WIDGET_LABELS: Record<WidgetType, string> = { GITHUB: "GitHub", YOUTUBE: "YouTube" }
 const WIDGET_META: Record<WidgetType, { label: string, placeholder: string, hint: string }> = {
-  GITHUB: { label: "GitHub Username", placeholder: "e.g. torvalds", hint: "Your GitHub username as it appears in your profile URL." },
-  YOUTUBE: { label: "YouTube Handle or Channel ID", placeholder: "e.g. @mkbhd or UCBcRF18a7Qf58cCRy5xuWwQ", hint: "Your @handle or the channel ID from your YouTube URL." },
+  GITHUB: { label: "GitHub Username", placeholder: "e.g. torvalds", hint: "Enter your GitHub username and display your top repositories." },
+  YOUTUBE: { label: "YouTube Handle or Channel ID", placeholder: "e.g. @mkbhd or UCBcRF18a7Qf58cCRy5xuWwQ", hint: "Enter your @handle or the channel ID to display your latest videos." },
 }
 
 const widgetsStore = useWidgetsStore()
@@ -152,6 +152,7 @@ function toggleEdit(widget: Widget) {
     cancelEdit()
     return
   }
+
   cancelAdd()
   editingId.value = widget.id
   editHandle.value = widget.handle

@@ -13,7 +13,7 @@
 
       <footer class="flex flex-row items-center justify-end">
         <div class="navigation-group">
-          <button class="btn-danger" aria-label="Cancel" :disabled="loading" @click="emit('close')">
+          <button class="btn-danger" :disabled="loading" @click="emit('close')">
             Cancel
           </button>
           <button class="btn-success" type="submit" :disabled="loading || !form.title || !form.url">

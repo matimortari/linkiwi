@@ -60,7 +60,7 @@
           This action is irreversible. All data will be lost.
         </p>
 
-        <button title="Delete Account" class="btn-danger md:self-end" @click="handleDeleteUser">
+        <button class="btn-danger md:self-end" @click="handleDeleteUser">
           <icon name="mdi:user-remove" size="20" />
           <span>Delete Account</span>
         </button>

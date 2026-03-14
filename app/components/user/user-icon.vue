@@ -1,6 +1,10 @@
 <template>
   <li class="flex size-10 items-center justify-center rounded-full" :style="iconStyle(isHovered)" @mouseenter="isHovered = true" @mouseleave="isHovered = false">
-    <nuxt-link :to="item.url" class="flex size-full items-center justify-center" target="_blank" @click="handleClick">
+    <nuxt-link
+      :to="item.url" class="flex size-full items-center justify-center"
+      :aria-label="item.platform" target="_blank"
+      @click="handleClick"
+    >
       <icon :name="item.logo" size="20" :style="iconInnerStyle" />
     </nuxt-link>
   </li>

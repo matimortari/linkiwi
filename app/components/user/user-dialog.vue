@@ -9,7 +9,7 @@
             accept="image/*" class="absolute top-0 left-0 size-full opacity-0"
             @change="handleUpdateImage"
           >
-          <label class="btn absolute -bottom-2 -left-2 cursor-pointer" for="image">
+          <label class="btn absolute -bottom-2 -left-2 cursor-pointer" for="image" aria-label="Upload Profile Image">
             <icon name="mdi:upload" size="20" />
           </label>
         </div>

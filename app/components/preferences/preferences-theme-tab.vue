@@ -2,8 +2,8 @@
   <div class="scroll-area grid h-72 grid-cols-2 gap-2 overflow-auto pr-1 md:grid-cols-3 2xl:grid-cols-4">
     <div v-for="(theme, index) in THEMES" :key="theme.title" class="flex flex-col items-center gap-2">
       <button
-        :title="theme.title" aria-label="Select Theme"
-        tabindex="0" class="flex w-full flex-col items-center justify-center gap-4 rounded-2xl border p-8 hover:border-dashed hover:opacity-80"
+        :aria-label="`Select ${theme.title} theme`" tabindex="0"
+        class="flex w-full flex-col items-center justify-center gap-4 rounded-2xl border p-8 hover:border-dashed hover:opacity-80"
         :class="{ 'opacity-80': selectedTheme !== theme.title }" :style="themeStyles[index]?.backgroundStyle.value ?? {}"
         @click="handleThemeSelection(theme.title)"
       >

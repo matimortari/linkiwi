@@ -2,9 +2,9 @@
   <teleport to="body">
     <transition name="fade">
       <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80" @mousedown.self="emit('update:isOpen', false)">
-        <div class="overlay min-w-100 space-y-4">
+        <div class="overlay min-w-100 space-y-4" role="dialog" aria-modal="true" aria-labelledby="dialog-title">
           <header class="flex flex-row items-center justify-between gap-4">
-            <h3>
+            <h3 id="dialog-title">
               {{ title }}
             </h3>
 
