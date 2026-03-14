@@ -49,20 +49,19 @@
       </div>
 
       <div class="flex flex-col items-center justify-start gap-4 overflow-y-auto p-4 text-center">
-        <img :src="user.image" alt="Avatar" class="size-24 object-cover" :style="profilePictureStyle">
-
-        <p class="line-clamp-3 max-w-sm truncate whitespace-break-spaces" :style="slugStyle">
-          @{{ user.slug }}
-        </p>
-        <p v-if="user.description" class="line-clamp-3 max-w-sm truncate leading-4 whitespace-break-spaces" :style="descriptionStyle">
-          {{ user.description }}
-        </p>
-
-        <div class="my-2 w-full">
-          <ul v-if="visibleIcons.length" class="navigation-group justify-center">
-            <UserIcon v-for="icon in visibleIcons" :key="icon.id" :item="icon" :preferences="preferences" />
-          </ul>
+        <div class="flex flex-col items-center gap-2">
+          <img :src="user.image" alt="Avatar" class="size-24 object-cover" :style="profilePictureStyle">
+          <p class="line-clamp-3 max-w-sm truncate whitespace-break-spaces" :style="slugStyle">
+            @{{ user.slug }}
+          </p>
+          <p v-if="user.description" class="line-clamp-3 max-w-sm truncate leading-4 whitespace-break-spaces" :style="descriptionStyle">
+            {{ user.description }}
+          </p>
         </div>
+
+        <ul v-if="visibleIcons.length" class="navigation-group justify-center">
+          <UserIcon v-for="icon in visibleIcons" :key="icon.id" :item="icon" :preferences="preferences" />
+        </ul>
 
         <div class="w-full">
           <ul v-if="visibleLinks.length" class="flex flex-col items-center gap-4">

@@ -1,5 +1,5 @@
 <template>
-  <Teleport to="body">
+  <teleport to="body">
     <div class="toast-container" aria-live="polite" aria-atomic="true">
       <TransitionGroup name="toast">
         <div
@@ -17,7 +17,7 @@
         </div>
       </TransitionGroup>
     </div>
-  </Teleport>
+  </teleport>
 </template>
 
 <script setup lang="ts">

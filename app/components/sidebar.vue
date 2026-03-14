@@ -12,20 +12,29 @@
     :class="[isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0']"
   >
     <div class="flex h-full flex-col gap-8 px-12 md:px-0">
-      <div v-if="user" class="navigation-group w-full gap-4!">
-        <div class="relative size-12 shrink-0">
-          <img :src="user.image" alt="Avatar" class="size-full rounded-full border object-cover select-none">
+      <div class="navigation-group w-full gap-4!">
+        <div v-if="user" class="flex w-full items-center gap-4">
+          <div class="relative size-12 shrink-0">
+            <img :src="user.image" alt="Avatar" class="size-full rounded-full border object-cover select-none">
+            <button title="Edit Profile Information" class="btn-primary absolute -right-2 -bottom-2 p-1!" aria-label="Edit Profile Information" @click="isUserDialogOpen = true">
+              <icon name="mdi:square-edit-outline" size="20" />
+            </button>
+          </div>
 
-          <button title="Edit Profile Information" class="btn-primary absolute -right-2 -bottom-2 p-1!" aria-label="Edit Profile Information" @click="isUserDialogOpen = true">
-            <icon name="mdi:square-edit-outline" size="20" />
-          </button>
+          <div class="flex w-full min-w-0 flex-col overflow-hidden">
+            <span class="text-sm font-semibold wrap-break-word">{{ user.name }}</span>
+            <nuxt-link :to="`/${user.slug}`" :title="`${baseURL}/${user.slug}`" class="text-caption truncate hover:underline">
+              @{{ user.slug }}
+            </nuxt-link>
+          </div>
         </div>
 
-        <div class="flex w-full min-w-0 flex-col gap-1 overflow-hidden">
-          <span class="text-sm font-semibold wrap-break-word">{{ user.name }}</span>
-          <nuxt-link :to="`/${user.slug}`" :title="`${baseURL}/${user.slug}`" class="text-caption truncate hover:underline">
-            @{{ user.slug }}
-          </nuxt-link>
+        <div v-else class="flex w-full items-center gap-4">
+          <div class="size-12 shrink-0 animate-pulse rounded-full bg-muted" />
+          <div class="flex w-full flex-col gap-2">
+            <div class="h-4 w-28 animate-pulse rounded-full bg-muted" />
+            <div class="h-3 w-20 animate-pulse rounded-full bg-muted" />
+          </div>
         </div>
       </div>
 

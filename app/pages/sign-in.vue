@@ -41,6 +41,7 @@
 </template>
 
 <script setup lang="ts">
+const { public: { baseURL } } = useRuntimeConfig()
 const route = useRoute()
 
 const errorMessage = computed(() => {
@@ -61,6 +62,7 @@ const errorMessage = computed(() => {
 
 useHead({
   title: "Sign In",
+  link: [{ rel: "canonical", href: `${baseURL}` }],
   meta: [{ name: "description", content: "LinKiosk Sign In page" }],
 })
 </script>
