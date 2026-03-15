@@ -22,6 +22,7 @@ The API uses standard HTTP response codes to indicate success or failure:
 - `403 Forbidden` - Insufficient permissions
 - `404 Not Found` - Resource not found
 - `409 Conflict` - Resource conflict
+- `429 Too Many Requests` - Rate limit exceeded
 - `500 Internal Server Error` - Server error
 
 ---
@@ -531,7 +532,7 @@ Retrieves all widgets for the authenticated user.
     {
       "id": "string",
       "userId": "string",
-      "type": "GITHUB | YOUTUBE",
+      "type": "GITHUB | YOUTUBE | SPOTIFY",
       "handle": "string",
       "order": "number",
       "isVisible": "boolean",
@@ -552,7 +553,7 @@ Creates a new widget for the authenticated user. Only one widget per platform ty
 
 ```json
 {
-  "type": "GITHUB | YOUTUBE", // Required: widget platform type
+  "type": "GITHUB | YOUTUBE | SPOTIFY", // Required: widget platform type
   "handle": "string" // Required: 1-100 characters
 }
 ```
@@ -564,7 +565,7 @@ Creates a new widget for the authenticated user. Only one widget per platform ty
   "widget": {
     "id": "string",
     "userId": "string",
-    "type": "GITHUB | YOUTUBE",
+    "type": "GITHUB | YOUTUBE | SPOTIFY",
     "handle": "string",
     "order": "number",
     "isVisible": "boolean",
@@ -810,8 +811,6 @@ Records analytics data for page views, link clicks, or social icon clicks. Does 
 }
 ```
 
-**Note:** Analytics events are not recorded when users interact with their own profile.
-
 #### Create Guestbook Comment
 
 > **POST** `/api/analytics/comments`
@@ -864,7 +863,5 @@ Deletes analytics data for the authenticated user. Can be filtered by type and d
   "message": "Successfully deleted {count} analytics record(s)"
 }
 ```
-
-**Note:** The message will display the actual count of deleted records (e.g., "Successfully deleted 5 analytics records" or "Successfully deleted 1 analytics record").
 
 ---
