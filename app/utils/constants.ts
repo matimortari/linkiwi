@@ -1,21 +1,21 @@
 export const PRODUCT_BULLETS = [
   {
-    description: "Design your own landing page",
-    icon: "mdi:cards-playing-heart-outline",
+    description: "Share your page across different platforms with ease",
+    icon: "mdi:share-outline",
   },
   {
-    description: "Add unlimited links and social icons",
-    icon: "mdi:link-variant-plus",
+    description: "Generate a QR code for in-person sharing",
+    icon: "mdi:qrcode",
   },
   {
-    description: "Free to use!",
-    icon: "mdi:tag-remove-outline",
+    description: "Tag your links per source and track visitor engagement",
+    icon: "mdi:chart-timeline-variant-shimmer",
   },
 ]
 
 export const ANALYTICS_BULLETS = [
   {
-    description: "Real-time page view tracking",
+    description: "Real-time tracking for page views and clicks",
     icon: "mdi:clock-star-four-points-outline",
   },
   {
@@ -23,9 +23,16 @@ export const ANALYTICS_BULLETS = [
     icon: "mdi:cursor-default-click-outline",
   },
   {
-    description: "Discover your traffic sources",
-    icon: "mdi:web",
+    description: "See click rates and performance per individual link",
+    icon: "mdi:chart-bar",
   },
+]
+
+export const SHARE_PLATFORMS = [
+  { id: "whatsapp", icon: "simple-icons:whatsapp", color: "#25a244", rotate: -3 },
+  { id: "linkedin", icon: "simple-icons:linkedin", color: "#0a66c2", rotate: -1 },
+  { id: "facebook", icon: "simple-icons:facebook", color: "#1877f2", rotate: 1.5 },
+  { id: "twitter", icon: "simple-icons:x", color: "#111111", rotate: 3 },
 ]
 
 export const MOCK_ANALYTICS = [

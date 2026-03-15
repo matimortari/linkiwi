@@ -1,59 +1,88 @@
 <template>
-  <div class="mx-auto flex w-full max-w-7xl gap-8 px-4 py-20">
+  <div class="mx-auto flex w-full max-w-7xl gap-8 px-4 py-32">
     <aside class="sticky top-24 hidden h-fit min-w-48 space-y-2 md:block">
-      <nuxt-link
-        v-for="section in SECTIONS" :key="section.id"
-        :to="`#${section.id}`" class="btn-ghost justify-start!"
-        :class="activeSection === section.id ? 'text-caption bg-muted' : ''" @click.prevent="scrollToSection(section.id)"
-      >
-        {{ section.label }}
-      </nuxt-link>
+      <h3>
+        Brand Resources
+      </h3>
+
+      <nav class="flex flex-col space-y-1 py-4">
+        <nuxt-link
+          v-for="section in SECTIONS" :key="section.id"
+          :to="`#${section.id}`" class="btn-ghost justify-start!"
+          :class="activeSection === section.id ? 'text-caption bg-muted' : ''" @click.prevent="scrollToSection(section.id)"
+        >
+          {{ section.label }}
+        </nuxt-link>
+      </nav>
     </aside>
 
     <div class="mx-auto w-full max-w-4xl flex-1 space-y-8">
-      <h1>
-        Brand Resources
-      </h1>
+      <section id="wordmarks" class="space-y-2">
+        <h4>
+          Wordmarks
+        </h4>
 
-      <section v-for="category in ASSET_CATEGORIES" :id="category.id" :key="category.id" class="space-y-2">
-        <h2>
-          {{ category.name }}
-        </h2>
-
-        <div class="grid w-full grid-cols-1 gap-2" :class="category.gridClass">
-          <div v-for="(asset, index) in category.assets" :key="asset.name" class="flex flex-col items-center">
-            <div class="flex w-full items-center justify-center" :class="[category.containerClass, asset.bgClass]">
-              <img :src="asset.image" :alt="asset.name" :class="category.imageClass">
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div v-for="(asset, index) in WORDMARKS" :key="asset.name" class="flex flex-col items-center">
+            <div class="flex h-32 w-full items-center justify-center border" :class="asset.bgClass">
+              <img :src="asset.image" :alt="asset.name" class="h-20 w-36 object-contain">
             </div>
 
             <div class="flex w-full items-center justify-between p-2">
               <span class="text-sm font-medium">{{ asset.name }}</span>
-              <button :aria-label="`Download ${asset.name}`" class="transition-transform hover:scale-110" @click="handleDownloadImage(asset, index, category.actions)">
-                <icon :name="category.actions[index]!.icon.value" size="20" />
+              <button :aria-label="`Download ${asset.name}`" class="transition-transform hover:scale-110" @click="handleDownloadImage(asset, index, wordmarkActions)">
+                <icon :name="wordmarkActions[index]!.icon.value" size="20" />
               </button>
             </div>
           </div>
         </div>
       </section>
 
-      <section v-for="category in COLOR_CATEGORIES" :id="category.id" :key="category.name" class="space-y-2">
-        <h3>
-          {{ category.name }}
-        </h3>
+      <section id="symbols" class="space-y-2">
+        <h4>
+          Symbols
+        </h4>
 
-        <div class="grid w-full grid-cols-2 gap-2 md:grid-cols-3">
-          <div v-for="(color, index) in category.colors" :key="color.name" class="flex flex-col items-center">
-            <div class="h-24 w-full cursor-pointer" :style="{ backgroundColor: `var(${color.var})` }" @click="handleCopyColor(color.var, index, category.actions)" />
+        <div class="grid grid-cols-3 gap-4">
+          <div v-for="(asset, index) in SYMBOLS" :key="asset.name" class="flex flex-col items-center">
+            <div class="flex h-40 w-full items-center justify-center border" :class="asset.bgClass">
+              <img :src="asset.image" :alt="asset.name" class="size-16 object-contain">
+            </div>
 
-            <div class="flex w-full flex-col p-2">
-              <div class="flex w-full items-center justify-between">
-                <span class="text-sm font-medium">{{ color.name }}</span>
-                <button :aria-label="`Copy ${color.name}`" class="transition-transform hover:scale-110" @click="handleCopyColor(color.var, index, category.actions)">
-                  <icon :name="category.actions[index]!.icon.value" size="20" />
-                </button>
+            <div class="flex w-full items-center justify-between p-2">
+              <span class="truncate text-sm font-medium">{{ asset.name }}</span>
+              <button :aria-label="`Download ${asset.name}`" class="shrink-0 transition-transform hover:scale-110" @click="handleDownloadImage(asset, index, symbolActions)">
+                <icon :name="symbolActions[index]!.icon.value" size="20" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="colors" class="space-y-6">
+        <h4>
+          Colors
+        </h4>
+
+        <div v-for="category in COLOR_CATEGORIES" :id="category.id" :key="category.name" class="space-y-2 pl-4">
+          <h3>
+            {{ category.name }}
+          </h3>
+
+          <div class="grid w-full grid-cols-2 gap-4 md:grid-cols-3">
+            <div v-for="(color, index) in category.colors" :key="color.name" class="flex flex-col items-center">
+              <div class="aspect-square h-32 w-full cursor-pointer border" :style="{ backgroundColor: `var(${color.var})` }" @click="handleCopyColor(color.var, index, category.actions)" />
+
+              <div class="flex w-full flex-col p-2">
+                <div class="flex w-full items-center justify-between">
+                  <span class="text-sm font-medium">{{ color.name }}</span>
+                  <button :aria-label="`Copy ${color.name}`" class="transition-transform hover:scale-110" @click="handleCopyColor(color.var, index, category.actions)">
+                    <icon :name="category.actions[index]!.icon.value" size="20" />
+                  </button>
+                </div>
+
+                <span class="text-xs text-muted-foreground">{{ colorValues[color.var] }}</span>
               </div>
-
-              <span class="text-xs text-muted-foreground">{{ colorValues[color.var] }}</span>
             </div>
           </div>
         </div>
@@ -73,11 +102,11 @@ const { public: { baseURL } } = useRuntimeConfig()
 const { createActionHandler } = useActionIcon()
 const { colorMode } = useTheme()
 const colorValues = ref<Record<string, string>>({})
-const activeSection = ref("symbols")
+const activeSection = ref("wordmarks")
 
 const SECTIONS = [
-  { id: "symbols", label: "Symbols" },
   { id: "wordmarks", label: "Wordmarks" },
+  { id: "symbols", label: "Symbols" },
   { id: "brand", label: "Brand Colors" },
   { id: "base", label: "Base Colors" },
   { id: "accent", label: "Accent Colors" },
@@ -113,47 +142,14 @@ const ACCENT_COLORS = [
   { name: "Success", var: "--success" },
 ]
 
-const ASSET_CATEGORIES = [
-  {
-    id: "symbols",
-    name: "Symbols",
-    assets: SYMBOLS,
-    actions: SYMBOLS.map(() => createActionHandler("mdi:download")),
-    gridClass: "md:grid-cols-3",
-    containerClass: "size-32",
-    imageClass: "size-20 object-contain",
-  },
-  {
-    id: "wordmarks",
-    name: "Wordmarks",
-    assets: WORDMARKS,
-    actions: WORDMARKS.map(() => createActionHandler("mdi:download")),
-    gridClass: "md:grid-cols-2",
-    containerClass: "h-32",
-    imageClass: "h-20 w-36 object-contain",
-  },
+const COLOR_CATEGORIES = [
+  { id: "brand", name: "Brand Colors", colors: BRAND_COLORS, actions: BRAND_COLORS.map(() => createActionHandler("mdi:content-copy")) },
+  { id: "base", name: "Base Colors", colors: BASE_COLORS, actions: BASE_COLORS.map(() => createActionHandler("mdi:content-copy")) },
+  { id: "accent", name: "Accent Colors", colors: ACCENT_COLORS, actions: ACCENT_COLORS.map(() => createActionHandler("mdi:content-copy")) },
 ]
 
-const COLOR_CATEGORIES = [
-  {
-    id: "brand",
-    name: "Brand Colors",
-    colors: BRAND_COLORS,
-    actions: BRAND_COLORS.map(() => createActionHandler("mdi:content-copy")),
-  },
-  {
-    id: "base",
-    name: "Base Colors",
-    colors: BASE_COLORS,
-    actions: BASE_COLORS.map(() => createActionHandler("mdi:content-copy")),
-  },
-  {
-    id: "accent",
-    name: "Accent Colors",
-    colors: ACCENT_COLORS,
-    actions: ACCENT_COLORS.map(() => createActionHandler("mdi:content-copy")),
-  },
-]
+const symbolActions = SYMBOLS.map(() => createActionHandler("mdi:download"))
+const wordmarkActions = WORDMARKS.map(() => createActionHandler("mdi:download"))
 
 function scrollToSection(id: string) {
   const element = document.getElementById(id)
@@ -222,6 +218,6 @@ watch(colorMode, () => updateColors(), { flush: "post" })
 useHead({
   title: "Brand Resources",
   link: [{ rel: "canonical", href: `${baseURL}/brand` }],
-  meta: [{ name: "description", content: "LinKiosk Brand Resources." }],
+  meta: [{ name: "description", content: "LinKiosk Brand Resources and Guidelines." }],
 })
 </script>

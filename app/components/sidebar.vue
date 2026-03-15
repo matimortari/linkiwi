@@ -39,13 +39,9 @@
       </div>
 
       <nav class="flex flex-col gap-2" aria-label="Main Navigation">
-        <p class="text-caption uppercase">
-          My Account
-        </p>
-
         <nuxt-link
           v-for="link in SIDEBAR_NAV_LINKS" :key="link.url"
-          :to="link.url" class="btn-ghost justify-start! text-base!"
+          :to="link.url" class="btn-ghost justify-start!"
           :class="{ 'bg-muted': route.path === link.url }" @click="emit('update:isOpen', false)"
         >
           <icon :name="link.icon" size="25" />
@@ -56,26 +52,22 @@
       <div class="border-t md:flex-1" />
 
       <nav class="flex flex-col gap-2" aria-label="Mobile Navigation Actions">
-        <p class="text-caption uppercase">
-          Actions
-        </p>
-
-        <button class="btn-ghost justify-start! text-base!" @click="isShareDialogOpen = true">
+        <button class="btn-ghost justify-start!" @click="isShareDialogOpen = true">
           <icon name="mdi:share-variant-outline" size="25" />
           <span>Share</span>
         </button>
-        <button class="btn-ghost justify-start! text-base!" @click="toggleTheme">
+        <button class="btn-ghost justify-start!" @click="toggleTheme">
           <icon :name="themeIcon" size="25" />
           <span>Toggle Theme</span>
         </button>
-        <button class="btn-ghost justify-start! text-base!" @click="signOut">
+        <button class="btn-ghost justify-start!" @click="signOut">
           <icon name="mdi:logout" size="25" class="text-caption-danger" />
           <span>Sign Out</span>
         </button>
       </nav>
     </div>
 
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 select-none md:hidden">
+    <div class="absolute bottom-16 left-1/2 -translate-x-1/2 select-none md:hidden">
       <Logo />
     </div>
   </aside>

@@ -3,7 +3,9 @@
     <NuxtPage />
   </NuxtLayout>
 
-  <Toast />
+  <ClientOnly>
+    <Toast />
+  </ClientOnly>
 </template>
 
 <script setup lang="ts">

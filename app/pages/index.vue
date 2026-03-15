@@ -2,7 +2,7 @@
   <section
     id="hero" v-motion
     :initial="{ opacity: 0, y: -40 }" :visible-once="{ opacity: 1, y: 0 }"
-    :duration="800" class="flex min-h-screen w-full flex-col items-center justify-between gap-8 overflow-hidden border-b bg-card px-4 py-32 md:flex-row md:px-40 2xl:min-h-[80vh]"
+    :duration="800" class="relative flex min-h-screen w-full flex-col items-center justify-between gap-8 overflow-hidden border-b bg-card px-4 py-32 md:flex-row md:px-40 2xl:min-h-[80vh]"
   >
     <img src="/assets/hero-backdrop.svg" alt="Hero background" class="wave-bg" aria-hidden="true">
 
@@ -27,40 +27,52 @@
   <section
     id="product" v-motion
     :initial="{ opacity: 0, y: 20 }" :visible-once="{ opacity: 1, y: 0 }"
-    :duration="800" class="relative flex w-full flex-col items-center justify-center gap-12 px-12 py-24 text-center"
+    :duration="800" class="relative flex w-full flex-col items-center justify-center gap-12 px-8 py-28 text-center md:px-20"
   >
-    <h2>
-      Create Your Page In Minutes
-    </h2>
+    <div class="flex flex-col items-center gap-2">
+      <span class="section-badge">Sharing</span>
+      <h2>
+        Share Your Page, Your Way
+      </h2>
+    </div>
 
     <div class="container mx-auto grid w-full grid-cols-1 items-center justify-items-center gap-8 md:grid-cols-2">
       <div class="order-1 flex items-center justify-center">
-        <div class="relative h-80 w-64">
-          <div class="absolute inset-0 animate-pulse rounded-2xl bg-linear-to-br from-primary to-secondary opacity-20 blur-2xl" />
-
-          <div class="overlay relative flex size-full flex-col items-center gap-4">
-            <icon name="mdi:link-variant" size="60" class="my-4 shrink-0 text-primary" />
-
-            <div class="navigation-group">
-              <span v-for="i in 3" :key="i" class="size-6 rounded-full bg-muted">{{ '' }}</span>
+        <div class="relative grid grid-cols-2 gap-2">
+          <div
+            v-for="platform in SHARE_PLATFORMS" :key="platform.id"
+            class="card flex h-28 w-44 flex-col justify-between"
+            :style="{ background: platform.color }"
+          >
+            <div class="flex items-center justify-between">
+              <icon name="mdi:account-circle" size="30" class="text-white/60" />
+              <icon :name="platform.icon" size="25" class="text-surface-foreground" />
             </div>
-
-            <div class="flex w-full flex-col items-center gap-2">
-              <span v-for="i in 3" :key="i" class="h-5 w-32 rounded-full bg-muted" />
+            <div class="flex flex-col items-start gap-1 text-start">
+              <span class="text-sm font-medium text-surface-foreground">@alexjohnson</span>
+              <span class="text-xs text-white/50">linkiosk.app/alexjohnson</span>
             </div>
+          </div>
+
+          <div class="-right-10 -bottom-3 navigation-group hidden gap-1.5 rounded-full border bg-card px-3 py-1.5 whitespace-nowrap shadow-sm md:absolute" style="z-index: 10;">
+            <icon name="mdi:link-variant" size="20" class="text-primary" />
+            <span class="text-xs font-medium">linkiosk.app/alexjohnson</span>
           </div>
         </div>
       </div>
 
       <div class="order-2 flex flex-col gap-4 text-start">
         <p class="text-lead">
-          Customize your page with your own style and share your unique URL with your audience.
-          Whether you're a creator, business, or influencer, LinKiosk makes it easy to connect all your online presence in one place.
+          Customize your page with your own style and share your unique URL.
+          Whether you're a creator, business, or influencer, LinKiosk makes it
+          easy to share and connect with your audience.
         </p>
 
         <div class="flex flex-col gap-2">
-          <div v-for="bullet in PRODUCT_BULLETS" :key="bullet.description" class="navigation-group">
-            <icon :name="bullet.icon" size="25" class="text-secondary" />
+          <div v-for="bullet in PRODUCT_BULLETS" :key="bullet.description" class="navigation-group gap-3">
+            <div class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-secondary/15">
+              <icon :name="bullet.icon" size="20" class="text-secondary" />
+            </div>
             <span class="text-sm font-medium">{{ bullet.description }}</span>
           </div>
         </div>
@@ -71,14 +83,17 @@
   <section
     id="analytics" v-motion
     :initial="{ opacity: 0, y: 20 }" :visible-once="{ opacity: 1, y: 0 }"
-    :duration="800" class="relative flex w-full flex-col items-center justify-center gap-12 border-y bg-muted/30 px-12 py-24 text-center"
+    :duration="800" class="relative flex w-full flex-col items-center justify-center gap-12 border-y bg-muted/20 px-8 py-28 text-center md:px-20"
   >
-    <h2>
-      Track Your Performance
-    </h2>
+    <div class="flex flex-col items-center gap-2">
+      <span class="section-badge">Analytics</span>
+      <h2>
+        Track Your Performance
+      </h2>
+    </div>
 
-    <div class="container mx-auto grid w-full grid-cols-1 items-center justify-items-center gap-8 md:grid-cols-2">
-      <div class="order-2 flex flex-col gap-4 text-start md:order-1">
+    <div class="container mx-auto grid w-full grid-cols-1 items-center justify-items-center gap-12 md:grid-cols-2">
+      <div class="order-2 flex flex-col gap-6 text-start md:order-1">
         <p class="text-lead">
           Get insights into how your audience engages with your content.
           Track views, clicks, and traffic sources all in one place.
@@ -86,8 +101,10 @@
         </p>
 
         <div class="flex flex-col gap-2">
-          <div v-for="bullet in ANALYTICS_BULLETS" :key="bullet.description" class="navigation-group">
-            <icon :name="bullet.icon" size="25" class="text-secondary" />
+          <div v-for="bullet in ANALYTICS_BULLETS" :key="bullet.description" class="navigation-group gap-3">
+            <div class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-secondary/15">
+              <icon :name="bullet.icon" size="20" class="text-secondary" />
+            </div>
             <span class="text-sm font-medium">{{ bullet.description }}</span>
           </div>
         </div>
@@ -95,8 +112,6 @@
 
       <div class="order-1 flex items-center justify-center md:order-2">
         <div class="relative w-full max-w-md">
-          <div class="absolute inset-0 animate-pulse rounded-2xl bg-linear-to-br from-secondary to-primary opacity-20 blur-2xl" />
-
           <div class="overlay relative space-y-2 backdrop-blur-sm">
             <div class="grid grid-cols-2 gap-2">
               <div v-for="item in MOCK_ANALYTICS" :key="item.label" class="card navigation-group p-2!">
@@ -126,22 +141,22 @@
     </div>
   </section>
 
-  <section id="cta" class="relative z-10 flex min-h-[50vh] w-full flex-col items-center justify-center gap-8 bg-card px-12 py-24 text-center">
+  <section id="cta" class="relative z-10 flex min-h-[50vh] w-full flex-col items-center justify-center gap-8 overflow-hidden border-t bg-card px-12 py-32 text-center">
     <div class="cta-wrapper-grid" />
     <div class="cta-wrapper-vignette" />
 
     <div class="flex flex-col items-center gap-4">
       <h2>
-        Ready to Try?
+        Ready to Build Your Page?
       </h2>
 
-      <p class="font-semibold md:text-lg">
-        Create an account and build your page today!
+      <p class="text-caption max-w-sm">
+        Create an account and get started in minutes!
       </p>
 
-      <nuxt-link to="/sign-in" class="btn-secondary">
-        <span>Get Started</span>
-        <icon name="mdi:arrow-right" size="25" />
+      <nuxt-link to="/sign-in" class="btn-primary">
+        <span>Create Your Page</span>
+        <icon name="mdi:arrow-right" size="20" />
       </nuxt-link>
     </div>
   </section>
@@ -164,7 +179,7 @@ definePageMeta({
 <style scoped>
 h1 {
   font-family: var(--font-display);
-  line-height: 4rem;
+  line-height: 3rem;
   max-width: 30rem;
 }
 h2 {
@@ -173,6 +188,7 @@ h2 {
 }
 @media (min-width: 768px) {
   h1 {
+    line-height: 3.875rem;
     font-size: 3.5rem;
   }
 }
@@ -196,7 +212,6 @@ h2 {
     linear-gradient(to right, var(--muted) 1px, transparent 1px),
     linear-gradient(to bottom, var(--muted) 1px, transparent 1px);
   opacity: 50%;
-  gap: 1rem;
 }
 
 .cta-wrapper-vignette {
@@ -204,14 +219,24 @@ h2 {
   inset: 0;
   z-index: -10;
   pointer-events: none;
-  border-radius: inherit;
   background: radial-gradient(ellipse at center, transparent 0%, transparent 40%, var(--background) 100%);
 }
 
 .text-lead {
   max-width: 28rem;
   color: var(--muted-foreground);
-  line-height: 1.25rem;
+  line-height: 1.5rem;
   font-weight: 500;
+}
+
+.section-badge {
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--primary) 30%, transparent);
+  background-color: color-mix(in srgb, var(--primary) 10%, transparent);
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--primary);
 }
 </style>
