@@ -1,3 +1,4 @@
+// Presets for the landing page carousel showcase
 export const CAROUSEL_PRESETS: { slug: string, description: string, image: string, icons: { id: number, logo: string }[], links: { id: number, title: string }[], preferences: UserPreferences }[] = [
   {
     slug: "coffeecorner",

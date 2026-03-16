@@ -1,3 +1,4 @@
+// Available user preference options
 export const BACKGROUND_TYPES = [
   { value: "FLAT", label: "Flat" },
   { value: "GRADIENT", label: "Gradient" },
@@ -113,6 +114,7 @@ export const BANNER_LINKS = {
   CLIMATE_ACTION: "https://www.nrdc.org",
 } as const
 
+// Supported platform options for social icons
 export const SOCIAL_ICONS = {
   "Airbnb": "simple-icons:airbnb",
   "Amazon": "simple-icons:amazon",

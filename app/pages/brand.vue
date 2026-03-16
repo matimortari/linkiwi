@@ -7,7 +7,7 @@
 
       <nav class="flex flex-col space-y-1 py-4">
         <nuxt-link
-          v-for="section in SECTIONS" :key="section.id"
+          v-for="section in BRAND_SECTIONS" :key="section.id"
           :to="`#${section.id}`" class="btn-ghost justify-start!"
           :class="activeSection === section.id ? 'text-caption bg-muted' : ''" @click.prevent="scrollToSection(section.id)"
         >
@@ -64,7 +64,7 @@
           Colors
         </h4>
 
-        <div v-for="category in COLOR_CATEGORIES" :id="category.id" :key="category.name" class="space-y-2 pl-4">
+        <div v-for="category in colorCategories" :id="category.id" :key="category.name" class="space-y-2 pl-4">
           <h3>
             {{ category.name }}
           </h3>
@@ -92,64 +92,19 @@
 </template>
 
 <script setup lang="ts">
-import SymbolMonoDark from "~/assets/symbol-mono-dark.png"
-import SymbolMonoLight from "~/assets/symbol-mono-light.png"
-import Symbol from "~/assets/symbol.png"
-import WordmarkDark from "~/assets/wordmark-dark.png"
-import WordmarkLight from "~/assets/wordmark-light.png"
-
 const { public: { baseURL } } = useRuntimeConfig()
 const { createActionHandler } = useActionIcon()
 const { colorMode } = useTheme()
 const colorValues = ref<Record<string, string>>({})
 const activeSection = ref("wordmarks")
+const symbolActions = SYMBOLS.map(() => createActionHandler("mdi:download"))
+const wordmarkActions = WORDMARKS.map(() => createActionHandler("mdi:download"))
 
-const SECTIONS = [
-  { id: "wordmarks", label: "Wordmarks" },
-  { id: "symbols", label: "Symbols" },
-  { id: "brand", label: "Brand Colors" },
-  { id: "base", label: "Base Colors" },
-  { id: "accent", label: "Accent Colors" },
-]
-
-const SYMBOLS = [
-  { name: "Symbol", image: Symbol, bgClass: "bg-background!" },
-  { name: "Symbol Mono (dark)", image: SymbolMonoDark, bgClass: "bg-[#f9fafb]!" },
-  { name: "Symbol Mono (light)", image: SymbolMonoLight, bgClass: "bg-[#030712]!" },
-]
-
-const WORDMARKS = [
-  { name: "Wordmark (dark)", image: WordmarkDark, bgClass: "bg-[#f9fafb]!" },
-  { name: "Wordmark (light)", image: WordmarkLight, bgClass: "bg-[#030712]!" },
-]
-
-const BRAND_COLORS = [
-  { name: "Primary", var: "--primary" },
-  { name: "Secondary", var: "--secondary" },
-]
-
-const BASE_COLORS = [
-  { name: "Background", var: "--background" },
-  { name: "Foreground", var: "--foreground" },
-  { name: "Card", var: "--card" },
-  { name: "Input", var: "--input" },
-  { name: "Muted", var: "--muted" },
-  { name: "Muted Foreground", var: "--muted-foreground" },
-]
-
-const ACCENT_COLORS = [
-  { name: "Danger", var: "--danger" },
-  { name: "Success", var: "--success" },
-]
-
-const COLOR_CATEGORIES = [
+const colorCategories = [
   { id: "brand", name: "Brand Colors", colors: BRAND_COLORS, actions: BRAND_COLORS.map(() => createActionHandler("mdi:content-copy")) },
   { id: "base", name: "Base Colors", colors: BASE_COLORS, actions: BASE_COLORS.map(() => createActionHandler("mdi:content-copy")) },
   { id: "accent", name: "Accent Colors", colors: ACCENT_COLORS, actions: ACCENT_COLORS.map(() => createActionHandler("mdi:content-copy")) },
 ]
-
-const symbolActions = SYMBOLS.map(() => createActionHandler("mdi:download"))
-const wordmarkActions = WORDMARKS.map(() => createActionHandler("mdi:download"))
 
 function scrollToSection(id: string) {
   const element = document.getElementById(id)
@@ -183,13 +138,11 @@ async function handleCopyColor(colorVar: string, index: number, actions: ReturnT
   await actions[index].triggerCopy(value)
 }
 
-function updateColors() {
-  for (const color of COLOR_CATEGORIES.flatMap(category => category.colors)) {
+onMounted(() => {
+  for (const color of colorCategories.flatMap(category => category.colors)) {
     colorValues.value[color.var] = getComputedStyle(document.documentElement).getPropertyValue(color.var).trim() || "—"
   }
-}
 
-function observeSections() {
   const observer = new IntersectionObserver((entries) => {
     const intersecting = entries.filter(entry => entry.isIntersecting)
     if (intersecting.length > 0) {
@@ -200,20 +153,19 @@ function observeSections() {
     }
   }, { threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1], rootMargin: "-100px 0px -60% 0px" })
 
-  SECTIONS.forEach((section) => {
+  BRAND_SECTIONS.forEach((section) => {
     const element = document.getElementById(section.id)
     if (element) {
       observer.observe(element)
     }
   })
-}
-
-onMounted(() => {
-  updateColors()
-  observeSections()
 })
 
-watch(colorMode, () => updateColors(), { flush: "post" })
+watch(colorMode, () => {
+  for (const color of colorCategories.flatMap(category => category.colors)) {
+    colorValues.value[color.var] = getComputedStyle(document.documentElement).getPropertyValue(color.var).trim() || "—"
+  }
+}, { flush: "post" })
 
 useHead({
   title: "Brand Resources",
