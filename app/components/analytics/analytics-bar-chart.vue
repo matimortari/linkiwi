@@ -18,10 +18,7 @@ ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 const chartOptions: ChartOptions<"bar"> = {
   responsive: true,
   maintainAspectRatio: false,
-  interaction: {
-    intersect: false,
-    mode: "index" as keyof InteractionModeMap,
-  },
+  interaction: { intersect: false, mode: "index" as keyof InteractionModeMap },
   plugins: {
     legend: { display: false },
     tooltip: {
@@ -40,31 +37,15 @@ const chartOptions: ChartOptions<"bar"> = {
   scales: {
     x: {
       grid: { display: false },
-      ticks: {
-        font: { size: 10 },
-        maxRotation: 45,
-        minRotation: 0,
-      },
+      ticks: { font: { size: 10 }, maxRotation: 45, minRotation: 0 },
     },
     y: {
       beginAtZero: false,
       grid: { color: "rgba(0, 0, 0, 0.05)" },
-      ticks: {
-        font: { size: 10 },
-        precision: 0,
-        padding: 8,
-      },
+      ticks: { font: { size: 10 }, precision: 0, padding: 8 },
     },
   },
-  elements: {
-    bar: {
-      borderSkipped: false,
-      backgroundColor: "de896d",
-    },
-  },
-  animation: {
-    duration: 750,
-    easing: "easeInOutQuart",
-  },
+  elements: { bar: { borderSkipped: false, backgroundColor: "de896d" } },
+  animation: { duration: 750, easing: "easeInOutQuart" },
 }
 </script>

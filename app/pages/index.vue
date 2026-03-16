@@ -168,12 +168,10 @@ const { public: { baseURL } } = useRuntimeConfig()
 useHead({
   title: "Your Link-in-Bio Page!",
   link: [{ rel: "canonical", href: `${baseURL}` }],
-  meta: [{ name: "description", content: "Create your own landing page for sharing links to your social media profiles, websites, and more!" }],
+  meta: [{ name: "description", content: "Create your personalized link-in-bio page with LinKiosk. Share your links, profiles, and contact info in one place!" }],
 })
 
-definePageMeta({
-  middleware: "guest",
-})
+definePageMeta({ middleware: "guest" })
 </script>
 
 <style scoped>

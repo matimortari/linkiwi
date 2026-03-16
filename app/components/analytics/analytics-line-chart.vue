@@ -18,10 +18,7 @@ ChartJS.register(Title, Tooltip, Legend, LineElement, PointElement, CategoryScal
 const chartOptions: ChartOptions<"line"> = {
   responsive: true,
   maintainAspectRatio: false,
-  interaction: {
-    intersect: false,
-    mode: "index" as const,
-  },
+  interaction: { intersect: false, mode: "index" as const },
   plugins: {
     legend: { display: false },
     tooltip: {
@@ -38,40 +35,19 @@ const chartOptions: ChartOptions<"line"> = {
     },
   },
   elements: {
-    line: {
-      borderWidth: 2,
-      borderColor: "#de896d",
-      fill: false,
-    },
-    point: {
-      radius: 4,
-      hoverRadius: 8,
-      backgroundColor: "#de896d",
-      borderColor: "#e5e7eb",
-      hoverBorderWidth: 2,
-    },
+    line: { borderWidth: 2, borderColor: "#de896d", fill: false },
+    point: { radius: 4, hoverRadius: 8, backgroundColor: "#de896d", borderColor: "#e5e7eb", hoverBorderWidth: 2 },
   },
   scales: {
     x: {
       grid: { display: false },
-      ticks: {
-        font: { size: 10 },
-        maxRotation: 45,
-        minRotation: 0,
-      },
+      ticks: { font: { size: 10 }, maxRotation: 45, minRotation: 0 },
     },
     y: {
       beginAtZero: false,
-      ticks: {
-        font: { size: 10 },
-        precision: 0,
-        padding: 8,
-      },
+      ticks: { font: { size: 10 }, precision: 0, padding: 8 },
     },
   },
-  animation: {
-    duration: 750,
-    easing: "easeInOutQuart",
-  },
+  animation: { duration: 750, easing: "easeInOutQuart" },
 }
 </script>

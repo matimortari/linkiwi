@@ -30,7 +30,6 @@ defineProps<{
 
 const { user } = storeToRefs(useUserStore())
 const selectedTheme = ref("")
-
 const themeStyles = THEMES.map((theme) => {
   const { backgroundStyle, iconStyle, linkStyle } = useDynamicStyles(ref(theme.preferences))
   return { backgroundStyle, iconStyle, linkStyle }

@@ -64,7 +64,7 @@
           Colors
         </h4>
 
-        <div v-for="category in colorCategories" :id="category.id" :key="category.name" class="space-y-2 pl-4">
+        <div v-for="category in COLOR_CATEGORIES" :id="category.id" :key="category.name" class="space-y-2 pl-4">
           <h3>
             {{ category.name }}
           </h3>
@@ -100,7 +100,7 @@ const activeSection = ref("wordmarks")
 const symbolActions = SYMBOLS.map(() => createActionHandler("mdi:download"))
 const wordmarkActions = WORDMARKS.map(() => createActionHandler("mdi:download"))
 
-const colorCategories = [
+const COLOR_CATEGORIES = [
   { id: "brand", name: "Brand Colors", colors: BRAND_COLORS, actions: BRAND_COLORS.map(() => createActionHandler("mdi:content-copy")) },
   { id: "base", name: "Base Colors", colors: BASE_COLORS, actions: BASE_COLORS.map(() => createActionHandler("mdi:content-copy")) },
   { id: "accent", name: "Accent Colors", colors: ACCENT_COLORS, actions: ACCENT_COLORS.map(() => createActionHandler("mdi:content-copy")) },
@@ -139,7 +139,7 @@ async function handleCopyColor(colorVar: string, index: number, actions: ReturnT
 }
 
 onMounted(() => {
-  for (const color of colorCategories.flatMap(category => category.colors)) {
+  for (const color of COLOR_CATEGORIES.flatMap(category => category.colors)) {
     colorValues.value[color.var] = getComputedStyle(document.documentElement).getPropertyValue(color.var).trim() || "—"
   }
 
@@ -162,7 +162,7 @@ onMounted(() => {
 })
 
 watch(colorMode, () => {
-  for (const color of colorCategories.flatMap(category => category.colors)) {
+  for (const color of COLOR_CATEGORIES.flatMap(category => category.colors)) {
     colorValues.value[color.var] = getComputedStyle(document.documentElement).getPropertyValue(color.var).trim() || "—"
   }
 }, { flush: "post" })
@@ -170,6 +170,6 @@ watch(colorMode, () => {
 useHead({
   title: "Brand Resources",
   link: [{ rel: "canonical", href: `${baseURL}/brand` }],
-  meta: [{ name: "description", content: "LinKiosk Brand Resources and Guidelines." }],
+  meta: [{ name: "description", content: "LinKiosk brand resources and guidelines." }],
 })
 </script>

@@ -19,10 +19,7 @@ withDefaults(defineProps<{
   label?: string
   value?: string
   disabled?: boolean
-}>(), {
-  value: "#000000",
-  disabled: false,
-})
+}>(), { value: "#000000", disabled: false })
 
 const emit = defineEmits<{ "update:value": [value: string] }>()
 </script>

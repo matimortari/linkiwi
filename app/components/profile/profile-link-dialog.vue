@@ -44,31 +44,13 @@ async function handleSubmit() {
     return
   }
 
-  if (isUpdateMode.value) {
-    await handleUpdateLink()
-  }
-  else {
-    await handleCreateLink()
-  }
-}
-
-async function handleCreateLink() {
   try {
-    await linksStore.createLink(form.value as Parameters<typeof linksStore.createLink>[0])
-    emit("close")
-  }
-  catch {
-    // Silently fail
-  }
-}
-
-async function handleUpdateLink() {
-  if (!editingLinkId.value) {
-    return
-  }
-
-  try {
-    await linksStore.updateLink(editingLinkId.value, { title: form.value.title, url: form.value.url })
+    if (isUpdateMode.value && editingLinkId.value) {
+      await linksStore.updateLink(editingLinkId.value, { title: form.value.title, url: form.value.url })
+    }
+    else {
+      await linksStore.createLink(form.value as Parameters<typeof linksStore.createLink>[0])
+    }
     emit("close")
   }
   catch {

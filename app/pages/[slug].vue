@@ -95,7 +95,5 @@ onMounted(async () => {
   }
 })
 
-definePageMeta({
-  layout: "minimal",
-})
+definePageMeta({ layout: "minimal" })
 </script>

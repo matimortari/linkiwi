@@ -78,11 +78,7 @@ const comments = computed(() => userStore.user?.comments ?? [])
 const saveAction = createActionHandler("mdi:content-save-check")
 
 async function handleSubmit() {
-  await userStore.updatePreferences({
-    enableGuestbook: preferences.value.enableGuestbook,
-  })
-
-  await userStore.getUser()
+  await userStore.updatePreferences({ enableGuestbook: preferences.value.enableGuestbook })
   saveAction.triggerSuccess()
 }
 

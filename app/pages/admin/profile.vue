@@ -39,8 +39,5 @@ useHead({
   meta: [{ name: "description", content: "LinKiosk profile page." }],
 })
 
-definePageMeta({
-  layout: "admin",
-  middleware: "auth",
-})
+definePageMeta({ layout: "admin", middleware: "auth" })
 </script>

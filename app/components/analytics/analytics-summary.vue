@@ -114,26 +114,10 @@ const referrerStats = computed(() => analyticsStore.referrerStats?.referrers || 
 const resetAction = createActionHandler("mdi:close")
 
 const summaryItems = computed(() => [
-  {
-    label: "Total Page Views",
-    icon: "mdi:file-eye-outline",
-    value: totalViews.value,
-  },
-  {
-    label: "Total Clicks",
-    icon: "mdi:cursor-default-click-outline",
-    value: totalClicks.value,
-  },
-  {
-    label: "Click Rate",
-    icon: "mdi:file-percent-outline",
-    value: `${clickRate.value}%`,
-  },
-  {
-    label: "Joined On",
-    icon: "mdi:calendar-clock-outline",
-    value: joinedAt.value ? formatDate(new Date(joinedAt.value)) : "N/A",
-  },
+  { label: "Total Page Views", icon: "mdi:file-eye-outline", value: totalViews.value },
+  { label: "Total Clicks", icon: "mdi:cursor-default-click-outline", value: totalClicks.value },
+  { label: "Click Rate", icon: "mdi:file-percent-outline", value: `${clickRate.value}%` },
+  { label: "Joined On", icon: "mdi:calendar-clock-outline", value: joinedAt.value ? formatDate(new Date(joinedAt.value)) : "N/A" },
 ])
 
 function getSourceIcon(source: string): string {
@@ -167,7 +151,6 @@ async function handleDeleteAnalytics() {
 
   await analyticsStore.deleteAnalytics()
   await Promise.all([analyticsStore.getAnalytics(), analyticsStore.getReferrerStats()])
-
   resetAction.triggerSuccess()
 }
 
