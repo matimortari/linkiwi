@@ -31,9 +31,9 @@ export default defineNuxtConfig({
   vite: {
     server: {
       hmr: {
-        protocol: "wss",
-        host: "dev.local",
-        clientPort: 443,
+        protocol: "ws",
+        host: new URL(process.env.NUXT_PUBLIC_BASE_URL!).hostname,
+        port: Number(new URL(process.env.NUXT_PUBLIC_BASE_URL!).port) || 3000,
       },
     },
     plugins: [tailwindcss() as any],
