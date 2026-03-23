@@ -15,15 +15,15 @@
     "db:reset": "prisma db push --force-reset"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.1007.0",
+    "@aws-sdk/client-s3": "3.1014.0",
     "@nuxt/content": "3.11.2",
     "@nuxtjs/color-mode": "4.0.0",
-    "@nuxtjs/seo": "3.4.0",
+    "@nuxtjs/seo": "4.0.2",
     "@pinia/nuxt": "0.11.3",
     "@prisma/adapter-pg": "7.5.0",
     "@prisma/client": "7.5.0",
     "@vueuse/motion": "3.0.3",
-    "better-sqlite3": "12.6.2",
+    "better-sqlite3": "12.8.0",
     "chart.js": "4.5.1",
     "nuxt": "4.4.2",
     "nuxt-auth-utils": "0.5.29",
@@ -34,23 +34,23 @@
     "vue": "3.5.30",
     "vue-chartjs": "5.3.3",
     "vue-draggable-plus": "0.6.1",
-    "vue-router": "5.0.3",
+    "vue-router": "5.0.4",
     "zod": "4.3.6"
   },
   "devDependencies": {
     "@antfu/eslint-config": "7.7.0",
     "@iconify-json/mdi": "1.2.3",
-    "@iconify-json/simple-icons": "1.2.73",
+    "@iconify-json/simple-icons": "1.2.75",
     "@nuxt/fonts": "0.14.0",
     "@nuxt/icon": "2.2.1",
-    "@tailwindcss/vite": "4.2.1",
-    "@types/node": "25.4.0",
+    "@tailwindcss/vite": "4.2.2",
+    "@types/node": "25.5.0",
     "@types/parquetjs": "0.10.6",
-    "eslint": "10.0.0",
+    "eslint": "10.1.0",
     "eslint-plugin-better-tailwindcss": "4.3.0",
     "eslint-plugin-format": "2.0.0",
     "prisma": "7.5.0",
-    "tailwindcss": "4.2.1",
-    "typescript": "5.9.3"
+    "tailwindcss": "4.2.2",
+    "typescript": "6.0.2"
   }
 }
