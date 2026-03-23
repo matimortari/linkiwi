@@ -17,8 +17,8 @@ export function useSessionMonitor() {
         try {
           await $fetch("/api/auth/validate", { method: "POST", credentials: "include" })
         }
-        catch (err: any) {
-          if (err.statusCode === 401 || err.status === 401) {
+        catch (err: unknown) {
+          if (err && typeof err === "object" && "statusCode" in err && err.statusCode === 401) {
             await signOut()
           }
         }

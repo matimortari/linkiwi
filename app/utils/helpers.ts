@@ -14,8 +14,13 @@ export function formatDate(date?: string | Date | null): string {
 /**
  * Extracts the error message from various error formats (Nuxt/H3/Zod).
  */
-export function getErrorMessage(err: any, fallback: string): string {
-  return err?.data?.statusMessage || err?.data?.message || err?.statusMessage || err?.message || fallback
+export function getErrorMessage(err: unknown, fallback: string): string {
+  if (err && typeof err === "object") {
+    const e = err as { data?: { statusMessage?: string, message?: string }, statusMessage?: string, message?: string }
+    return (e.data?.statusMessage || e.data?.message || e.statusMessage || e.message || fallback)
+  }
+
+  return fallback
 }
 
 /**

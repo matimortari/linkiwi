@@ -14,7 +14,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
       analytics.value = res
       return res
     }
-    catch (err: any) {
+    catch (err: unknown) {
       const message = getErrorMessage(err, "Failed to fetch analytics")
       toast.error(message)
       console.error("getAnalytics error:", err)
@@ -33,7 +33,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
       referrerStats.value = res
       return res
     }
-    catch (err: any) {
+    catch (err: unknown) {
       const message = getErrorMessage(err, "Failed to get referrer stats")
       toast.error(message)
       console.error("getReferrerStats error:", err)
@@ -50,7 +50,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
     try {
       await $fetch("/api/analytics", { method: "POST", body: { type: "pageView", userId, referrer }, credentials: "include" })
     }
-    catch (err: any) {
+    catch (err: unknown) {
       const message = getErrorMessage(err, "Failed to record page view")
       toast.error(message)
       console.error("recordPageView error:", err)
@@ -67,7 +67,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
     try {
       await $fetch("/api/analytics", { method: "POST", body: { type: "link", userId, id: linkId }, credentials: "include" })
     }
-    catch (err: any) {
+    catch (err: unknown) {
       const message = getErrorMessage(err, "Failed to record link click")
       toast.error(message)
       console.error("recordLinkClick error:", err)
@@ -84,7 +84,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
     try {
       await $fetch("/api/analytics", { method: "POST", body: { type: "icon", userId, id: iconId }, credentials: "include" })
     }
-    catch (err: any) {
+    catch (err: unknown) {
       const message = getErrorMessage(err, "Failed to record social icon click")
       toast.error(message)
       console.error("recordIconClick error:", err)
@@ -101,7 +101,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
     try {
       await $fetch("/api/analytics/comments", { method: "POST", body: data, credentials: "include" })
     }
-    catch (err: any) {
+    catch (err: unknown) {
       const message = getErrorMessage(err, "Failed to submit comment")
       toast.error(message)
       console.error("submitComment error:", err)
@@ -129,7 +129,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
 
       await $fetch<{ success: boolean, message: string }>(params.toString() ? `/api/analytics?${params.toString()}` : "/api/analytics", { method: "DELETE", credentials: "include" })
     }
-    catch (err: any) {
+    catch (err: unknown) {
       const message = getErrorMessage(err, "Failed to delete analytics")
       toast.error(message)
       console.error("deleteAnalytics error:", err)

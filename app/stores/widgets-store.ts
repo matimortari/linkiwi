@@ -13,7 +13,7 @@ export const useWidgetsStore = defineStore("widgets", () => {
       widgets.value = res.widgets.map(w => Object.freeze(w))
       return res
     }
-    catch (err: any) {
+    catch (err: unknown) {
       const message = getErrorMessage(err, "Failed to get widgets")
       toast.error(message)
       console.error("getWidgets error:", err)
@@ -32,7 +32,7 @@ export const useWidgetsStore = defineStore("widgets", () => {
       widgets.value.push(Object.freeze(res.widget))
       return res
     }
-    catch (err: any) {
+    catch (err: unknown) {
       const message = getErrorMessage(err, "Failed to create widget")
       toast.error(message)
       console.error("createWidget error:", err)
@@ -54,7 +54,7 @@ export const useWidgetsStore = defineStore("widgets", () => {
       }
       return res
     }
-    catch (err: any) {
+    catch (err: unknown) {
       const message = getErrorMessage(err, "Failed to update widget")
       toast.error(message)
       console.error("updateWidget error:", err)
@@ -72,7 +72,7 @@ export const useWidgetsStore = defineStore("widgets", () => {
       await $fetch(`/api/widgets/${id}`, { method: "DELETE", credentials: "include" })
       widgets.value = widgets.value.filter(w => w.id !== id)
     }
-    catch (err: any) {
+    catch (err: unknown) {
       const message = getErrorMessage(err, "Failed to delete widget")
       toast.error(message)
       console.error("deleteWidget error:", err)
@@ -90,7 +90,7 @@ export const useWidgetsStore = defineStore("widgets", () => {
       const res = await $fetch<{ data: any }>("/api/widgets/fetch/github", { method: "GET", query: { handle } })
       return res
     }
-    catch (err: any) {
+    catch (err: unknown) {
       const message = getErrorMessage(err, "Failed to fetch GitHub data")
       toast.error(message)
       console.error("getGitHubData error:", err)
@@ -108,7 +108,7 @@ export const useWidgetsStore = defineStore("widgets", () => {
       const res = await $fetch<{ data: any }>("/api/widgets/fetch/youtube", { method: "GET", query: { handle } })
       return res
     }
-    catch (err: any) {
+    catch (err: unknown) {
       const message = getErrorMessage(err, "Failed to fetch YouTube data")
       toast.error(message)
       console.error("getYouTubeData error:", err)

@@ -13,7 +13,7 @@ export const useLinksStore = defineStore("links", () => {
       links.value = res.links.map(i => Object.freeze(i))
       return res
     }
-    catch (err: any) {
+    catch (err: unknown) {
       const message = getErrorMessage(err, "Failed to get links")
       toast.error(message)
       console.error("getLinks error:", err)
@@ -32,7 +32,7 @@ export const useLinksStore = defineStore("links", () => {
       links.value.push(Object.freeze(res.link))
       return res
     }
-    catch (err: any) {
+    catch (err: unknown) {
       const message = getErrorMessage(err, "Failed to create link")
       toast.error(message)
       console.error("createLink error:", err)
@@ -54,7 +54,7 @@ export const useLinksStore = defineStore("links", () => {
       }
       return res
     }
-    catch (err: any) {
+    catch (err: unknown) {
       const message = getErrorMessage(err, "Failed to update link")
       toast.error(message)
       console.error("updateLink error:", err)
@@ -72,7 +72,7 @@ export const useLinksStore = defineStore("links", () => {
       await $fetch(`/api/links/${id}`, { method: "DELETE", credentials: "include" })
       links.value = links.value.filter(link => link.id !== id)
     }
-    catch (err: any) {
+    catch (err: unknown) {
       const message = getErrorMessage(err, "Failed to delete link")
       toast.error(message)
       console.error("deleteLink error:", err)

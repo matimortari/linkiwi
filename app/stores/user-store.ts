@@ -15,7 +15,7 @@ export const useUserStore = defineStore("user", () => {
       user.value = res.userData
       return res
     }
-    catch (err: any) {
+    catch (err: unknown) {
       const message = getErrorMessage(err, "Failed to get user")
       toast.error(message)
       console.error("getUser error:", err)
@@ -34,7 +34,7 @@ export const useUserStore = defineStore("user", () => {
       userProfile.value = res.userProfile
       return res
     }
-    catch (err: any) {
+    catch (err: unknown) {
       const message = getErrorMessage(err, "Failed to get user profile")
       toast.error(message)
       console.error("getUserProfile error:", err)
@@ -53,7 +53,7 @@ export const useUserStore = defineStore("user", () => {
       user.value = res.updatedUser
       return res
     }
-    catch (err: any) {
+    catch (err: unknown) {
       const message = getErrorMessage(err, "Failed to update user")
       toast.error(message)
       console.error("updateUser error:", err)
@@ -77,7 +77,7 @@ export const useUserStore = defineStore("user", () => {
       }
       return res
     }
-    catch (err: any) {
+    catch (err: unknown) {
       const message = getErrorMessage(err, "Failed to update user image")
       toast.error(message)
       console.error("updateUserImage error:", err)
@@ -98,7 +98,7 @@ export const useUserStore = defineStore("user", () => {
       }
       return res
     }
-    catch (err: any) {
+    catch (err: unknown) {
       const message = getErrorMessage(err, "Failed to update preferences")
       toast.error(message)
       console.error("updatePreferences error:", err)
@@ -116,7 +116,7 @@ export const useUserStore = defineStore("user", () => {
       await $fetch("/api/user", { method: "DELETE", credentials: "include" })
       user.value = null
     }
-    catch (err: any) {
+    catch (err: unknown) {
       const message = getErrorMessage(err, "Failed to delete user")
       toast.error(message)
       console.error("deleteUser error:", err)

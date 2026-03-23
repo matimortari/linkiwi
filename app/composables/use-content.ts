@@ -51,7 +51,7 @@ export function useContent(options: { selector?: string, parseMethod?: boolean }
     }
   }
 
-  const headerClasses = computed(() => (header: any) => {
+  const headerClasses = computed(() => (header: { id: string, level: number }) => {
     const classes: string[] = []
     const isActive = activeSection.value === header.id
     if (header.level === 2) {

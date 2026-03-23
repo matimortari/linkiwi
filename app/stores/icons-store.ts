@@ -13,7 +13,7 @@ export const useIconsStore = defineStore("icons", () => {
       icons.value = res.icons.map(i => Object.freeze(i))
       return res
     }
-    catch (err: any) {
+    catch (err: unknown) {
       const message = getErrorMessage(err, "Failed to get icons")
       toast.error(message)
       console.error("getIcons error:", err)
@@ -32,7 +32,7 @@ export const useIconsStore = defineStore("icons", () => {
       icons.value.push(Object.freeze(res.icon))
       return res
     }
-    catch (err: any) {
+    catch (err: unknown) {
       const message = getErrorMessage(err, "Failed to create icon")
       toast.error(message)
       console.error("createIcon error:", err)
@@ -54,7 +54,7 @@ export const useIconsStore = defineStore("icons", () => {
       }
       return res
     }
-    catch (err: any) {
+    catch (err: unknown) {
       const message = getErrorMessage(err, "Failed to update icon")
       toast.error(message)
       console.error("updateIcon error:", err)
@@ -72,7 +72,7 @@ export const useIconsStore = defineStore("icons", () => {
       await $fetch(`/api/social-icons/${id}`, { method: "DELETE", credentials: "include" })
       icons.value = icons.value.filter(icon => icon.id !== id)
     }
-    catch (err: any) {
+    catch (err: unknown) {
       const message = getErrorMessage(err, "Failed to delete icon")
       toast.error(message)
       console.error("deleteIcon error:", err)
