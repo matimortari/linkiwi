@@ -13,37 +13,15 @@ export async function handleOAuthUser(event: H3Event, userData: OAuthUserData) {
   if (!user) {
     user = await db.user.findUnique({
       where: { email },
-      include: {
-        preferences: true,
-        links: true,
-        icons: true,
-        widgets: true,
-        views: true,
-        comments: true,
-      },
+      include: { preferences: true, links: true, icons: true, widgets: true, views: true, comments: true },
     })
   }
 
   // If still no user, create one
   if (!user) {
     user = await db.user.create({
-      data: {
-        email,
-        name: name?.trim() ?? email.split("@")[0],
-        image: image || `${process.env.R2_PUBLIC_URL}/defaults/avatar.png`,
-        slug: await generateSlug(name ?? email.split("@")[0]),
-        preferences: {
-          create: {},
-        },
-      },
-      include: {
-        preferences: true,
-        links: true,
-        icons: true,
-        widgets: true,
-        views: true,
-        comments: true,
-      },
+      data: { email, name: name?.trim() ?? email.split("@")[0], image: image || `${process.env.R2_PUBLIC_URL}/defaults/avatar.png`, slug: await generateSlug(name ?? email.split("@")[0]), preferences: { create: {} } },
+      include: { preferences: true, links: true, icons: true, widgets: true, views: true, comments: true },
     })
   }
 

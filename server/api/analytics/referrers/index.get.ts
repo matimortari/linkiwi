@@ -2,7 +2,7 @@ export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
 
   // Rate limit: 100 requests per hour per user
-  await enforceRateLimit(event, `analytics:referrers:${user.id}`, 100, 60 * 60 * 1000)
+  await enforceRateLimit(event, `analytics:referrers:${user.id}`, 100)
 
   const query = getQuery(event)
 
@@ -12,11 +12,7 @@ export default defineEventHandler(async (event) => {
 
   const referrerStats = await db.pageView.groupBy({
     by: ["source"],
-    where: {
-      userId: user.id,
-      source: { not: null }, // Exclude null sources to prevent data integrity issues
-      ...(dateFrom || dateTo ? { createdAt: { ...(dateFrom && { gte: dateFrom }), ...(dateTo && { lte: dateTo }) } } : {}),
-    },
+    where: { userId: user.id, source: { not: null }, ...(dateFrom || dateTo ? { createdAt: { ...(dateFrom && { gte: dateFrom }), ...(dateTo && { lte: dateTo }) } } : {}) },
     _count: { source: true },
     orderBy: { _count: { source: "desc" } },
   })

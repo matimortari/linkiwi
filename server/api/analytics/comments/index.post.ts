@@ -3,7 +3,7 @@ import { createCommentSchema } from "#shared/schemas/analytics-schema"
 export default defineEventHandler(async (event) => {
   // Rate limit: 10 requests per hour per IP
   const ip = getRequestIP(event, { xForwardedFor: true }) || "unknown"
-  await enforceRateLimit(event, `comments:${ip}`, 10, 60 * 60 * 1000)
+  await enforceRateLimit(event, `comments:${ip}`, 10)
 
   const body = await readBody(event)
   const result = createCommentSchema.safeParse(body)
@@ -20,14 +20,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ status: 403, statusText: "Guestbook is disabled for this user" })
   }
 
-  const comment = await db.comment.create({
-    data: {
-      userId: result.data.userId,
-      name: result.data.name,
-      email: result.data.email || null,
-      message: result.data.message,
-    },
-  })
+  const comment = await db.comment.create({ data: { userId: result.data.userId, name: result.data.name, email: result.data.email || null, message: result.data.message } })
 
   // Invalidate user data cache
   await deleteCached(CacheKeys.userData(result.data.userId))

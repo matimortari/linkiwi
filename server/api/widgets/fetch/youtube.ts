@@ -24,7 +24,6 @@ export default defineEventHandler(async (event) => {
 
   const channelId: any = channel.id
   const searchRes: any = await $fetch<any>("https://www.googleapis.com/youtube/v3/search", { query: { part: "snippet", channelId, order: "date", type: "video", maxResults: 5, key: apiKey } }).catch(() => null)
-
   const videos: any[] = searchRes?.items?.map((video: any) => ({
     id: video.id.videoId,
     title: video.snippet.title,

@@ -1,13 +1,10 @@
+import type { H3Event } from "h3"
 import type { RedisClientType } from "redis"
 import { createClient } from "redis"
 
+export const CACHE_TTL = { SHORT: 60, LONG: 300 } as const
 let redisClient: RedisClientType | null = null
 let connecting = false
-
-export const CACHE_TTL = {
-  SHORT: 60,
-  LONG: 300,
-} as const
 
 /**
  * Gets or creates the Redis client instance.
@@ -84,7 +81,7 @@ export async function getCached<T>(key: string): Promise<T | null> {
     console.info(`[Cache MISS] ${key}`)
     return null
   }
-  catch (err: any) {
+  catch (err: unknown) {
     console.error(`[Cache ERROR] ${key}`, err)
     return null
   }
@@ -173,7 +170,7 @@ export async function checkRateLimit(identifier: string, limit: number = 100, wi
 
     return { allowed, limit, remaining, reset }
   }
-  catch (err: any) {
+  catch (err: unknown) {
     console.error("[Rate Limit ERROR]", err)
     return { allowed: true, limit, remaining: limit, reset: Date.now() + windowMs }
   }
@@ -183,7 +180,7 @@ export async function checkRateLimit(identifier: string, limit: number = 100, wi
  * Enforces rate limiting with automatic header injection (X-RateLimit-*, Retry-After).
  * Throws 429 error when request limit is exceeded.
  */
-export async function enforceRateLimit(event: any, identifier: string, limit: number = 100, windowMs: number = 60 * 60 * 1000): Promise<void> {
+export async function enforceRateLimit(event: H3Event, identifier: string, limit: number = 100, windowMs: number = 60 * 60 * 1000): Promise<void> {
   const result = await checkRateLimit(identifier, limit, windowMs)
 
   setHeader(event, "X-RateLimit-Limit", result.limit.toString())

@@ -2,7 +2,7 @@ export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
 
   // Rate limit: 200 requests per hour per user
-  await enforceRateLimit(event, `widgets:get:${user.id}`, 200, 60 * 60 * 1000)
+  await enforceRateLimit(event, `widgets:get:${user.id}`, 200)
 
   const cacheKey = CacheKeys.userWidgets(user.id)
   const cached = await getCached<any>(cacheKey)

@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
 
   // Rate limit: 50 requests per hour per user
-  await enforceRateLimit(event, `links:update:${user.id}`, 50, 60 * 60 * 1000)
+  await enforceRateLimit(event, `links:update:${user.id}`, 50)
 
   const linkId = getRouterParam(event, "link")
   if (!linkId) {
@@ -27,17 +27,7 @@ export default defineEventHandler(async (event) => {
   const updatedLink = await db.userLink.update({
     where: { id: linkId },
     data: { url: result.data.url, title: result.data.title, order: result.data.order, isVisible: result.data.isVisible },
-    select: {
-      id: true,
-      userId: true,
-      url: true,
-      title: true,
-      order: true,
-      clickCount: true,
-      isVisible: true,
-      createdAt: true,
-      updatedAt: true,
-    },
+    select: { id: true, userId: true, url: true, title: true, order: true, clickCount: true, isVisible: true, createdAt: true, updatedAt: true },
   })
 
   // Invalidate links cache and user profile cache

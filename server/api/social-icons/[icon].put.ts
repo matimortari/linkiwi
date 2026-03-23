@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
 
   // Rate limit: 30 requests per hour per user
-  await enforceRateLimit(event, `icons:update:${user.id}`, 30, 60 * 60 * 1000)
+  await enforceRateLimit(event, `icons:update:${user.id}`, 30)
 
   const iconId = getRouterParam(event, "icon")
   if (!iconId) {
@@ -27,18 +27,7 @@ export default defineEventHandler(async (event) => {
   const updatedIcon = await db.userIcon.update({
     where: { id: iconId },
     data: { order: result.data.order, isVisible: result.data.isVisible },
-    select: {
-      id: true,
-      userId: true,
-      url: true,
-      platform: true,
-      logo: true,
-      order: true,
-      clickCount: true,
-      isVisible: true,
-      createdAt: true,
-      updatedAt: true,
-    },
+    select: { id: true, userId: true, url: true, platform: true, logo: true, order: true, clickCount: true, isVisible: true, createdAt: true, updatedAt: true },
   })
 
   // Invalidate icons cache and user profile cache

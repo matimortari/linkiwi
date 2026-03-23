@@ -2,7 +2,7 @@ export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
 
   // Rate limit: 200 requests per hour per user
-  await enforceRateLimit(event, `user:get:${user.id}`, 200, 60 * 60 * 1000)
+  await enforceRateLimit(event, `user:get:${user.id}`, 200)
 
   const cacheKey = CacheKeys.userData(user.id)
   const cached = await getCached<any>(cacheKey)
@@ -12,11 +12,7 @@ export default defineEventHandler(async (event) => {
 
   const userData = await db.user.findUnique({
     where: { id: user.id },
-    include: {
-      preferences: true,
-      comments: true,
-      views: true,
-    },
+    include: { preferences: true, comments: true, views: true },
   })
   if (!userData) {
     throw createError({ status: 404, statusText: "User not found" })

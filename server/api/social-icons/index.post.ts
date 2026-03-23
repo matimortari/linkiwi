@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
 
   // Rate limit: 30 requests per hour per user
-  await enforceRateLimit(event, `icons:create:${user.id}`, 30, 60 * 60 * 1000)
+  await enforceRateLimit(event, `icons:create:${user.id}`, 30)
 
   const body = await readBody(event)
   const result = createUserIconSchema.safeParse(body)
@@ -18,27 +18,12 @@ export default defineEventHandler(async (event) => {
   }
 
   // Get the max order value to append new icon at the end
-  const maxOrderIcon = await db.userIcon.findFirst({
-    where: { userId: user.id },
-    orderBy: { order: "desc" },
-    select: { order: true },
-  })
+  const maxOrderIcon = await db.userIcon.findFirst({ where: { userId: user.id }, orderBy: { order: "desc" }, select: { order: true } })
   const nextOrder = (maxOrderIcon?.order ?? -1) + 1
 
   const newIcon = await db.userIcon.create({
     data: { userId: user.id, url: result.data.url, platform: result.data.platform, logo: result.data.logo, order: nextOrder },
-    select: {
-      id: true,
-      userId: true,
-      url: true,
-      platform: true,
-      logo: true,
-      order: true,
-      clickCount: true,
-      isVisible: true,
-      createdAt: true,
-      updatedAt: true,
-    },
+    select: { id: true, userId: true, url: true, platform: true, logo: true, order: true, clickCount: true, isVisible: true, createdAt: true, updatedAt: true },
   })
 
   // Invalidate icons cache and user profile cache

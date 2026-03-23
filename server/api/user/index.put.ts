@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
 
   // Rate limit: 30 requests per hour per user
-  await enforceRateLimit(event, `user:update:${user.id}`, 30, 60 * 60 * 1000)
+  await enforceRateLimit(event, `user:update:${user.id}`, 30)
 
   const body = await readBody(event)
   const result = updateUserSchema.safeParse(body)
@@ -24,16 +24,7 @@ export default defineEventHandler(async (event) => {
   const updatedUser = await db.user.update({
     where: { id: user.id },
     data: { name: result.data.name, slug: result.data.slug, description: result.data.description },
-    select: {
-      id: true,
-      email: true,
-      name: true,
-      slug: true,
-      description: true,
-      image: true,
-      createdAt: true,
-      updatedAt: true,
-    },
+    select: { id: true, email: true, name: true, slug: true, description: true, image: true, createdAt: true, updatedAt: true },
   })
 
   // Invalidate both old and new profile caches, plus user data cache

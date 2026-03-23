@@ -1,7 +1,7 @@
 export default defineEventHandler(async (event) => {
   // Rate limit: 300 requests per hour per IP
   const ip = getRequestIP(event, { xForwardedFor: true }) || "unknown"
-  await enforceRateLimit(event, `profile:view:${ip}`, 300, 60 * 60 * 1000)
+  await enforceRateLimit(event, `profile:view:${ip}`, 300)
 
   const slug = getRouterParam(event, "slug")
   if (!slug) {

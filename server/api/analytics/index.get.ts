@@ -2,7 +2,7 @@ export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
 
   // Rate limit: 100 requests per hour per user
-  await enforceRateLimit(event, `analytics:get:${user.id}`, 100, 60 * 60 * 1000)
+  await enforceRateLimit(event, `analytics:get:${user.id}`, 100)
 
   const cacheKey = CacheKeys.analytics(user.id)
   const cached = await getCached<any>(cacheKey)
@@ -13,18 +13,18 @@ export default defineEventHandler(async (event) => {
   const [pageViews, linkClicks, iconClicks] = await Promise.all([
     db.pageView.findMany({
       where: { userId: user.id },
-      orderBy: { createdAt: "desc" },
       select: { id: true, userId: true, createdAt: true, referrer: true, source: true },
+      orderBy: { createdAt: "desc" },
     }),
     db.linkClick.findMany({
       where: { userLink: { userId: user.id } },
-      orderBy: { createdAt: "desc" },
       include: { userLink: true },
+      orderBy: { createdAt: "desc" },
     }),
     db.iconClick.findMany({
       where: { userIcon: { userId: user.id } },
-      orderBy: { createdAt: "desc" },
       include: { userIcon: true },
+      orderBy: { createdAt: "desc" },
     }),
   ])
 

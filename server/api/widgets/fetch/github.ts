@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const user: any = userRes.value
-  const repos: any[] = reposRes.status === "fulfilled" ? reposRes.value : []
+  const repos: any[] = reposRes.status === "fulfilled" ? reposRes.value : [].filter((r: any) => !r.fork).map((r: any) => ({ name: r.name, description: r.description || null, stars: r.stargazers_count, language: r.language || null, url: r.html_url }))
 
   const data = {
     handle,
@@ -29,13 +29,7 @@ export default defineEventHandler(async (event) => {
     followers: user.followers,
     publicRepos: user.public_repos,
     profileUrl: user.html_url,
-    repos: repos.filter((r: any) => !r.fork).map((r: any) => ({
-      name: r.name,
-      description: r.description || null,
-      stars: r.stargazers_count,
-      language: r.language || null,
-      url: r.html_url,
-    })),
+    repos,
   }
 
   await setCached(cacheKey, data, 60 * 60)

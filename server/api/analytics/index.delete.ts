@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
 
   // Rate limit: 5 requests per hour per user
-  await enforceRateLimit(event, `analytics:delete:${user.id}`, 5, 60 * 60 * 1000)
+  await enforceRateLimit(event, `analytics:delete:${user.id}`, 5)
 
   const query = getQuery(event)
   if (query.type && !["pageView", "linkClick", "iconClick"].includes(query.type as string)) {
@@ -85,7 +85,7 @@ export default defineEventHandler(async (event) => {
         referrer: pv.referrer ?? null,
         source: pv.source ?? null,
         createdAt: pv.createdAt,
-      } as any)
+      })
     }
 
     await writer.close()
@@ -110,7 +110,7 @@ export default defineEventHandler(async (event) => {
         linkUrl: lc.userLink?.url ?? null,
         linkTitle: lc.userLink?.title ?? null,
         createdAt: lc.createdAt,
-      } as any)
+      })
     }
 
     await writer.close()
@@ -137,7 +137,7 @@ export default defineEventHandler(async (event) => {
         iconPlatform: ic.userIcon?.platform ?? null,
         iconLogo: ic.userIcon?.logo ?? null,
         createdAt: ic.createdAt,
-      } as any)
+      })
     }
 
     await writer.close()
@@ -177,10 +177,7 @@ export default defineEventHandler(async (event) => {
         }
       }
       else {
-        await tx.userLink.updateMany({
-          where: { userId: user.id, id: { in: userLinks.map(link => link.id) } },
-          data: { clickCount: 0 },
-        })
+        await tx.userLink.updateMany({ where: { userId: user.id, id: { in: userLinks.map(link => link.id) } }, data: { clickCount: 0 } })
       }
     }
 
@@ -197,10 +194,7 @@ export default defineEventHandler(async (event) => {
         }
       }
       else {
-        await tx.userIcon.updateMany({
-          where: { userId: user.id, id: { in: userIcons.map(icon => icon.id) } },
-          data: { clickCount: 0 },
-        })
+        await tx.userIcon.updateMany({ where: { userId: user.id, id: { in: userIcons.map(icon => icon.id) } }, data: { clickCount: 0 } })
       }
     }
   })

@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
 
   // Rate limit: 50 requests per hour per user
-  await enforceRateLimit(event, `widgets:update:${user.id}`, 50, 60 * 60 * 1000)
+  await enforceRateLimit(event, `widgets:update:${user.id}`, 50)
 
   const widgetId = getRouterParam(event, "widget")
   if (!widgetId) {

@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
 
   // Rate limit: 50 requests per hour per user
-  await enforceRateLimit(event, `links:create:${user.id}`, 50, 60 * 60 * 1000)
+  await enforceRateLimit(event, `links:create:${user.id}`, 50)
 
   const body = await readBody(event)
   const result = createUserLinkSchema.safeParse(body)
@@ -13,26 +13,12 @@ export default defineEventHandler(async (event) => {
   }
 
   // Get the max order value to append new link at the end
-  const maxOrderLink = await db.userLink.findFirst({
-    where: { userId: user.id },
-    orderBy: { order: "desc" },
-    select: { order: true },
-  })
+  const maxOrderLink = await db.userLink.findFirst({ where: { userId: user.id }, orderBy: { order: "desc" }, select: { order: true } })
   const nextOrder = (maxOrderLink?.order ?? -1) + 1
 
   const newLink = await db.userLink.create({
     data: { userId: user.id, url: result.data.url, title: result.data.title, order: nextOrder },
-    select: {
-      id: true,
-      userId: true,
-      url: true,
-      title: true,
-      order: true,
-      clickCount: true,
-      isVisible: true,
-      createdAt: true,
-      updatedAt: true,
-    },
+    select: { id: true, userId: true, url: true, title: true, order: true, clickCount: true, isVisible: true, createdAt: true, updatedAt: true },
   })
 
   // Invalidate links cache and user profile cache

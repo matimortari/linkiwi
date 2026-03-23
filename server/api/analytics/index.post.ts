@@ -3,7 +3,7 @@ import { analyticsRecordSchema } from "#shared/schemas/analytics-schema"
 export default defineEventHandler(async (event) => {
   // Rate limit: 100 requests per hour per IP
   const ip = getRequestIP(event, { xForwardedFor: true }) || "unknown"
-  await enforceRateLimit(event, `analytics:${ip}`, 100, 60 * 60 * 1000)
+  await enforceRateLimit(event, `analytics:${ip}`, 100)
 
   const body = await readBody(event)
   const result = analyticsRecordSchema.safeParse(body)
@@ -39,10 +39,7 @@ export default defineEventHandler(async (event) => {
         throw createError({ status: 400, statusText: "Link ID is required" })
       }
 
-      const link = await db.userLink.findFirst({
-        where: { id: result.data.id, userId: result.data.userId },
-        select: { id: true, clicks: true },
-      })
+      const link = await db.userLink.findFirst({ where: { id: result.data.id, userId: result.data.userId }, select: { id: true, clicks: true } })
       if (!link) {
         throw createError({ status: 404, statusText: "Link not found" })
       }
@@ -64,10 +61,7 @@ export default defineEventHandler(async (event) => {
         throw createError({ status: 400, statusText: "Icon ID is required" })
       }
 
-      const icon = await db.userIcon.findFirst({
-        where: { id: result.data.id, userId: result.data.userId },
-        select: { id: true, clicks: true },
-      })
+      const icon = await db.userIcon.findFirst({ where: { id: result.data.id, userId: result.data.userId }, select: { id: true, clicks: true } })
       if (!icon) {
         throw createError({ status: 404, statusText: "Icon not found" })
       }

@@ -2,7 +2,7 @@ export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
 
   // Rate limit: 30 requests per hour per user
-  await enforceRateLimit(event, `icons:delete:${user.id}`, 30, 60 * 60 * 1000)
+  await enforceRateLimit(event, `icons:delete:${user.id}`, 30)
 
   const iconId = getRouterParam(event, "icon")
   if (!iconId) {

@@ -2,7 +2,7 @@ export default defineEventHandler(async (event) => {
   const user = await getUserFromSession(event)
 
   // Rate limit: 200 requests per hour per user
-  await enforceRateLimit(event, `links:get:${user.id}`, 200, 60 * 60 * 1000)
+  await enforceRateLimit(event, `links:get:${user.id}`, 200)
 
   const cacheKey = CacheKeys.userLinks(user.id)
   const cached = await getCached<any>(cacheKey)
@@ -12,17 +12,7 @@ export default defineEventHandler(async (event) => {
 
   const links = await db.userLink.findMany({
     where: { userId: user.id },
-    select: {
-      id: true,
-      userId: true,
-      url: true,
-      title: true,
-      order: true,
-      clickCount: true,
-      isVisible: true,
-      createdAt: true,
-      updatedAt: true,
-    },
+    select: { id: true, userId: true, url: true, title: true, order: true, clickCount: true, isVisible: true, createdAt: true, updatedAt: true },
     orderBy: { order: "asc" },
   })
 

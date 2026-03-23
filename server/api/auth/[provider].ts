@@ -15,18 +15,8 @@ const configs: Record<string, any> = {
 }
 
 const extractUserData: Record<string, (user: any) => any> = {
-  google: user => ({
-    id: user.id?.toString() || user.sub?.toString(),
-    name: user.name || user.given_name,
-    email: user.email,
-    image: user.picture,
-  }),
-  github: user => ({
-    id: user.id?.toString(),
-    name: user.name,
-    email: user.email,
-    image: user.avatar_url,
-  }),
+  google: user => ({ id: user.id?.toString() || user.sub?.toString(), name: user.name || user.given_name, email: user.email, image: user.picture }),
+  github: user => ({ id: user.id?.toString(), name: user.name, email: user.email, image: user.avatar_url }),
 }
 
 export default defineEventHandler(async (event: H3Event) => {
@@ -65,7 +55,7 @@ export default defineEventHandler(async (event: H3Event) => {
       return sendRedirect(event, `/sign-in?error=${provider}_oauth_failed`)
     } })(event)
   }
-  catch (err: any) {
+  catch (err: unknown) {
     throw createError({ status: 500, message: "OAuth processing failed", data: { provider, error: err instanceof Error ? err.message : String(err) } })
   }
 })
