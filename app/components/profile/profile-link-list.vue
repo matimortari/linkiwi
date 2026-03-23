@@ -49,7 +49,7 @@
     </div>
   </div>
 
-  <ProfileLinkDialog :is-open="isDialogOpen" :selected-link="selectedLink" @close="handleCloseDialog" />
+  <ProfileLinkDialog :is-open="isLinkDialogOpen" :selected-link="selectedLink" @close="handleCloseDialog" />
 </template>
 
 <script setup lang="ts">
@@ -57,22 +57,22 @@ import { VueDraggable } from "vue-draggable-plus"
 
 const linksStore = useLinksStore()
 const { links, loading } = storeToRefs(linksStore)
-const isDialogOpen = ref(false)
+const { isLinkDialogOpen, openDialog, closeDialog } = useDialogs()
 const selectedLink = ref<Link | null>(null)
 const orderedLinks = ref<Link[]>([])
 
 function handleAddLink() {
   selectedLink.value = null
-  isDialogOpen.value = true
+  openDialog("link")
 }
 
 function handleUpdateLink(link: Link) {
   selectedLink.value = link
-  isDialogOpen.value = true
+  openDialog("link")
 }
 
 function handleCloseDialog() {
-  isDialogOpen.value = false
+  closeDialog("link")
   selectedLink.value = null
 }
 

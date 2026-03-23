@@ -1,5 +1,5 @@
 <template>
-  <Dialog :is-open="isOpen" title="Add Social Icon" @update:is-open="emit('close')">
+  <Dialog :is-open="isIconDialogOpen" title="Add Social Icon" @update:is-open="resetForm">
     <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
       <span class="text-sm font-medium">Select Platform</span>
 
@@ -21,7 +21,7 @@
 
       <footer class="flex flex-row items-center justify-end">
         <div class="navigation-group">
-          <button class="btn-danger" :disabled="loading" @click="emit('close')">
+          <button class="btn-danger" :disabled="loading" @click="handleCancel">
             Cancel
           </button>
           <button class="btn-success" type="submit" :disabled="loading || !form.platform || !form.url">
@@ -34,14 +34,11 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
-  isOpen: boolean
-}>()
-
 const emit = defineEmits<{ close: [] }>()
 
 const iconsStore = useIconsStore()
 const { loading } = storeToRefs(iconsStore)
+const { isIconDialogOpen } = useDialogs()
 const form = ref<Parameters<typeof iconsStore.createIcon>[0]>({ platform: "" as keyof typeof SOCIAL_ICONS, logo: "" as typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS], url: "" })
 const socialIconEntries = computed(() => Object.entries(SOCIAL_ICONS) as [keyof typeof SOCIAL_ICONS, (typeof SOCIAL_ICONS)[keyof typeof SOCIAL_ICONS]][])
 
@@ -51,8 +48,13 @@ function selectIcon(label: keyof typeof SOCIAL_ICONS, iconName: typeof SOCIAL_IC
 }
 
 async function handleSubmit() {
+  if (!form.value.platform || !form.value.url) {
+    return
+  }
+
   try {
     await iconsStore.createIcon(form.value)
+    resetForm()
     emit("close")
   }
   catch {
@@ -60,12 +62,26 @@ async function handleSubmit() {
   }
 }
 
+function handleCancel() {
+  resetForm()
+  emit("close")
+}
+
+function resetForm() {
+  form.value.platform = "" as keyof typeof SOCIAL_ICONS
+  form.value.logo = "" as typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS]
+  form.value.url = ""
+}
+
 // Reset form when dialog is opened
-watch(() => props.isOpen, (open) => {
+watch(() => isIconDialogOpen.value, (open) => {
   if (open) {
     form.value.platform = "" as keyof typeof SOCIAL_ICONS
     form.value.logo = "" as typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS]
     form.value.url = ""
+  }
+  else {
+    resetForm()
   }
 }, { immediate: true })
 </script>

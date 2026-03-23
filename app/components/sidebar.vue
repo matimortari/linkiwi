@@ -1,11 +1,11 @@
 <template>
   <!-- Mobile toggle -->
-  <button class="btn fixed top-4 right-4 z-40 md:hidden!" :aria-label="isOpen ? 'Close menu' : 'Open menu'" @click="emit('update:isOpen', !isOpen)">
+  <button class="btn fixed top-4 right-4 z-40 md:hidden!" :aria-label="isOpen ? 'Close menu' : 'Open menu'" @click="isOpen ? closeSidebar() : openSidebar()">
     <icon :name="isOpen ? 'mdi:close' : 'mdi:menu'" size="25" :class="isOpen ? 'text-muted-foreground' : ''" />
   </button>
 
   <!-- Mobile overlay -->
-  <div v-if="isOpen" class="fixed inset-0 z-20 bg-black/50 md:hidden" @click="emit('update:isOpen', false)" />
+  <div v-if="isOpen" class="fixed inset-0 z-20 bg-black/50 md:hidden" @click="closeSidebar()" />
 
   <aside
     class="fixed top-0 left-0 z-30 size-full bg-card px-4 py-8 transition-transform ease-in-out md:static md:block md:w-56 md:translate-x-0 md:bg-transparent 2xl:w-64 2xl:py-12"
@@ -16,7 +16,7 @@
         <div v-if="user" class="flex w-full items-center gap-4">
           <div class="relative size-12 shrink-0">
             <img :src="user.image" alt="Avatar" class="size-full rounded-full border object-cover select-none">
-            <button class="btn-primary absolute -right-2 -bottom-2 p-1!" aria-label="Edit Profile Information" @click="isUserDialogOpen = true">
+            <button class="btn-primary absolute -right-2 -bottom-2 p-1!" aria-label="Edit Profile Information" @click="openDialog('user')">
               <icon name="mdi:square-edit-outline" size="20" />
             </button>
           </div>
@@ -42,7 +42,7 @@
         <nuxt-link
           v-for="link in SIDEBAR_NAV_LINKS" :key="link.url"
           :to="link.url" class="btn-ghost justify-start!"
-          :class="{ 'bg-muted': route.path === link.url }" @click="emit('update:isOpen', false)"
+          :class="{ 'bg-muted': route.path === link.url }" @click="closeSidebar()"
         >
           <icon :name="link.icon" size="25" />
           <span>{{ link.label }}</span>
@@ -52,7 +52,7 @@
       <div class="border-t md:flex-1" />
 
       <nav class="flex flex-col gap-2" aria-label="Mobile Navigation Actions">
-        <button class="btn-ghost justify-start!" @click="isShareDialogOpen = true">
+        <button class="btn-ghost justify-start!" @click="openDialog('share')">
           <icon name="mdi:share-variant-outline" size="25" />
           <span>Share</span>
         </button>
@@ -72,8 +72,8 @@
     </div>
   </aside>
 
-  <UserDialog :is-open="isUserDialogOpen" @close=" isUserDialogOpen = false" />
-  <UserShareDialog :is-open="isShareDialogOpen" @close="isShareDialogOpen = false" />
+  <UserDialog :is-open="isUserDialogOpen" @close="closeDialog('user')" />
+  <UserShareDialog :is-open="isShareDialogOpen" @close="closeDialog('share')" />
 </template>
 
 <script setup lang="ts">
@@ -81,13 +81,10 @@ defineProps<{
   isOpen: boolean
 }>()
 
-const emit = defineEmits<{ "update:isOpen": [value: boolean] }>()
-
 const { toggleTheme, themeIcon } = useTheme()
 const route = useRoute()
+const { isUserDialogOpen, isShareDialogOpen, openDialog, closeDialog, closeSidebar, openSidebar } = useDialogs()
 const { user } = storeToRefs(useUserStore())
-const isUserDialogOpen = ref(false)
-const isShareDialogOpen = ref(false)
 </script>
 
 <style scoped>

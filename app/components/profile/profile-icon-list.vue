@@ -33,14 +33,14 @@
         </li>
       </VueDraggable>
 
-      <button class="btn-primary self-end" @click="isDialogOpen = true">
+      <button class="btn-primary self-end" @click="openDialog('icon')">
         <icon name="mdi:star-plus" size="25" />
         <span>Add Social Icon</span>
       </button>
     </div>
   </div>
 
-  <ProfileIconDialog :is-open="isDialogOpen" @close=" isDialogOpen = false" />
+  <ProfileIconDialog :is-open="isIconDialogOpen" @close="closeDialog('icon')" />
 </template>
 
 <script setup lang="ts">
@@ -48,7 +48,7 @@ import { VueDraggable } from "vue-draggable-plus"
 
 const iconStore = useIconsStore()
 const { icons, loading } = storeToRefs(iconStore)
-const isDialogOpen = ref(false)
+const { isIconDialogOpen, openDialog, closeDialog } = useDialogs()
 const orderedIcons = ref<Icon[]>([])
 
 async function handleReorderIcon() {

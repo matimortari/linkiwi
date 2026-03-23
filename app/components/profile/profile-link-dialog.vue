@@ -1,5 +1,5 @@
 <template>
-  <Dialog :is-open="isOpen" :title="isUpdateMode ? 'Edit Link' : 'Add Link'" @update:is-open="emit('close')">
+  <Dialog :is-open="isLinkDialogOpen" :title="isUpdateMode ? 'Edit Link' : 'Add Link'" @update:is-open="emit('close')">
     <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
       <div class="flex max-w-md flex-col gap-2">
         <label for="title" class="w-12 text-sm font-medium">Title</label>
@@ -13,7 +13,7 @@
 
       <footer class="flex flex-row items-center justify-end">
         <div class="navigation-group">
-          <button class="btn-danger" :disabled="loading" @click="emit('close')">
+          <button class="btn-danger" :disabled="loading" @click="handleCancel">
             Cancel
           </button>
           <button class="btn-success" type="submit" :disabled="loading || !form.title || !form.url">
@@ -26,15 +26,11 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
-  isOpen: boolean
-  selectedLink?: Link | null
-}>()
-
 const emit = defineEmits<{ close: [] }>()
 
 const linksStore = useLinksStore()
 const { loading } = storeToRefs(linksStore)
+const { isLinkDialogOpen, selectedLink } = useDialogs()
 const form = ref<Parameters<typeof linksStore.createLink>[0] | Parameters<typeof linksStore.updateLink>[1]>({ title: "", url: "" })
 const editingLinkId = ref<string | null>(null)
 const isUpdateMode = computed(() => !!editingLinkId.value)
@@ -51,6 +47,7 @@ async function handleSubmit() {
     else {
       await linksStore.createLink(form.value as Parameters<typeof linksStore.createLink>[0])
     }
+    resetForm()
     emit("close")
   }
   catch {
@@ -58,12 +55,26 @@ async function handleSubmit() {
   }
 }
 
+function handleCancel() {
+  resetForm()
+  emit("close")
+}
+
+function resetForm() {
+  editingLinkId.value = null
+  form.value.title = ""
+  form.value.url = ""
+}
+
 // Reset form when dialog is opened or when selectedLink changes
-watch([() => props.isOpen, () => props.selectedLink], ([open]) => {
+watch([() => isLinkDialogOpen.value, () => selectedLink.value], ([open]) => {
   if (open) {
-    editingLinkId.value = props.selectedLink?.id || null
-    form.value.title = props.selectedLink?.title || ""
-    form.value.url = props.selectedLink?.url || ""
+    editingLinkId.value = selectedLink.value?.id || null
+    form.value.title = selectedLink.value?.title || ""
+    form.value.url = selectedLink.value?.url || ""
   }
-}, { immediate: true, deep: true })
+  else {
+    resetForm()
+  }
+}, { immediate: true })
 </script>

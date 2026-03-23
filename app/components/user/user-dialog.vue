@@ -1,5 +1,5 @@
 <template>
-  <Dialog :is-open="isOpen" title="Edit Profile Info" @update:is-open="emit('close')">
+  <Dialog :is-open="isUserDialogOpen" title="Edit Profile Info" @update:is-open="emit('close')">
     <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
       <div class="flex flex-col items-center border-b pb-4">
         <div class="relative size-24">
@@ -40,14 +40,11 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
-  isOpen: boolean
-}>()
-
 const emit = defineEmits<{ close: [] }>()
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
+const { isUserDialogOpen } = useDialogs()
 const form = ref({ name: "", slug: "", description: "", image: "" })
 
 async function handleUpdateImage(event: Event) {
@@ -65,7 +62,7 @@ async function handleUpdateImage(event: Event) {
 }
 
 async function handleSubmit() {
-  if (!user.value?.id) {
+  if (!user.value?.id || !form.value.name || !form.value.slug) {
     return
   }
 
@@ -80,7 +77,7 @@ async function handleSubmit() {
 }
 
 // Reset form when dialog is opened
-watch(() => props.isOpen, (open) => {
+watch(() => isUserDialogOpen.value, (open) => {
   if (open && user.value) {
     form.value = {
       name: user.value.name ?? "",

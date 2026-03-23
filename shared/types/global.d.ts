@@ -70,6 +70,19 @@ interface Comment {
   createdAt: Date | string
 }
 
+interface UIState {
+  sidebar: boolean
+  dialogs: {
+    user: boolean
+    share: boolean
+    link: {
+      isOpen: boolean
+      selectedLink: Link | null
+    }
+    icon: boolean
+  }
+}
+
 interface Toast {
   id: string
   message: string

@@ -2,7 +2,7 @@
   <Masthead />
 
   <div class="flex flex-col items-center gap-4 overflow-x-hidden md:flex-row md:items-start">
-    <Sidebar :is-open="isSidebarOpen" @update:is-open="isSidebarOpen = $event" />
+    <Sidebar :is-open="isSidebarOpen" />
 
     <main class="w-full flex-1 overflow-x-hidden">
       <Loading v-if="isLoading" class="flex min-h-screen items-center justify-center" />
@@ -18,7 +18,7 @@ const userStore = useUserStore()
 const linksStore = useLinksStore()
 const iconsStore = useIconsStore()
 const widgetsStore = useWidgetsStore()
-const isSidebarOpen = ref(false)
+const { isSidebarOpen } = useDialogs()
 const isLoading = ref(true)
 
 onMounted(async () => {
