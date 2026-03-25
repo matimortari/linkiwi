@@ -1,16 +1,7 @@
 import tailwindcss from "@tailwindcss/vite"
 
 export default defineNuxtConfig({
-  modules: [
-    "@nuxt/content",
-    "@nuxt/fonts",
-    "@nuxt/icon",
-    "@nuxtjs/color-mode",
-    "@nuxtjs/seo",
-    "@pinia/nuxt",
-    "@vueuse/motion/nuxt",
-    "nuxt-auth-utils",
-  ],
+  modules: ["@nuxt/content", "@nuxt/fonts", "@nuxt/icon", "@nuxtjs/color-mode", "@nuxtjs/seo", "@pinia/nuxt", "@vueuse/motion/nuxt", "nuxt-auth-utils"],
   runtimeConfig: {
     public: {
       baseURL: process.env.NUXT_PUBLIC_BASE_URL,
@@ -18,30 +9,18 @@ export default defineNuxtConfig({
     session: {
       maxAge: 60 * 60 * 24 * 7, // 7 days
       password: process.env.NUXT_SESSION_PASSWORD!,
-      cookie: {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-      },
+      cookie: { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax" },
     },
   },
-  devServer: {
-    host: "0.0.0.0",
-  },
+  devServer: { host: "0.0.0.0" },
   vite: {
-    server: {
-      hmr: {
-        protocol: "ws",
-        host: new URL(process.env.NUXT_PUBLIC_BASE_URL!).hostname,
-        port: Number(new URL(process.env.NUXT_PUBLIC_BASE_URL!).port) || 3000,
-      },
-    },
+    server: process.env.NUXT_PUBLIC_BASE_URL
+      ? {
+          allowedHosts: [new URL(process.env.NUXT_PUBLIC_BASE_URL).hostname],
+          hmr: { protocol: "wss", host: new URL(process.env.NUXT_PUBLIC_BASE_URL).hostname, port: Number(new URL(process.env.NUXT_PUBLIC_BASE_URL).port) || 3000 },
+        }
+      : {},
     plugins: [tailwindcss() as any],
-  },
-  nitro: {
-    externals: {
-      inline: ["unhead"],
-    },
   },
   app: {
     head: {
@@ -49,13 +28,6 @@ export default defineNuxtConfig({
     },
   },
   css: ["~/assets/styles.css"],
-  site: {
-    url: process.env.NUXT_PUBLIC_BASE_URL,
-    name: "LinKiosk",
-  },
-  robots: {
-    disallow: ["/admin"],
-  },
   colorMode: {
     classSuffix: "",
     preference: "system",
@@ -85,4 +57,6 @@ export default defineNuxtConfig({
     mode: "svg",
     clientBundle: { scan: true },
   },
+  robots: { disallow: ["/admin"] },
+  site: { url: process.env.NUXT_PUBLIC_BASE_URL, name: "LinKiosk" },
 })
