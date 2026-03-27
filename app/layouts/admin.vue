@@ -18,7 +18,7 @@ const userStore = useUserStore()
 const linksStore = useLinksStore()
 const iconsStore = useIconsStore()
 const widgetsStore = useWidgetsStore()
-const { isSidebarOpen } = useDialogs()
+const { isSidebarOpen } = useUIState()
 const isLoading = ref(true)
 
 onMounted(async () => {

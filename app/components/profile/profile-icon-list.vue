@@ -48,7 +48,7 @@ import { VueDraggable } from "vue-draggable-plus"
 
 const iconStore = useIconsStore()
 const { icons, loading } = storeToRefs(iconStore)
-const { isIconDialogOpen, openDialog, closeDialog } = useDialogs()
+const { isIconDialogOpen, openDialog, closeDialog } = useUIState()
 const orderedIcons = ref<Icon[]>([])
 
 async function handleReorderIcon() {

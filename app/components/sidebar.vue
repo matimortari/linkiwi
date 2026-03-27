@@ -83,7 +83,7 @@ defineProps<{
 
 const { toggleTheme, themeIcon } = useTheme()
 const route = useRoute()
-const { isUserDialogOpen, isShareDialogOpen, openDialog, closeDialog, closeSidebar, openSidebar } = useDialogs()
+const { isUserDialogOpen, isShareDialogOpen, openDialog, closeDialog, closeSidebar, openSidebar } = useUIState()
 const { user } = storeToRefs(useUserStore())
 </script>
 

@@ -1,6 +1,6 @@
 const uiState = reactive<UIState>({ sidebar: false, dialogs: { user: false, share: false, link: { isOpen: false, selectedLink: null }, icon: false } })
 
-export function useDialogs() {
+export function useUIState() {
   const openDialog = (type: "user" | "share" | "link" | "icon") => {
     if (type === "link") {
       uiState.dialogs.link.isOpen = true

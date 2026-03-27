@@ -44,7 +44,7 @@ const emit = defineEmits<{ close: [] }>()
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
-const { isUserDialogOpen } = useDialogs()
+const { isUserDialogOpen } = useUIState()
 const form = ref({ name: "", slug: "", description: "", image: "" })
 
 async function handleUpdateImage(event: Event) {

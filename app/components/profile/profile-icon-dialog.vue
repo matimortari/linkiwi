@@ -38,7 +38,7 @@ const emit = defineEmits<{ close: [] }>()
 
 const iconsStore = useIconsStore()
 const { loading } = storeToRefs(iconsStore)
-const { isIconDialogOpen } = useDialogs()
+const { isIconDialogOpen } = useUIState()
 const form = ref<Parameters<typeof iconsStore.createIcon>[0]>({ platform: "" as keyof typeof SOCIAL_ICONS, logo: "" as typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS], url: "" })
 const socialIconEntries = computed(() => Object.entries(SOCIAL_ICONS) as [keyof typeof SOCIAL_ICONS, (typeof SOCIAL_ICONS)[keyof typeof SOCIAL_ICONS]][])
 

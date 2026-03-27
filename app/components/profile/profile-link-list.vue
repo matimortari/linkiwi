@@ -57,7 +57,7 @@ import { VueDraggable } from "vue-draggable-plus"
 
 const linksStore = useLinksStore()
 const { links, loading } = storeToRefs(linksStore)
-const { isLinkDialogOpen, openDialog, closeDialog } = useDialogs()
+const { isLinkDialogOpen, openDialog, closeDialog } = useUIState()
 const selectedLink = ref<Link | null>(null)
 const orderedLinks = ref<Link[]>([])
 

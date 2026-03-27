@@ -30,7 +30,7 @@ const emit = defineEmits<{ close: [] }>()
 
 const linksStore = useLinksStore()
 const { loading } = storeToRefs(linksStore)
-const { isLinkDialogOpen, selectedLink } = useDialogs()
+const { isLinkDialogOpen, selectedLink } = useUIState()
 const form = ref<Parameters<typeof linksStore.createLink>[0] | Parameters<typeof linksStore.updateLink>[1]>({ title: "", url: "" })
 const editingLinkId = ref<string | null>(null)
 const isUpdateMode = computed(() => !!editingLinkId.value)
