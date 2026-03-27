@@ -42,12 +42,6 @@ export async function handleOAuthUser(event: H3Event, userData: OAuthUserData) {
     name: user.name,
     image: user.image,
     slug: user.slug,
-    preferences: user.preferences ?? {},
-    links: user.links ?? [],
-    icons: user.icons ?? [],
-    widgets: user.widgets ?? [],
-    views: user.views ?? [],
-    comments: user.comments ?? [],
   }
 
   const now = new Date()
