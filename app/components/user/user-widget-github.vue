@@ -62,7 +62,8 @@ onMounted(async () => {
   error.value = false
 
   try {
-    data.value = await widgetsStore.getGitHubData(props.handle)
+    const res = await widgetsStore.getGitHubData(props.handle)
+    data.value = res?.data || null
   }
   catch {
     error.value = true

@@ -50,11 +50,8 @@ export const useAnalyticsStore = defineStore("analytics", () => {
     try {
       await $fetch("/api/analytics", { method: "POST", body: { type: "pageView", userId, referrer }, credentials: "include" })
     }
-    catch (err: unknown) {
-      const message = getErrorMessage(err, "Failed to record page view")
-      toast.error(message)
-      console.error("recordPageView error:", err)
-      throw err
+    catch {
+      // Silenty fail to avoid spamming users with errors if analytics recording fails
     }
     finally {
       loading.value = false

@@ -95,17 +95,18 @@ export function useAnalyticsData() {
         type: "pageView" as const,
         userId: String(pv.userId),
         createdAt: pv.createdAt ? String(pv.createdAt) : undefined,
-      })) ?? []),
+      }))
+      ?? []),
       ...(res?.linkClicks?.map((lc: any) => ({
         type: "link" as const,
-        userId: String(lc.userId),
-        id: lc.id ? String(lc.id) : undefined,
+        userId: String(lc.userLink.userId),
+        id: lc.userLinkId ? String(lc.userLinkId) : undefined,
         createdAt: lc.createdAt ? String(lc.createdAt) : undefined,
       })) ?? []),
       ...(res?.iconClicks?.map((ic: any) => ({
         type: "icon" as const,
-        userId: String(ic.userId),
-        id: ic.id ? String(ic.id) : undefined,
+        userId: String(ic.userIcon.userId),
+        id: ic.userIconId ? String(ic.userIconId) : undefined,
         createdAt: ic.createdAt ? String(ic.createdAt) : undefined,
       })) ?? []),
     ]

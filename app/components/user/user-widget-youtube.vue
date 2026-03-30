@@ -44,7 +44,7 @@
 
       <div v-if="data.videos?.length > 1" class="grid grid-cols-2 gap-2 md:grid-cols-4">
         <div v-for="video in data.videos.slice(1)" :key="video.id" class="group relative overflow-hidden rounded-xl bg-white/20">
-          <nuxt-link :to="data.videos[0].url" target="_blank" class="group relative block w-full overflow-hidden rounded-xl">
+          <nuxt-link :to="video.url" target="_blank" class="group relative block w-full overflow-hidden rounded-xl">
             <img
               v-if="video.thumbnail" :src="video.thumbnail"
               :alt="video.title" class="aspect-video w-full rounded-lg object-cover transition-all group-hover:brightness-75"
@@ -78,7 +78,8 @@ onMounted(async () => {
   error.value = false
 
   try {
-    data.value = await widgetsStore.getYouTubeData(props.handle)
+    const res = await widgetsStore.getYouTubeData(props.handle)
+    data.value = res?.data || null
   }
   catch {
     error.value = true

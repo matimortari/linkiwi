@@ -31,6 +31,7 @@ export function useUIState() {
   const isSidebarOpen = computed(() => uiState.sidebar)
 
   return {
+    uiState,
     isUserDialogOpen,
     isShareDialogOpen,
     isLinkDialogOpen,

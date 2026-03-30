@@ -24,24 +24,17 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   preferences: UserPreferences
 }>()
 
-const { user } = storeToRefs(useUserStore())
+const emit = defineEmits<{ "update:preferences": [value: UserPreferences] }>()
+
 const selectedTheme = ref("")
 const themeStyles = THEMES.map((theme) => {
   const { backgroundStyle, iconStyle, linkStyle } = useDynamicStyles(ref(theme.preferences))
   return { backgroundStyle, iconStyle, linkStyle }
 })
-
-function handleApplyTheme(newPreferences: UserPreferences) {
-  if (!user.value) {
-    return
-  }
-
-  user.value.preferences = newPreferences
-}
 
 function handleThemeSelection(title: string) {
   const theme = THEMES.find(t => t.title === title)
@@ -50,8 +43,6 @@ function handleThemeSelection(title: string) {
   }
 
   selectedTheme.value = title
-  if (theme.preferences) {
-    handleApplyTheme(theme.preferences)
-  }
+  emit("update:preferences", { ...props.preferences, ...theme.preferences })
 }
 </script>

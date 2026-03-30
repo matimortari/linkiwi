@@ -10,7 +10,7 @@ export const useLinksStore = defineStore("links", () => {
 
     try {
       const res = await $fetch<{ links: Link[] }>("/api/links", { method: "GET", credentials: "include" })
-      links.value = res.links.map(i => Object.freeze(i))
+      links.value = res.links
       return res
     }
     catch (err: unknown) {
@@ -29,7 +29,7 @@ export const useLinksStore = defineStore("links", () => {
 
     try {
       const res = await $fetch<{ link: Link }>("/api/links", { method: "POST", body: data, credentials: "include" })
-      links.value.push(Object.freeze(res.link))
+      links.value.push(res.link)
       return res
     }
     catch (err: unknown) {
@@ -50,7 +50,7 @@ export const useLinksStore = defineStore("links", () => {
       const res = await $fetch<{ link: Link }>(`/api/links/${id}`, { method: "PUT", body: data, credentials: "include" })
       const index = links.value.findIndex(link => link.id === id)
       if (index !== -1) {
-        links.value[index] = Object.freeze(res.link)
+        links.value[index] = res.link
       }
       return res
     }

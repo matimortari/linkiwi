@@ -71,7 +71,7 @@
     </div>
   </div>
 
-  <PreferencesThemeTab v-if="props.activeTab === 'themes'" :preferences="preferences" />
+  <PreferencesThemeTab v-if="props.activeTab === 'themes'" :preferences="preferences" @update:preferences="v => emit('update:preferences', v)" />
 </template>
 
 <script setup lang="ts">
@@ -90,4 +90,9 @@ const isIconShadowDisabled = computed(() => !localPrefs.isIconShadow)
 
 // Emit updated preferences whenever localPrefs changes
 watch(localPrefs, v => emit("update:preferences", { ...v }), { deep: true })
+
+// Update localPrefs if preferences prop changes
+watch(() => props.preferences, (newVal) => {
+  Object.assign(localPrefs, newVal)
+}, { deep: true })
 </script>

@@ -11,6 +11,7 @@ export function useDynamicStyles(preferences: UserPreferences | null | Ref<UserP
     borderRadius: pref.value?.profilePictureRadius,
     borderColor: pref.value?.profilePictureBorderColor,
     borderWidth: pref.value?.profilePictureBorderWidth,
+    borderStyle: "solid",
   }))
 
   const slugStyle = computed(() => ({

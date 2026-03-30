@@ -10,7 +10,7 @@ export const useIconsStore = defineStore("icons", () => {
 
     try {
       const res = await $fetch<{ icons: Icon[] }>("/api/social-icons", { method: "GET", credentials: "include" })
-      icons.value = res.icons.map(i => Object.freeze(i))
+      icons.value = res.icons
       return res
     }
     catch (err: unknown) {
@@ -29,7 +29,7 @@ export const useIconsStore = defineStore("icons", () => {
 
     try {
       const res = await $fetch<{ icon: Icon }>("/api/social-icons", { method: "POST", body: data, credentials: "include" })
-      icons.value.push(Object.freeze(res.icon))
+      icons.value.push(res.icon)
       return res
     }
     catch (err: unknown) {
@@ -50,7 +50,7 @@ export const useIconsStore = defineStore("icons", () => {
       const res = await $fetch<{ icon: Icon }>(`/api/social-icons/${id}`, { method: "PUT", body: data, credentials: "include" })
       const index = icons.value.findIndex(icon => icon.id === id)
       if (index !== -1) {
-        icons.value[index] = Object.freeze(res.icon)
+        icons.value[index] = res.icon
       }
       return res
     }

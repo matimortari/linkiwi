@@ -10,7 +10,7 @@ export const useWidgetsStore = defineStore("widgets", () => {
 
     try {
       const res = await $fetch<{ widgets: Widget[] }>("/api/widgets", { method: "GET", credentials: "include" })
-      widgets.value = res.widgets.map(w => Object.freeze(w))
+      widgets.value = res.widgets
       return res
     }
     catch (err: unknown) {
@@ -29,7 +29,7 @@ export const useWidgetsStore = defineStore("widgets", () => {
 
     try {
       const res = await $fetch<{ widget: Widget }>("/api/widgets", { method: "POST", body: data, credentials: "include" })
-      widgets.value.push(Object.freeze(res.widget))
+      widgets.value.push(res.widget)
       return res
     }
     catch (err: unknown) {
@@ -50,7 +50,7 @@ export const useWidgetsStore = defineStore("widgets", () => {
       const res = await $fetch<{ widget: Widget }>(`/api/widgets/${id}`, { method: "PUT", body: data, credentials: "include" })
       const index = widgets.value.findIndex(w => w.id === id)
       if (index !== -1) {
-        widgets.value[index] = Object.freeze(res.widget)
+        widgets.value[index] = res.widget
       }
       return res
     }
@@ -84,8 +84,6 @@ export const useWidgetsStore = defineStore("widgets", () => {
   }
 
   async function getGitHubData(handle: string) {
-    loading.value = true
-
     try {
       const res = await $fetch<{ data: any }>("/api/widgets/fetch/github", { method: "GET", query: { handle } })
       return res
@@ -96,14 +94,9 @@ export const useWidgetsStore = defineStore("widgets", () => {
       console.error("getGitHubData error:", err)
       throw err
     }
-    finally {
-      loading.value = false
-    }
   }
 
   async function getYouTubeData(handle: string) {
-    loading.value = true
-
     try {
       const res = await $fetch<{ data: any }>("/api/widgets/fetch/youtube", { method: "GET", query: { handle } })
       return res
@@ -113,9 +106,6 @@ export const useWidgetsStore = defineStore("widgets", () => {
       toast.error(message)
       console.error("getYouTubeData error:", err)
       throw err
-    }
-    finally {
-      loading.value = false
     }
   }
 
