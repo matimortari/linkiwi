@@ -3,7 +3,7 @@
     <div class="flex flex-col gap-2">
       <div class="navigation-group flex-wrap justify-center">
         <button
-          v-for="tab in shareTabs" :key="tab.value"
+          v-for="tab in SHARE_TABS" :key="tab.value"
           class="btn-ghost justify-start! text-muted-foreground!" :class="{ 'bg-muted!': activeTab === tab.value }"
           @click="activeTab = tab.value"
         >
@@ -26,7 +26,7 @@
         </p>
 
         <div class="card grid grid-cols-2 gap-2 md:grid-cols-3">
-          <button v-for="source in trackingSources" :key="source.id" class="btn-ghost justify-start!" @click="handleCopyWithTracking(source.id)">
+          <button v-for="source in TRACKING_SOURCES" :key="source.id" class="btn-ghost justify-start!" @click="handleCopyWithTracking(source.id)">
             <icon :name="source.icon" size="25" class="shrink-0" />
             <span>{{ source.label }}</span>
           </button>
@@ -100,13 +100,8 @@ const pageUrl = computed(() => `${baseURL}/${user.value?.slug}`)
 const downloadAction = createActionHandler("mdi:download")
 const copyAction = createActionHandler("mdi:content-copy")
 
-const shareTabs = [
-  { label: "QR Code", value: "qr" },
-  { label: "Link Tracking", value: "tracking" },
-  { label: "Share to Socials", value: "social" },
-]
-
-const trackingSources = [
+const SHARE_TABS = [{ label: "QR Code", value: "qr" }, { label: "Link Tracking", value: "tracking" }, { label: "Share to Socials", value: "social" }]
+const TRACKING_SOURCES = [
   { id: "instagram", label: "Instagram", icon: "simple-icons:instagram" },
   { id: "twitter", label: "X / Twitter", icon: "simple-icons:x" },
   { id: "tiktok", label: "TikTok", icon: "simple-icons:tiktok" },
@@ -174,21 +169,19 @@ watchEffect(() => {
   qr.addData(pageUrl.value)
   qr.make()
   const moduleCount = qr.getModuleCount()
-  const padding = 2
-  const viewBoxSize = moduleCount + 2 * padding
+  const viewBoxSize = moduleCount + 2 * 2
   const radius = (moduleCount * 0.25) / 2
-
   const circles = Array.from({ length: moduleCount }, (_, row) =>
     Array.from({ length: moduleCount }, (_, col) => {
       if (!qr.isDark(row, col) || (Math.abs(row - moduleCount / 2) < radius && Math.abs(col - moduleCount / 2) < radius)) {
         return ""
       }
 
-      return `<circle cx="${col + padding + 0.5}" cy="${row + padding + 0.5}" r="0.5" fill="#000000"/>`
+      return `<circle cx="${col + 2 + 0.5}" cy="${row + 2 + 0.5}" r="0.5" fill="#000000"/>`
     }).join("")).join("")
 
   const logoSize = moduleCount * 0.2 * 0.85
-  const logoPos = moduleCount / 2 + padding - logoSize / 2
+  const logoPos = moduleCount / 2 + 2 - logoSize / 2
   qrContainer.value.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 ${viewBoxSize} ${viewBoxSize}"><rect width="100%" height="100%" fill="#ffffff"/>${circles}<image href="${logoBase64.value}" x="${logoPos}" y="${logoPos}" width="${logoSize}" height="${logoSize}"/></svg>`
 })
 

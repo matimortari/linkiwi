@@ -12,7 +12,7 @@
         v-else v-model="orderedIcons"
         tag="ul" class="navigation-group"
         handle=".drag-handle" :animation="150"
-        @end="handleReorderIcon"
+        @end="reorderIcon"
       >
         <li v-for="icon in orderedIcons" :key="icon.id" class="card relative flex size-20 items-center justify-center" :class="{ 'border-dashed! opacity-60': !icon.isVisible }">
           <button class="drag-handle btn-ghost absolute top-0 left-0 cursor-move p-0.5!" aria-label="Drag to reorder">
@@ -23,7 +23,7 @@
             <icon :name="icon.logo" :size="30" />
           </nuxt-link>
 
-          <button :aria-label="icon.isVisible ? 'Hide Icon' : 'Show Icon'" class="btn-ghost absolute top-0 right-0 flex items-center p-0.5!" @click="handleToggleVisibility(icon.id!, icon.isVisible ?? true)">
+          <button :aria-label="icon.isVisible ? 'Hide Icon' : 'Show Icon'" class="btn-ghost absolute top-0 right-0 flex items-center p-0.5!" @click="toggleVisibility(icon.id!, icon.isVisible ?? true)">
             <icon :name="icon.isVisible !== false ? 'mdi:eye-outline' : 'mdi:eye-off-outline'" size="25" class="text-muted-foreground" />
           </button>
 
@@ -51,7 +51,7 @@ const { icons, loading } = storeToRefs(iconStore)
 const { isIconDialogOpen, openDialog, closeDialog } = useUIState()
 const orderedIcons = ref<Icon[]>([])
 
-async function handleReorderIcon() {
+async function reorderIcon() {
   const updates = orderedIcons.value.map((icon, index) => ({ id: icon.id!, order: index }))
   for (const { id, order } of updates) {
     try {
@@ -72,7 +72,7 @@ async function handleDeleteIcon(iconId: string) {
   await iconStore.deleteIcon(iconId)
 }
 
-async function handleToggleVisibility(iconId: string, currentVisibility: boolean) {
+async function toggleVisibility(iconId: string, currentVisibility: boolean) {
   await iconStore.updateIcon(iconId, { isVisible: !currentVisibility })
 }
 

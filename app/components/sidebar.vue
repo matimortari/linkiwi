@@ -81,8 +81,8 @@ defineProps<{
   isOpen: boolean
 }>()
 
-const { toggleTheme, themeIcon } = useTheme()
 const route = useRoute()
+const { toggleTheme, themeIcon } = useTheme()
 const { isUserDialogOpen, isShareDialogOpen, openDialog, closeDialog, closeSidebar, openSidebar } = useUIState()
 const { user } = storeToRefs(useUserStore())
 </script>

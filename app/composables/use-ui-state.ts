@@ -1,4 +1,4 @@
-const uiState = reactive<UIState>({ sidebar: false, dialogs: { user: false, share: false, link: { isOpen: false, selectedLink: null }, icon: false } })
+const uiState = reactive<UIState>({ sidebar: false, preview: false, dialogs: { user: false, share: false, link: { isOpen: false, selectedLink: null }, icon: false } })
 
 export function useUIState() {
   const openDialog = (type: "user" | "share" | "link" | "icon") => {
@@ -22,6 +22,8 @@ export function useUIState() {
 
   const openSidebar = () => uiState.sidebar = true
   const closeSidebar = () => uiState.sidebar = false
+  const openPreview = () => uiState.preview = true
+  const closePreview = () => uiState.preview = false
 
   const isUserDialogOpen = computed(() => uiState.dialogs.user)
   const isShareDialogOpen = computed(() => uiState.dialogs.share)
@@ -29,6 +31,7 @@ export function useUIState() {
   const selectedLink = computed(() => uiState.dialogs.link.selectedLink)
   const isIconDialogOpen = computed(() => uiState.dialogs.icon)
   const isSidebarOpen = computed(() => uiState.sidebar)
+  const isPreviewOpen = computed(() => uiState.preview)
 
   return {
     uiState,
@@ -38,9 +41,12 @@ export function useUIState() {
     selectedLink,
     isIconDialogOpen,
     isSidebarOpen,
+    isPreviewOpen,
     openDialog,
     closeDialog,
     openSidebar,
     closeSidebar,
+    openPreview,
+    closePreview,
   }
 }

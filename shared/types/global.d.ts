@@ -72,6 +72,7 @@ interface Comment {
 
 interface UIState {
   sidebar: boolean
+  preview: boolean
   dialogs: {
     user: boolean
     share: boolean

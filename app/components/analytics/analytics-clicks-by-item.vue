@@ -52,14 +52,12 @@ const items = computed(() => [
 // Create a map of item ID to click counts
 const clicksMap = computed(() => {
   const counts: Record<string, number> = {}
-
   for (const click of analyticsStore.analytics?.linkClicks ?? []) {
     const id = click.userLinkId
     if (id) {
       counts[id] = (counts[id] ?? 0) + 1
     }
   }
-
   for (const click of analyticsStore.analytics?.iconClicks ?? []) {
     const id = click.userIconId
     if (id) {

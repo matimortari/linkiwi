@@ -32,16 +32,6 @@
 const { public: { baseURL } } = useRuntimeConfig()
 const { user, loading } = storeToRefs(useUserStore())
 
-const localPreferences = ref<UserPreferences | null>(null)
-provide("localPreferences", localPreferences)
-
-// Watch user preferences and sync to local ref
-watch(() => user.value?.preferences, (newPrefs) => {
-  if (newPrefs) {
-    localPreferences.value = { ...newPrefs }
-  }
-}, { immediate: true, deep: true })
-
 useHead({
   title: "Preferences",
   link: [{ rel: "canonical", href: `${baseURL}/admin/preferences` }],

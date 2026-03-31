@@ -1,14 +1,14 @@
 <template>
   <!-- Mobile toggle -->
-  <button class="btn fixed bottom-4 left-1/2 z-50 -translate-x-1/2 md:hidden!" aria-label="Toggle Mobile Preview" @click="isOpen = !isOpen">
-    <icon :name="isOpen ? 'mdi:eye-off' : 'mdi:eye'" size="25" />
-    <span>{{ isOpen ? 'Close Preview' : 'Preview' }}</span>
+  <button class="btn fixed bottom-4 left-1/2 z-50 -translate-x-1/2 md:hidden!" aria-label="Toggle Mobile Preview" @click="isPreviewOpen ? closePreview() : openPreview()">
+    <icon :name="isPreviewOpen ? 'mdi:eye-off' : 'mdi:eye'" size="25" />
+    <span>{{ isPreviewOpen ? 'Close Preview' : 'Preview' }}</span>
   </button>
 
   <div v-if="user" class="mx-auto flex justify-center select-none">
     <!-- Mobile full-screen preview -->
     <transition name="slide">
-      <div v-if="isOpen" class="fixed top-0 left-0 z-40 size-full overflow-y-auto p-12 md:hidden" :style="backgroundStyle">
+      <div v-if="isPreviewOpen" class="fixed top-0 left-0 z-40 size-full overflow-y-auto p-12 md:hidden" :style="backgroundStyle">
         <div class="flex max-h-full flex-col items-center justify-start gap-4 overflow-y-auto p-4 text-center">
           <img :src="user.image" alt="Avatar" class="size-24 object-cover" :style="profilePictureStyle">
           <p class="line-clamp-3 max-w-sm truncate whitespace-break-spaces" :style="slugStyle">
@@ -81,7 +81,7 @@
 const { user, preferences: storePreferences } = storeToRefs(useUserStore())
 const { links } = storeToRefs(useLinksStore())
 const { icons } = storeToRefs(useIconsStore())
-const isOpen = ref(false)
+const { isPreviewOpen, openPreview, closePreview } = useUIState()
 const localPreferences = inject<Ref<UserPreferences | null>>("localPreferences", ref(null))
 const preferences = computed(() => localPreferences.value || storePreferences.value)
 const visibleLinks = computed(() => links.value.filter(link => link.isVisible !== false))

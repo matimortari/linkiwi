@@ -12,7 +12,7 @@
         v-else v-model="orderedLinks"
         tag="ul" class="grid grid-cols-1 gap-2 md:grid-cols-2 2xl:grid-cols-3"
         handle=".drag-handle" :animation="150"
-        @end="handleReorderLink"
+        @end="reorderLink"
       >
         <li v-for="link in orderedLinks" :key="link.id" class="card flex flex-col gap-2" :class="{ 'border-dashed! opacity-60': !link.isVisible }">
           <div class="flex flex-row items-center justify-between font-semibold">
@@ -24,7 +24,7 @@
             </div>
 
             <div class="flex flex-row items-center gap-1">
-              <button :aria-label="link.isVisible ? 'Hide Link' : 'Show Link'" class="btn-ghost p-0.5!" @click="handleToggleVisibility(link.id!, link.isVisible ?? true)">
+              <button :aria-label="link.isVisible ? 'Hide Link' : 'Show Link'" class="btn-ghost p-0.5!" @click="toggleVisibility(link.id!, link.isVisible ?? true)">
                 <icon :name="link.isVisible !== false ? 'mdi:eye-outline' : 'mdi:eye-off-outline'" size="25" class="text-muted-foreground" />
               </button>
               <button aria-label="Update Link" class="btn-ghost p-0.5!" @click="handleUpdateLink(link)">
@@ -70,7 +70,7 @@ function handleUpdateLink(link: Link) {
   openDialog("link")
 }
 
-async function handleReorderLink() {
+async function reorderLink() {
   const updates = orderedLinks.value.map((link, index) => ({ id: link.id!, order: index }))
   for (const { id, order } of updates) {
     try {
@@ -91,7 +91,7 @@ async function handleDeleteLink(linkId: string) {
   await linksStore.deleteLink(linkId)
 }
 
-async function handleToggleVisibility(linkId: string, currentVisibility: boolean) {
+async function toggleVisibility(linkId: string, currentVisibility: boolean) {
   await linksStore.updateLink(linkId, { isVisible: !currentVisibility })
 }
 

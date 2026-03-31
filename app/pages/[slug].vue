@@ -7,7 +7,6 @@
     </ClientOnly>
 
     <Loading v-if="loading" class="absolute inset-0 flex items-center justify-center backdrop-blur-sm" />
-
     <Empty v-else-if="!userProfile && !loading" :message="`User @${slug} not found.`" icon-name="mdi:account-off" />
 
     <div v-else-if="userProfile" class="flex w-full flex-1 flex-col items-center gap-4 pt-4 pb-32 text-center" :style="backgroundStyle">
@@ -90,8 +89,7 @@ onMounted(async () => {
       meta: [{ name: "description", content: `@${userProfile.value.slug} profile on LinKiosk.` }],
     })
 
-    const referrer = (route.query.ref as string) || (typeof document === "undefined" ? "" : document.referrer) || ""
-    await analyticsStore.recordPageView(userProfile.value.id, referrer)
+    await analyticsStore.recordPageView(userProfile.value.id, (route.query.ref as string) ?? "direct")
   }
 })
 
