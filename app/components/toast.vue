@@ -8,11 +8,11 @@
           role="alert"
         >
           <div class="toast-content">
-            <icon :name="toast.type === 'success' ? 'mdi:check-circle-outline' : 'mdi:close-circle-outline'" size="20" />
+            <icon :name="getToastIcon(toast.type)" size="20" />
             <span class="toast-message">{{ toast.message }}</span>
           </div>
           <button class="toast-close" aria-label="Close notification" @click="dismiss(toast.id)">
-            <icon name="mdi:close" size="15" />
+            <icon name="ph:x-bold" size="15" />
           </button>
         </div>
       </TransitionGroup>
@@ -22,6 +22,22 @@
 
 <script setup lang="ts">
 const { toasts, dismiss } = useToast()
+
+function getToastIcon(type: Toast["type"]) {
+  if (type === "success") {
+    return "ph:check-circle-bold"
+  }
+
+  if (type === "warning") {
+    return "ph:warning-circle-bold"
+  }
+
+  if (type === "info") {
+    return "ph:info-bold"
+  }
+
+  return "ph:x-circle-bold"
+}
 </script>
 
 <style scoped>
@@ -29,7 +45,7 @@ const { toasts, dismiss } = useToast()
   position: fixed;
   bottom: 1rem;
   right: 1rem;
-  z-index: 60;
+  z-index: 50;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -92,10 +108,17 @@ const { toasts, dismiss } = useToast()
   background-color: color-mix(in oklab, var(--color-success) 20%, transparent);
   color: var(--success);
 }
-
 .toast-error {
   background-color: color-mix(in oklab, var(--color-danger) 20%, transparent);
   color: var(--danger);
+}
+.toast-warning {
+  background-color: color-mix(in oklab, var(--color-warning) 20%, transparent);
+  color: var(--warning);
+}
+.toast-info {
+  background-color: color-mix(in oklab, var(--color-info) 20%, transparent);
+  color: var(--info);
 }
 
 .toast-enter-active,

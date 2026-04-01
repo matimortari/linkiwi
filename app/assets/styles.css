@@ -28,6 +28,8 @@
   --secondary: #de896d;
   --danger: #b91c1c;
   --success: #14532d;
+  --warning: #b45309;
+  --info: #0369a1;
 
   --border-style: 1px solid var(--muted);
   --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -45,6 +47,8 @@ html.dark {
   --secondary: #de896d;
   --danger: #b91c1c;
   --success: #14532d;
+  --warning: #b45309;
+  --info: #0369a1;
 }
 
 @theme {
@@ -59,6 +63,8 @@ html.dark {
   --color-secondary: var(--secondary);
   --color-danger: var(--danger);
   --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
 
   --font-default: "Poppins", sans-serif;
   --font-display: "Suez One", sans-serif;
@@ -142,6 +148,12 @@ h6 {
 }
 .text-caption-danger {
   color: var(--danger);
+}
+.text-caption-warning {
+  color: var(--warning);
+}
+.text-caption-info {
+  color: var(--info);
 }
 
 /*
