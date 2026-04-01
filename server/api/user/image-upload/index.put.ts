@@ -21,6 +21,7 @@ export default defineEventHandler(async (event) => {
   })
 
   await db.user.update({ where: { id: user.id }, data: { image: imageUrl } })
+  await deleteCached(CacheKeys.userData(user.id))
 
   return { imageUrl }
 })

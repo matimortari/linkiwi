@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
   }
 
   // Check if user has guestbook enabled
-  const user = await db.user.findUnique({ where: { id: result.data.userId }, include: { preferences: true } })
+  const user = await db.user.findUnique({ where: { id: result.data.userId }, select: { id: true, preferences: { select: { enableGuestbook: true } } } })
   if (!user) {
     throw createError({ status: 404, statusText: "User not found" })
   }

@@ -18,12 +18,12 @@ export default defineEventHandler(async (event) => {
     }),
     db.linkClick.findMany({
       where: { userLink: { userId: user.id } },
-      include: { userLink: true },
+      select: { userLinkId: true, createdAt: true, userLink: { select: { userId: true } } },
       orderBy: { createdAt: "desc" },
     }),
     db.iconClick.findMany({
       where: { userIcon: { userId: user.id } },
-      include: { userIcon: true },
+      select: { userIconId: true, createdAt: true, userIcon: { select: { userId: true } } },
       orderBy: { createdAt: "desc" },
     }),
   ])

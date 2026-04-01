@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
   const cacheKey = `widget:github:${handle}`
   const cached = await getCached<any>(cacheKey)
   if (cached) {
-    return cached
+    return { data: cached }
   }
 
   const [userRes, reposRes] = (await Promise.allSettled<any>([

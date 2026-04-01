@@ -52,16 +52,24 @@ const { isIconDialogOpen, openDialog, closeDialog } = useUIState()
 const orderedIcons = ref<Icon[]>([])
 
 async function reorderIcon() {
-  const updates = orderedIcons.value.map((icon, index) => ({ id: icon.id!, order: index }))
-  for (const { id, order } of updates) {
-    try {
-      await iconStore.updateIcon(id, { order })
-    }
-    catch {
-      // Silently fail
-    }
+  const previousOrder = [...orderedIcons.value]
+  const updates = orderedIcons.value.map((icon, index) => ({ id: icon.id!, order: index })).filter(({ id, order }) => {
+    const existing = icons.value.find(icon => icon.id === id)
+    return existing?.order !== order
+  })
+
+  if (!updates.length) {
+    return
   }
-  iconStore.icons.sort((a, b) => a.order - b.order)
+
+  try {
+    await Promise.all(updates.map(({ id, order }) => iconStore.updateIcon(id, { order })))
+    iconStore.icons.sort((a, b) => a.order - b.order)
+  }
+  catch {
+    orderedIcons.value = previousOrder
+    await iconStore.getIcons().catch(() => {})
+  }
 }
 
 async function handleDeleteIcon(iconId: string) {

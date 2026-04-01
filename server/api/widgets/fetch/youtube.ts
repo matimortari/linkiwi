@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
   const cacheKey = `widget:youtube:${handle}`
   const cached = await getCached<any>(cacheKey)
   if (cached) {
-    return cached
+    return { data: cached }
   }
 
   const channelQuery = handle.startsWith("UC") ? { id: handle } : { forHandle: handle }

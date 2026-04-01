@@ -39,7 +39,7 @@ export default defineEventHandler(async (event) => {
         throw createError({ status: 400, statusText: "Link ID is required" })
       }
 
-      const link = await db.userLink.findFirst({ where: { id: result.data.id, userId: result.data.userId }, select: { id: true, clicks: true } })
+      const link = await db.userLink.findFirst({ where: { id: result.data.id, userId: result.data.userId }, select: { id: true } })
       if (!link) {
         throw createError({ status: 404, statusText: "Link not found" })
       }
@@ -61,7 +61,7 @@ export default defineEventHandler(async (event) => {
         throw createError({ status: 400, statusText: "Icon ID is required" })
       }
 
-      const icon = await db.userIcon.findFirst({ where: { id: result.data.id, userId: result.data.userId }, select: { id: true, clicks: true } })
+      const icon = await db.userIcon.findFirst({ where: { id: result.data.id, userId: result.data.userId }, select: { id: true } })
       if (!icon) {
         throw createError({ status: 404, statusText: "Icon not found" })
       }

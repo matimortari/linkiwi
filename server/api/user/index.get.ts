@@ -10,10 +10,7 @@ export default defineEventHandler(async (event) => {
     return { userData: cached }
   }
 
-  const userData = await db.user.findUnique({
-    where: { id: user.id },
-    include: { preferences: true, comments: true, views: true },
-  })
+  const userData = await db.user.findUnique({ where: { id: user.id }, include: { preferences: true, comments: true } })
   if (!userData) {
     throw createError({ status: 404, statusText: "User not found" })
   }

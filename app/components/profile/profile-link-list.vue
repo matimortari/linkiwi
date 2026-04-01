@@ -71,16 +71,23 @@ function handleUpdateLink(link: Link) {
 }
 
 async function reorderLink() {
-  const updates = orderedLinks.value.map((link, index) => ({ id: link.id!, order: index }))
-  for (const { id, order } of updates) {
-    try {
-      await linksStore.updateLink(id, { order })
-    }
-    catch {
-      // Silently fail
-    }
+  const previousOrder = [...orderedLinks.value]
+  const updates = orderedLinks.value.map((link, index) => ({ id: link.id!, order: index })).filter(({ id, order }) => {
+    const existing = links.value.find(link => link.id === id)
+    return existing?.order !== order
+  })
+  if (!updates.length) {
+    return
   }
-  linksStore.links.sort((a, b) => a.order - b.order)
+
+  try {
+    await Promise.all(updates.map(({ id, order }) => linksStore.updateLink(id, { order })))
+    linksStore.links.sort((a, b) => a.order - b.order)
+  }
+  catch {
+    orderedLinks.value = previousOrder
+    await linksStore.getLinks().catch(() => {})
+  }
 }
 
 async function handleDeleteLink(linkId: string) {
