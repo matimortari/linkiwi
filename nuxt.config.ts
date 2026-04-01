@@ -12,6 +12,17 @@ export default defineNuxtConfig({
       cookie: { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax" },
     },
   },
+  routeRules: {
+    "/**": {
+      headers: {
+        "X-Content-Type-Options": "nosniff",
+        "X-Frame-Options": "DENY",
+        "Referrer-Policy": "strict-origin-when-cross-origin",
+        "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+        "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+      },
+    },
+  },
   devServer: { host: "0.0.0.0" },
   vite: {
     server: process.env.NUXT_PUBLIC_BASE_URL

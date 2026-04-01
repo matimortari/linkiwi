@@ -19,8 +19,15 @@ export async function handleOAuthUser(event: H3Event, userData: OAuthUserData) {
 
   // If still no user, create one
   if (!user) {
+    const r2PublicUrl = requireEnv("R2_PUBLIC_URL")
     user = await db.user.create({
-      data: { email, name: name?.trim() ?? email.split("@")[0], image: image || `${process.env.R2_PUBLIC_URL}/defaults/avatar.png`, slug: await generateSlug(name ?? email.split("@")[0]), preferences: { create: {} } },
+      data: {
+        email,
+        name: name?.trim() ?? email.split("@")[0],
+        image: image || `${r2PublicUrl}/defaults/avatar.png`,
+        slug: await generateSlug(name ?? email.split("@")[0]),
+        preferences: { create: {} },
+      },
       include: { preferences: true, links: true, icons: true, widgets: true, views: true, comments: true },
     })
   }

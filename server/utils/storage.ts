@@ -1,13 +1,16 @@
 import { Buffer } from "node:buffer"
 import { DeleteObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
 
+const r2Endpoint = requireEnv("R2_ENDPOINT")
+const r2AccessKeyId = requireEnv("R2_ACCESS_KEY_ID")
+const r2SecretAccessKey = requireEnv("R2_SECRET_ACCESS_KEY")
+const r2BucketName = requireEnv("R2_BUCKET_NAME")
+const r2PublicUrl = requireEnv("R2_PUBLIC_URL")
+
 export const s3 = new S3Client({
   region: "auto",
-  endpoint: process.env.R2_ENDPOINT,
-  credentials: {
-    accessKeyId: process.env.R2_ACCESS_KEY_ID!,
-    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
-  },
+  endpoint: r2Endpoint,
+  credentials: { accessKeyId: r2AccessKeyId, secretAccessKey: r2SecretAccessKey },
 })
 
 /**
@@ -25,26 +28,19 @@ export async function uploadFile({ path, file, maxSize, allowedMimeTypes, oldFil
     throw createError({ status: 413, statusText: "File too large" })
   }
 
-  const ext = file.name.split(".").pop()?.toLowerCase()
-  const key = `${path}/${Date.now()}.${ext}`
+  const key = `${path}/${Date.now()}.${file.name.split(".").pop()?.toLowerCase()}`
   const buffer = await file.arrayBuffer()
-
-  await s3.send(new PutObjectCommand({
-    Bucket: process.env.R2_BUCKET_NAME!,
-    Key: key,
-    Body: Buffer.from(buffer),
-    ContentType: file.type,
-  }))
+  await s3.send(new PutObjectCommand({ Bucket: r2BucketName, Key: key, Body: Buffer.from(buffer), ContentType: file.type }))
   if (oldFile) {
     await deleteFile(oldFile).catch(() => {})
   }
 
-  return `${process.env.R2_PUBLIC_URL}/${key}`
+  return `${r2PublicUrl}/${key}`
 }
 
 /**
  * Deletes a file from Blob storage given its URL.
  */
 export async function deleteFile(url: string) {
-  await s3.send(new DeleteObjectCommand({ Bucket: process.env.R2_BUCKET_NAME!, Key: url.replace(`${process.env.R2_PUBLIC_URL}/`, "") }))
+  await s3.send(new DeleteObjectCommand({ Bucket: r2BucketName, Key: url.replace(`${r2PublicUrl}/`, "") }))
 }

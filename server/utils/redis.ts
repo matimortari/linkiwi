@@ -16,12 +16,15 @@ async function getRedisClient() {
   if (connecting) {
     return null
   }
+  if (!process.env.REDIS_URL) {
+    return null
+  }
 
   connecting = true
 
   try {
     const client = createClient({
-      url: process.env.REDIS_URL,
+      url: requireEnv("REDIS_URL"),
       socket: {
         connectTimeout: 5000, // 5 seconds
         reconnectStrategy: (retries) => {

@@ -1,6 +1,18 @@
 import type { EventHandlerRequest, H3Event } from "h3"
 
 /**
+ * Helper function to ensure required environment variables are set, throwing an error if missing.
+ */
+export function requireEnv(name: string) {
+  const value = process.env[name]
+  if (!value) {
+    throw new Error(`Missing required environment variable: ${name}`)
+  }
+
+  return value
+}
+
+/**
  * Retrieves the authenticated user from the current session.
  * Throws 401 if no valid session exists.
  */
