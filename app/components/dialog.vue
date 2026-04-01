@@ -13,7 +13,7 @@
             </button>
           </header>
 
-          <section>
+          <section class="scroll-area">
             <slot />
           </section>
         </div>
