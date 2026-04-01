@@ -165,7 +165,9 @@ export default defineEventHandler(async (event) => {
     }
 
     if (linkClicks.length > 0) {
-      const result = await tx.linkClick.deleteMany({ where: { userLinkId: { in: linkClicks.map(lc => lc.userLinkId) }, createdAt: { in: linkClicks.map(lc => lc.createdAt) } } })
+      const result = hasDateFilter
+        ? await tx.linkClick.deleteMany({ where: { OR: linkClicks.map(lc => ({ userLinkId: lc.userLinkId, createdAt: lc.createdAt })) } })
+        : await tx.linkClick.deleteMany({ where: { userLinkId: { in: linkClicks.map(lc => lc.userLinkId) } } })
       deleteResult += result.count
 
       // Update clickCounts
@@ -182,7 +184,9 @@ export default defineEventHandler(async (event) => {
     }
 
     if (iconClicks.length > 0) {
-      const result = await tx.iconClick.deleteMany({ where: { userIconId: { in: iconClicks.map(ic => ic.userIconId) }, createdAt: { in: iconClicks.map(ic => ic.createdAt) } } })
+      const result = hasDateFilter
+        ? await tx.iconClick.deleteMany({ where: { OR: iconClicks.map(ic => ({ userIconId: ic.userIconId, createdAt: ic.createdAt })) } })
+        : await tx.iconClick.deleteMany({ where: { userIconId: { in: iconClicks.map(ic => ic.userIconId) } } })
       deleteResult += result.count
 
       // Update clickCounts

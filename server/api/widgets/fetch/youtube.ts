@@ -4,11 +4,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ status: 400, statusText: "YouTube handle is required" })
   }
 
-  const apiKey = process.env.YOUTUBE_API_KEY
-  if (!apiKey) {
-    throw createError({ status: 500, statusText: "YouTube API key is not configured" })
-  }
-
+  const youTubeApiKey = requireEnv("YOUTUBE_API_KEY")
   const cacheKey = `widget:youtube:${handle}`
   const cached = await getCached<any>(cacheKey)
   if (cached) {
@@ -16,14 +12,14 @@ export default defineEventHandler(async (event) => {
   }
 
   const channelQuery = handle.startsWith("UC") ? { id: handle } : { forHandle: handle }
-  const channelRes: any = await $fetch<any>("https://www.googleapis.com/youtube/v3/channels", { query: { part: "snippet,statistics", ...channelQuery, key: apiKey } }).catch(() => null)
+  const channelRes: any = await $fetch<any>("https://www.googleapis.com/youtube/v3/channels", { query: { part: "snippet,statistics", ...channelQuery, key: youTubeApiKey } }).catch(() => null)
   const channel: any = channelRes?.items?.[0]
   if (!channel) {
     throw createError({ status: 404, statusText: `YouTube channel '${handle}' not found` })
   }
 
   const channelId: any = channel.id
-  const searchRes: any = await $fetch<any>("https://www.googleapis.com/youtube/v3/search", { query: { part: "snippet", channelId, order: "date", type: "video", maxResults: 5, key: apiKey } }).catch(() => null)
+  const searchRes: any = await $fetch<any>("https://www.googleapis.com/youtube/v3/search", { query: { part: "snippet", channelId, order: "date", type: "video", maxResults: 5, key: youTubeApiKey } }).catch(() => null)
   const videos: any[] = searchRes?.items?.map((video: any) => ({
     id: video.id.videoId,
     title: video.snippet.title,

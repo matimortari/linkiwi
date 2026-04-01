@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ status: 400, statusText: "Slug is required" })
   }
 
-  const cacheKey = `${CacheKeys.userProfile(slug)}:public`
+  const cacheKey = CacheKeys.userProfile(slug)
   const cached = await getCached<any>(cacheKey)
   if (cached) {
     return { userProfile: cached }

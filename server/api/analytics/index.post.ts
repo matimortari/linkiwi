@@ -11,14 +11,14 @@ export default defineEventHandler(async (event) => {
     throw createError({ status: 400, statusText: result.error.issues[0]?.message })
   }
 
-  const user = await db.user.findUnique({ where: { id: result.data.userId }, select: { id: true } })
-  if (!user) {
+  const targetUser = await db.user.findUnique({ where: { slug: result.data.slug }, select: { id: true, slug: true } })
+  if (!targetUser) {
     throw createError({ status: 404, statusText: "User not found" })
   }
 
   // Do not record analytics for own profile views/clicks
   const session = await getUserSession(event)
-  if (session?.user?.id === result.data.userId) {
+  if (session?.user?.id === targetUser.id) {
     return
   }
 
@@ -26,10 +26,10 @@ export default defineEventHandler(async (event) => {
     case "pageView": {
       const referrer = result.data.referrer || getHeader(event, "referer") || null // The referrer header uses 'referer' due to a misspelling from the original HTTP spec that has been preserved for compatibility
       const source = categorizeReferrer(referrer)
-      await db.pageView.create({ data: { userId: result.data.userId, referrer, source } })
+      await db.pageView.create({ data: { userId: targetUser.id, referrer, source } })
 
       // Invalidate analytics cache
-      await deleteCached(CacheKeys.analytics(result.data.userId))
+      await deleteCached(CacheKeys.analytics(targetUser.id))
 
       return { message: "Page view recorded" }
     }
@@ -39,7 +39,7 @@ export default defineEventHandler(async (event) => {
         throw createError({ status: 400, statusText: "Link ID is required" })
       }
 
-      const link = await db.userLink.findFirst({ where: { id: result.data.id, userId: result.data.userId }, select: { id: true } })
+      const link = await db.userLink.findFirst({ where: { id: result.data.id, userId: targetUser.id }, select: { id: true } })
       if (!link) {
         throw createError({ status: 404, statusText: "Link not found" })
       }
@@ -50,8 +50,7 @@ export default defineEventHandler(async (event) => {
       ])
 
       // Invalidate analytics and links cache (clickCount changed)
-      const userData = await db.user.findUnique({ where: { id: result.data.userId }, select: { slug: true } })
-      await deleteCached(CacheKeys.analytics(result.data.userId), CacheKeys.userLinks(result.data.userId), CacheKeys.userProfile(userData?.slug || ""))
+      await deleteCached(CacheKeys.analytics(targetUser.id), CacheKeys.userLinks(targetUser.id), CacheKeys.userProfile(targetUser.slug))
 
       return { message: "Link click recorded", linkClick: { userLinkId: linkClick.userLinkId, createdAt: linkClick.createdAt } }
     }
@@ -61,7 +60,7 @@ export default defineEventHandler(async (event) => {
         throw createError({ status: 400, statusText: "Icon ID is required" })
       }
 
-      const icon = await db.userIcon.findFirst({ where: { id: result.data.id, userId: result.data.userId }, select: { id: true } })
+      const icon = await db.userIcon.findFirst({ where: { id: result.data.id, userId: targetUser.id }, select: { id: true } })
       if (!icon) {
         throw createError({ status: 404, statusText: "Icon not found" })
       }
@@ -72,8 +71,7 @@ export default defineEventHandler(async (event) => {
       ])
 
       // Invalidate analytics and icons cache (clickCount changed)
-      const userData = await db.user.findUnique({ where: { id: result.data.userId }, select: { slug: true } })
-      await deleteCached(CacheKeys.analytics(result.data.userId), CacheKeys.userIcons(result.data.userId), CacheKeys.userProfile(userData?.slug || ""))
+      await deleteCached(CacheKeys.analytics(targetUser.id), CacheKeys.userIcons(targetUser.id), CacheKeys.userProfile(targetUser.slug))
 
       return { message: "Social icon click recorded", iconClick: { userIconId: iconClick.userIconId, createdAt: iconClick.createdAt } }
     }

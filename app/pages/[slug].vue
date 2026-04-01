@@ -69,11 +69,11 @@ const visibleIcons = computed(() => userProfile.value?.icons?.filter(icon => ico
 const visibleWidgets = computed(() => userProfile.value?.widgets?.filter(w => w.isVisible) ?? [])
 
 async function handleClick(itemId: string, type: "link" | "icon") {
-  if (!userProfile.value?.id) {
+  if (!userProfile.value?.slug) {
     return
   }
 
-  type === "link" ? await analyticsStore.recordLinkClick(userProfile.value.id, itemId) : await analyticsStore.recordIconClick(userProfile.value.id, itemId)
+  type === "link" ? await analyticsStore.recordLinkClick(userProfile.value.slug, itemId) : await analyticsStore.recordIconClick(userProfile.value.slug, itemId)
 }
 
 onMounted(async () => {
@@ -89,7 +89,7 @@ onMounted(async () => {
       meta: [{ name: "description", content: `@${userProfile.value.slug} profile on LinKiosk.` }],
     })
 
-    await analyticsStore.recordPageView(userProfile.value.id, (route.query.ref as string) ?? "direct")
+    await analyticsStore.recordPageView(userProfile.value.slug, (route.query.ref as string) ?? "direct")
   }
 })
 

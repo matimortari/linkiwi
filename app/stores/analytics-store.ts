@@ -44,11 +44,11 @@ export const useAnalyticsStore = defineStore("analytics", () => {
     }
   }
 
-  async function recordPageView(userId: string, referrer?: string) {
+  async function recordPageView(slug: string, referrer?: string) {
     loading.value = true
 
     try {
-      await $fetch("/api/analytics", { method: "POST", body: { type: "pageView", userId, referrer }, credentials: "include" })
+      await $fetch("/api/analytics", { method: "POST", body: { type: "pageView", slug, referrer }, credentials: "include" })
     }
     catch {
       // Silenty fail to avoid spamming users with errors if analytics recording fails
@@ -58,11 +58,11 @@ export const useAnalyticsStore = defineStore("analytics", () => {
     }
   }
 
-  async function recordLinkClick(userId: string, linkId: string) {
+  async function recordLinkClick(slug: string, linkId: string) {
     loading.value = true
 
     try {
-      await $fetch("/api/analytics", { method: "POST", body: { type: "link", userId, id: linkId }, credentials: "include" })
+      await $fetch("/api/analytics", { method: "POST", body: { type: "link", slug, id: linkId }, credentials: "include" })
     }
     catch (err: unknown) {
       const message = getErrorMessage(err, "Failed to record link click")
@@ -75,11 +75,11 @@ export const useAnalyticsStore = defineStore("analytics", () => {
     }
   }
 
-  async function recordIconClick(userId: string, iconId: string) {
+  async function recordIconClick(slug: string, iconId: string) {
     loading.value = true
 
     try {
-      await $fetch("/api/analytics", { method: "POST", body: { type: "icon", userId, id: iconId }, credentials: "include" })
+      await $fetch("/api/analytics", { method: "POST", body: { type: "icon", slug, id: iconId }, credentials: "include" })
     }
     catch (err: unknown) {
       const message = getErrorMessage(err, "Failed to record social icon click")

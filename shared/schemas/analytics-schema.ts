@@ -18,19 +18,12 @@ const referrerSchema = z.string().nullable().optional().transform((val) => {
   }
 })
 
+const slugSchema = z.string().min(3, "Slug must be at least 3 characters").max(50, "Slug must be at most 50 characters").regex(/^[a-z0-9-]+$/, "Invalid slug")
+
 export const analyticsRecordSchema = z.discriminatedUnion("type", [
-  z.object({ userId: z.cuid(), referrer: referrerSchema, createdAt: z.string().optional() }).extend({
-    type: z.literal("pageView"),
-    id: z.cuid().optional(),
-  }),
-  z.object({ userId: z.cuid(), referrer: referrerSchema, createdAt: z.string().optional() }).extend({
-    type: z.literal("link"),
-    id: z.cuid(),
-  }),
-  z.object({ userId: z.cuid(), referrer: referrerSchema, createdAt: z.string().optional() }).extend({
-    type: z.literal("icon"),
-    id: z.cuid(),
-  }),
+  z.object({ slug: slugSchema, referrer: referrerSchema, createdAt: z.string().optional() }).extend({ type: z.literal("pageView"), id: z.cuid().optional() }),
+  z.object({ slug: slugSchema, referrer: referrerSchema, createdAt: z.string().optional() }).extend({ type: z.literal("link"), id: z.cuid() }),
+  z.object({ slug: slugSchema, referrer: referrerSchema, createdAt: z.string().optional() }).extend({ type: z.literal("icon"), id: z.cuid() }),
 ])
 
 export const createCommentSchema = z.object({
