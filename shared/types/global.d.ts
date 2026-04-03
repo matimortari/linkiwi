@@ -84,6 +84,12 @@ interface UIState {
   }
 }
 
+interface TocHeader {
+  id: string
+  text: string
+  method?: string
+}
+
 interface Toast {
   id: string
   message: string

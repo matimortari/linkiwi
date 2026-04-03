@@ -1,5 +1,5 @@
 <template>
-  <Masthead />
+  <Toolbar />
 
   <div class="flex flex-col items-center gap-4 overflow-x-hidden md:flex-row md:items-start">
     <Sidebar :is-open="isSidebarOpen" />

@@ -12,7 +12,7 @@
             <span class="toast-message">{{ toast.message }}</span>
           </div>
           <button class="toast-close" aria-label="Close notification" @click="dismiss(toast.id)">
-            <icon name="ph:x-bold" size="15" />
+            <icon name="mdi:close" size="15" />
           </button>
         </div>
       </TransitionGroup>
@@ -25,18 +25,18 @@ const { toasts, dismiss } = useToast()
 
 function getToastIcon(type: Toast["type"]) {
   if (type === "success") {
-    return "ph:check-circle-bold"
+    return "mdi:check-circle"
   }
 
   if (type === "warning") {
-    return "ph:warning-circle-bold"
+    return "mdi:warning-circle"
   }
 
   if (type === "info") {
-    return "ph:info-bold"
+    return "mdi:info-circle"
   }
 
-  return "ph:x-circle-bold"
+  return "mdi:x-circle"
 }
 </script>
 
