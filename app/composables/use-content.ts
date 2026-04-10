@@ -4,7 +4,7 @@ export function useContent(options: { selector?: string, parseMethod?: boolean }
   const { selector = "article", parseMethod = false } = options
   const route = useRoute()
   const activeSection = ref<string | null>(null)
-  const headers = ref<any[]>([])
+  const headers = ref<TocHeader[]>([])
   let observer: IntersectionObserver | null = null
 
   async function extractHeaders() {
@@ -51,9 +51,8 @@ export function useContent(options: { selector?: string, parseMethod?: boolean }
     }
   }
 
-  const headerClasses = computed(() => (header: { id: string, level: number }) => {
+  const headerClasses = computed(() => (header: TocHeader) => {
     const classes: string[] = []
-    const isActive = activeSection.value === header.id
     if (header.level === 2) {
       classes.push("ml-0 my-2 font-semibold py-1")
     }
@@ -63,7 +62,7 @@ export function useContent(options: { selector?: string, parseMethod?: boolean }
     if (header.level === 4) {
       classes.push("ml-8 my-1 text-xs font-medium py-0.5")
     }
-    if (isActive) {
+    if (activeSection.value === header.id) {
       classes.push("text-primary font-bold border-l-2 border-primary pl-2 -ml-0.5")
     }
     else {

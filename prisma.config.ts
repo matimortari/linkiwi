@@ -1,4 +1,3 @@
-/* eslint-disable e18e/ban-dependencies */
 import { defineConfig, env } from "prisma/config"
 import "dotenv/config"
 
