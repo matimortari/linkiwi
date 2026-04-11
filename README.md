@@ -3,12 +3,12 @@
     <img src="public/logo-light.png" alt="Logo" width="300"/>
 </h1>
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=matimortari_linkiosk&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=matimortari_linkiosk)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=matimortari_linkiosk&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=matimortari_linkiosk)
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=matimortari_linkiosk&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=matimortari_linkiosk)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=matimortari_linkiwi&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=matimortari_linkiwi)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=matimortari_linkiwi&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=matimortari_linkiwi)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=matimortari_linkiwi&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=matimortari_linkiwi)
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat&colorA=0d1117)](https://opensource.org/licenses/MIT)
 
-[**LinKiosk**](https://linkiosk.up.railway.app) is a landing page builder that allows users and businesses to centralize and share their links and online presence in one place. It offers various customization options, link management, and profile analytics.
+[**LinKiwi**](https://linkiwi.up.railway.app) is a landing page builder that allows users and businesses to centralize and share their links and online presence in one place. It offers various customization options, link management, and profile analytics.
 
 </div>
 
@@ -18,7 +18,7 @@
 - **Admin Dashboard:** Manage your links, profile settings, and customization options from the dedicated admin interface.
 - **Custom Profile Page:** Design your landing page with your key links and information. Pick from many themes, and feel free to customize colors, fonts, and layouts to match your style.
 - **Link Management:** Add, edit, and organize links to your social profiles, websites, and other online resources. You can pin social icons to enhance visibility for your most important platforms.
-- **Platform Widgets:** Embed live data from GitHub and YouTube directly on your profile page.
+- **Platform Widgets:** Embed live data from GitHub, Spotify, and YouTube directly on your profile page.
 - **Analytics Dashboard:** Monitor insights for your profile page, such as total views and clicks on individual links.
 
 ## Stack
