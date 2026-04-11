@@ -9,7 +9,7 @@ const slug = route.params.slug as string
 const pageContent = await queryCollection("content").path(`/${slug === "privacy" ? "privacy-policy" : slug === "terms" ? "terms-of-service" : slug}`).first()
 
 const PAGE_TITLES: Record<string, string> = { privacy: "Privacy Policy", terms: "Terms of Service" }
-const PAGE_DESCRIPTIONS: Record<string, string> = { privacy: "Read the privacy policy for LinKiosk.", terms: "Read the terms of service for LinKiosk." }
+const PAGE_DESCRIPTIONS: Record<string, string> = { privacy: "Read the privacy policy for LinKiwi.", terms: "Read the terms of service for LinKiwi." }
 
 useHead({
   title: PAGE_TITLES[slug],

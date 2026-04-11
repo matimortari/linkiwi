@@ -33,7 +33,7 @@ const { user, loading } = storeToRefs(useUserStore())
 useHead({
   title: "Analytics",
   link: [{ rel: "canonical", href: `${baseURL}/admin/analytics` }],
-  meta: [{ name: "description", content: "LinKiosk analytics page." }],
+  meta: [{ name: "description", content: "LinKiwi analytics page." }],
 })
 
 definePageMeta({ layout: "admin", middleware: "auth" })

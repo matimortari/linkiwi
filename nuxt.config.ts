@@ -67,5 +67,5 @@ export default defineNuxtConfig({
   icon: { mode: "svg", clientBundle: { scan: true } },
   ogImage: { enabled: false },
   robots: { disallow: ["/admin"] },
-  site: { url: process.env.NUXT_PUBLIC_BASE_URL, name: "LinKiosk" },
+  site: { url: process.env.NUXT_PUBLIC_BASE_URL, name: "LinKiwi" },
 })

@@ -149,10 +149,10 @@ function shareToSocial(platform: "twitter" | "facebook" | "linkedin" | "whatsapp
   const trackedUrl = `${pageUrl.value}?ref=${platform}`
 
   const shareUrls = {
-    twitter: `https://x.com/intent/tweet?text=${encodeURIComponent(`🚀 Check out my #linkiosk profile! 🌟\n\n🔗 ${trackedUrl}`)}`,
+    twitter: `https://x.com/intent/tweet?text=${encodeURIComponent(`🚀 Check out my #linkiwi profile! 🌟\n\n🔗 ${trackedUrl}`)}`,
     facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(trackedUrl)}`,
     linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(trackedUrl)}`,
-    whatsapp: `https://wa.me/?text=${encodeURIComponent(`Check out my LinKiosk profile: ${trackedUrl}`)}`,
+    whatsapp: `https://wa.me/?text=${encodeURIComponent(`Check out my LinKiwi profile: ${trackedUrl}`)}`,
   }
 
   window.open(shareUrls[platform], "_blank")

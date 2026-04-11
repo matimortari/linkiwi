@@ -10,7 +10,7 @@ provide("contentHeaders", useContent({ selector: ".markdown", parseMethod: true 
 useHead({
   title: "API Specification",
   link: [{ rel: "canonical", href: `${baseURL}/api-spec` }],
-  meta: [{ name: "description", content: "LinKiosk API specification." }],
+  meta: [{ name: "description", content: "LinKiwi API specification." }],
 })
 
 definePageMeta({ layout: "content", layoutProps: { parseMethod: true } })

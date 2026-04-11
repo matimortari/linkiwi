@@ -63,6 +63,6 @@ const errorMessage = computed(() => {
 useHead({
   title: "Sign In",
   link: [{ rel: "canonical", href: `${baseURL}` }],
-  meta: [{ name: "description", content: "Sign in to your LinKiosk account" }],
+  meta: [{ name: "description", content: "Sign in to your LinKiwi account" }],
 })
 </script>

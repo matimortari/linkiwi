@@ -5,7 +5,7 @@
         Brand Resources
       </h1>
       <p class="max-w-xl font-medium text-muted-foreground">
-        Official LinKiosk logos, symbols, and color palette.
+        Official LinKiwi logos, symbols, and color palette.
       </p>
     </header>
 
@@ -150,6 +150,6 @@ watch(colorMode, syncColorValues, { flush: "post" })
 useHead({
   title: "Brand Resources",
   link: [{ rel: "canonical", href: `${baseURL}/brand` }],
-  meta: [{ name: "description", content: "LinKiosk brand resources and guidelines." }],
+  meta: [{ name: "description", content: "LinKiwi brand resources and guidelines." }],
 })
 </script>

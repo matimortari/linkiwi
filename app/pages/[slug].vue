@@ -86,7 +86,7 @@ onMounted(async () => {
     useHead({
       title: `@${userProfile.value.slug}`,
       link: [{ rel: "canonical", href: `${baseURL}/${userProfile.value.slug}` }],
-      meta: [{ name: "description", content: `@${userProfile.value.slug} profile on LinKiosk.` }],
+      meta: [{ name: "description", content: `@${userProfile.value.slug} profile on LinKiwi.` }],
     })
 
     await analyticsStore.recordPageView(userProfile.value.slug, (route.query.ref as string) ?? "direct")

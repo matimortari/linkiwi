@@ -11,7 +11,7 @@
         Keep all your stuff together!
       </h1>
       <p class="text-lead">
-        Welcome to <span class="font-semibold text-secondary">LinKiosk</span>! Your links, profiles, contact info, and more
+        Welcome to <span class="font-semibold text-secondary">LinKiwi</span>! Your links, profiles, contact info, and more
         in one place. Create and customize your page and share it with your audience.
       </p>
 
@@ -50,13 +50,13 @@
             </div>
             <div class="flex flex-col items-start gap-1 text-start">
               <span class="text-sm font-medium text-surface-foreground">@alexjohnson</span>
-              <span class="text-xs text-white/50">linkiosk.app/alexjohnson</span>
+              <span class="text-xs text-white/50">linkiwi.app/alexjohnson</span>
             </div>
           </div>
 
           <div class="-right-10 -bottom-3 navigation-group hidden gap-1.5 rounded-full border bg-card px-3 py-1.5 whitespace-nowrap shadow-sm md:absolute" style="z-index: 10;">
             <icon name="mdi:link-variant" size="20" class="text-primary" />
-            <span class="text-xs font-medium">linkiosk.app/alexjohnson</span>
+            <span class="text-xs font-medium">linkiwi.app/alexjohnson</span>
           </div>
         </div>
       </div>
@@ -64,7 +64,7 @@
       <div class="order-2 flex flex-col gap-4 text-start">
         <p class="text-lead">
           Customize your page with your own style and share your unique URL.
-          Whether you're a creator, business, or influencer, LinKiosk makes it
+          Whether you're a creator, business, or influencer, LinKiwi makes it
           easy to share and connect with your audience.
         </p>
 
@@ -168,7 +168,7 @@ const { public: { baseURL } } = useRuntimeConfig()
 useHead({
   title: "Your Link-in-Bio Page!",
   link: [{ rel: "canonical", href: `${baseURL}` }],
-  meta: [{ name: "description", content: "Create your personalized link-in-bio page with LinKiosk. Share your links, profiles, and contact info in one place!" }],
+  meta: [{ name: "description", content: "Create your personalized link-in-bio page with LinKiwi. Share your links, profiles, and contact info in one place!" }],
 })
 
 definePageMeta({ middleware: "guest" })

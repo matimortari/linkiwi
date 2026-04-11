@@ -19,7 +19,7 @@
           <icon name="mdi:logout" size="20" />
         </button>
 
-        <nuxt-link to="https://github.com/matimortari/linkiosk" target="_blank" aria-label="GitHub Repository" class="btn-ghost">
+        <nuxt-link to="https://github.com/matimortari/linkiwi" target="_blank" aria-label="GitHub Repository" class="btn-ghost">
           <icon name="simple-icons:github" size="20" />
         </nuxt-link>
       </nav>
