@@ -61,6 +61,14 @@ function getPresetImage(filename: string): string {
 </script>
 
 <style scoped>
+.scroll-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scroll-hide::-webkit-scrollbar {
+  display: none;
+}
+
 .carousel-enter-active,
 .carousel-leave-active {
   transition:
