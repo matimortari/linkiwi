@@ -166,11 +166,7 @@ export const NEUTRAL_COLORS = [
 
 export const STATUS_COLORS = [
   { name: "Danger", var: "--danger" },
-  { name: "Danger Foreground", var: "--danger-foreground" },
   { name: "Success", var: "--success" },
-  { name: "Success Foreground", var: "--success-foreground" },
   { name: "Warning", var: "--warning" },
-  { name: "Warning Foreground", var: "--warning-foreground" },
   { name: "Info", var: "--info" },
-  { name: "Info Foreground", var: "--info-foreground" },
 ]

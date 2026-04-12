@@ -90,6 +90,14 @@ const { backgroundStyle, profilePictureStyle, slugStyle, descriptionStyle } = us
 </script>
 
 <style scoped>
+.scroll-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scroll-hide::-webkit-scrollbar {
+  display: none;
+}
+
 .slide-enter-from {
   transform: translateY(100%);
 }

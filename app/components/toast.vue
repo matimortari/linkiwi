@@ -105,20 +105,20 @@ function getToastIcon(type: Toast["type"]) {
 }
 
 .toast-success {
-  background-color: color-mix(in oklab, var(--color-success) 20%, transparent);
-  color: var(--success);
+  background-color: color-mix(in srgb, var(--success) 50%, transparent);
+  color: var(--success-foreground);
 }
 .toast-error {
-  background-color: color-mix(in oklab, var(--color-danger) 20%, transparent);
-  color: var(--danger);
+  background-color: color-mix(in srgb, var(--danger) 50%, transparent);
+  color: var(--danger-foreground);
 }
 .toast-warning {
-  background-color: color-mix(in oklab, var(--color-warning) 20%, transparent);
-  color: var(--warning);
+  background-color: color-mix(in srgb, var(--warning) 50%, transparent);
+  color: var(--warning-foreground);
 }
 .toast-info {
-  background-color: color-mix(in oklab, var(--color-info) 20%, transparent);
-  color: var(--info);
+  background-color: color-mix(in srgb, var(--info) 50%, transparent);
+  color: var(--info-foreground);
 }
 
 .toast-enter-active,
