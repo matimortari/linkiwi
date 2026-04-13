@@ -1,9 +1,11 @@
-import type { CreateWidgetInput, UpdateWidgetInput } from "#shared/schemas/widget-schema"
+import type { CreateWidgetInput, UpdateWidgetInput, WidgetType } from "#shared/schemas/widget-schema"
 
 export const useWidgetsStore = defineStore("widgets", () => {
   const toast = useToast()
   const widgets = ref<Widget[]>([])
   const loading = ref(false)
+  const widgetLoading = ref<Record<WidgetType, boolean>>({ GITHUB: false, YOUTUBE: false, SPOTIFY: false })
+  const widgetError = ref<Record<WidgetType, boolean>>({ GITHUB: false, YOUTUBE: false, SPOTIFY: false })
 
   async function getWidgets() {
     loading.value = true
@@ -83,40 +85,36 @@ export const useWidgetsStore = defineStore("widgets", () => {
     }
   }
 
-  async function getGitHubData(handle: string) {
-    try {
-      const res = await $fetch<{ data: any }>("/api/widgets/fetch/github", { method: "GET", query: { handle } })
-      return res
-    }
-    catch (err: unknown) {
-      const message = getErrorMessage(err, "Failed to fetch GitHub data")
-      toast.error(message)
-      console.error("getGitHubData error:", err)
-      throw err
-    }
-  }
+  async function getWidgetData(type: WidgetType, handle: string) {
+    widgetLoading.value[type] = true
+    widgetError.value[type] = false
 
-  async function getYouTubeData(handle: string) {
     try {
-      const res = await $fetch<{ data: any }>("/api/widgets/fetch/youtube", { method: "GET", query: { handle } })
+      const endpoint = `/api/widgets/fetch/${type.toLowerCase()}`
+      const res = await $fetch<{ data: any }>(endpoint, { method: "GET", query: { handle } })
       return res
     }
     catch (err: unknown) {
-      const message = getErrorMessage(err, "Failed to fetch YouTube data")
+      const message = getErrorMessage(err, `Failed to fetch ${type.toLowerCase()} data`)
       toast.error(message)
-      console.error("getYouTubeData error:", err)
+      console.error(`getWidgetData(${type}) error:`, err)
+      widgetError.value[type] = true
       throw err
+    }
+    finally {
+      widgetLoading.value[type] = false
     }
   }
 
   return {
     loading,
+    widgetLoading,
+    widgetError,
     widgets,
     getWidgets,
     createWidget,
     updateWidget,
     deleteWidget,
-    getGitHubData,
-    getYouTubeData,
+    getWidgetData,
   }
 })

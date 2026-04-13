@@ -5,7 +5,7 @@
     </div>
 
     <div class="navigation-group">
-      <img v-if="data.avatar" :src="data.avatar" :alt="data.name" class="size-8 rounded-full ring-1 ring-surface-foreground">
+      <img v-if="data.avatar" :src="data.avatar" :alt="data.name" class="ring-surface-foreground size-8 rounded-full ring-1">
 
       <div class="flex min-w-0 flex-col gap-1">
         <div class="flex flex-row items-start gap-1 text-start">
@@ -28,12 +28,12 @@
 
         <div class="pointer-events-none absolute inset-0 flex items-center justify-center">
           <div class="flex size-12 items-center justify-center rounded-full bg-black/70 transition-transform group-hover:scale-110">
-            <icon name="mdi:play" size="35" class="text-surface-foreground!" />
+            <icon name="mdi:play" size="35" class="text-[#eeeeee]" />
           </div>
         </div>
 
         <div class="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/70 to-transparent p-2">
-          <p class="line-clamp-2 text-sm font-medium text-surface-foreground">
+          <p class="line-clamp-2 text-sm font-medium text-[#eeeeee]">
             {{ data.videos[0].title }}
           </p>
           <p class="mt-0.5 text-[10px]" :style="widgetTextStyle">
@@ -50,7 +50,7 @@
               :alt="video.title" class="aspect-video w-full rounded-lg object-cover transition-all group-hover:brightness-75"
             >
             <div class="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/30">
-              <p class="absolute inset-x-0 bottom-0 line-clamp-2 w-full p-1 text-xs font-medium text-surface-foreground opacity-0 transition-opacity group-hover:opacity-100">
+              <p class="absolute inset-x-0 bottom-0 line-clamp-2 w-full p-1 text-xs font-medium text-[#eeeeee] opacity-0 transition-opacity group-hover:opacity-100">
                 {{ video.title }}
               </p>
             </div>
@@ -68,24 +68,14 @@ const props = defineProps<{
 }>()
 
 const widgetsStore = useWidgetsStore()
+const { widgetLoading } = storeToRefs(widgetsStore)
 const { linkStyle, linkInnerStyle, widgetTextStyle } = useDynamicStyles(toRef(props, "preferences"))
+const widgetType = "YOUTUBE" as const
 const data = ref<any>(null)
-const loading = ref(false)
-const error = ref(false)
+const loading = computed(() => widgetLoading.value[widgetType])
 
 onMounted(async () => {
-  loading.value = true
-  error.value = false
-
-  try {
-    const res = await widgetsStore.getYouTubeData(props.handle)
-    data.value = res?.data || null
-  }
-  catch {
-    error.value = true
-  }
-  finally {
-    loading.value = false
-  }
+  const res = await widgetsStore.getWidgetData(widgetType, props.handle)
+  data.value = res?.data || null
 })
 </script>

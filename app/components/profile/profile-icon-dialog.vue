@@ -21,10 +21,10 @@
 
       <footer class="flex flex-row items-center justify-end">
         <div class="navigation-group">
-          <button class="btn-danger" :disabled="loading" @click="handleCancel">
+          <button class="btn-danger" @click="handleCancel">
             Cancel
           </button>
-          <button class="btn-success" type="submit" :disabled="loading || !form.platform || !form.url">
+          <button class="btn-success" type="submit">
             Confirm
           </button>
         </div>
@@ -37,7 +37,6 @@
 const emit = defineEmits<{ close: [] }>()
 
 const iconsStore = useIconsStore()
-const { loading } = storeToRefs(iconsStore)
 const { isIconDialogOpen } = useUIState()
 const form = ref<Parameters<typeof iconsStore.createIcon>[0]>({ platform: "" as keyof typeof SOCIAL_ICONS, logo: "" as typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS], url: "" })
 const socialIconEntries = computed(() => Object.entries(SOCIAL_ICONS) as [keyof typeof SOCIAL_ICONS, (typeof SOCIAL_ICONS)[keyof typeof SOCIAL_ICONS]][])
@@ -52,13 +51,9 @@ async function handleSubmit() {
     return
   }
 
-  try {
-    await iconsStore.createIcon(form.value)
-    resetForm()
-    emit("close")
-  }
-  catch {
-    // Silently fail
+  const created = await iconsStore.createIcon(form.value)
+  if (created) {
+    handleCancel()
   }
 }
 

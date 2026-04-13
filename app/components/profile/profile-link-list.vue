@@ -80,13 +80,13 @@ async function reorderLink() {
     return
   }
 
-  try {
-    await Promise.all(updates.map(({ id, order }) => linksStore.updateLink(id, { order })))
+  const results = await Promise.all(updates.map(({ id, order }) => linksStore.updateLink(id, { order })))
+  if (results.every(Boolean)) {
     linksStore.links.sort((a, b) => a.order - b.order)
   }
-  catch {
+  else {
     orderedLinks.value = previousOrder
-    await linksStore.getLinks().catch(() => {})
+    await linksStore.getLinks()
   }
 }
 

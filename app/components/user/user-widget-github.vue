@@ -5,7 +5,7 @@
     </div>
 
     <div class="navigation-group">
-      <img v-if="data.avatar" :src="data.avatar" :alt="data.name" class="size-8 rounded-full ring-1 ring-surface-foreground">
+      <img v-if="data.avatar" :src="data.avatar" :alt="data.name" class="ring-surface-foreground size-8 rounded-full ring-1">
 
       <div class="flex min-w-0 flex-col gap-1">
         <div class="flex flex-row items-start gap-1 text-start">
@@ -52,24 +52,14 @@ const props = defineProps<{
 }>()
 
 const widgetsStore = useWidgetsStore()
+const { widgetLoading } = storeToRefs(widgetsStore)
 const { linkStyle, linkInnerStyle, widgetTextStyle } = useDynamicStyles(toRef(props, "preferences"))
+const widgetType = "GITHUB" as const
 const data = ref<any>(null)
-const loading = ref(false)
-const error = ref(false)
+const loading = computed(() => widgetLoading.value[widgetType])
 
 onMounted(async () => {
-  loading.value = true
-  error.value = false
-
-  try {
-    const res = await widgetsStore.getGitHubData(props.handle)
-    data.value = res?.data || null
-  }
-  catch {
-    error.value = true
-  }
-  finally {
-    loading.value = false
-  }
+  const res = await widgetsStore.getWidgetData(widgetType, props.handle)
+  data.value = res?.data || null
 })
 </script>
