@@ -13,10 +13,10 @@
 
       <footer class="flex flex-row items-center justify-end">
         <div class="navigation-group">
-          <button class="btn-danger" :disabled="loading" @click="handleCancel">
+          <button class="btn-danger" @click="handleCancel">
             Cancel
           </button>
-          <button class="btn-success" type="submit" :disabled="loading || !form.title || !form.url">
+          <button class="btn-success" type="submit">
             Confirm
           </button>
         </div>
@@ -29,7 +29,6 @@
 const emit = defineEmits<{ close: [] }>()
 
 const linksStore = useLinksStore()
-const { loading } = storeToRefs(linksStore)
 const { isLinkDialogOpen, selectedLink } = useUIState()
 const form = ref<Parameters<typeof linksStore.createLink>[0] | Parameters<typeof linksStore.updateLink>[1]>({ title: "", url: "" })
 const editingLinkId = ref<string | null>(null)
@@ -40,18 +39,9 @@ async function handleSubmit() {
     return
   }
 
-  try {
-    if (isUpdateMode.value && editingLinkId.value) {
-      await linksStore.updateLink(editingLinkId.value, { title: form.value.title, url: form.value.url })
-    }
-    else {
-      await linksStore.createLink(form.value as Parameters<typeof linksStore.createLink>[0])
-    }
-    resetForm()
-    emit("close")
-  }
-  catch {
-    // Silently fail
+  const result = isUpdateMode.value && editingLinkId.value ? await linksStore.updateLink(editingLinkId.value, { title: form.value.title, url: form.value.url }) : await linksStore.createLink(form.value as Parameters<typeof linksStore.createLink>[0])
+  if (result) {
+    handleCancel()
   }
 }
 

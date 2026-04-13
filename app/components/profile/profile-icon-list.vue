@@ -62,13 +62,13 @@ async function reorderIcon() {
     return
   }
 
-  try {
-    await Promise.all(updates.map(({ id, order }) => iconStore.updateIcon(id, { order })))
+  const results = await Promise.all(updates.map(({ id, order }) => iconStore.updateIcon(id, { order })))
+  if (results.every(Boolean)) {
     iconStore.icons.sort((a, b) => a.order - b.order)
   }
-  catch {
+  else {
     orderedIcons.value = previousOrder
-    await iconStore.getIcons().catch(() => {})
+    await iconStore.getIcons()
   }
 }
 

@@ -153,12 +153,10 @@ async function handleCreate() {
   if (!newType.value || !newHandle.value) {
     return
   }
-  try {
-    await widgetsStore.createWidget({ type: newType.value, handle: newHandle.value })
+
+  const created = await widgetsStore.createWidget({ type: newType.value, handle: newHandle.value })
+  if (created) {
     cancelAdd()
-  }
-  catch {
-    // Silently fail
   }
 }
 
@@ -166,12 +164,10 @@ async function handleUpdate(id: string) {
   if (!editHandle.value) {
     return
   }
-  try {
-    await widgetsStore.updateWidget(id, { handle: editHandle.value })
+
+  const updated = await widgetsStore.updateWidget(id, { handle: editHandle.value })
+  if (updated) {
     cancelEdit()
-  }
-  catch {
-    // Silently fail
   }
 }
 

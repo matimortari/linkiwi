@@ -46,10 +46,10 @@
           >
             <div class="flex items-center justify-between">
               <icon name="mdi:account-circle" size="30" class="text-white/60" />
-              <icon :name="platform.icon" size="25" class="text-surface-foreground" />
+              <icon :name="platform.icon" size="25" class="text-[#eeeeee]" />
             </div>
             <div class="flex flex-col items-start gap-1 text-start">
-              <span class="text-sm font-medium text-surface-foreground">@alexjohnson</span>
+              <span class="text-sm font-medium text-[#eeeeee]">@alexjohnson</span>
               <span class="text-xs text-white/50">linkiwi.app/alexjohnson</span>
             </div>
           </div>
