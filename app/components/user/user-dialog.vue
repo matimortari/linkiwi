@@ -66,14 +66,13 @@ async function handleSubmit() {
     return
   }
 
-  try {
-    await userStore.updateUser({ name: form.value.name, slug: form.value.slug, description: form.value.description })
-    await userStore.getUser()
-    emit("close")
+  const updated = await userStore.updateUser({ name: form.value.name, slug: form.value.slug, description: form.value.description })
+  if (!updated) {
+    return
   }
-  catch {
-    // Silently fail
-  }
+
+  await userStore.getUser()
+  emit("close")
 }
 
 // Reset form when dialog is opened
