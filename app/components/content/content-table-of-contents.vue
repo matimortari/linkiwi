@@ -1,7 +1,7 @@
 <template>
   <aside
     id="table-of-contents" :class="isOpen ? 'translate-y-0 md:translate-x-0' : 'translate-y-full md:translate-x-full'"
-    class="fixed inset-x-0 bottom-0 z-40 flex h-[80vh] w-full flex-col border-t shadow-xl transition-transform md:inset-y-0 md:right-0 md:left-auto md:z-20 md:h-screen md:w-80 md:translate-y-0 md:border-t-0 xl:w-1/4 xl:translate-x-0"
+    class="fixed inset-x-0 bottom-0 z-40 flex h-[80vh] w-full flex-col border-t shadow-xl transition-transform md:inset-y-0 md:right-0 md:left-auto md:z-20 md:h-screen md:w-80 md:translate-y-0 md:border-t-0 xl:w-80 xl:translate-x-0"
   >
     <div class="flex h-full flex-col p-4 md:pt-24">
       <div class="flex items-center gap-1 border-b py-2 font-semibold text-muted-foreground uppercase">

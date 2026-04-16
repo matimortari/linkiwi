@@ -1,7 +1,7 @@
 <template>
-  <div v-if="preset" class="-mb-80 flex items-center justify-center select-none md:w-1/2 md:justify-end">
+  <div v-if="preset" class="carousel-host -mb-80 flex items-center justify-center select-none md:w-full md:justify-end">
     <transition name="carousel" mode="out-in">
-      <div :key="preset.slug" class="relative flex h-150 w-80 flex-col overflow-hidden rounded-[2.5rem] border-4 shadow-lg md:my-4 md:block 2xl:w-96">
+      <div :key="preset.slug" class="phone-mockup relative flex flex-col overflow-hidden rounded-[2.5rem] border-4 shadow-lg md:my-4 md:block">
         <div class="absolute -top-1 z-10 w-full rounded-t-[2.5rem] bg-linear-to-r from-primary to-secondary pb-1">
           <div class="flex flex-row items-center justify-between rounded-t-[2.5rem] bg-[#111016] p-4 pb-2">
             <div class="navigation-group">
@@ -61,6 +61,16 @@ function getPresetImage(filename: string): string {
 </script>
 
 <style scoped>
+.carousel-host {
+  perspective: 1200px;
+}
+
+.phone-mockup {
+  width: clamp(17rem, 82vw, 23rem);
+  height: clamp(34rem, 84vw, 39rem);
+  transform-origin: center;
+}
+
 .scroll-hide {
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -72,26 +82,38 @@ function getPresetImage(filename: string): string {
 .carousel-enter-active,
 .carousel-leave-active {
   transition:
-    transform 0.4s ease,
-    opacity 0.4s ease;
+    transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1),
+    opacity 0.55s cubic-bezier(0.2, 0.8, 0.2, 1),
+    filter 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
   transform-style: preserve-3d;
 }
 
 .carousel-enter-from {
-  transform: rotateY(90deg) scale(0.8);
+  transform: translateX(30px) rotateY(22deg) rotateX(4deg) scale(0.93);
   opacity: 0;
+  filter: blur(6px);
 }
 .carousel-enter-to {
-  transform: rotateY(0deg) scale(1);
+  transform: translateX(0) rotateY(0deg) rotateX(0deg) scale(1);
   opacity: 1;
+  filter: blur(0);
 }
 
 .carousel-leave-from {
-  transform: rotateY(0deg) scale(1);
+  transform: translateX(0) rotateY(0deg) rotateX(0deg) scale(1);
   opacity: 1;
+  filter: blur(0);
 }
 .carousel-leave-to {
-  transform: rotateY(-90deg) scale(0.95);
+  transform: translateX(-30px) rotateY(-18deg) rotateX(-3deg) scale(0.95);
   opacity: 0;
+  filter: blur(4px);
+}
+
+@media (min-width: 768px) {
+  .phone-mockup {
+    width: clamp(20rem, 34vw, 24rem);
+    height: clamp(36rem, 48vw, 41rem);
+  }
 }
 </style>

@@ -9,13 +9,11 @@
         <button class="btn" aria-label="Toggle Theme" @click="toggleTheme">
           <icon :name="themeIcon" size="20" />
         </button>
-
         <button v-if="loggedIn" class="btn" @click="signOut">
           <icon name="mdi:logout" size="20" />
           <span>Sign Out</span>
         </button>
-
-        <nuxt-link v-if="!loggedIn" to="/sign-in" class="btn">
+        <nuxt-link v-else to="/sign-in" class="btn">
           <icon name="mdi:login" size="20" />
           <span>Sign In</span>
         </nuxt-link>
