@@ -60,8 +60,8 @@ function resetForm() {
 watch([() => isLinkDialogOpen.value, () => selectedLink.value], ([open]) => {
   if (open) {
     editingLinkId.value = selectedLink.value?.id || null
-    form.value.title = selectedLink.value?.title || ""
-    form.value.url = selectedLink.value?.url || ""
+    form.value.title = selectedLink.value?.title
+    form.value.url = selectedLink.value?.url
   }
   else {
     resetForm()

@@ -17,12 +17,12 @@ export function useContent(options: { selector?: string, parseMethod?: boolean }
 
     const hElements = container.querySelectorAll("h2, h3, h4")
     headers.value = Array.from(hElements, (el) => {
-      const text = el.textContent?.trim() || ""
+      const text = el.textContent?.trim()
       let method: string | undefined
       if (parseMethod) {
         const next = el.nextElementSibling
         if (next && !/^H[2-4]$/.test(next.tagName)) {
-          const nextText = next.textContent?.replace(/\*\*/g, "").trim() || ""
+          const nextText = next.textContent?.replace(/\*\*/g, "").trim()
           const match = nextText.match(/^(GET|POST|PUT|DELETE)\b/i)
           if (match) {
             method = match[1]?.toUpperCase()

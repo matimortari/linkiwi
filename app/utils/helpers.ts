@@ -8,7 +8,7 @@ export function formatDate(date?: string | Date | null): string {
 
   const dt = typeof date === "string" ? new Date(date) : date
   const formatted = dt.toLocaleDateString("en-US", { year: "2-digit", month: "short", day: "numeric" })
-  return formatted.charAt(0).toLowerCase() + formatted.slice(1)
+  return `${formatted.charAt(0).toLowerCase() + formatted.slice(1)}, ${dt.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false })}`
 }
 
 /**

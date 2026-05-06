@@ -17,11 +17,7 @@
         <slot />
       </article>
 
-      <ContentTableOfContents
-        :headers="headers" :is-open="isTocOpen"
-        :header-classes="headerClasses" @select="scrollToHeader"
-        @close="isTocOpen = false"
-      />
+      <ContentTableOfContents :headers="headers" :is-open="isTocOpen" :header-classes="headerClasses" @select="scrollToHeader" />
     </div>
   </div>
 

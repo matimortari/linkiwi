@@ -56,7 +56,7 @@ const iconHover = reactive<Record<string, boolean>>({})
 const images = import.meta.glob("/assets/presets/*", { eager: true, import: "default" })
 
 function getPresetImage(filename: string): string {
-  return images[`/assets/presets/${filename}`] as string || ""
+  return images[`/assets/presets/${filename}`] as string
 }
 </script>
 
