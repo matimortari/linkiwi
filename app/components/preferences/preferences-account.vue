@@ -1,10 +1,10 @@
 <template>
-  <div class="card flex flex-col gap-4">
+  <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:p-8">
     <h3>
       Account Options
     </h3>
 
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-4">
       <div class="card flex flex-col gap-2">
         <h4>
           Guestbook
@@ -13,7 +13,7 @@
           Allow visitors to leave comments on your profile page.
         </p>
 
-        <div class="flex items-center justify-between gap-2 p-2 pt-0">
+        <div class="flex items-center justify-between gap-2">
           <PreferencesCheckbox id="enableGuestbook" v-model:value="preferences.enableGuestbook" label="Enable Guestbook" class="max-w-xs" />
 
           <button class="btn-primary" @click="handleSubmit">

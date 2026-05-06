@@ -1,5 +1,5 @@
 <template>
-  <div class="card flex flex-col gap-4">
+  <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:p-8">
     <h3>
       Clicks by Item
     </h3>
@@ -7,13 +7,13 @@
     <Loading v-if="linksLoading || iconsLoading || analyticsLoading" />
     <Empty v-else-if="!items.length" message="No links or social icons yet." icon-name="mdi:octagram-minus-outline" />
 
-    <ul v-else class="grid grid-cols-1 gap-2 md:grid-cols-3">
+    <ul v-else class="grid grid-cols-1 gap-4 md:grid-cols-3">
       <li v-for="item in items" :key="item.id" class="card flex flex-col gap-2">
         <div class="flex flex-row items-center justify-between font-semibold">
           <icon v-if="item.type === 'icon'" :name="item.logo" :size="30" />
           <span v-else>{{ item.title }}</span>
 
-          <span class="text-sm font-medium text-primary">{{ clicksMap[item.id] ?? 0 }} clicks</span>
+          <span class="text-caption-info text-sm font-medium">{{ clicksMap[item.id] ?? 0 }} clicks</span>
         </div>
 
         <nuxt-link v-if="item.url" :to="item.url" class="text-caption truncate hover:underline">

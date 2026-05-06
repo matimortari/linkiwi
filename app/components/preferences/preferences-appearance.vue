@@ -1,12 +1,12 @@
 <template>
-  <div class="card flex flex-col gap-4">
+  <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:p-8">
     <h3>
       Appearance
     </h3>
 
     <div class="flex flex-col gap-2">
-      <div class="flex flex-col justify-between gap-2 p-2 pt-0 md:flex-row">
-        <div class="navigation-group flex-wrap md:gap-1">
+      <div class="flex flex-col justify-between gap-2 md:flex-row">
+        <div class="navigation-group flex-wrap">
           <button
             v-for="t in APPEARANCE_TABS" :key="t.value"
             class="btn-ghost justify-start! text-muted-foreground!" :class="{ 'bg-muted!': activeTab === t.value }"
@@ -16,7 +16,7 @@
           </button>
         </div>
 
-        <div class="navigation-group md:gap-1">
+        <div class="navigation-group">
           <button class="btn-danger" @click="handleResetPreferences">
             <icon :name="resetAction.icon.value" size="20" />
             <span>Reset</span>

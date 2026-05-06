@@ -1,5 +1,5 @@
 <template>
-  <div class="card flex flex-col gap-4">
+  <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:p-8">
     <h3>
       My Social Icons
     </h3>
@@ -10,7 +10,7 @@
 
       <VueDraggable
         v-else v-model="orderedIcons"
-        tag="ul" class="navigation-group"
+        tag="ul" class="flex flex-row items-center gap-4!"
         handle=".drag-handle" :animation="150"
         @end="reorderIcon"
       >
@@ -28,7 +28,7 @@
           </button>
 
           <button class="btn-ghost absolute right-0 bottom-0 flex items-center p-0.5!" aria-label="Delete Social Icon" @click="handleDeleteIcon(icon.id!)">
-            <icon name="mdi:remove-circle-outline" size="25" class="text-danger" />
+            <icon name="mdi:remove-circle-outline" size="25" class="text-caption-danger" />
           </button>
         </li>
       </VueDraggable>
