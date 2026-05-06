@@ -77,7 +77,12 @@ useHead({
   min-height: 100vh;
   width: 100%;
   overflow: hidden;
-  padding: 4rem;
+  padding: 1rem;
+}
+@media (min-width: 768px) {
+  .auth-shell {
+    padding: 4rem;
+  }
 }
 
 .auth-backdrop {
@@ -96,15 +101,21 @@ useHead({
 
 .auth-grid {
   display: grid;
-  min-height: calc(100vh - 12rem);
-  width: min(100%, 1500px);
+  min-height: 100vh;
+  width: 100%;
   max-width: 1500px;
   overflow: hidden;
-  border: var(--border-style);
-  border-radius: 1.5rem;
-  background-color: color-mix(in srgb, var(--background) 85%, transparent);
-  box-shadow: 0 25px 60px -40px rgba(0, 0, 0, 0.9);
-  backdrop-filter: blur(8px);
+}
+@media (min-width: 768px) {
+  .auth-grid {
+    min-height: calc(100vh - 8rem);
+    border: var(--border-style);
+    border-radius: 1.5rem;
+    background-color: color-mix(in srgb, var(--background) 85%, transparent);
+    box-shadow: 0 25px 60px -40px rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(8px);
+    grid-template-columns: minmax(0, 1fr) minmax(430px, 60%);
+  }
 }
 
 .auth-aside {

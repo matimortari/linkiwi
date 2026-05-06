@@ -1,5 +1,5 @@
 <template>
-  <div class="card flex flex-col gap-4">
+  <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:p-8">
     <h3>
       My Links
     </h3>
@@ -10,7 +10,7 @@
 
       <VueDraggable
         v-else v-model="orderedLinks"
-        tag="ul" class="grid grid-cols-1 gap-2 md:grid-cols-2 2xl:grid-cols-3"
+        tag="ul" class="grid grid-cols-1 gap-4 md:grid-cols-2 2xl:grid-cols-3"
         handle=".drag-handle" :animation="150"
         @end="reorderLink"
       >
@@ -28,10 +28,10 @@
                 <icon :name="link.isVisible !== false ? 'mdi:eye-outline' : 'mdi:eye-off-outline'" size="25" class="text-muted-foreground" />
               </button>
               <button aria-label="Update Link" class="btn-ghost p-0.5!" @click="handleUpdateLink(link)">
-                <icon name="mdi:circle-edit-outline" size="25" class="text-primary" />
+                <icon name="mdi:circle-edit-outline" size="25" class="text-caption-info" />
               </button>
               <button aria-label="Delete Link" class="btn-ghost p-0.5!" @click="handleDeleteLink(link.id!)">
-                <icon name="mdi:remove-circle-outline" size="25" class="text-danger" />
+                <icon name="mdi:remove-circle-outline" size="25" class="text-caption-danger" />
               </button>
             </div>
           </div>

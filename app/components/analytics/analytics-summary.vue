@@ -1,14 +1,14 @@
 <template>
-  <div class="card flex flex-col gap-4">
+  <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:p-8">
     <h3>
       Summary
     </h3>
 
-    <div class="flex flex-col gap-2">
-      <div class="flex flex-col justify-between gap-2 p-2 pt-0 md:flex-row">
+    <div class="flex flex-col gap-4">
+      <div class="flex flex-col justify-between gap-2 md:flex-row">
         <div class="grid grid-cols-2 gap-2 md:grid-cols-4 md:justify-items-center">
           <div v-for="item in summaryItems" :key="item.label" class="navigation-group">
-            <icon :name="item.icon" size="30" class="shrink-0 text-primary" />
+            <icon :name="item.icon" size="30" class="text-caption-info shrink-0" />
             <div class="flex flex-col items-start">
               <p class="text-caption">
                 {{ item.label }}
@@ -24,7 +24,7 @@
         </button>
       </div>
 
-      <div class="card flex flex-col gap-2">
+      <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:p-8">
         <h4>
           Page Views Over Time
         </h4>
@@ -33,7 +33,7 @@
         <AnalyticsLineChart v-else :chart-data="pageViewsChartData" />
       </div>
 
-      <div class="card flex flex-col gap-2">
+      <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:p-8">
         <h4>
           Traffic Sources
         </h4>
@@ -73,7 +73,7 @@
                     {{ stat.count }}
                   </td>
                   <td class="px-4 py-2 text-right text-sm">
-                    <span class="inline-flex items-center rounded-full border bg-primary/20 px-2 py-1 text-xs font-medium text-primary">{{ stat.percentage }}%</span>
+                    <span class="text-caption-info inline-flex items-center rounded-full border bg-primary/20 px-2 py-1 text-xs font-medium">{{ stat.percentage }}%</span>
                   </td>
                 </tr>
               </tbody>
@@ -82,8 +82,8 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-1 gap-2 md:grid-cols-2">
-        <div class="card flex flex-col gap-2">
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:p-8">
           <h4>
             Link Clicks
           </h4>
@@ -92,7 +92,7 @@
           <AnalyticsBarChart v-else :chart-data="linkClicksChartData" />
         </div>
 
-        <div class="card flex flex-col gap-2">
+        <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:p-8">
           <h4>
             Social Icon Clicks
           </h4>
