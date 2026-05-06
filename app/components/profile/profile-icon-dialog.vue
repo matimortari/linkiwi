@@ -1,5 +1,5 @@
 <template>
-  <Dialog :is-open="isIconDialogOpen" title="Add Social Icon" @update:is-open="resetForm">
+  <Dialog :is-open="isIconDialogOpen" title="Add Social Icon" @update:is-open="emit('close')">
     <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
       <span class="text-sm font-medium">Select Platform</span>
 
