@@ -2,12 +2,12 @@
   <section
     id="hero" v-motion
     :initial="{ opacity: 0, y: -40 }" :visible-once="{ opacity: 1, y: 0 }"
-    :duration="800" class="relative flex min-h-screen w-full flex-col items-center justify-between gap-8 overflow-hidden border-b md:flex-row"
+    :duration="800" class="relative flex min-h-screen w-full items-center justify-between gap-8 overflow-hidden border-b"
   >
     <img src="/assets/hero-backdrop.svg" alt="Hero background" class="hero-backdrop" aria-hidden="true">
 
     <div class="section-shell hero-shell">
-      <header class="z-1 flex flex-col items-start gap-4 text-start">
+      <header class="z-1 flex flex-col items-center gap-6 text-center md:items-start md:text-start">
         <h1>
           Keep all your stuff together!
         </h1>
@@ -16,20 +16,21 @@
           in one place. Create and customize your page and share it with your audience.
         </p>
 
-        <div class="flex flex-wrap items-center gap-4">
+        <div class="flex flex-wrap items-center justify-center gap-4 md:justify-start">
           <nuxt-link to="/sign-in" class="btn-primary">
             <span>Get Started Now</span>
-            <icon name="mdi:arrow-right" size="22" />
+            <icon name="mdi:arrow-right" size="25" />
           </nuxt-link>
 
           <nuxt-link to="#product" class="btn-ghost border!">
             <span>Learn More</span>
-            <icon name="mdi:arrow-down" size="18" />
+            <icon name="mdi:arrow-down" size="25" />
           </nuxt-link>
         </div>
       </header>
 
-      <div class="hero-preview-wrap">
+      <!-- Controlled bleed wrapper for the carousel -->
+      <div class="flex w-full translate-y-24 justify-center md:translate-y-52">
         <Carousel />
       </div>
     </div>
@@ -61,14 +62,14 @@
             </div>
           </div>
 
-          <div class="-right-8 -bottom-3 z-10 navigation-group hidden gap-1.5 rounded-full border bg-card p-4 whitespace-nowrap shadow-sm backdrop-blur-sm md:absolute">
+          <div class="-right-8 -bottom-3 z-10 navigation-group hidden gap-1.5 rounded-full border bg-card p-4 whitespace-nowrap shadow-sm backdrop-blur-sm md:absolute md:flex">
             <icon name="mdi:link-variant" size="20" class="text-primary" />
             <span class="text-xs font-medium">linkiwi.app/alexjohnson</span>
           </div>
         </div>
       </div>
 
-      <div class="order-2 flex flex-col gap-4 text-start">
+      <div class="order-2 flex flex-col items-center gap-6 text-center md:items-start md:text-start">
         <p class="text-lead">
           Customize your page with your own style and share your unique URL.
           Whether you're a creator, business, or influencer, LinKiwi makes it
@@ -76,7 +77,7 @@
         </p>
 
         <div class="flex flex-col gap-2">
-          <div v-for="bullet in PRODUCT_BULLETS" :key="bullet.description" class="navigation-group">
+          <div v-for="bullet in PRODUCT_BULLETS" :key="bullet.description" class="navigation-group text-start">
             <div class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-secondary/15">
               <icon :name="bullet.icon" size="20" class="text-secondary" />
             </div>
@@ -101,15 +102,15 @@
       </div>
 
       <div class="section-grid">
-        <div class="order-2 flex flex-col gap-4 text-start md:order-1">
+        <div class="order-2 flex flex-col items-center gap-4 text-center md:order-1 md:items-start md:text-start">
           <p class="text-lead">
             Get insights into how your audience engages with your content.
             Track views, clicks, and traffic sources all in one place.
             Make data-driven decisions to optimize your online presence.
           </p>
 
-          <div class="flex flex-col gap-2">
-            <div v-for="bullet in ANALYTICS_BULLETS" :key="bullet.description" class="navigation-group">
+          <div class="flex flex-col gap-3">
+            <div v-for="bullet in ANALYTICS_BULLETS" :key="bullet.description" class="navigation-group text-start">
               <div class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-secondary/15">
                 <icon :name="bullet.icon" size="20" class="text-secondary" />
               </div>
@@ -118,17 +119,17 @@
           </div>
         </div>
 
-        <div class="order-1 flex items-center justify-center md:order-2">
+        <div class="order-1 flex w-full items-center justify-center md:order-2">
           <div class="relative w-full max-w-md">
             <div class="overlay relative space-y-2 backdrop-blur-sm">
               <div class="grid grid-cols-2 gap-2">
-                <div v-for="item in MOCK_ANALYTICS" :key="item.label" class="card navigation-group">
-                  <icon :name="item.icon" size="30" class="shrink-0 text-primary" />
-                  <div class="flex flex-col items-start text-start">
+                <div v-for="item in MOCK_ANALYTICS" :key="item.label" class="card flex items-start gap-4">
+                  <icon :name="item.icon" size="30" class="text-caption-info shrink-0" />
+                  <div class="flex h-full flex-1 flex-col items-start text-start">
                     <p class="text-caption">
                       {{ item.label }}
                     </p>
-                    <span class="text-lg font-semibold">{{ item.value }}</span>
+                    <span class="mt-auto w-full self-end text-end text-lg font-semibold">{{ item.value }}</span>
                   </div>
                 </div>
               </div>
@@ -154,7 +155,7 @@
     <div class="cta-wrapper-grid" />
     <div class="cta-wrapper-vignette" />
 
-    <div class="flex flex-col items-center gap-4 rounded-3xl border border-muted/60 bg-background/80 p-12 shadow-lg backdrop-blur-sm">
+    <div class="flex flex-col items-center gap-4 rounded-3xl border border-muted/60 bg-background/80 p-8 shadow-lg backdrop-blur-sm md:p-12">
       <h2>
         Ready to Build Your Page?
       </h2>
@@ -186,12 +187,13 @@ definePageMeta({ middleware: "guest" })
 <style scoped>
 h1 {
   font-family: var(--font-display);
-  line-height: 3.2rem;
+  line-height: 1.2;
   max-width: 28rem;
+  font-size: clamp(2.5rem, 8vw, 3.75rem);
 }
 h2 {
-  font-size: clamp(1.85rem, 3.5vw, 2.4rem);
-  line-height: 1.1;
+  font-size: clamp(1.85rem, 5vw, 2.4rem);
+  line-height: 1.2;
 }
 
 .section-shell {
@@ -202,18 +204,20 @@ h2 {
 }
 
 .hero-shell {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 2rem;
-  padding-block: 4rem;
+  gap: 3rem;
+  padding-top: 8rem;
+  padding-bottom: 0;
 }
 
 .section-header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 2rem;
+  gap: 0.75rem;
+  margin-bottom: 3rem;
 }
 
 .section-grid {
@@ -221,7 +225,7 @@ h2 {
   grid-template-columns: 1fr;
   align-items: center;
   justify-items: center;
-  gap: 2rem;
+  gap: 3rem;
 }
 
 .platform-card {
@@ -257,8 +261,10 @@ h2 {
   }
 
   .hero-shell {
+    display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(320px, 520px);
     gap: 3rem;
+    padding-block: 6rem;
   }
 
   .section-grid {
@@ -267,8 +273,7 @@ h2 {
   }
 
   h1 {
-    line-height: 4.5rem;
-    font-size: 3.75rem;
+    line-height: 1.1;
   }
 }
 
@@ -314,6 +319,7 @@ h2 {
   background-color: color-mix(in srgb, var(--primary) 10%, transparent);
   padding: 0.25rem 0.75rem;
   font-size: 0.75rem;
+  letter-spacing: 0.05em;
   font-weight: 600;
   text-transform: uppercase;
   color: var(--primary);
