@@ -8,12 +8,13 @@ export function useAnalyticsData() {
     const result: Record<string, number> = {}
     for (const item of items) {
       const raw = item[dateKey]
-      const date = new Date(raw as string | Date)
+      const date = new Date(raw)
       if (Number.isNaN(date.getTime())) {
         continue
       }
+
       const key = date.toISOString().split("T")[0]
-      if (typeof key === "string" && key) {
+      if (key) {
         result[key] = (result[key] ?? 0) + 1
       }
     }
@@ -30,14 +31,9 @@ export function useAnalyticsData() {
     const viewsByDate = groupByDate(pageViews.value, "createdAt")
     const linksByDate = groupByDate(linkClicks.value, "createdAt")
     const iconsByDate = groupByDate(iconClicks.value, "createdAt")
-    const allDates = [...new Set([...Object.keys(viewsByDate), ...Object.keys(linksByDate), ...Object.keys(iconsByDate)])].toSorted()
+    const allDates = [...new Set([...Object.keys(viewsByDate), ...Object.keys(linksByDate), ...Object.keys(iconsByDate)])].sort((a, b) => a.localeCompare(b))
 
-    return allDates.map((date: string) => ({
-      date,
-      pageViews: viewsByDate[date] ?? 0,
-      linkClicks: linksByDate[date] ?? 0,
-      iconClicks: iconsByDate[date] ?? 0,
-    }))
+    return allDates.map((date: string) => ({ date, pageViews: viewsByDate[date] ?? 0, linkClicks: linksByDate[date] ?? 0, iconClicks: iconsByDate[date] ?? 0 }))
   })
 
   // Metrics
@@ -46,16 +42,13 @@ export function useAnalyticsData() {
   const clickRate = computed(() => totalViews.value ? ((totalClicks.value / totalViews.value) * 100).toFixed(2) : "0")
   const joinedAt = computed(() => userStore.user?.createdAt)
 
-  // Chart data
+  // Chart data builder
   function buildChart(values: number[], labels: string[], label: string) {
     if (!values.some(v => v > 0)) {
       return null
     }
 
-    return {
-      labels,
-      datasets: [{ label, data: values, backgroundColor: "#de896d" }],
-    }
+    return { labels, datasets: [{ label, data: values, backgroundColor: "#de896d" }] }
   }
 
   const pageViewsChartData = computed(() => stats.value.length ? buildChart(stats.value.map(s => s.pageViews), stats.value.map(s => s.date), "Page Views") : null)
@@ -74,43 +67,31 @@ export function useAnalyticsData() {
         {
           label: "Traffic Sources",
           data: referrers.map((r: any) => r.count),
-          backgroundColor: [
-            "#36a2eb",
-            "#ff6384",
-            "#4bc0c0",
-            "#ff9f40",
-            "#9966ff",
-            "#ffcd56",
-          ],
+          backgroundColor: ["#36a2eb", "#ff6384", "#4bc0c0", "#ff9f40", "#9966ff", "#ffcd56"],
         },
       ],
     }
   })
 
-  const normalizedRecords = computed<AnalyticsRecordSchema[]>(() => {
-    const res = analyticsStore.analytics
-
-    return [
-      ...(res?.pageViews?.map((pv: any) => ({
-        type: "pageView" as const,
-        userId: String(pv.userId),
-        createdAt: pv.createdAt ? String(pv.createdAt) : undefined,
-      }))
-      ?? []),
-      ...(res?.linkClicks?.map((lc: any) => ({
-        type: "link" as const,
-        userId: String(lc.userLink.userId),
-        id: lc.userLinkId ? String(lc.userLinkId) : undefined,
-        createdAt: lc.createdAt ? String(lc.createdAt) : undefined,
-      })) ?? []),
-      ...(res?.iconClicks?.map((ic: any) => ({
-        type: "icon" as const,
-        userId: String(ic.userIcon.userId),
-        id: ic.userIconId ? String(ic.userIconId) : undefined,
-        createdAt: ic.createdAt ? String(ic.createdAt) : undefined,
-      })) ?? []),
-    ]
-  })
+  const normalizedRecords = computed<AnalyticsRecordSchema[]>(() => [
+    ...(analyticsStore.analytics.pageViews?.map((pv: any) => ({
+      type: "pageView",
+      userId: String(pv.userId),
+      createdAt: pv.createdAt ? String(pv.createdAt) : undefined,
+    })) ?? []),
+    ...(analyticsStore.analytics.linkClicks?.map((lc: any) => ({
+      type: "link",
+      userId: String(lc.userLink.userId),
+      id: lc.userLinkId ? String(lc.userLinkId) : undefined,
+      createdAt: lc.createdAt ? String(lc.createdAt) : undefined,
+    })) ?? []),
+    ...(analyticsStore.analytics.iconClicks?.map((ic: any) => ({
+      type: "icon",
+      userId: String(ic.userIcon.userId),
+      id: ic.userIconId ? String(ic.userIconId) : undefined,
+      createdAt: ic.createdAt ? String(ic.createdAt) : undefined,
+    })) ?? []),
+  ])
 
   return {
     stats,
