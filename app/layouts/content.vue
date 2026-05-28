@@ -1,5 +1,5 @@
 <template>
-  <ContentMasthead :is-toc-open="isTocOpen" @toggle-toc="isTocOpen = !isTocOpen" />
+  <Masthead :is-toc-open="isTocOpen" @toggle-toc="isTocOpen = !isTocOpen" />
 
   <div class="content-shell flex min-h-screen overflow-x-hidden border-b">
     <div v-if="isTocOpen" aria-hidden="true" class="fixed inset-0 z-30 bg-black/50 backdrop-blur-sm xl:hidden" @click="isTocOpen = false" />
@@ -17,7 +17,7 @@
         <slot />
       </article>
 
-      <ContentTableOfContents :headers="headers" :is-open="isTocOpen" :header-classes="headerClasses" @select="scrollToHeader" />
+      <TableOfContents :headers="headers" :is-open="isTocOpen" :header-classes="headerClasses" @select="scrollToHeader" />
     </div>
   </div>
 
