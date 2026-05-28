@@ -15,8 +15,8 @@
       </header>
 
       <div class="flex flex-col gap-4">
-        <PreferencesAppearance />
-        <PreferencesAccount />
+        <PreferencesAppearanceOptions />
+        <PreferencesAccountOptions />
       </div>
     </div>
 
