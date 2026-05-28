@@ -1,14 +1,14 @@
 <template>
-  <div v-if="preset" class="carousel-host -mb-80 flex items-center justify-center select-none md:w-full md:justify-end">
+  <div v-if="preset" class="flex w-full items-center justify-center select-none md:justify-end">
     <transition name="carousel" mode="out-in">
-      <div :key="preset.slug" class="phone-mockup relative flex flex-col overflow-hidden rounded-[2.5rem] border-4 shadow-lg md:my-4 md:block">
+      <div :key="preset.slug" class="phone-mockup relative flex flex-col overflow-hidden rounded-[2.5rem] border-4 shadow-xl md:my-4">
         <div class="absolute -top-1 z-10 w-full rounded-t-[2.5rem] bg-linear-to-r from-primary to-secondary pb-1">
           <div class="flex flex-row items-center justify-between rounded-t-[2.5rem] bg-[#111016] p-4 pb-2">
             <div class="navigation-group">
               <span v-for="i in 3" :key="i" class="size-2.5 rounded-full bg-[#3b3b41]" />
             </div>
 
-            <span class="rounded-2xl bg-[#3b3b41] p-1 font-mono text-xs text-[#ebe8e8]">@{{ preset.slug }}</span>
+            <span class="rounded-2xl bg-[#3b3b41] p-1 px-2.5 font-mono text-xs text-[#ebe8e8]">@{{ preset.slug }}</span>
           </div>
         </div>
 
@@ -61,13 +61,9 @@ function getPresetImage(filename: string): string {
 </script>
 
 <style scoped>
-.carousel-host {
-  perspective: 1200px;
-}
-
 .phone-mockup {
-  width: clamp(17rem, 82vw, 23rem);
-  height: clamp(34rem, 84vw, 39rem);
+  width: clamp(18rem, 85vw, 22rem);
+  height: clamp(38rem, 85vw, 42rem);
   transform-origin: center;
 }
 
@@ -113,7 +109,7 @@ function getPresetImage(filename: string): string {
 @media (min-width: 768px) {
   .phone-mockup {
     width: clamp(20rem, 34vw, 24rem);
-    height: clamp(36rem, 48vw, 41rem);
+    height: clamp(38rem, 48vw, 43rem);
   }
 }
 </style>

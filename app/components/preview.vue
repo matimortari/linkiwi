@@ -38,7 +38,7 @@
     <div
       v-motion :initial="{ opacity: 0, x: 20 }"
       :visible="{ opacity: 1, x: 0 }" :duration="800"
-      :style="backgroundStyle" class="scroll-hide relative hidden h-150 w-80 overflow-x-hidden rounded-[2.5rem] border-4 shadow-lg md:my-4 md:block 2xl:w-96"
+      :style="backgroundStyle" class="scroll-hide relative hidden h-150 w-80 overflow-x-hidden rounded-[2.5rem] border-4 shadow-xl md:my-4 md:block 2xl:w-96"
     >
       <div class="sticky top-2 left-1/2 h-2 w-24 -translate-x-1/2 rounded-full bg-black" />
       <div class="sticky top-2 w-full px-4">

@@ -14,7 +14,7 @@ export const PRODUCT_BULLETS = [
 export const ANALYTICS_BULLETS = [
   { description: "Real-time tracking for page views and clicks", icon: "mdi:clock-star-four-points-outline" },
   { description: "Monitor link and social icon clicks", icon: "mdi:cursor-default-click-outline" },
-  { description: "See click rates and performance per individual link", icon: "mdi:chart-bar" },
+  { description: "See click rates and performance per link", icon: "mdi:chart-bar" },
 ]
 
 export const SHARE_PLATFORMS = [
