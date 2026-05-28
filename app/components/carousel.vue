@@ -15,7 +15,7 @@
         <div class="scroll-hide flex h-full flex-1 flex-col items-center gap-2 overflow-y-auto px-4 py-24 text-center" :style="backgroundStyle">
           <img :src="getPresetImage(preset.image || '')" :alt="preset.slug" :style="profilePictureStyle" class="size-24">
           <p :style="slugStyle">
-            /{{ preset.slug }}
+            @{{ preset.slug }}
           </p>
 
           <p :style="descriptionStyle">

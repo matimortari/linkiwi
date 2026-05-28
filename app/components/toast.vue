@@ -25,18 +25,18 @@ const { toasts, dismiss } = useToast()
 
 function getToastIcon(type: Toast["type"]) {
   if (type === "success") {
-    return "mdi:check-circle"
+    return "mdi:check-circle-outline"
   }
 
   if (type === "warning") {
-    return "mdi:warning-circle"
+    return "mdi:alert-circle-outline"
   }
 
   if (type === "info") {
-    return "mdi:info-circle"
+    return "mdi:info-circle-outline"
   }
 
-  return "mdi:x-circle"
+  return "mdi:close-circle-outline"
 }
 </script>
 
