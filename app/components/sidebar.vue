@@ -72,7 +72,7 @@
     </div>
   </aside>
 
-  <UserDialog :is-open="isUserDialogOpen" @close="closeDialog('user')" />
+  <UserSettingsDialog :is-open="isUserDialogOpen" @close="closeDialog('user')" />
   <UserShareDialog :is-open="isShareDialogOpen" @close="closeDialog('share')" />
 </template>
 
