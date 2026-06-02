@@ -58,13 +58,13 @@
             </div>
             <div class="flex flex-col items-start gap-1 text-start">
               <span class="text-sm font-medium text-[#eeeeee]">@alexjohnson</span>
-              <span class="text-xs text-white/50">linkiwi.app/alexjohnson</span>
+              <span class="text-xs text-white/50">{{ baseURL.replace(/^https?:\/\//, "") }}/alexjohnson</span>
             </div>
           </div>
 
-          <div class="-right-8 -bottom-3 z-10 navigation-group hidden gap-1.5 rounded-full border bg-card p-4 whitespace-nowrap shadow-sm backdrop-blur-sm md:absolute md:flex">
+          <div class="-right-8 -bottom-8 z-10 navigation-group hidden gap-1.5 rounded-full border bg-card p-4 whitespace-nowrap shadow-sm backdrop-blur-sm md:absolute md:flex">
             <icon name="mdi:link-variant" size="20" class="text-primary" />
-            <span class="text-xs font-medium">linkiwi.app/alexjohnson</span>
+            <span class="text-xs font-medium">{{ baseURL.replace(/^https?:\/\//, "") }}/alexjohnson</span>
           </div>
         </div>
       </div>
@@ -232,7 +232,7 @@ h2 {
   position: relative;
   z-index: 1;
   transform-origin: bottom center;
-  box-shadow: 0 10px 24px -18px rgba(0, 0, 0, 0.9);
+  box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.15);
   transition:
     transform var(--transition),
     box-shadow var(--transition);
@@ -252,7 +252,7 @@ h2 {
 }
 .platform-card:hover {
   transform: translateY(-0.2rem) scale(1.02);
-  box-shadow: 0 16px 32px -18px rgba(0, 0, 0, 0.85);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.12);
 }
 
 @media (min-width: 768px) {
@@ -314,7 +314,7 @@ h2 {
 }
 
 .section-badge {
-  border-radius: 9999px;
+  border-radius: var(--border-radius);
   border: 1px solid color-mix(in srgb, var(--primary) 30%, transparent);
   background-color: color-mix(in srgb, var(--primary) 10%, transparent);
   padding: 0.25rem 0.75rem;

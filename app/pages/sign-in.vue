@@ -89,13 +89,9 @@ useHead({
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(900px circle at 80% 20%, color-mix(in srgb, var(--secondary) 20%, transparent), transparent 55%),
-    radial-gradient(700px circle at 20% 80%, color-mix(in srgb, var(--primary) 20%, transparent), transparent 60%),
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--card) 85%, transparent),
-      color-mix(in srgb, var(--background) 95%, transparent)
-    );
+    radial-gradient(900px circle at 80% 20%, color-mix(in srgb, var(--secondary) 15%, transparent), transparent 55%),
+    radial-gradient(700px circle at 20% 80%, color-mix(in srgb, var(--primary) 12%, transparent), transparent 60%),
+    linear-gradient(180deg, color-mix(in srgb, var(--card) 40%, transparent), var(--background));
   z-index: -1;
 }
 
@@ -110,9 +106,11 @@ useHead({
   .auth-grid {
     min-height: calc(100vh - 8rem);
     border: var(--border-style);
-    border-radius: 1.5rem;
-    background-color: color-mix(in srgb, var(--background) 85%, transparent);
-    box-shadow: 0 25px 60px -40px rgba(0, 0, 0, 0.9);
+    border-radius: var(--border-radius);
+    background-color: var(--background);
+    box-shadow:
+      0 20px 40px -15px rgba(0, 0, 0, 0.06),
+      0 1px 3px rgba(0, 0, 0, 0.02);
     backdrop-filter: blur(8px);
     grid-template-columns: minmax(0, 1fr) minmax(430px, 60%);
   }
@@ -122,13 +120,13 @@ useHead({
   display: none;
   position: relative;
   min-height: 100%;
-  border-left: 1px solid var(--muted);
+  border-left: var(--border-style);
 }
 .auth-aside::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(35deg, rgba(0, 0, 0, 0.55), transparent 60%);
+  background: linear-gradient(35deg, rgba(0, 0, 0, 0.5), transparent 60%);
 }
 
 @media (min-width: 768px) {

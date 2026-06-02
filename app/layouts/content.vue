@@ -48,9 +48,11 @@ function scrollToHeader(id: string) {
   margin-bottom: 3rem;
   max-width: min(980px, 100%);
   border: 1px solid color-mix(in srgb, var(--muted) 65%, transparent);
-  border-radius: 1.25rem;
-  background-color: color-mix(in srgb, var(--background) 90%, transparent);
-  box-shadow: 0 20px 50px -36px rgba(0, 0, 0, 0.85);
+  border-radius: var(--border-radius);
+  background-color: var(--background);
+  box-shadow:
+    0 10px 30px -10px rgba(0, 0, 0, 0.1),
+    0 1px 3px rgba(0, 0, 0, 0.05);
   padding: clamp(1.2rem, 2vw, 2rem);
   padding-inline: 1rem;
   padding-bottom: 2.5rem;
@@ -144,7 +146,7 @@ function scrollToHeader(id: string) {
   background-color: color-mix(in srgb, var(--card) 80%, transparent);
   margin: 1.2rem 0;
   padding: 0.9rem;
-  border-radius: 0 0.75rem 0.75rem 0;
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
   font-style: italic;
   color: var(--foreground);
 }
@@ -160,7 +162,7 @@ function scrollToHeader(id: string) {
   color: var(--foreground);
   font-family: var(--font-mono);
   font-size: 0.8rem;
-  border-radius: 0.35rem;
+  border-radius: calc(var(--border-radius) * 0.5);
   padding: 0.18rem 0.42rem;
   border: 1px solid var(--muted);
 }
@@ -171,7 +173,7 @@ function scrollToHeader(id: string) {
 :deep(.prose) pre {
   background-color: color-mix(in srgb, var(--card) 80%, transparent);
   border: 1px solid var(--muted);
-  border-radius: 0.9rem;
+  border-radius: var(--border-radius);
   padding: 1rem;
   margin: 1.1rem 0;
   overflow-x: auto;

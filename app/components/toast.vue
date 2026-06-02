@@ -66,11 +66,13 @@ function getToastIcon(type: Toast["type"]) {
   justify-content: space-between;
   gap: 0.75rem;
   padding: 0.875rem 1rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: var(--border-radius);
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -4px rgba(0, 0, 0, 0.1);
   pointer-events: auto;
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: var(--border-style);
 }
 
 .toast-content {
@@ -85,6 +87,7 @@ function getToastIcon(type: Toast["type"]) {
   font-size: 0.875rem;
   line-height: 1.25rem;
   word-break: break-word;
+  font-weight: 500;
 }
 
 .toast-close {
@@ -95,35 +98,36 @@ function getToastIcon(type: Toast["type"]) {
   border: none;
   background: transparent;
   cursor: pointer;
-  border-radius: 0.25rem;
+  border-radius: calc(var(--border-radius) * 0.5);
   flex-shrink: 0;
   transition: background-color 0.2s;
+  color: inherit;
 }
 
 .toast-close:hover {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: color-mix(in srgb, var(--foreground) 12%, transparent);
 }
 
 .toast-success {
-  background-color: color-mix(in srgb, var(--success) 50%, transparent);
+  background-color: var(--success);
   color: var(--success-foreground);
 }
 .toast-error {
-  background-color: color-mix(in srgb, var(--danger) 50%, transparent);
+  background-color: var(--danger);
   color: var(--danger-foreground);
 }
 .toast-warning {
-  background-color: color-mix(in srgb, var(--warning) 50%, transparent);
+  background-color: var(--warning);
   color: var(--warning-foreground);
 }
 .toast-info {
-  background-color: color-mix(in srgb, var(--info) 50%, transparent);
+  background-color: var(--info);
   color: var(--info-foreground);
 }
 
 .toast-enter-active,
 .toast-leave-active {
-  transition: all 0.3s ease;
+  transition: all var(--transition);
 }
 .toast-enter-from {
   opacity: 0;
@@ -134,6 +138,6 @@ function getToastIcon(type: Toast["type"]) {
   transform: translateX(100%);
 }
 .toast-move {
-  transition: transform 0.3s ease;
+  transition: transform var(--transition);
 }
 </style>

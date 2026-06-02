@@ -1,6 +1,49 @@
 @import "tailwindcss";
 
+/* Color palette and core design primitives */
 :root {
+  --neutral-100: #f9fafb;
+  --neutral-200: #f3f4f6;
+  --neutral-300: #e5e7eb;
+  --neutral-400: #9ca3af;
+  --neutral-500: #6b7280;
+  --neutral-600: #4b5563;
+  --neutral-700: #374151;
+  --neutral-800: #111827;
+  --neutral-900: #030712;
+  --brand-primary: #77774a;
+  --brand-secondary: #474b36;
+  --red-dark: #8d2525;
+  --red-light: #daa0a0;
+  --green-dark: #0a6647;
+  --green-light: #98cfb8;
+  --orange-dark: #8f4210;
+  --orange-light: #e6cfa3;
+  --blue-dark: #4872a5;
+  --blue-light: #b7c9dd;
+
+  --border-style: 1px solid var(--muted);
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Theme tokens derived from core primitives */
+  --background: var(--neutral-100);
+  --foreground: var(--neutral-900);
+  --card: var(--neutral-200);
+  --input: var(--neutral-300);
+  --muted: var(--neutral-400);
+  --muted-foreground: var(--neutral-600);
+  --primary: var(--brand-primary);
+  --secondary: var(--brand-secondary);
+  --danger: var(--red-light);
+  --danger-foreground: var(--red-dark);
+  --success: var(--green-light);
+  --success-foreground: var(--green-dark);
+  --warning: var(--orange-light);
+  --warning-foreground: var(--orange-dark);
+  --info: var(--blue-light);
+  --info-foreground: var(--blue-dark);
+
+  /* Global resets */
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-default);
@@ -10,47 +53,24 @@
   padding: 0;
 }
 
-:root {
-  --background: #f9fafb;
-  --foreground: #262626;
-  --card: #f3f4f6;
-  --input: #e5e7eb;
-  --muted: #d1d5db;
-  --muted-foreground: #4b5563;
-  --primary: #6c7952;
-  --secondary: #de896d;
-  --danger: #daa0a0;
-  --danger-foreground: #8d2525;
-  --success: #98cfb8;
-  --success-foreground: #0a6647;
-  --warning: #e6cfa3;
-  --warning-foreground: #8f4210;
-  --info: #b7c9dd;
-  --info-foreground: #4872a5;
-
-  --border-style: 1px solid var(--muted);
-  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
 html.dark {
-  --background: #030712;
-  --foreground: #e5e7eb;
-  --card: #111827;
-  --input: #1f2937;
-  --muted: #374151;
-  --muted-foreground: #9ca3af;
-  --primary: #6c7952;
-  --secondary: #de896d;
-  --danger: #8d2525;
-  --danger-foreground: #daa0a0;
-  --success: #0a6647;
-  --success-foreground: #98cfb8;
-  --warning: #8f4210;
-  --warning-foreground: #e6cfa3;
-  --info: #4872a5;
-  --info-foreground: #b7c9dd;
+  --background: var(--neutral-900);
+  --foreground: var(--neutral-200);
+  --card: var(--neutral-800);
+  --input: var(--neutral-700);
+  --muted: var(--neutral-600);
+  --muted-foreground: var(--neutral-400);
+  --danger: var(--red-dark);
+  --danger-foreground: var(--red-light);
+  --success: var(--green-dark);
+  --success-foreground: var(--green-light);
+  --warning: var(--orange-dark);
+  --warning-foreground: var(--orange-light);
+  --info: var(--blue-dark);
+  --info-foreground: var(--blue-light);
 }
 
+/* Theme configuration */
 @theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -74,14 +94,11 @@ html.dark {
   --font-mono: "JetBrains Mono", monospace;
 
   --border-radius: 1rem;
-
   --default-transition-duration: 300ms;
   --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/*
-  Global resets and accessibility
-*/
+/* Accessibility */
 @layer base {
   button:not(:disabled),
   [role="button"]:not(:disabled) {
@@ -97,14 +114,12 @@ html.dark {
   }
 
   *:focus-visible {
-    outline: solid 2px var(--muted);
+    outline: solid 2px var(--primary);
     border-radius: 0.25rem;
   }
 }
 
-/*
-  Typography
-*/
+/* Typography */
 h1 {
   font-size: 2.5rem;
   line-height: 2.5rem;
@@ -157,9 +172,7 @@ h6 {
   color: var(--info-foreground);
 }
 
-/*
-  UI elements
-*/
+/* UI elements */
 .card {
   background-color: var(--card);
   border: var(--border-style);
@@ -198,30 +211,22 @@ h6 {
   overflow-y: auto;
 }
 
-/*
-  Form elements
-*/
+/* Form elements */
 input,
 textarea,
 select {
   appearance: none;
   background-color: var(--input);
-  color: var(--muted-foreground);
+  color: var(--foreground);
   border: var(--border-style);
-  accent-color: var(--muted);
+  accent-color: var(--primary);
   border-radius: 5rem;
   padding: 0.5rem;
   font-size: 0.875rem;
   transition: all var(--transition);
 }
-
-input:hover,
-textarea:hover,
-select:hover,
-input:focus,
-textarea:focus,
-select:focus {
-  border-color: var(--muted-foreground);
+input::placeholder {
+  color: var(--muted-foreground);
 }
 
 input[type="checkbox"],
@@ -239,7 +244,7 @@ input[type="checkbox"]:checked::before {
   justify-content: center;
   align-items: center;
   font-size: 1.5rem;
-  color: var(--success);
+  color: var(--success-foreground);
   width: 100%;
   height: 100%;
 }
@@ -274,9 +279,7 @@ input[type="radio"]:checked::after {
   transform: translate(-50%, -50%) scale(1);
 }
 
-/*
-  Button elements
-*/
+/* Button elements */
 :is(.btn, .btn-primary, .btn-secondary, .btn-danger, .btn-success, .btn-warning, .btn-info, .btn-ghost) {
   display: flex;
   flex-direction: row;
@@ -310,11 +313,11 @@ input[type="radio"]:checked::after {
 }
 .btn-primary {
   background-color: var(--primary);
-  color: #eeeeee;
+  color: #ffffff;
 }
 .btn-secondary {
   background-color: var(--secondary);
-  color: #eeeeee;
+  color: #ffffff;
 }
 .btn-danger {
   background-color: var(--danger);
@@ -341,16 +344,14 @@ input[type="radio"]:checked::after {
   background-color: color-mix(in srgb, var(--muted) 60%, transparent);
 }
 
-/*
-  Color matching utilities
-*/
+/* Color matching utilities */
 .bg-primary {
   background-color: var(--primary);
-  color: #eeeeee;
+  color: #ffffff;
 }
 .bg-secondary {
   background-color: var(--secondary);
-  color: #eeeeee;
+  color: #ffffff;
 }
 .bg-muted {
   background-color: var(--muted);
@@ -378,7 +379,7 @@ input[type="radio"]:checked::after {
 */
 .scroll-area {
   scrollbar-width: thin;
-  scrollbar-color: var(--muted) var(--background);
+  scrollbar-color: var(--muted-foreground) transparent;
 }
 
 ::selection {
