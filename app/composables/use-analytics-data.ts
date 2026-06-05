@@ -48,7 +48,7 @@ export function useAnalyticsData() {
       return null
     }
 
-    return { labels, datasets: [{ label, data: values, backgroundColor: "#de896d" }] }
+    return { labels, datasets: [{ label, data: values, backgroundColor: "#474b36" }] }
   }
 
   const pageViewsChartData = computed(() => stats.value.length ? buildChart(stats.value.map(s => s.pageViews), stats.value.map(s => s.date), "Page Views") : null)

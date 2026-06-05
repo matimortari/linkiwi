@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto w-full max-w-4xl space-y-8 px-4 py-24">
+  <div class="mx-auto w-full max-w-5xl space-y-8 px-4 py-24">
     <header class="space-y-2 border-b pb-4 text-center md:text-start">
       <h1>
         Brand Resources
@@ -9,34 +9,33 @@
       </p>
     </header>
 
-    <div class="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+    <div class="grid gap-2 md:grid-cols-2">
       <div class="space-y-2">
         <h3 class="text-base! tracking-widest text-muted-foreground uppercase">
           Symbols
         </h3>
 
-        <article class="card space-y-2 p-2!">
-          <div class="flex items-center justify-center rounded-2xl border p-10" :class="selectedSymbol.bgClass">
+        <div class="card space-y-2 p-2!">
+          <div class="flex h-56 items-center justify-center rounded-lg border p-10" :class="selectedSymbol.bgClass">
             <img :src="selectedSymbol.image" :alt="selectedSymbol.name" class="h-16 w-auto object-contain">
           </div>
 
-          <div class="flex items-center justify-between">
+          <div class="flex items-center justify-between border-t p-2">
             <div class="navigation-group">
               <button
                 v-for="(asset, index) in SYMBOLS" :key="asset.name"
-                :aria-label="`Show ${asset.name}`" class="size-2.5 rounded-full transition-all hover:ring-2 hover:ring-primary/50"
-                :class="index === selectedSymbolIndex ? 'bg-primary ring-2 ring-primary/30' : 'bg-muted-foreground/30 ring-1 ring-muted'" @click="selectedSymbolIndex = index"
+                class="size-2.5 rounded-full transition-all" :class="index === selectedSymbolIndex ? 'bg-primary ring-2 ring-primary/30' : 'bg-muted-foreground/30'"
+                :aria-label="`Show ${asset.name}`" @click="selectedSymbolIndex = index"
               />
             </div>
-
             <div class="navigation-group">
               <span class="text-caption">{{ selectedSymbol.name }}</span>
-              <button :aria-label="`Download ${selectedSymbol.name}`" class="text-muted-foreground transition-colors hover:text-foreground" @click="handleDownloadImage(selectedSymbol, selectedSymbolIndex, symbolActions)">
+              <button :aria-label="`Download ${selectedSymbol.name}`" class="text-muted-foreground transition-colors" @click="handleDownloadImage(selectedSymbol, selectedSymbolIndex, symbolActions)">
                 <icon :name="symbolActions[selectedSymbolIndex]!.icon.value" size="20" />
               </button>
             </div>
           </div>
-        </article>
+        </div>
       </div>
 
       <div class="space-y-2">
@@ -44,49 +43,92 @@
           Wordmarks
         </h3>
 
-        <article class="card space-y-2 p-2!">
-          <div class="flex items-center justify-center rounded-2xl border p-10" :class="selectedWordmark.bgClass">
+        <div class="card space-y-2 p-2!">
+          <div class="flex h-56 items-center justify-center rounded-lg border p-10" :class="selectedWordmark.bgClass">
             <img :src="selectedWordmark.image" :alt="selectedWordmark.name" class="h-16 w-auto object-contain">
           </div>
 
-          <div class="flex items-center justify-between">
+          <div class="flex items-center justify-between border-t px-1 pt-2">
             <div class="navigation-group">
               <button
                 v-for="(asset, index) in WORDMARKS" :key="asset.name"
-                :aria-label="`Show ${asset.name}`" class="size-2.5 rounded-full transition-all hover:ring-2 hover:ring-primary/50"
-                :class="index === selectedWordmarkIndex ? 'bg-primary ring-2 ring-primary/30' : 'bg-muted-foreground/30 ring-1 ring-muted'" @click="selectedWordmarkIndex = index"
+                class="size-2.5 rounded-full transition-all" :class="index === selectedWordmarkIndex ? 'bg-primary ring-2 ring-primary/30' : 'bg-muted-foreground/30'"
+                :aria-label="`Show ${asset.name}`" @click="selectedWordmarkIndex = index"
               />
             </div>
-
             <div class="navigation-group">
               <span class="text-caption">{{ selectedWordmark.name }}</span>
-              <button :aria-label="`Download ${selectedWordmark.name}`" class="text-muted-foreground transition-colors hover:text-foreground" @click="handleDownloadImage(selectedWordmark, selectedWordmarkIndex, wordmarkActions)">
+              <button :aria-label="`Download ${selectedWordmark.name}`" class="text-muted-foreground transition-colors" @click="handleDownloadImage(selectedWordmark, selectedWordmarkIndex, wordmarkActions)">
                 <icon :name="wordmarkActions[selectedWordmarkIndex]!.icon.value" size="20" />
               </button>
             </div>
           </div>
-        </article>
+        </div>
       </div>
     </div>
 
-    <div class="space-y-8">
-      <div v-for="category in COLOR_CATEGORIES" :key="category.name" class="space-y-4">
+    <div class="space-y-2">
+      <h3 class="text-base! tracking-widest text-muted-foreground uppercase">
+        Neutral Colors
+      </h3>
+
+      <div class="grid grid-cols-3 gap-2 md:grid-cols-3 xl:grid-cols-9">
+        <div v-for="(color, index) in NEUTRAL_SCALE" :key="color.name" class="flex flex-col gap-2">
+          <button class="aspect-square w-full rounded-lg border" :style="{ backgroundColor: `var(${color.var})` }" :aria-label="`Copy ${color.value}`" @click="handleCopyColor(color.value, index, neutralActions)" />
+          <div class="flex flex-col px-1">
+            <span class="truncate text-sm font-medium">{{ color.name }}</span>
+            <button class="text-caption flex items-center gap-1 font-mono" @click="handleCopyColor(color.value, index, neutralActions)">
+              <span>{{ color.value }}</span>
+              <icon :name="neutralActions[index]!.icon.value" size="15" class="shrink-0" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid gap-8 md:grid-cols-2">
+      <div class="space-y-2">
         <h3 class="text-base! tracking-widest text-muted-foreground uppercase">
-          {{ category.name }}
+          Brand Colors
         </h3>
 
-        <div class="grid grid-cols-2 gap-4">
-          <div v-for="(color, index) in category.colors" :key="color.name" class="card group flex w-full flex-col items-start gap-2 p-2! md:flex-row md:items-center">
-            <button
-              class="aspect-square w-full shrink-0 rounded-2xl border md:size-24" :style="{ backgroundColor: `var(${color.var})` }"
-              :aria-label="`Copy ${color.name}`" @click="handleCopyColor(color.var, index, category.actions)"
-            />
-            <div class="flex w-full flex-col items-start gap-1.5 px-0.5 md:min-w-0">
-              <span class="w-full truncate text-sm font-semibold">{{ color.name }}</span>
-              <span class="block font-mono text-xs text-muted-foreground">{{ colorValues[color.var] }}</span>
-              <button :aria-label="`Copy ${color.name}`" class="text-muted-foreground transition-colors hover:text-foreground" @click="handleCopyColor(color.var, index, category.actions)">
-                <icon :name="category.actions[index]!.icon.value" size="20" />
+        <div class="flex flex-col gap-2">
+          <div v-for="(color, index) in BRAND_COLORS" :key="color.name" class="flex flex-col gap-2">
+            <button class="aspect-video w-full rounded-lg border" :style="{ backgroundColor: `var(${color.var})` }" :aria-label="`Copy ${color.value}`" @click="handleCopyColor(color.value, index, brandActions)" />
+            <div class="flex flex-col px-1">
+              <span class="truncate text-sm font-medium">{{ color.name }}</span>
+              <button class="text-caption flex items-center gap-1 font-mono" @click="handleCopyColor(color.value, index, brandActions)">
+                <span>{{ color.value }}</span>
+                <icon :name="brandActions[index]!.icon.value" size="15" />
               </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <h3 class="text-base! tracking-widest text-muted-foreground uppercase">
+          Status Colors
+        </h3>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div v-for="(group, index) in STATUS_COLORS" :key="group.name" class="card space-y-2">
+            <span class="block font-semibold text-muted-foreground">{{ group.name }}</span>
+            <div class="flex flex-col gap-2">
+              <div class="navigation-group">
+                <button class="size-10 shrink-0 rounded-md border" :style="{ backgroundColor: `var(${group.darkVar})` }" @click="handleCopyColor(group.darkVal, index * 2, statusActions)" />
+                <button class="text-caption flex min-w-0 items-center gap-1 truncate font-mono" @click="handleCopyColor(group.darkVal, index * 2, statusActions)">
+                  <span class="truncate">{{ group.darkVal }}</span>
+                  <icon :name="statusActions[index * 2]!.icon.value" size="15" class="shrink-0" />
+                </button>
+              </div>
+              <div class="navigation-group">
+                <button class="size-10 shrink-0 rounded-md border" :style="{ backgroundColor: `var(${group.lightVar})` }" @click="handleCopyColor(group.lightVal, (index * 2) + 1, statusActions)" />
+                <button class="text-caption flex min-w-0 items-center gap-1 truncate font-mono" @click="handleCopyColor(group.lightVal, (index * 2) + 1, statusActions)">
+                  <span class="truncate">{{ group.lightVal }}</span>
+                  <icon :name="statusActions[(index * 2) + 1]!.icon.value" size="15" class="shrink-0" />
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -98,22 +140,17 @@
 <script setup lang="ts">
 const { public: { baseURL } } = useRuntimeConfig()
 const { createActionHandler } = useActionIcon()
-const { colorMode } = useTheme()
-const colorValues = ref<Record<string, string>>({})
 const selectedWordmarkIndex = ref(0)
 const selectedSymbolIndex = ref(0)
 const symbolActions = SYMBOLS.map(() => createActionHandler("mdi:download"))
 const wordmarkActions = WORDMARKS.map(() => createActionHandler("mdi:download"))
+const neutralActions = NEUTRAL_SCALE.map(() => createActionHandler("mdi:content-copy"))
+const brandActions = BRAND_COLORS.map(() => createActionHandler("mdi:content-copy"))
+const statusActions = Array.from({ length: STATUS_COLORS.length * 2 }, () => createActionHandler("mdi:content-copy"))
 const selectedWordmark = computed(() => WORDMARKS[selectedWordmarkIndex.value] ?? WORDMARKS[0]!)
 const selectedSymbol = computed(() => SYMBOLS[selectedSymbolIndex.value] ?? SYMBOLS[0]!)
 
-const COLOR_CATEGORIES = [
-  { id: "brand", name: "Brand Colors", colors: BRAND_COLORS, actions: BRAND_COLORS.map(() => createActionHandler("mdi:content-copy")) },
-  { id: "neutral", name: "Neutral Colors", colors: NEUTRAL_COLORS, actions: NEUTRAL_COLORS.map(() => createActionHandler("mdi:content-copy")) },
-  { id: "status", name: "Status Colors", colors: STATUS_COLORS, actions: STATUS_COLORS.map(() => createActionHandler("mdi:content-copy")) },
-]
-
-function handleDownloadImage(logo: { name: string, image: string }, index: number, actions: ReturnType<typeof createActionHandler>[]) {
+function handleDownloadImage(logo: { name: string, image: string }, index: number, actions: any[]) {
   if (!actions[index]) {
     return
   }
@@ -125,31 +162,16 @@ function handleDownloadImage(logo: { name: string, image: string }, index: numbe
   actions[index].triggerSuccess()
 }
 
-async function handleCopyColor(colorVar: string, index: number, actions: ReturnType<typeof createActionHandler>[]) {
+async function handleCopyColor(hex: string, index: number, actions: any[]) {
   if (!actions[index]) {
     return
   }
-
-  const value = colorValues.value[colorVar]
-  if (!value || value === "—") {
-    return
-  }
-
-  await actions[index].triggerCopy(value)
+  await actions[index].triggerCopy(hex)
 }
-
-function syncColorValues() {
-  for (const color of COLOR_CATEGORIES.flatMap(c => c.colors)) {
-    colorValues.value[color.var] = getComputedStyle(document.documentElement).getPropertyValue(color.var).trim() || "—"
-  }
-}
-
-onMounted(syncColorValues)
-watch(colorMode, syncColorValues, { flush: "post" })
 
 useHead({
   title: "Brand Resources",
   link: [{ rel: "canonical", href: `${baseURL}/brand` }],
-  meta: [{ name: "description", content: "LinKiwi brand resources and guidelines." }],
+  meta: [{ name: "description", content: "LinKiwi brand assets, resources and color specifications." }],
 })
 </script>

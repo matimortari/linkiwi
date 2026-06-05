@@ -45,7 +45,7 @@ const chartOptions: ChartOptions<"bar"> = {
       ticks: { font: { size: 10 }, precision: 0, padding: 8 },
     },
   },
-  elements: { bar: { borderSkipped: false, backgroundColor: "de896d" } },
+  elements: { bar: { borderSkipped: false, backgroundColor: "474b36" } },
   animation: { duration: 750, easing: "easeInOutQuart" },
 }
 </script>

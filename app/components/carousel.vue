@@ -8,7 +8,7 @@
               <span v-for="i in 3" :key="i" class="size-2.5 rounded-full bg-[#3b3b41]" />
             </div>
 
-            <span class="rounded-2xl bg-[#3b3b41] p-1 px-2.5 font-mono text-xs text-[#ebe8e8]">@{{ preset.slug }}</span>
+            <span class="rounded-2xl bg-[#3b3b41] p-1 px-2.5 font-mono text-xs text-[#f9fafb]">@{{ preset.slug }}</span>
           </div>
         </div>
 
