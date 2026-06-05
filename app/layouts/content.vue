@@ -1,21 +1,21 @@
 <template>
   <Masthead :is-toc-open="isTocOpen" @toggle-toc="isTocOpen = !isTocOpen" />
 
-  <div class="content-shell flex min-h-screen overflow-x-hidden border-b">
+  <div class="relative flex min-h-screen overflow-x-hidden border-b">
     <div v-if="isTocOpen" aria-hidden="true" class="fixed inset-0 z-30 bg-black/50 backdrop-blur-sm xl:hidden" @click="isTocOpen = false" />
 
-    <div class="flex flex-1 flex-col xl:flex-row">
+    <div class="mx-auto px-4 xl:grid xl:grid-cols-[1fr_320px] xl:gap-8">
       <button class="btn fixed bottom-6 left-6 z-30" aria-label="Scroll to top" @click="scrollToTop">
         <icon name="mdi:arrow-up" size="25" />
       </button>
 
-      <article
+      <main
         v-motion :initial="{ opacity: 0, y: 10 }"
         :enter="{ opacity: 1, y: 0 }" :duration="600"
         class="prose"
       >
         <slot />
-      </article>
+      </main>
 
       <TableOfContents :headers="headers" :is-open="isTocOpen" :header-classes="headerClasses" @select="scrollToHeader" />
     </div>
@@ -46,7 +46,8 @@ function scrollToHeader(id: string) {
 .prose {
   margin-top: 4.5rem;
   margin-bottom: 3rem;
-  max-width: min(980px, 100%);
+  width: 100%;
+  max-width: 860px;
   border: 1px solid color-mix(in srgb, var(--muted) 65%, transparent);
   border-radius: var(--border-radius);
   background-color: var(--background);
@@ -58,7 +59,19 @@ function scrollToHeader(id: string) {
   padding-bottom: 2.5rem;
   margin-inline: auto;
 }
-
+@media (min-width: 768px) {
+  .prose {
+    padding-inline: 1.5rem;
+    padding-bottom: 3.5rem;
+    margin-top: 5.3rem;
+  }
+}
+@media (min-width: 1280px) {
+  .prose {
+    margin-inline: 0;
+    max-width: 100%;
+  }
+}
 .prose :deep(> :first-child) {
   margin-top: 0;
 }
@@ -186,28 +199,5 @@ function scrollToHeader(id: string) {
   border: none;
   padding: 0;
   font-size: 0.8rem;
-}
-
-.content-shell {
-  position: relative;
-  background:
-    radial-gradient(700px circle at 10% 0%, color-mix(in srgb, var(--primary) 10%, transparent), transparent 60%),
-    radial-gradient(550px circle at 90% 10%, color-mix(in srgb, var(--secondary) 15%, transparent), transparent 65%),
-    var(--background);
-}
-
-@media (min-width: 768px) {
-  .prose {
-    padding-inline: 1.5rem;
-    padding-bottom: 3.5rem;
-    margin-top: 5.3rem;
-  }
-}
-
-@media (min-width: 1280px) {
-  .prose {
-    margin-inline: 1.5rem;
-    max-width: calc(100vw - 20rem - 3rem);
-  }
 }
 </style>

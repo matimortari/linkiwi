@@ -45,10 +45,7 @@
       <div v-if="data.videos?.length > 1" class="grid grid-cols-2 gap-2 md:grid-cols-4">
         <div v-for="video in data.videos.slice(1)" :key="video.id" class="group relative overflow-hidden rounded-xl bg-white/20">
           <nuxt-link :to="video.url" target="_blank" class="group relative block w-full overflow-hidden rounded-xl">
-            <img
-              v-if="video.thumbnail" :src="video.thumbnail"
-              :alt="video.title" class="aspect-video w-full rounded-lg object-cover transition-all group-hover:brightness-75"
-            >
+            <img v-if="video.thumbnail" :src="video.thumbnail" :alt="video.title" class="aspect-video w-full rounded-lg object-cover transition-all group-hover:brightness-75">
             <div class="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/30">
               <p class="absolute inset-x-0 bottom-0 line-clamp-2 w-full p-1 text-xs font-medium text-[#eeeeee] opacity-0 transition-opacity group-hover:opacity-100">
                 {{ video.title }}

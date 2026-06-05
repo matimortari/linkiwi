@@ -6,7 +6,7 @@
         :class="isMobile ? 'items-end justify-center' : 'items-center justify-center'" @mousedown.self="emit('update:isOpen', false)"
       >
         <div
-          class="overlay space-y-4" :class="isMobile ? 'flex max-h-dvh w-full flex-col' : 'min-w-100'"
+          class="overlay space-y-4" :class="isMobile ? 'flex max-h-dvh w-full flex-col' : 'min-w-120'"
           role="dialog" aria-modal="true"
           aria-labelledby="dialog-title"
         >

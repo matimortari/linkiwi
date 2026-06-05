@@ -17,7 +17,7 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-3 gap-8 py-4">
+      <div class="grid grid-cols-2 gap-8 py-4">
         <div v-for="(section, index) in FOOTER_SECTIONS" :key="index">
           <p class="mb-4 font-semibold">
             {{ section.title }}
@@ -43,7 +43,7 @@
 const { themeTitle } = useTheme()
 const { loggedIn } = useUserSession()
 
-const FOOTER_SECTIONS = [
+const FOOTER_SECTIONS = computed(() => [
   {
     title: "Product",
     links: [...(!loggedIn.value
@@ -64,10 +64,10 @@ const FOOTER_SECTIONS = [
     title: "Resources",
     links: [
       { label: "API Reference", href: "/api-spec" },
+      { label: "Brand Assets", href: "/brand" },
       { label: "Privacy Policy", href: "/legal/privacy" },
       { label: "Terms of Service", href: "/legal/terms" },
-      { label: "Brand", href: "/brand" },
     ],
   },
-]
+])
 </script>

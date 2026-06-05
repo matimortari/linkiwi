@@ -62,7 +62,7 @@
             </div>
           </div>
 
-          <div class="-right-8 -bottom-8 z-10 navigation-group hidden gap-1.5 rounded-full border bg-card p-4 whitespace-nowrap shadow-sm backdrop-blur-sm md:absolute md:flex">
+          <div class="-right-8 -bottom-8 z-10 navigation-group hidden gap-1.5 truncate rounded-full border bg-card p-4 shadow-sm backdrop-blur-sm md:absolute md:flex">
             <icon name="mdi:link-variant" size="20" class="text-primary" />
             <span class="text-xs font-medium">{{ baseURL.replace(/^https?:\/\//, "") }}/alexjohnson</span>
           </div>
