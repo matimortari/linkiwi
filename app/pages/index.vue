@@ -44,21 +44,21 @@
     <div class="section-header">
       <span class="section-badge">Sharing</span>
       <h2>
-        Share Your Page, Your Way
+        Your Page, Your Style
       </h2>
     </div>
 
     <div class="section-grid">
       <div class="order-1 flex items-center justify-center">
         <div class="product-stack relative grid grid-cols-2 gap-4">
-          <div v-for="platform in SHARE_PLATFORMS" :key="platform.id" class="card platform-card flex h-30 w-40 flex-col justify-between md:h-36 md:w-56" :style="{ background: platform.color }">
+          <div v-for="platform in SHARE_PLATFORMS" :key="platform.id" class="card platform-card flex h-30 w-40 flex-col justify-between overflow-hidden md:h-36 md:w-56" :style="{ background: platform.color }">
             <div class="flex items-center justify-between">
               <icon name="mdi:account-circle" size="30" class="text-white/60" />
               <icon :name="platform.icon" size="25" class="text-[#eeeeee]" />
             </div>
-            <div class="flex flex-col items-start gap-1 text-start">
+            <div class="flex min-w-0 flex-col items-start gap-1 overflow-hidden text-start">
               <span class="text-sm font-medium text-[#eeeeee]">@alexjohnson</span>
-              <span class="text-xs text-white/50">{{ baseURL.replace(/^https?:\/\//, "") }}/alexjohnson</span>
+              <span class="truncate text-xs text-white/50">{{ baseURL.replace(/^https?:\/\//, "") }}/alexjohnson</span>
             </div>
           </div>
 
