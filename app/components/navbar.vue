@@ -11,11 +11,11 @@
         </button>
         <button v-if="loggedIn" class="btn" @click="signOut">
           <icon name="mdi:logout" size="20" />
-          <span>Sign Out</span>
+          <span class="hidden md:inline">Sign Out</span>
         </button>
         <nuxt-link v-else to="/sign-in" class="btn">
           <icon name="mdi:login" size="20" />
-          <span>Sign In</span>
+          <span class="hidden md:inline">Sign In</span>
         </nuxt-link>
       </nav>
     </div>

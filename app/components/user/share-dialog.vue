@@ -25,7 +25,7 @@
           Copy your profile link with tracking parameters to see where your visitors are coming from.
         </p>
 
-        <div class="card grid grid-cols-2 gap-2 md:grid-cols-3">
+        <div class="card grid grid-cols-2 gap-2 md:grid-cols-5">
           <button v-for="source in TRACKING_SOURCES" :key="source.id" class="btn-ghost justify-start!" @click="handleCopyWithTracking(source.id)">
             <icon :name="source.icon" size="25" class="shrink-0" />
             <span>{{ source.label }}</span>
@@ -45,7 +45,6 @@
         </div>
       </div>
 
-      <!-- Share to Socials Tab -->
       <div v-if="activeTab === 'social'" class="flex flex-col gap-2">
         <p class="text-caption text-center">
           Share your profile directly to social media platforms.
