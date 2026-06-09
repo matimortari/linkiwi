@@ -1,9 +1,9 @@
 import type { EventHandlerRequest, H3Event } from "h3"
 
 /**
- * Helper function to ensure required environment variables are set, throwing an error if missing.
+ * Ensure required environment variables are set, throwing an error if missing.
  */
-export function requireEnv(name: string) {
+export function requireEnv(name: string): string {
   const value = process.env[name]
   if (!value) {
     throw new Error(`Missing required environment variable: ${name}`)
@@ -16,13 +16,14 @@ export function requireEnv(name: string) {
  * Retrieves the authenticated user from the current session.
  * Throws 401 if no valid session exists.
  */
-export async function getUserFromSession(event: H3Event<EventHandlerRequest>) {
+export async function getUserFromSession(event: H3Event<EventHandlerRequest>): Promise<{ id: string, email: string, name: string, image: string | null }> {
   const session = await getUserSession(event)
-  if (!session?.user?.id) {
-    throw createError({ status: 401, statusText: "Unauthorized" })
+  if (session?.user?.id) {
+    const { id, email, name, image } = session.user
+    return { id, email, name, image: image ?? null }
   }
 
-  return session.user
+  throw createError({ statusCode: 401, statusMessage: "Unauthorized" })
 }
 
 /**
@@ -43,9 +44,8 @@ export async function generateSlug(base: string = ""): Promise<string> {
 }
 
 /**
- * Categorizes a referrer URL into a known source type.
+ * Categorizes a referrer URL or simple ref tag into a known source type.
  * Returns 'direct' if no referrer, or a specific platform/source name.
- * Handles both full URLs and simple ref tags (e.g., "newsletter", "twitter").
  */
 export function categorizeReferrer(referrer: string | null | undefined): string {
   if (!referrer || typeof referrer !== "string" || referrer.trim() === "") {
@@ -103,7 +103,6 @@ export function formatSourceLabel(source: string | null | undefined): string {
     return "Unknown"
   }
 
-  const normalizedSource = source.toLowerCase().trim()
   const labels: Record<string, string> = {
     direct: "Direct",
     facebook: "Facebook",
@@ -135,5 +134,5 @@ export function formatSourceLabel(source: string | null | undefined): string {
     unknown: "Unknown",
   }
 
-  return labels[normalizedSource] || normalizedSource.charAt(0).toUpperCase() + normalizedSource.slice(1)
+  return labels[source] || source.charAt(0).toUpperCase() + source.slice(1)
 }

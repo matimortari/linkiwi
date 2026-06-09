@@ -17,7 +17,7 @@ export const s3 = new S3Client({
  * Uploads a file to Blob storage and removes the previous file if provided.
  * Validates file size and MIME type before upload.
  */
-export async function uploadFile({ path, file, maxSize, allowedMimeTypes, oldFile }: { path: string, file: File, maxSize: number, allowedMimeTypes: string[], oldFile?: string }) {
+export async function uploadFile({ path, file, maxSize, allowedMimeTypes, oldFile }: { path: string, file: File, maxSize: number, allowedMimeTypes: string[], oldFile?: string }): Promise<string> {
   if (!file || !(file instanceof File)) {
     throw createError({ status: 400, statusText: "No file uploaded" })
   }
@@ -41,6 +41,6 @@ export async function uploadFile({ path, file, maxSize, allowedMimeTypes, oldFil
 /**
  * Deletes a file from Blob storage given its URL.
  */
-export async function deleteFile(url: string) {
+export async function deleteFile(url: string): Promise<void> {
   await s3.send(new DeleteObjectCommand({ Bucket: r2BucketName, Key: url.replace(`${r2PublicUrl}/`, "") }))
 }
