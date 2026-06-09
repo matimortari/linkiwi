@@ -117,7 +117,7 @@ const summaryItems = computed(() => [
   { label: "Total Page Views", icon: "mdi:file-eye-outline", value: totalViews.value },
   { label: "Total Clicks", icon: "mdi:cursor-default-click-outline", value: totalClicks.value },
   { label: "Click Rate", icon: "mdi:file-percent-outline", value: `${clickRate.value}%` },
-  { label: "Joined On", icon: "mdi:calendar-clock-outline", value: joinedAt.value ? formatDate(new Date(joinedAt.value)) : "N/A" },
+  { label: "Joined On", icon: "mdi:calendar-clock-outline", value: joinedAt.value ? new Date(joinedAt.value).toLocaleDateString("en-US", { year: "2-digit", month: "short", day: "numeric" }) : "N/A" },
 ])
 
 function getSourceIcon(source: string): string {
