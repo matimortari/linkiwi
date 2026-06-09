@@ -160,8 +160,8 @@ export const BRAND_COLORS = [
 ]
 
 export const STATUS_COLORS = [
-  { name: "Danger", darkVar: "--red-dark", darkVal: "#8d2525", lightVar: "--red-light", lightVal: "#daa0a0" },
-  { name: "Success", darkVar: "--green-dark", darkVal: "#0a6647", lightVar: "--green-light", lightVal: "#98cfb8" },
-  { name: "Warning", darkVar: "--orange-dark", darkVal: "#8f4210", lightVar: "--orange-light", lightVal: "#e6cfa3" },
-  { name: "Info", darkVar: "--blue-dark", darkVal: "#4872a5", lightVar: "--blue-light", lightVal: "#b7c9dd" },
+  { name: "Danger", darkVar: "--red-dark", darkVal: "#a11f1f", lightVar: "--red-light", lightVal: "#e69191" },
+  { name: "Success", darkVar: "--green-dark", darkVal: "#00754a", lightVar: "--green-light", lightVal: "#81dbb3" },
+  { name: "Warning", darkVar: "--orange-dark", darkVal: "#a64503", lightVar: "--orange-light", lightVal: "#fad08c" },
+  { name: "Info", darkVar: "--blue-dark", darkVal: "#3773ba", lightVar: "--blue-light", lightVal: "#a3c7f0" },
 ]
