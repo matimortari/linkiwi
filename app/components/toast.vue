@@ -2,18 +2,16 @@
   <teleport to="body">
     <div class="toast-container" aria-live="polite" aria-atomic="true">
       <TransitionGroup name="toast">
-        <div
-          v-for="toast in toasts" :key="toast.id"
-          class="toast" :class="[`toast-${toast.type}`]"
-          role="alert"
-        >
-          <div class="toast-content">
-            <icon :name="getToastIcon(toast.type)" size="20" />
-            <span class="toast-message">{{ toast.message }}</span>
+        <div v-for="toast in toasts" :key="toast.id" class="toast" role="alert">
+          <div class="flex min-w-0 flex-1 flex-row items-center gap-4">
+            <icon :name="TOAST_ICONS[toast.type]" size="20" :class="`text-${toast.type}`" />
+            <span class="text-caption wrap-break-word">{{ toast.message }}</span>
           </div>
           <button class="toast-close" aria-label="Close notification" @click="dismiss(toast.id)">
             <icon name="mdi:close" size="15" />
           </button>
+
+          <span v-if="toast.duration && toast.duration > 0" class="toast-progress" :class="`bg-${toast.type}`" :style="{ animationDuration: `${toast.duration}ms` }" />
         </div>
       </TransitionGroup>
     </div>
@@ -22,29 +20,19 @@
 
 <script setup lang="ts">
 const { toasts, dismiss } = useToast()
-
-function getToastIcon(type: Toast["type"]) {
-  if (type === "success") {
-    return "mdi:check-circle-outline"
-  }
-
-  if (type === "warning") {
-    return "mdi:alert-circle-outline"
-  }
-
-  if (type === "info") {
-    return "mdi:info-circle-outline"
-  }
-
-  return "mdi:close-circle-outline"
+const TOAST_ICONS: Record<Toast["type"], string> = {
+  success: "mdi:check-circle-outline",
+  warning: "mdi:alert-circle-outline",
+  info: "mdi:info-circle-outline",
+  error: "mdi:close-circle-outline",
 }
 </script>
 
 <style scoped>
 .toast-container {
   position: fixed;
-  bottom: 1rem;
-  right: 1rem;
+  bottom: 1.5rem;
+  right: 1.5rem;
   z-index: 50;
   display: flex;
   flex-direction: column;
@@ -56,38 +44,40 @@ function getToastIcon(type: Toast["type"]) {
   .toast-container {
     left: 1rem;
     right: 1rem;
+    bottom: 1rem;
     max-width: none;
   }
 }
 
 .toast {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.875rem 1rem;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+  background-color: var(--neutral-900);
+  color: var(--neutral-100);
   border-radius: var(--border-radius);
+  border: 1px solid var(--neutral-800);
   box-shadow:
-    0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    0 20px 25px -5px rgba(0, 0, 0, 0.3),
+    0 10px 10px -5px rgba(0, 0, 0, 0.2);
   pointer-events: auto;
-  backdrop-filter: blur(8px);
-  border: var(--border-style);
+  overflow: hidden;
 }
 
-.toast-content {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex: 1;
-  min-width: 0;
+.text-success {
+  color: var(--success);
 }
-
-.toast-message {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  word-break: break-word;
-  font-weight: 500;
+.text-error {
+  color: var(--danger);
+}
+.text-warning {
+  color: var(--warning);
+}
+.text-info {
+  color: var(--info);
 }
 
 .toast-close {
@@ -98,46 +88,55 @@ function getToastIcon(type: Toast["type"]) {
   border: none;
   background: transparent;
   cursor: pointer;
+  color: var(--neutral-400);
   border-radius: calc(var(--border-radius) * 0.5);
   flex-shrink: 0;
   transition: background-color 0.2s;
-  color: inherit;
 }
 
 .toast-close:hover {
-  background-color: color-mix(in srgb, var(--foreground) 12%, transparent);
+  background-color: var(--neutral-800);
+  color: var(--neutral-100);
 }
 
-.toast-success {
-  background-color: var(--success);
-  color: var(--success-foreground);
+.toast-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  transform-origin: left;
+  animation: shrink linear forwards;
 }
-.toast-error {
-  background-color: var(--danger);
-  color: var(--danger-foreground);
-}
-.toast-warning {
-  background-color: var(--warning);
-  color: var(--warning-foreground);
-}
-.toast-info {
-  background-color: var(--info);
-  color: var(--info-foreground);
+
+@keyframes shrink {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
 }
 
 .toast-enter-active,
 .toast-leave-active {
-  transition: all var(--transition);
+  transition:
+    opacity 0.25s var(--transition),
+    transform 0.35s var(--transition);
 }
 .toast-enter-from {
   opacity: 0;
-  transform: translateX(100%);
+  transform: translateX(30px) scale(0.98);
 }
 .toast-leave-to {
   opacity: 0;
-  transform: translateX(100%);
+  transform: translateX(40px);
+}
+.toast-leave-active {
+  position: absolute;
+  width: 100%;
 }
 .toast-move {
-  transition: transform var(--transition);
+  transition: transform 0.35s var(--transition);
 }
 </style>
