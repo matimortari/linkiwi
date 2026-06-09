@@ -16,8 +16,16 @@ export function formatDate(date?: string | Date | null): string {
  */
 export function getErrorMessage(err: unknown, fallback: string): string {
   if (err && typeof err === "object") {
-    const e = err as { data?: { statusMessage?: string, message?: string }, statusMessage?: string, message?: string }
-    return (e.data?.statusMessage || e.data?.message || e.statusMessage || e.message || fallback)
+    const e = err as {
+      data?: { statusMessage?: string, message?: string, issues?: Array<{ message: string }> }
+      statusMessage?: string
+      message?: string
+    }
+    if (e.data?.issues?.length) {
+      return e.data.issues.map(i => i.message).join(", ")
+    }
+
+    return e.data?.statusMessage || e.data?.message || e.statusMessage || e.message || fallback
   }
 
   return fallback
