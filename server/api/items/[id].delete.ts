@@ -1,0 +1,26 @@
+export default defineEventHandler(async (event) => {
+  const sessionUser = await getUserFromSession(event)
+  const itemId = getRouterParam(event, "id")
+  if (!itemId) {
+    throw createError({ status: 400, statusText: "Item ID is required" })
+  }
+
+  // Rate limit: 50 deletions per hour per account
+  await enforceRateLimit(event, `items:delete:${sessionUser.id}`, 50)
+
+  const existingItem = await db.profileItem.findUnique({ where: { id: itemId }, select: { userId: true, type: true } })
+  if (!existingItem) {
+    throw createError({ status: 404, statusText: "Profile item not found" })
+  }
+  if (existingItem.userId !== sessionUser.id) {
+    throw createError({ status: 403, statusText: "You do not have permission to delete this resource" })
+  }
+
+  // Delete the item (cascade will handle related records)
+  await db.profileItem.delete({ where: { id: itemId } })
+
+  const user = await db.user.findUnique({ where: { id: sessionUser.id }, select: { slug: true } })
+  await deleteCached(CacheKeys.userItems(sessionUser.id), CacheKeys.userProfile(user?.slug || ""))
+
+  return { success: true, message: `${existingItem.type} component deleted successfully.` }
+})

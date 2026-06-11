@@ -1,17 +1,43 @@
 export default defineEventHandler(async (event) => {
-  const user = await getUserFromSession(event)
+  const sessionUser = await getUserFromSession(event)
 
   // Rate limit: 5 requests per hour per user
-  await enforceRateLimit(event, `user:delete:${user.id}`, 5)
+  await enforceRateLimit(event, `user:delete:${sessionUser.id}`, 5)
 
-  // Delete user's avatar from blob storage if it exists
-  if (user.image) {
-    await deleteFile(user.image).catch(() => {})
+  // Gather all file URLs and identity metadata before dropping database records
+  const accountData = await db.user.findUnique({
+    where: { id: sessionUser.id },
+    select: { slug: true, image: true, banner: { select: { url: true } }, assets: { select: { url: true } } },
+  })
+  if (!accountData) {
+    throw createError({ status: 404, statusText: "User account not found" })
   }
 
-  // Delete the user (cascade will handle related records)
-  await db.user.delete({ where: { id: user.id } })
+  await deleteCached(CacheKeys.userData(sessionUser.id), CacheKeys.userProfile(accountData.slug))
+
+  // Compile an inventory of every file the user owns
+  const deadFiles: string[] = []
+  if (accountData.image) {
+    deadFiles.push(accountData.image)
+  }
+  if (accountData.banner?.url) {
+    deadFiles.push(accountData.banner.url)
+  }
+
+  accountData.assets.forEach((asset) => {
+    if (asset.url) {
+      deadFiles.push(asset.url)
+    }
+  })
+
+  // Purge files from storage concurrently, ensuring one corrupt file URL doesn't crash the whole account deletion chain
+  if (deadFiles.length > 0) {
+    await Promise.allSettled(deadFiles.map(url => deleteFile(url)))
+  }
+
+  // Delete the user (cascade will handle related records) and clear session cookies
+  await db.user.delete({ where: { id: sessionUser.id } })
   await clearUserSession(event)
 
-  return { success: true, message: "User deleted successfully" }
+  return { success: true, message: "Your account and all associated assets have been permanently deleted." }
 })
