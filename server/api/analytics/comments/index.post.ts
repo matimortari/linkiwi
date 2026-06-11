@@ -1,29 +1,29 @@
 import { createCommentSchema } from "#shared/schemas/analytics-schema"
 
 export default defineEventHandler(async (event) => {
-  // Rate limit: 10 requests per hour per IP
-  const ip = getRequestIP(event, { xForwardedFor: true }) || "unknown"
-  await enforceRateLimit(event, `comments:${ip}`, 10)
-
   const body = await readBody(event)
   const result = createCommentSchema.safeParse(body)
   if (!result.success) {
     throw createError({ status: 400, statusText: result.error.issues[0]?.message || "Invalid input" })
   }
 
-  // Check if user has guestbook enabled
-  const user = await db.user.findUnique({ where: { id: result.data.userId }, select: { id: true, preferences: { select: { enableGuestbook: true } } } })
-  if (!user) {
-    throw createError({ status: 404, statusText: "User not found" })
+  const { userId, name, email, message } = result.data
+
+  // Rate limit: 10 requests per hour per IP
+  const clientIp = getRequestIP(event, { xForwardedFor: true }) || "anonymous"
+  await enforceRateLimit(event, `comments:public-create:${clientIp}`, 10)
+
+  const targetUser = await db.user.findUnique({ where: { id: userId }, select: { slug: true, preferences: { select: { enableGuestbook: true } } } })
+  if (!targetUser) {
+    throw createError({ status: 404, statusText: "The target profile does not exist." })
   }
-  if (!user.preferences?.enableGuestbook) {
-    throw createError({ status: 403, statusText: "Guestbook is disabled for this user" })
+  if (!targetUser.preferences?.enableGuestbook) {
+    throw createError({ status: 403, statusText: "This user has disabled their guestbook." })
   }
 
-  const comment = await db.comment.create({ data: { userId: result.data.userId, name: result.data.name, email: result.data.email || null, message: result.data.message } })
+  const newComment = await db.comment.create({ data: { userId, name, email: email || null, message } })
 
-  // Invalidate user data cache
-  await deleteCached(CacheKeys.userData(result.data.userId))
+  await deleteCached(CacheKeys.userComments(userId), CacheKeys.userProfile(targetUser.slug))
 
-  return { comment }
+  return { newComment }
 })
