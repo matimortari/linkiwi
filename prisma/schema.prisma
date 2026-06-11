@@ -12,18 +12,38 @@ enum BackgroundType {
   GRADIENT
 }
 
-enum WidgetType {
-  GITHUB
-  YOUTUBE
-  SPOTIFY
-}
-
 enum SupportBanner {
   NONE
   LGBTQ_RIGHTS
   ANTI_RACISM
   MENTAL_HEALTH
   CLIMATE_ACTION
+}
+
+enum ScheduleAction {
+  HIDE
+  DELETE
+}
+
+enum ProfileItemType {
+  LINK
+  WIDGET
+  ICON
+  DIVIDER
+  PHOTO_GRID
+}
+
+enum WidgetType {
+  GITHUB
+  YOUTUBE
+  SPOTIFY
+}
+
+enum SupportPlatform {
+  KO_FI
+  BUY_ME_A_COFFEE
+  PIX
+  CUSTOM
 }
 
 model Account {
@@ -39,21 +59,23 @@ model Account {
 }
 
 model User {
-  id          String           @id @default(cuid())
-  email       String           @unique
-  name        String
-  image       String?
-  slug        String           @unique
-  description String?
-  preferences UserPreferences? @relation("UserPreferences")
-  links       UserLink[]
-  icons       UserIcon[]
-  views       PageView[]
-  comments    Comment[]
-  accounts    Account[]
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
-  widgets     Widget[]
+  id            String             @id @default(cuid())
+  email         String             @unique
+  name          String
+  image         String?
+  slug          String             @unique
+  description   String?
+  location      String?
+  preferences   UserPreferences?   @relation("UserPreferences")
+  banner        UserBanner?        @relation("UserBanner")
+  supportButton UserSupportButton?
+  items         ProfileItem[]
+  assets        UserAsset[]
+  views         PageView[]
+  comments      Comment[]
+  accounts      Account[]
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
 }
 
 model UserPreferences {
@@ -91,85 +113,114 @@ model UserPreferences {
   iconShadowWeight          String         @default("medium")
   iconLogoColor             String         @default("#475569")
   iconHoverBackgroundColor  String         @default("#cbd5e1")
+  dividerColor              String         @default("#e2e8f0")
+  dividerThickness          String         @default("1px")
+  dividerStyle              String         @default("solid")
   supportBanner             SupportBanner  @default(NONE)
   enableGuestbook           Boolean        @default(false)
+  showLocation              Boolean        @default(false)
   user                      User           @relation("UserPreferences", fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model UserLink {
-  id         String      @id @default(cuid())
-  userId     String
-  url        String
-  title      String
-  order      Int         @default(0)
-  isVisible  Boolean     @default(true)
-  clickCount Int         @default(0)
-  clicks     LinkClick[]
-  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
-
-  @@index([userId, order])
-}
-
-model UserIcon {
-  id         String      @id @default(cuid())
-  userId     String
-  url        String
-  platform   String
-  logo       String
-  order      Int         @default(0)
-  isVisible  Boolean     @default(true)
-  clickCount Int         @default(0)
-  clicks     IconClick[]
-  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
-
-  @@index([userId, order])
-}
-
-model Widget {
+model UserBanner {
   id        String     @id @default(cuid())
-  userId    String
-  type      WidgetType
-  handle    String
-  order     Int        @default(0)
-  isVisible Boolean    @default(true)
-  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String     @unique
+  assetId   String?    @unique
+  url       String
+  user      User       @relation("UserBanner", fields: [userId], references: [id], onDelete: Cascade)
+  asset     UserAsset? @relation(fields: [assetId], references: [id], onDelete: SetNull)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+}
+
+model UserAsset {
+  id        String          @id @default(cuid())
+  userId    String
+  url       String
+  key       String
+  mimeType  String
+  size      Int
+  label     String?
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  banner    UserBanner?
+  photos    PhotoGridItem[]
+  createdAt DateTime        @default(now())
+
+  @@index([userId])
+}
+
+model ProfileItem {
+  id             String                @id @default(cuid())
+  userId         String
+  type           ProfileItemType
+  order          Int                   @default(0)
+  isPinned       Boolean               @default(false)
+  isVisible      Boolean               @default(true)
+  scheduledStart DateTime?
+  scheduledEnd   DateTime?
+  scheduleAction ScheduleAction?
+  user           User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  link           ProfileItemLink?
+  widget         ProfileItemWidget?
+  icon           ProfileItemIcon?
+  photoGrid      ProfileItemPhotoGrid?
+  clicks         ItemClick[]
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
 
   @@index([userId, order])
+  @@index([userId, isPinned])
 }
 
-model PageView {
-  id        String   @id @default(cuid())
-  userId    String
-  createdAt DateTime @default(now())
-  referrer  String?
-  source    String?
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId, createdAt])
+model ProfileItemLink {
+  itemId String      @id
+  url    String
+  label  String
+  item   ProfileItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
 }
 
-model LinkClick {
-  userLinkId String
-  createdAt  DateTime @default(now())
-  userLink   UserLink @relation(fields: [userLinkId], references: [id], onDelete: Cascade)
-
-  @@id([userLinkId, createdAt])
-  @@index([createdAt])
+model ProfileItemWidget {
+  itemId String      @id
+  type   WidgetType
+  handle String
+  item   ProfileItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
 }
 
-model IconClick {
-  userIconId String
-  createdAt  DateTime @default(now())
-  userIcon   UserIcon @relation(fields: [userIconId], references: [id], onDelete: Cascade)
+model ProfileItemIcon {
+  itemId   String      @id
+  url      String
+  platform String?
+  logo     String?
+  item     ProfileItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+}
 
-  @@id([userIconId, createdAt])
-  @@index([createdAt])
+model ProfileItemPhotoGrid {
+  itemId String          @id
+  item   ProfileItem     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  photos PhotoGridItem[]
+}
+
+model PhotoGridItem {
+  id      String               @id @default(cuid())
+  gridId  String
+  assetId String?
+  url     String
+  order   Int                  @default(0)
+  alt     String?
+  grid    ProfileItemPhotoGrid @relation(fields: [gridId], references: [itemId], onDelete: Cascade)
+  asset   UserAsset?           @relation(fields: [assetId], references: [id], onDelete: SetNull)
+
+  @@index([gridId, order])
+}
+
+model UserSupportButton {
+  userId           String          @id
+  isEnabled        Boolean         @default(false)
+  platform         SupportPlatform @default(CUSTOM)
+  url              String
+  thankYouMessage  String?
+  suggestedAmounts Int[]
+  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Comment {
@@ -182,4 +233,24 @@ model Comment {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, createdAt])
+}
+
+model PageView {
+  id        String   @id @default(cuid())
+  userId    String
+  referrer  String?
+  source    String?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+}
+
+model ItemClick {
+  id        String      @id @default(cuid())
+  itemId    String
+  createdAt DateTime    @default(now())
+  item      ProfileItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@index([itemId, createdAt])
 }
