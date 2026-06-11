@@ -35,8 +35,12 @@ declare global {
     isIconShadow: boolean
     iconShadowColor?: string
     iconShadowWeight?: ShadowWeight
+    dividerColor?: string
+    dividerThickness?: string
+    dividerStyle?: string
     supportBanner?: BannerOption
     enableGuestbook?: boolean
+    showLocation?: boolean
   }
 }
 

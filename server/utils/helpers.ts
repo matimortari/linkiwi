@@ -1,4 +1,5 @@
 import type { EventHandlerRequest, H3Event } from "h3"
+import crypto from "node:crypto"
 
 /**
  * Ensure required environment variables are set, throwing an error if missing.
@@ -30,17 +31,17 @@ export async function getUserFromSession(event: H3Event<EventHandlerRequest>): P
  * Generates a unique slug based on the provided base string.
  */
 export async function generateSlug(base: string = ""): Promise<string> {
-  const cleanedBase = base.normalize("NFKD").replace(/[\u0300-\u036F]/g, "").toLowerCase().replace(/[^\w-]/g, "").replace(/[-\s]+/g, "-").replace(/^-+|-+$/g, "")
-  for (let attempt = 0; attempt < 5; attempt++) {
-    const randomString = Math.random().toString(36).slice(2, 8)
-    const slug = cleanedBase ? `${cleanedBase}-${randomString}` : randomString
-    const existingUser = await db.user.findUnique({ where: { slug } })
-    if (!existingUser) {
+  const cleaned = base.normalize("NFKD").replace(/[\u0300-\u036F]/g, "").toLowerCase().replace(/[^\w-]/g, "").replace(/[-\s]+/g, "-").replace(/^-+|-+$/g, "")
+  for (let attempt = 0; attempt < 10; attempt++) {
+    const suffix = crypto.randomUUID().slice(0, 6)
+    const slug = cleaned ? `${cleaned}-${suffix}` : suffix
+    const exists = await db.user.findUnique({ where: { slug }, select: { id: true } })
+    if (!exists) {
       return slug
     }
   }
 
-  return Math.random().toString(36).slice(2, 8)
+  return crypto.randomUUID().replace(/-/g, "").slice(0, 12)
 }
 
 /**
@@ -56,7 +57,8 @@ export function categorizeReferrer(referrer: string | null | undefined): string 
   if (!normalized.includes(".") && !normalized.includes("://") && !normalized.includes("/")) {
     return normalized
   }
-  if (normalized.includes(process.env.NUXT_PUBLIC_BASE_URL?.toLowerCase() || "")) {
+  const baseUrl = process.env.NUXT_PUBLIC_BASE_URL?.toLowerCase()
+  if (baseUrl && normalized.includes(baseUrl)) {
     return "direct"
   }
 

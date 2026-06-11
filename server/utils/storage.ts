@@ -1,4 +1,5 @@
 import { Buffer } from "node:buffer"
+import crypto from "node:crypto"
 import { DeleteObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
 
 const r2Endpoint = requireEnv("R2_ENDPOINT")
@@ -28,7 +29,7 @@ export async function uploadFile({ path, file, maxSize, allowedMimeTypes, oldFil
     throw createError({ status: 413, statusText: "File too large" })
   }
 
-  const key = `${path}/${Date.now()}.${file.name.split(".").pop()?.toLowerCase()}`
+  const key = `${path}/${crypto.randomUUID()}.${file.name.split(".").pop()?.toLowerCase()}`
   const buffer = await file.arrayBuffer()
   await s3.send(new PutObjectCommand({ Bucket: r2BucketName, Key: key, Body: Buffer.from(buffer), ContentType: file.type }))
   if (oldFile) {

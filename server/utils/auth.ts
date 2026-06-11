@@ -3,57 +3,46 @@ import type { H3Event } from "h3"
 export async function handleOAuthUser(event: H3Event, userData: OAuthUserData) {
   const { id: providerAccountId, name, email, image, provider } = userData
 
-  // Find existing account by provider
-  let account = await db.account.findUnique({
+  const account = await db.account.findUnique({
     where: { provider_providerAccountId: { provider, providerAccountId } },
-    include: { user: true },
+    select: { user: { select: { id: true, email: true, name: true, image: true, slug: true } } },
   })
 
-  let user: any = account?.user ?? null
-  if (!user) {
-    user = await db.user.findUnique({
+  let sessionUser: User | null = account?.user ?? null
+  if (!sessionUser) {
+    const existingUser = await db.user.findUnique({
       where: { email },
-      include: { preferences: true, links: true, icons: true, widgets: true, views: true, comments: true },
+      select: { id: true, email: true, name: true, image: true, slug: true },
     })
-  }
-
-  // If still no user, create one
-  if (!user) {
-    const r2PublicUrl = requireEnv("R2_PUBLIC_URL")
-    user = await db.user.create({
-      data: {
-        email,
-        name: name?.trim() ?? email.split("@")[0],
-        image: image || `${r2PublicUrl}/defaults/avatar.png`,
-        slug: await generateSlug(name ?? email.split("@")[0]),
-        preferences: { create: {} },
-      },
-      include: { preferences: true, links: true, icons: true, widgets: true, views: true, comments: true },
-    })
-  }
-
-  // Upsert account
-  account = await db.account.upsert({
-    where: { provider_providerAccountId: { provider, providerAccountId } },
-    update: {},
-    create: { userId: user.id, provider, providerAccountId },
-    include: { user: true },
-  })
-
-  user = account.user
-
-  // Build session object
-  const sessionUser = {
-    id: user.id,
-    email: user.email,
-    name: user.name,
-    image: user.image,
-    slug: user.slug,
+    if (existingUser) {
+      await db.account.create({ data: { userId: existingUser.id, provider, providerAccountId } })
+      sessionUser = existingUser
+    }
+    else {
+      const r2PublicUrl = requireEnv("R2_PUBLIC_URL")
+      const slug = await generateSlug(name ?? email.split("@")[0]!)
+      const newUser = await db.user.create({
+        data: {
+          email,
+          name: name?.trim() ?? email.split("@")[0]!,
+          image: image ?? `${r2PublicUrl}/defaults/avatar.png`,
+          slug,
+          preferences: { create: {} },
+          accounts: { create: { provider, providerAccountId } },
+        },
+        select: { id: true, email: true, name: true, image: true, slug: true },
+      })
+      sessionUser = newUser
+    }
   }
 
   const now = new Date()
-  const expiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000) // 7 days
-  await setUserSession(event, { user: sessionUser, loggedInAt: now, expiresAt, lastActivityAt: now })
+  await setUserSession(event, {
+    user: sessionUser,
+    loggedInAt: now,
+    expiresAt: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000), // 7 days
+    lastActivityAt: now,
+  })
 
   return sendRedirect(event, "/admin/profile")
 }
