@@ -4,6 +4,7 @@ export function useAnalyticsData() {
   const analyticsStore = useAnalyticsStore()
   const userStore = useUserStore()
 
+  // Helper function to bucket records by calendar date
   function groupByDate<T extends Record<string, any>>(items: T[], dateKey: keyof T & string = "createdAt"): Record<string, number> {
     const result: Record<string, number> = {}
     for (const item of items) {
@@ -22,23 +23,29 @@ export function useAnalyticsData() {
     return result
   }
 
-  // Core analytics computations
-  const pageViews = computed(() => analyticsStore.analytics?.pageViews ?? [])
-  const linkClicks = computed(() => analyticsStore.analytics?.linkClicks ?? [])
-  const iconClicks = computed(() => analyticsStore.analytics?.iconClicks ?? [])
+  const pageViews = computed(() => analyticsStore.pageViews)
+  const linkClicks = computed(() => analyticsStore.itemClicks.filter(c => c.item?.type === "LINK"))
+  const iconClicks = computed(() => analyticsStore.itemClicks.filter(c => c.item?.type === "ICON"))
+  const widgetClicks = computed(() => analyticsStore.itemClicks.filter(c => c.item?.type === "WIDGET"))
 
   const stats = computed(() => {
     const viewsByDate = groupByDate(pageViews.value, "createdAt")
     const linksByDate = groupByDate(linkClicks.value, "createdAt")
     const iconsByDate = groupByDate(iconClicks.value, "createdAt")
-    const allDates = [...new Set([...Object.keys(viewsByDate), ...Object.keys(linksByDate), ...Object.keys(iconsByDate)])].sort((a, b) => a.localeCompare(b))
+    const widgetsByDate = groupByDate(widgetClicks.value, "createdAt")
 
-    return allDates.map((date: string) => ({ date, pageViews: viewsByDate[date] ?? 0, linkClicks: linksByDate[date] ?? 0, iconClicks: iconsByDate[date] ?? 0 }))
+    const allDates = [...new Set([...Object.keys(viewsByDate), ...Object.keys(linksByDate), ...Object.keys(iconsByDate), ...Object.keys(widgetsByDate)])].sort((a, b) => a.localeCompare(b))
+    return allDates.map((date: string) => ({
+      date,
+      pageViews: viewsByDate[date] ?? 0,
+      linkClicks: linksByDate[date] ?? 0,
+      iconClicks: iconsByDate[date] ?? 0,
+      widgetClicks: widgetsByDate[date] ?? 0,
+    }))
   })
 
-  // Metrics
   const totalViews = computed(() => pageViews.value.length)
-  const totalClicks = computed(() => linkClicks.value.length + iconClicks.value.length)
+  const totalClicks = computed(() => analyticsStore.itemClicks.length)
   const clickRate = computed(() => totalViews.value ? ((totalClicks.value / totalViews.value) * 100).toFixed(2) : "0")
   const joinedAt = computed(() => userStore.user?.createdAt)
 
@@ -56,42 +63,36 @@ export function useAnalyticsData() {
   const iconClicksChartData = computed(() => stats.value.length ? buildChart(stats.value.map(s => s.iconClicks), stats.value.map(s => s.date), "Social Icon Clicks") : null)
 
   const referrerChartData = computed(() => {
-    const referrers = analyticsStore.referrerStats?.referrers
-    if (!referrers?.length) {
+    if (!pageViews.value.length) {
       return null
     }
 
+    const counts: Record<string, number> = {}
+    pageViews.value.forEach((pv) => {
+      const sourceKey = pv.referrer || pv.source || "Direct / Unknown"
+      counts[sourceKey] = (counts[sourceKey] ?? 0) + 1
+    })
+
+    const topReferrers = Object.entries(counts).map(([label, count]) => ({ label, count })).sort((a, b) => b.count - a.count).slice(0, 6)
+
     return {
-      labels: referrers.map((r: any) => r.label),
+      labels: topReferrers.map(r => r.label),
       datasets: [
         {
           label: "Traffic Sources",
-          data: referrers.map((r: any) => r.count),
+          data: topReferrers.map(r => r.count),
           backgroundColor: ["#36a2eb", "#ff6384", "#4bc0c0", "#ff9f40", "#9966ff", "#ffcd56"],
         },
       ],
     }
   })
 
-  const normalizedRecords = computed<AnalyticsRecordSchema[]>(() => [
-    ...(analyticsStore.analytics.pageViews?.map((pv: any) => ({
-      type: "pageView",
-      userId: String(pv.userId),
-      createdAt: pv.createdAt ? String(pv.createdAt) : undefined,
-    })) ?? []),
-    ...(analyticsStore.analytics.linkClicks?.map((lc: any) => ({
-      type: "link",
-      userId: String(lc.userLink.userId),
-      id: lc.userLinkId ? String(lc.userLinkId) : undefined,
-      createdAt: lc.createdAt ? String(lc.createdAt) : undefined,
-    })) ?? []),
-    ...(analyticsStore.analytics.iconClicks?.map((ic: any) => ({
-      type: "icon",
-      userId: String(ic.userIcon.userId),
-      id: ic.userIconId ? String(ic.userIconId) : undefined,
-      createdAt: ic.createdAt ? String(ic.createdAt) : undefined,
-    })) ?? []),
-  ])
+  const normalizedRecords = computed<AnalyticsRecordSchema[]>(() => {
+    const currentSlug = userStore.user?.slug ?? ""
+    const viewsLog = pageViews.value.map(pv => ({ type: "pageView" as const, slug: currentSlug, referrer: pv.referrer ?? null, createdAt: pv.createdAt ? String(pv.createdAt) : undefined }))
+    const clicksLog = analyticsStore.itemClicks.map(ic => ({ type: "itemClick" as const, itemId: String(ic.itemId), createdAt: ic.createdAt ? String(ic.createdAt) : undefined }))
+    return [...viewsLog, ...clicksLog]
+  })
 
   return {
     stats,

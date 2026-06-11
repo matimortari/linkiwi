@@ -110,8 +110,25 @@ const { createActionHandler } = useActionIcon()
 const analyticsStore = useAnalyticsStore()
 const userStore = useUserStore()
 const { totalViews, totalClicks, clickRate, joinedAt, pageViewsChartData, linkClicksChartData, iconClicksChartData, referrerChartData } = useAnalyticsData()
-const referrerStats = computed(() => analyticsStore.referrerStats?.referrers || [])
 const resetAction = createActionHandler("mdi:close")
+
+// Derive the tabular traffic metrics dynamically from the raw page view data
+const referrerStats = computed(() => {
+  if (!analyticsStore.pageViews.length) {
+    return []
+  }
+
+  const counts: Record<string, number> = {}
+  analyticsStore.pageViews.forEach((pv) => {
+    const sourceKey = pv.referrer || pv.source || "Direct / Unknown"
+    counts[sourceKey] = (counts[sourceKey] ?? 0) + 1
+  })
+
+  return Object.entries(counts).map(([label, count]) => {
+    const source = label.toLowerCase().replace(/https?:\/\/(www\.)?/, "").split(".")[0] || "unknown"
+    return { source, label, count, percentage: ((count / analyticsStore.pageViews.length) * 100).toFixed(1) }
+  }).sort((a, b) => b.count - a.count).slice(0, 6)
+})
 
 const summaryItems = computed(() => [
   { label: "Total Page Views", icon: "mdi:file-eye-outline", value: totalViews.value },
@@ -150,9 +167,9 @@ async function handleDeleteAnalytics() {
   }
 
   await analyticsStore.deleteAnalytics()
-  await Promise.all([analyticsStore.getAnalytics(), analyticsStore.getReferrerStats()])
+  await analyticsStore.getAnalytics()
   resetAction.triggerSuccess()
 }
 
-onMounted(async () => await Promise.all([analyticsStore.getAnalytics(), analyticsStore.getReferrerStats(), userStore.getUser()]))
+onMounted(async () => await Promise.all([analyticsStore.getAnalytics(), userStore.getUser()]))
 </script>

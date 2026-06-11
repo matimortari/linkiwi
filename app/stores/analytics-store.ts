@@ -2,20 +2,30 @@ import type { CreateCommentInput } from "#shared/schemas/analytics-schema"
 
 export const useAnalyticsStore = defineStore("analytics", () => {
   const toast = useToast()
-  const analytics = ref<any>(null)
-  const referrerStats = ref<any>(null)
+  const pageViews = ref<PageView[]>([])
+  const itemClicks = ref<ItemClick[]>([])
+  const comments = ref<Comment[]>([])
   const loading = ref(false)
 
-  async function getAnalytics() {
+  async function getAnalytics(dateFrom?: string, dateTo?: string) {
     loading.value = true
 
     try {
-      const res = await $fetch("/api/analytics", { method: "GET", credentials: "include" })
-      analytics.value = res
+      const query: Record<string, string> = {}
+      if (dateFrom) {
+        query.dateFrom = dateFrom
+      }
+      if (dateTo) {
+        query.dateTo = dateTo
+      }
+
+      const res = await $fetch<{ data: { pageViews: PageView[], itemClicks: ItemClick[] } }>("/api/analytics", { method: "GET", query, credentials: "include" })
+      pageViews.value = res.data.pageViews
+      itemClicks.value = res.data.itemClicks
       return res
     }
     catch (err: unknown) {
-      const message = getErrorMessage(err, "Failed to fetch analytics")
+      const message = getErrorMessage(err, "Failed to fetch analytics data")
       toast.error(message)
       console.error("getAnalytics error:", err)
       throw err
@@ -25,49 +35,46 @@ export const useAnalyticsStore = defineStore("analytics", () => {
     }
   }
 
-  async function getReferrerStats() {
-    loading.value = true
-
-    try {
-      const res = await $fetch("/api/analytics/referrers", { method: "GET", credentials: "include" })
-      referrerStats.value = res
-      return res
-    }
-    catch (err: unknown) {
-      const message = getErrorMessage(err, "Failed to get referrer stats")
-      toast.error(message)
-      console.error("getReferrerStats error:", err)
-      throw err
-    }
-    finally {
-      loading.value = false
-    }
-  }
-
   async function recordPageView(slug: string, referrer?: string) {
-    loading.value = true
-
     try {
       await $fetch("/api/analytics", { method: "POST", body: { type: "pageView", slug, referrer }, credentials: "include" })
     }
-    catch {
-      // Silenty fail to avoid spamming users with errors if analytics recording fails
-    }
-    finally {
-      loading.value = false
+    catch (err: unknown) {
+      console.error("recordPageView error:", err)
     }
   }
 
-  async function recordLinkClick(slug: string, linkId: string) {
-    loading.value = true
-
+  async function recordItemClick(itemId: string) {
     try {
-      await $fetch("/api/analytics", { method: "POST", body: { type: "link", slug, id: linkId }, credentials: "include" })
+      await $fetch("/api/items/click", { method: "POST", body: { type: "itemClick", itemId }, credentials: "include" })
     }
     catch (err: unknown) {
-      const message = getErrorMessage(err, "Failed to record link click")
+      console.error("recordItemClick error:", err)
+    }
+  }
+
+  async function deleteAnalytics(options?: { type?: "pageView" | "itemClick", dateFrom?: string, dateTo?: string }) {
+    loading.value = true
+    try {
+      const query: Record<string, string> = {}
+      if (options?.type) {
+        query.type = options.type
+      }
+      if (options?.dateFrom) {
+        query.dateFrom = options.dateFrom
+      }
+      if (options?.dateTo) {
+        query.dateTo = options.dateTo
+      }
+
+      const res = await $fetch<{ success: boolean, message: string }>("/api/analytics", { method: "DELETE", query, credentials: "include" })
+      toast.success(res.message || "Analytics records deleted successfully")
+      return res
+    }
+    catch (err: unknown) {
+      const message = getErrorMessage(err, "Failed to delete analytics records")
       toast.error(message)
-      console.error("recordLinkClick error:", err)
+      console.error("deleteAnalytics error:", err)
       throw err
     }
     finally {
@@ -75,16 +82,18 @@ export const useAnalyticsStore = defineStore("analytics", () => {
     }
   }
 
-  async function recordIconClick(slug: string, iconId: string) {
+  async function getComments() {
     loading.value = true
 
     try {
-      await $fetch("/api/analytics", { method: "POST", body: { type: "icon", slug, id: iconId }, credentials: "include" })
+      const res = await $fetch<{ comments: Comment[] }>("/api/analytics/comments", { method: "GET", credentials: "include" })
+      comments.value = res.comments
+      return res
     }
     catch (err: unknown) {
-      const message = getErrorMessage(err, "Failed to record social icon click")
+      const message = getErrorMessage(err, "Failed to read comments")
       toast.error(message)
-      console.error("recordIconClick error:", err)
+      console.error("getComments error:", err)
       throw err
     }
     finally {
@@ -96,10 +105,13 @@ export const useAnalyticsStore = defineStore("analytics", () => {
     loading.value = true
 
     try {
-      await $fetch("/api/analytics/comments", { method: "POST", body: data, credentials: "include" })
+      const res = await $fetch<{ newComment: Comment }>("/api/analytics/comments", { method: "POST", body: data, credentials: "include" })
+      comments.value.unshift(res.newComment)
+      toast.success("Comment recorded successfully")
+      return res
     }
     catch (err: unknown) {
-      const message = getErrorMessage(err, "Failed to submit comment")
+      const message = getErrorMessage(err, "Failed to record comment")
       toast.error(message)
       console.error("submitComment error:", err)
       throw err
@@ -109,27 +121,18 @@ export const useAnalyticsStore = defineStore("analytics", () => {
     }
   }
 
-  async function deleteAnalytics(options?: { type?: "pageView" | "linkClick" | "iconClick", dateFrom?: string, dateTo?: string }) {
+  async function deleteComment(id: string) {
     loading.value = true
 
     try {
-      const params = new URLSearchParams()
-      if (options?.type) {
-        params.append("type", options.type)
-      }
-      if (options?.dateFrom) {
-        params.append("dateFrom", options.dateFrom)
-      }
-      if (options?.dateTo) {
-        params.append("dateTo", options.dateTo)
-      }
-
-      await $fetch<{ success: boolean, message: string }>(params.toString() ? `/api/analytics?${params.toString()}` : "/api/analytics", { method: "DELETE", credentials: "include" })
+      await $fetch(`/api/analytics/comments/${id}`, { method: "DELETE", credentials: "include" })
+      comments.value = comments.value.filter(comment => comment.id !== id)
+      toast.success("Comment deleted successfully")
     }
     catch (err: unknown) {
-      const message = getErrorMessage(err, "Failed to delete analytics")
+      const message = getErrorMessage(err, "Failed to delete comment")
       toast.error(message)
-      console.error("deleteAnalytics error:", err)
+      console.error("deleteComment error:", err)
       throw err
     }
     finally {
@@ -138,15 +141,16 @@ export const useAnalyticsStore = defineStore("analytics", () => {
   }
 
   return {
+    pageViews,
+    itemClicks,
+    comments,
     loading,
-    analytics,
-    referrerStats,
     getAnalytics,
-    getReferrerStats,
     recordPageView,
-    recordLinkClick,
-    recordIconClick,
-    submitComment,
+    recordItemClick,
     deleteAnalytics,
+    getComments,
+    submitComment,
+    deleteComment,
   }
 })

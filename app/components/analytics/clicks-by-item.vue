@@ -4,7 +4,7 @@
       Clicks by Item
     </h3>
 
-    <Loading v-if="linksLoading || iconsLoading || analyticsLoading" />
+    <Loading v-if="loading" />
     <Empty v-else-if="!items.length" message="No links or social icons yet." icon-name="mdi:octagram-minus-outline" />
 
     <ul v-else class="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -25,41 +25,36 @@
 </template>
 
 <script setup lang="ts">
-const linksStore = useLinksStore()
-const iconsStore = useIconsStore()
+const profileItemsStore = useProfileItemsStore()
 const analyticsStore = useAnalyticsStore()
-const { loading: linksLoading } = storeToRefs(linksStore)
-const { loading: iconsLoading } = storeToRefs(iconsStore)
-const { loading: analyticsLoading } = storeToRefs(analyticsStore)
+const { loading } = storeToRefs(profileItemsStore)
 
-// Merge links and social icons into a single items array
-const items = computed(() => [
-  ...linksStore.links.map(l => ({
-    id: l.id!,
-    type: "link" as const,
-    title: l.title,
-    url: l.url,
-  })),
-  ...iconsStore.icons.map(i => ({
-    id: i.id!,
-    type: "icon" as const,
-    logo: i.logo,
-    platform: i.platform,
-    url: i.url,
-  })),
-])
+// Map the unified items array down into the local structural variants
+const items = computed(() => {
+  return (profileItemsStore.items || []).filter((item: Record<string, any>) => item.type === "LINK" || item.type === "ICON").map((item: Record<string, any>) => {
+    if (item.type === "LINK") {
+      return {
+        id: item.id!,
+        type: "link" as const,
+        title: item.title,
+        url: item.url,
+      }
+    }
 
-// Create a map of item ID to click counts
+    return {
+      id: item.id!,
+      type: "icon" as const,
+      logo: item.logo,
+      platform: item.platform,
+      url: item.url,
+    }
+  })
+})
+
 const clicksMap = computed(() => {
   const counts: Record<string, number> = {}
-  for (const click of analyticsStore.analytics?.linkClicks ?? []) {
-    const id = click.userLinkId
-    if (id) {
-      counts[id] = (counts[id] ?? 0) + 1
-    }
-  }
-  for (const click of analyticsStore.analytics?.iconClicks ?? []) {
-    const id = click.userIconId
+  for (const click of analyticsStore.itemClicks || []) {
+    const id = click.itemId
     if (id) {
       counts[id] = (counts[id] ?? 0) + 1
     }
@@ -68,5 +63,5 @@ const clicksMap = computed(() => {
   return counts
 })
 
-onMounted(async () => await Promise.all([analyticsStore.getAnalytics(), analyticsStore.getReferrerStats()]))
+onMounted(async () => await Promise.all([analyticsStore.getAnalytics(), profileItemsStore.getItems()]))
 </script>

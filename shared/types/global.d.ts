@@ -66,18 +66,21 @@ interface ProfileItem {
 }
 
 interface ProfileItemLink {
+  id: string
   itemId: string
   url: string
   label: string
 }
 
 interface ProfileItemWidget {
+  id: string
   itemId: string
   type: WidgetType
   handle: string
 }
 
 interface ProfileItemIcon {
+  id: string
   itemId: string
   url: string
   platform?: string | null
@@ -120,6 +123,7 @@ interface ItemClick {
   id: string
   itemId: string
   createdAt: Date | string
+  item?: ProfileItem | null
 }
 
 interface Comment {
@@ -143,6 +147,14 @@ interface UIState {
       selectedItem: ProfileItem | null
       activeType: ProfileItemType | null
     }
+    link: {
+      isOpen: boolean
+      selectedLink: ProfileItem | null
+    }
+    icon: {
+      isOpen: boolean
+      selectedIcon: ProfileItem | null
+    }
   }
 }
 
@@ -158,4 +170,28 @@ interface Toast {
   message: string
   type: "success" | "error" | "warning" | "info"
   duration?: number
+}
+
+interface NormalizedLink {
+  id: string
+  title: string
+  url: string
+  isVisible: boolean
+  order: number
+}
+
+interface NormalizedIcon {
+  id: string
+  platform: string
+  url: string
+  logo: string
+  isVisible: boolean
+  order: number
+}
+
+interface NormalizedWidget {
+  id: string
+  isVisible: boolean
+  type: WidgetType
+  handle: string
 }

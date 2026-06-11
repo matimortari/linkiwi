@@ -15,18 +15,17 @@
 
 <script setup lang="ts">
 const userStore = useUserStore()
-const linksStore = useLinksStore()
-const iconsStore = useIconsStore()
-const widgetsStore = useWidgetsStore()
+const profileItemsStore = useProfileItemsStore()
 const { isSidebarOpen } = useUIState()
 const isLoading = ref(true)
 
 onMounted(async () => {
   try {
     await userStore.getUser()
-    await Promise.all([linksStore.getLinks(), iconsStore.getIcons(), widgetsStore.getWidgets()])
+    await profileItemsStore.getItems()
   }
-  catch {
+  catch (error) {
+    console.error("Layout initialization failed:", error)
     await navigateTo("/sign-in")
   }
   finally {
