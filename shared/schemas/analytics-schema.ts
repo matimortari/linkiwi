@@ -29,9 +29,9 @@ export const analyticsRecordSchema = z.discriminatedUnion("type", [
 
 export const createCommentSchema = z.object({
   userId: z.cuid2("Invalid user ID"),
-  name: z.string().min(1, "Name is required").max(100).trim(),
-  email: z.email("Invalid email address").max(100).or(z.literal("")).transform(val => val || undefined),
-  message: z.string().min(1, "Message is required").max(500).trim(),
+  name: z.string().min(1, "Name is required").max(50, "Name is too long").transform(val => val.trim()),
+  email: z.email("Invalid email address").nullable().optional().or(z.literal("")),
+  message: z.string().min(1, "Message cannot be empty").max(500, "Message exceeds 500 characters").transform(val => val.trim()),
 })
 
 export type AnalyticsRecordSchema = z.infer<typeof analyticsRecordSchema>

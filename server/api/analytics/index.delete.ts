@@ -1,20 +1,20 @@
-import { Buffer } from "node:buffer"
 import { promises as fs } from "node:fs"
 import os from "node:os"
 import path from "node:path"
 import parquet from "parquetjs"
 
 export default defineEventHandler(async (event) => {
-  const user = await getUserFromSession(event)
+  const sessionUser = await getUserFromSession(event)
 
   // Rate limit: 5 requests per hour per user
-  await enforceRateLimit(event, `analytics:delete:${user.id}`, 5)
+  await enforceRateLimit(event, `analytics:delete:${sessionUser.id}`, 5)
 
   const query = getQuery(event)
-  if (query.type && !["pageView", "linkClick", "iconClick"].includes(query.type as string)) {
-    throw createError({ status: 400, statusText: "Invalid analytics type" })
+  if (query.type && !["pageView", "itemClick"].includes(query.type as string)) {
+    throw createError({ status: 400, statusText: "Invalid analytics data collection type" })
   }
 
+  // Construct standard date constraint block matching index patterns
   const dateFilter: any = {}
   if (query.dateFrom) {
     dateFilter.gte = new Date(query.dateFrom as string)
@@ -24,49 +24,36 @@ export default defineEventHandler(async (event) => {
   }
 
   const hasDateFilter = Object.keys(dateFilter).length > 0
+  const prismaDateWhere = hasDateFilter ? { createdAt: dateFilter } : {}
 
   let pageViews: any[] = []
-  let linkClicks: any[] = []
-  let iconClicks: any[] = []
+  let itemClicks: any[] = []
+
+  // Concurrently get rows matching request scope bounds
   if (!query.type || query.type === "pageView") {
     pageViews = await db.pageView.findMany({
-      where: { userId: user.id, ...(hasDateFilter && { createdAt: dateFilter }) },
+      where: { userId: sessionUser.id, ...prismaDateWhere },
       take: 50000,
       orderBy: { createdAt: "asc" },
     })
   }
 
-  if (!query.type || query.type === "linkClick") {
-    const userLinks = await db.userLink.findMany({ where: { userId: user.id }, select: { id: true } })
-    if (userLinks.length > 0) {
-      linkClicks = await db.linkClick.findMany({
-        where: { userLinkId: { in: userLinks.map(link => link.id) }, ...(hasDateFilter && { createdAt: dateFilter }) },
-        take: 50000,
-        orderBy: { createdAt: "asc" },
-        include: { userLink: { select: { url: true, title: true } } },
-      })
-    }
+  if (!query.type || query.type === "itemClick") {
+    itemClicks = await db.itemClick.findMany({
+      where: { item: { userId: sessionUser.id }, ...prismaDateWhere },
+      take: 50000,
+      orderBy: { createdAt: "asc" },
+      include: { item: { select: { type: true, order: true } } }, // Include parent item information to enrich the cold archive file details
+    })
   }
-
-  if (!query.type || query.type === "iconClick") {
-    const userIcons = await db.userIcon.findMany({ where: { userId: user.id }, select: { id: true } })
-    if (userIcons.length > 0) {
-      iconClicks = await db.iconClick.findMany({
-        where: { userIconId: { in: userIcons.map(icon => icon.id) }, ...(hasDateFilter && { createdAt: dateFilter }) },
-        take: 50000,
-        orderBy: { createdAt: "asc" },
-        include: { userIcon: { select: { url: true, platform: true, logo: true } } },
-      })
-    }
-  }
-
-  const totalRecords = pageViews.length + linkClicks.length + iconClicks.length
-  if (totalRecords === 0) {
-    return { success: true, message: "No analytics data found to delete" }
+  if (pageViews.length + itemClicks.length === 0) {
+    return { success: true, message: "No records found within selected range parameters" }
   }
 
   const timestamp = Date.now()
   const archiveFiles: File[] = []
+
+  // Compile page views into a compressed Parquet partition
   if (pageViews.length > 0) {
     const schema = new parquet.ParquetSchema({
       id: { type: "UTF8" },
@@ -90,122 +77,68 @@ export default defineEventHandler(async (event) => {
 
     await writer.close()
     const buffer = await fs.readFile(tempPath)
-    archiveFiles.push(new File([Buffer.from(buffer)], `pageviews_archive_${timestamp}.parquet`, { type: "application/vnd.apache.parquet" }))
+
+    archiveFiles.push(new File([new Uint8Array(buffer)], `pageviews_archive_${timestamp}.parquet`, { type: "application/vnd.apache.parquet" }))
     await fs.unlink(tempPath)
   }
 
-  if (linkClicks.length > 0) {
+  // Compile item clicks into a compressed Parquet partition
+  if (itemClicks.length > 0) {
     const schema = new parquet.ParquetSchema({
-      userLinkId: { type: "UTF8" },
-      linkUrl: { type: "UTF8", optional: true },
-      linkTitle: { type: "UTF8", optional: true },
+      id: { type: "UTF8" },
+      itemId: { type: "UTF8" },
+      itemType: { type: "UTF8" },
+      itemOrder: { type: "INT32" },
       createdAt: { type: "TIMESTAMP_MILLIS" },
     })
 
-    const tempPath = path.join(os.tmpdir(), `linkclicks_archive_${timestamp}.parquet`)
+    const tempPath = path.join(os.tmpdir(), `itemclicks_archive_${timestamp}.parquet`)
     const writer = await parquet.ParquetWriter.openFile(schema, tempPath)
-    for (const lc of linkClicks) {
+    for (const ic of itemClicks) {
       await writer.appendRow({
-        userLinkId: lc.userLinkId,
-        linkUrl: lc.userLink?.url ?? null,
-        linkTitle: lc.userLink?.title ?? null,
-        createdAt: lc.createdAt,
-      })
-    }
-
-    await writer.close()
-    const buffer = await fs.readFile(tempPath)
-    archiveFiles.push(new File([Buffer.from(buffer)], `linkclicks_archive_${timestamp}.parquet`, { type: "application/vnd.apache.parquet" }))
-    await fs.unlink(tempPath)
-  }
-
-  if (iconClicks.length > 0) {
-    const schema = new parquet.ParquetSchema({
-      userIconId: { type: "UTF8" },
-      iconUrl: { type: "UTF8", optional: true },
-      iconPlatform: { type: "UTF8", optional: true },
-      iconLogo: { type: "UTF8", optional: true },
-      createdAt: { type: "TIMESTAMP_MILLIS" },
-    })
-
-    const tempPath = path.join(os.tmpdir(), `iconclicks_archive_${timestamp}.parquet`)
-    const writer = await parquet.ParquetWriter.openFile(schema, tempPath)
-    for (const ic of iconClicks) {
-      await writer.appendRow({
-        userIconId: ic.userIconId,
-        iconUrl: ic.userIcon?.url ?? null,
-        iconPlatform: ic.userIcon?.platform ?? null,
-        iconLogo: ic.userIcon?.logo ?? null,
+        id: ic.id,
+        itemId: ic.itemId,
+        itemType: ic.item?.type ?? "UNKNOWN",
+        itemOrder: ic.item?.order ?? 0,
         createdAt: ic.createdAt,
       })
     }
 
     await writer.close()
     const buffer = await fs.readFile(tempPath)
-    archiveFiles.push(new File([Buffer.from(buffer)], `iconclicks_archive_${timestamp}.parquet`, { type: "application/vnd.apache.parquet" }))
+
+    // Fixed: Cast Node Buffer via Uint8Array array boundary wrapping to appease Type Engine
+    archiveFiles.push(new File([new Uint8Array(buffer)], `itemclicks_archive_${timestamp}.parquet`, { type: "application/vnd.apache.parquet" }))
     await fs.unlink(tempPath)
   }
 
-  // Upload all records to cold storage
+  // Push generated data snapshots to cold storage
   for (const file of archiveFiles) {
     await uploadFile({
-      path: `archive/user_${user.id}`,
+      path: `archive/user_${sessionUser.id}`,
       file,
-      maxSize: 50 * 1024 * 1024, // 50 MB
+      maxSize: 50 * 1024 * 1024, // 50MB
       allowedMimeTypes: ["application/vnd.apache.parquet", "application/octet-stream"],
     })
   }
 
-  // Delete records from database in a transaction
-  let deleteResult = 0
+  // Atomic purging transaction execution across active relations
+  let purgedCount = 0
   await db.$transaction(async (tx) => {
     if (pageViews.length > 0) {
       const result = await tx.pageView.deleteMany({ where: { id: { in: pageViews.map(pv => pv.id) } } })
-      deleteResult += result.count
+      purgedCount += result.count
     }
-
-    if (linkClicks.length > 0) {
-      const result = hasDateFilter
-        ? await tx.linkClick.deleteMany({ where: { OR: linkClicks.map(lc => ({ userLinkId: lc.userLinkId, createdAt: lc.createdAt })) } })
-        : await tx.linkClick.deleteMany({ where: { userLinkId: { in: linkClicks.map(lc => lc.userLinkId) } } })
-      deleteResult += result.count
-
-      // Update clickCounts
-      const userLinks = await tx.userLink.findMany({ where: { userId: user.id }, select: { id: true } })
-      if (hasDateFilter) {
-        for (const link of userLinks) {
-          const remainingClicks = await tx.linkClick.count({ where: { userLinkId: link.id } })
-          await tx.userLink.update({ where: { id: link.id }, data: { clickCount: remainingClicks } })
-        }
-      }
-      else {
-        await tx.userLink.updateMany({ where: { userId: user.id, id: { in: userLinks.map(link => link.id) } }, data: { clickCount: 0 } })
-      }
-    }
-
-    if (iconClicks.length > 0) {
-      const result = hasDateFilter
-        ? await tx.iconClick.deleteMany({ where: { OR: iconClicks.map(ic => ({ userIconId: ic.userIconId, createdAt: ic.createdAt })) } })
-        : await tx.iconClick.deleteMany({ where: { userIconId: { in: iconClicks.map(ic => ic.userIconId) } } })
-      deleteResult += result.count
-
-      // Update clickCounts
-      const userIcons = await tx.userIcon.findMany({ where: { userId: user.id }, select: { id: true } })
-      if (hasDateFilter) {
-        for (const icon of userIcons) {
-          const remainingClicks = await tx.iconClick.count({ where: { userIconId: icon.id } })
-          await tx.userIcon.update({ where: { id: icon.id }, data: { clickCount: remainingClicks } })
-        }
-      }
-      else {
-        await tx.userIcon.updateMany({ where: { userId: user.id, id: { in: userIcons.map(icon => icon.id) } }, data: { clickCount: 0 } })
-      }
+    if (itemClicks.length > 0) {
+      const result = await tx.itemClick.deleteMany({ where: { id: { in: itemClicks.map(ic => ic.id) } } })
+      purgedCount += result.count
     }
   })
 
-  // Invalidate cache
-  const userData = await db.user.findUnique({ where: { id: user.id }, select: { slug: true } })
-  await deleteCached(CacheKeys.analytics(user.id), CacheKeys.userLinks(user.id), CacheKeys.userIcons(user.id), CacheKeys.userProfile(userData?.slug || ""))
+  const user = await db.user.findUnique({ where: { id: sessionUser.id }, select: { slug: true } })
+  const dynamicOverviewKey = `analytics:overview:${sessionUser.id}:${query.dateFrom || "all"}:${query.dateTo || "all"}`
 
-  return { success: true, message: `Successfully deleted ${deleteResult} analytics ${deleteResult === 1 ? "record" : "records"}` }
+  await deleteCached(dynamicOverviewKey, CacheKeys.analytics(sessionUser.id), CacheKeys.userProfile(user?.slug || ""))
+
+  return { success: true, message: `Successfully deleted ${purgedCount} entries.` }
 })

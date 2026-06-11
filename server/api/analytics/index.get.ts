@@ -1,34 +1,37 @@
 export default defineEventHandler(async (event) => {
-  const user = await getUserFromSession(event)
+  const sessionUser = await getUserFromSession(event)
 
   // Rate limit: 100 requests per hour per user
-  await enforceRateLimit(event, `analytics:get:${user.id}`, 100)
+  await enforceRateLimit(event, `analytics:get:${sessionUser.id}`, 100)
 
-  const cacheKey = CacheKeys.analytics(user.id)
+  const query = getQuery(event)
+  const dateFrom = query.dateFrom ? new Date(query.dateFrom as string) : undefined
+  const dateTo = query.dateTo ? new Date(query.dateTo as string) : undefined
+  const dateFilter = (dateFrom || dateTo) ? { createdAt: { ...(dateFrom && { gte: dateFrom }), ...(dateTo && { lte: dateTo }) } } : {}
+
+  // Dynamic cache key that changes when date ranges are applied
+  const cacheKey = `analytics:overview:${sessionUser.id}:${query.dateFrom || "all"}:${query.dateTo || "all"}`
   const cached = await getCached<any>(cacheKey)
   if (cached) {
     return cached
   }
 
-  const [pageViews, linkClicks, iconClicks] = await Promise.all([
+  // Concurrently pull page views and item clicks with the same date filter
+  const [pageViews, itemClicks] = await Promise.all([
     db.pageView.findMany({
-      where: { userId: user.id },
-      select: { id: true, userId: true, createdAt: true, referrer: true, source: true },
+      where: { userId: sessionUser.id, ...dateFilter },
+      select: { id: true, createdAt: true, referrer: true, source: true },
       orderBy: { createdAt: "desc" },
     }),
-    db.linkClick.findMany({
-      where: { userLink: { userId: user.id } },
-      select: { userLinkId: true, createdAt: true, userLink: { select: { userId: true } } },
-      orderBy: { createdAt: "desc" },
-    }),
-    db.iconClick.findMany({
-      where: { userIcon: { userId: user.id } },
-      select: { userIconId: true, createdAt: true, userIcon: { select: { userId: true } } },
+    db.itemClick.findMany({
+      where: { item: { userId: sessionUser.id }, ...dateFilter },
+      select: { id: true, itemId: true, createdAt: true, item: { select: { type: true, order: true } } },
       orderBy: { createdAt: "desc" },
     }),
   ])
 
-  await setCached(cacheKey, { pageViews, linkClicks, iconClicks }, CACHE_TTL.SHORT)
+  const data = { pageViews, itemClicks }
+  await setCached(cacheKey, data, CACHE_TTL.SHORT)
 
-  return { pageViews, linkClicks, iconClicks }
+  return { data }
 })

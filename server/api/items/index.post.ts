@@ -54,5 +54,5 @@ export default defineEventHandler(async (event) => {
   const user = await db.user.findUnique({ where: { id: sessionUser.id }, select: { slug: true } })
   await deleteCached(CacheKeys.userItems(sessionUser.id), CacheKeys.userProfile(user?.slug || ""))
 
-  return { item: newItem }
+  return { newItem }
 })
