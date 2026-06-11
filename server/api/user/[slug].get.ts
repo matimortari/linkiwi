@@ -14,7 +14,9 @@ export default defineEventHandler(async (event) => {
     return { userProfile: cached }
   }
 
-  const userProfile = await db.user.findUnique({
+  const now = new Date()
+
+  const profile = await db.user.findUnique({
     where: { slug },
     select: {
       id: true,
@@ -22,29 +24,37 @@ export default defineEventHandler(async (event) => {
       image: true,
       slug: true,
       description: true,
+      location: true,
       preferences: true,
-      links: {
-        where: { isVisible: true },
-        select: { id: true, url: true, title: true, order: true, isVisible: true },
+      banner: { select: { url: true } },
+      supportButton: { select: { isEnabled: true, platform: true, url: true, suggestedAmounts: true, thankYouMessage: true } },
+      items: {
+        where: {
+          isVisible: true,
+          AND: [
+            { OR: [{ scheduledStart: null }, { scheduledStart: { lte: now } }] },
+            { OR: [{ scheduledEnd: null }, { scheduledEnd: { gte: now } }] },
+          ],
+        },
         orderBy: { order: "asc" },
-      },
-      icons: {
-        where: { isVisible: true },
-        select: { id: true, url: true, platform: true, logo: true, order: true, isVisible: true },
-        orderBy: { order: "asc" },
-      },
-      widgets: {
-        where: { isVisible: true },
-        select: { id: true, type: true, handle: true, order: true, isVisible: true },
-        orderBy: { order: "asc" },
+        include: { link: true, widget: true, icon: true, photoGrid: { include: { photos: { orderBy: { order: "asc" } } } } },
       },
     },
   })
-  if (!userProfile) {
+
+  if (!profile) {
     throw createError({ status: 404, statusText: `User '${slug}' not found` })
   }
 
-  await setCached(cacheKey, userProfile, CACHE_TTL.LONG)
+  // Privacy Guard: Strip fields explicitly disabled by user preferences
+  if (!profile.preferences?.showLocation) {
+    profile.location = null
+  }
+  if (!profile.supportButton?.isEnabled) {
+    profile.supportButton = null
+  }
 
-  return { userProfile }
+  await setCached(cacheKey, profile, CACHE_TTL.LONG)
+
+  return { profile }
 })

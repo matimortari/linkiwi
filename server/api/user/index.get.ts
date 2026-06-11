@@ -1,21 +1,28 @@
 export default defineEventHandler(async (event) => {
-  const user = await getUserFromSession(event)
+  const sessionUser = await getUserFromSession(event)
 
   // Rate limit: 200 requests per hour per user
-  await enforceRateLimit(event, `user:get:${user.id}`, 200)
+  await enforceRateLimit(event, `user:get:${sessionUser.id}`, 200)
 
-  const cacheKey = CacheKeys.userData(user.id)
-  const cached = await getCached<any>(cacheKey)
-  if (cached) {
-    return { userData: cached }
+  const cacheKey = CacheKeys.userData(sessionUser.id)
+  const cachedUser = await getCached<any>(cacheKey)
+  if (cachedUser) {
+    return { user: cachedUser }
   }
 
-  const userData = await db.user.findUnique({ where: { id: user.id }, include: { preferences: true, comments: true } })
-  if (!userData) {
+  const user = await db.user.findUnique({
+    where: { id: sessionUser.id },
+    include: {
+      preferences: true,
+      banner: { select: { id: true, url: true, asset: true } },
+      supportButton: { select: { userId: true, url: true, isEnabled: true, platform: true, suggestedAmounts: true, thankYouMessage: true } },
+    },
+  })
+  if (!user) {
     throw createError({ status: 404, statusText: "User not found" })
   }
 
-  await setCached(cacheKey, userData, CACHE_TTL.SHORT)
+  await setCached(cacheKey, user, CACHE_TTL.SHORT)
 
-  return { userData }
+  return { user }
 })
