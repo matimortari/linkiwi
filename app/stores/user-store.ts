@@ -11,8 +11,8 @@ export const useUserStore = defineStore("user", () => {
     loading.value = true
 
     try {
-      const res = await $fetch<{ userData: User }>("/api/user", { method: "GET", credentials: "include" })
-      user.value = res.userData
+      const res = await $fetch<{ user: User }>("/api/user", { method: "GET", credentials: "include" })
+      user.value = res.user
       return res
     }
     catch (err: unknown) {
@@ -30,8 +30,8 @@ export const useUserStore = defineStore("user", () => {
     loading.value = true
 
     try {
-      const res = await $fetch<{ userProfile: User }>(`/api/user/${slug}`, { method: "GET" })
-      userProfile.value = res.userProfile
+      const res = await $fetch<{ profile: User }>(`/api/user/${slug}`, { method: "GET" })
+      userProfile.value = res.profile
       return res
     }
     catch (err: unknown) {
@@ -71,7 +71,7 @@ export const useUserStore = defineStore("user", () => {
       const formData = new FormData()
       formData.append("file", file)
 
-      const res = await $fetch<{ imageUrl: string }>("/api/user/image-upload", { method: "PUT", body: formData, credentials: "include" })
+      const res = await $fetch<{ imageUrl: string }>("/api/user/image", { method: "PUT", body: formData, credentials: "include" })
       if (user.value && res.imageUrl) {
         user.value.image = res.imageUrl
       }
