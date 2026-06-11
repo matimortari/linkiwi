@@ -47,8 +47,8 @@ export const SIDEBAR_NAV_LINKS = [
 export const APPEARANCE_TABS = [
   { label: "Background", value: "background" },
   { label: "User Info", value: "user" },
-  { label: "Links", value: "links" },
-  { label: "Social Icons", value: "icons" },
+  { label: "Layout", value: "elements" },
+  { label: "Monetization & Support", value: "support" },
   { label: "Themes", value: "themes" },
 ]
 
@@ -87,30 +87,34 @@ export const DEFAULT_PREFERENCES = {
   iconShadowWeight: "medium" as const,
   iconLogoColor: "#475569",
   iconHoverBackgroundColor: "#cbd5e1",
+  dividerColor: "#e2e8f0",
+  dividerThickness: "1px",
+  dividerStyle: "solid",
   supportBanner: "NONE" as const,
   enableGuestbook: false,
+  showLocation: false,
 }
 
 // Widget configuration constants
-export const WIDGET_OPTIONS: { type: "GITHUB" | "YOUTUBE" | "SPOTIFY", label: string, icon: string }[] = [
+export const WIDGET_OPTIONS: { type: WidgetType, label: string, icon: string }[] = [
   { type: "GITHUB", label: "GitHub", icon: "simple-icons:github" },
   { type: "YOUTUBE", label: "YouTube", icon: "simple-icons:youtube" },
   { type: "SPOTIFY", label: "Spotify", icon: "simple-icons:spotify" },
 ]
 
-export const WIDGET_ICONS: Record<"GITHUB" | "YOUTUBE" | "SPOTIFY", string> = {
+export const WIDGET_ICONS: Record<WidgetType, string> = {
   GITHUB: "simple-icons:github",
   YOUTUBE: "simple-icons:youtube",
   SPOTIFY: "simple-icons:spotify",
 }
 
-export const WIDGET_LABELS: Record<"GITHUB" | "YOUTUBE" | "SPOTIFY", string> = {
+export const WIDGET_LABELS: Record<WidgetType, string> = {
   GITHUB: "GitHub",
   YOUTUBE: "YouTube",
   SPOTIFY: "Spotify",
 }
 
-export const WIDGET_META: Record<"GITHUB" | "YOUTUBE" | "SPOTIFY", { label: string, placeholder: string, hint: string }> = {
+export const WIDGET_META: Record<WidgetType, { label: string, placeholder: string, hint: string }> = {
   GITHUB: { label: "GitHub Username", placeholder: "e.g. torvalds", hint: "Enter your GitHub username and display your top repositories." },
   YOUTUBE: { label: "YouTube Handle or Channel ID", placeholder: "e.g. @mkbhd or UCBcRF18a7Qf58cCRy5xuWwQ", hint: "Enter your @handle or channel ID to display your latest videos." },
   SPOTIFY: { label: "Spotify Link", placeholder: "e.g. https://open.spotify.com/track/...", hint: "Paste a Spotify URL for a track, album, playlist, episode, or podcast." },

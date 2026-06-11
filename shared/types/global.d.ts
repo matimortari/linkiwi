@@ -1,64 +1,125 @@
+type BackgroundType = "FLAT" | "GRADIENT"
+type SupportBanner = "NONE" | "LGBTQ_RIGHTS" | "ANTI_RACISM" | "MENTAL_HEALTH" | "CLIMATE_ACTION"
+type ScheduleAction = "HIDE" | "DELETE"
+type ProfileItemType = "LINK" | "WIDGET" | "ICON" | "DIVIDER" | "PHOTO_GRID"
+type WidgetType = "GITHUB" | "YOUTUBE" | "SPOTIFY"
+type SupportPlatform = "KO_FI" | "BUY_ME_A_COFFEE" | "PIX" | "CUSTOM"
+
 interface User {
   id: string
   email: string
   name: string
-  image: string
+  image?: string | null
   slug: string
   description?: string | null
-  preferences: UserPreferences
-  links?: Link[]
-  icons?: Icon[]
-  widgets?: Widget[]
+  location?: string | null
+  preferences?: UserPreferences | null
+  banner?: UserBanner | null
+  supportButton?: UserSupportButton | null
+  items?: ProfileItem[]
+  assets?: UserAsset[]
   views?: PageView[]
   comments?: Comment[]
+  accounts?: Account[]
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
-interface Link {
+interface UserBanner {
+  id: string
+  userId: string
+  assetId?: string | null
+  url: string
+  asset?: UserAsset | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+interface UserAsset {
   id: string
   userId: string
   url: string
-  title: string
-  order: number
-  clickCount: number
-  isVisible?: boolean
-  clicks?: { userLinkId: string, createdAt: string | Date }[]
+  key: string
+  mimeType: string
+  size: number
+  label?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
 }
 
-interface Icon {
+interface ProfileItem {
   id: string
   userId: string
-  url: string
-  platform: string
-  logo: string
+  type: ProfileItemType
   order: number
-  clickCount: number
-  isVisible?: boolean
-  clicks?: { userIconId: string, createdAt: string | Date }[]
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-interface Widget {
-  id: string
-  userId: string
-  type: "GITHUB" | "YOUTUBE" | "SPOTIFY"
-  handle: string
-  order: number
+  isPinned: boolean
   isVisible: boolean
+  scheduledStart?: Date | string | null
+  scheduledEnd?: Date | string | null
+  scheduleAction?: ScheduleAction | null
+  link?: ProfileItemLink | null
+  widget?: ProfileItemWidget | null
+  icon?: ProfileItemIcon | null
+  photoGrid?: ProfileItemPhotoGrid | null
+  clicks?: ItemClick[]
   createdAt?: Date | string
   updatedAt?: Date | string
+}
+
+interface ProfileItemLink {
+  itemId: string
+  url: string
+  label: string
+}
+
+interface ProfileItemWidget {
+  itemId: string
+  type: WidgetType
+  handle: string
+}
+
+interface ProfileItemIcon {
+  itemId: string
+  url: string
+  platform?: string | null
+  logo?: string | null
+}
+
+interface ProfileItemPhotoGrid {
+  itemId: string
+  photos?: PhotoGridItem[]
+}
+
+interface PhotoGridItem {
+  id: string
+  gridId: string
+  assetId?: string | null
+  url: string
+  order: number
+  alt?: string | null
+  asset?: UserAsset | null
+}
+
+interface UserSupportButton {
+  userId: string
+  isEnabled: boolean
+  platform: SupportPlatform
+  url: string
+  thankYouMessage?: string | null
+  suggestedAmounts: number[]
 }
 
 interface PageView {
   id: string
   userId: string
-  createdAt: Date | string
   referrer?: string | null
   source?: string | null
+  createdAt: Date | string
+}
+
+interface ItemClick {
+  id: string
+  itemId: string
+  createdAt: Date | string
 }
 
 interface Comment {
@@ -76,11 +137,12 @@ interface UIState {
   dialogs: {
     user: boolean
     share: boolean
-    link: {
+    supportButton: boolean
+    item: {
       isOpen: boolean
-      selectedLink: Link | null
+      selectedItem: ProfileItem | null
+      activeType: ProfileItemType | null
     }
-    icon: boolean
   }
 }
 
