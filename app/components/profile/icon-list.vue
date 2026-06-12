@@ -46,10 +46,18 @@
 <script setup lang="ts">
 import { VueDraggable } from "vue-draggable-plus"
 
-const iconStore = useIconsStore()
-const { icons, loading } = storeToRefs(iconStore)
+const profileItemsStore = useProfileItemsStore()
+const { loading } = storeToRefs(profileItemsStore)
 const { isIconDialogOpen, openDialog, closeDialog } = useUIState()
-const orderedIcons = ref<Icon[]>([])
+const orderedIcons = ref<NormalizedIcon[]>([])
+const icons = computed<NormalizedIcon[]>(() => (profileItemsStore.items || []).filter((item: ProfileItem) => item.type === "ICON" && item.icon).map((item: ProfileItem) => ({
+  id: item.id,
+  platform: item.icon!.platform ?? "",
+  url: item.icon!.url ?? "",
+  logo: item.icon!.logo ?? "",
+  isVisible: item.isVisible,
+  order: item.order,
+})).sort((a, b) => a.order - b.order))
 
 async function reorderIcon() {
   const previousOrder = [...orderedIcons.value]
@@ -57,18 +65,17 @@ async function reorderIcon() {
     const existing = icons.value.find(icon => icon.id === id)
     return existing?.order !== order
   })
-
   if (!updates.length) {
     return
   }
 
-  const results = await Promise.all(updates.map(({ id, order }) => iconStore.updateIcon(id, { order })))
+  const results = await Promise.all(updates.map(({ id, order }) => profileItemsStore.updateItem(id, { order })))
   if (results.every(Boolean)) {
-    iconStore.icons.sort((a, b) => a.order - b.order)
+    profileItemsStore.items.sort((a, b) => a.order - b.order)
   }
   else {
     orderedIcons.value = previousOrder
-    await iconStore.getIcons()
+    await profileItemsStore.getItems()
   }
 }
 
@@ -76,16 +83,13 @@ async function handleDeleteIcon(iconId: string) {
   if (!confirm("Are you sure you want to delete this social icon?")) {
     return
   }
-
-  await iconStore.deleteIcon(iconId)
+  await profileItemsStore.deleteItem(iconId)
 }
 
 async function toggleVisibility(iconId: string, currentVisibility: boolean) {
-  await iconStore.updateIcon(iconId, { isVisible: !currentVisibility })
+  await profileItemsStore.updateItem(iconId, { isVisible: !currentVisibility })
 }
 
 // Sync store icons to local orderedIcons
-watch(() => icons.value, (newIcons) => {
-  orderedIcons.value = [...newIcons]
-}, { immediate: true, deep: true })
+watch(() => icons.value, newIcons => orderedIcons.value = [...newIcons], { immediate: true, deep: true })
 </script>

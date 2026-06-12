@@ -9,7 +9,7 @@ interface User {
   id: string
   email: string
   name: string
-  image?: string | null
+  image: string
   slug: string
   description?: string | null
   location?: string | null
@@ -23,6 +23,48 @@ interface User {
   accounts?: Account[]
   createdAt?: Date | string
   updatedAt?: Date | string
+}
+
+interface UserPreferences {
+  backgroundType: BackgroundOption
+  backgroundColor?: string
+  backgroundGradientStart?: string
+  backgroundGradientEnd?: string
+  profilePictureRadius: RadiusSize
+  profilePictureBorderWidth: BorderWidth
+  profilePictureBorderColor: string
+  slugFontFamily: FontFamily
+  slugTextSize: FontSize
+  slugTextWeight: FontWeight
+  slugTextColor: string
+  headerFontFamily: FontFamily
+  headerTextSize: FontSize
+  headerTextWeight: FontWeight
+  headerTextColor: string
+  linkFontFamily: FontFamily
+  linkTextSize: LinkFontSize
+  linkTextWeight: FontWeight
+  linkTextColor: string
+  linkBackgroundColor: string
+  linkHoverBackgroundColor: string
+  linkBorderRadius: RadiusSize
+  linkPadding: LinkPaddingSize
+  isLinkShadow: boolean
+  linkShadowColor?: string
+  linkShadowWeight?: ShadowWeight
+  showLinkCopyButton?: boolean
+  iconBackgroundColor: string
+  iconHoverBackgroundColor: string
+  iconLogoColor: string
+  isIconShadow: boolean
+  iconShadowColor?: string
+  iconShadowWeight?: ShadowWeight
+  dividerColor?: string
+  dividerThickness?: BorderWidth
+  dividerStyle?: DividerStyle
+  supportBanner?: BannerOption
+  enableGuestbook?: boolean
+  showLocation?: boolean
 }
 
 interface UserBanner {

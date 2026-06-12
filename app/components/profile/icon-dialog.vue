@@ -6,7 +6,7 @@
       <div class="scroll-area grid max-h-64 grid-cols-3 gap-1 overflow-y-auto pr-1 md:grid-cols-6 2xl:grid-cols-8">
         <button
           v-for="[label, iconName] in socialIconEntries" :key="label"
-          type="button" class="card flex flex-col items-center justify-center gap-2 p-2! transition-all hover:bg-muted! active:bg-muted"
+          class="card flex flex-col items-center justify-center gap-2 p-2! transition-all hover:bg-muted! active:bg-muted"
           :class="{ 'bg-muted': form.platform === label }" @click="selectIcon(label, iconName)"
         >
           <icon :name="iconName" size="25" />
@@ -36,12 +36,12 @@
 <script setup lang="ts">
 const emit = defineEmits<{ close: [] }>()
 
-const iconsStore = useIconsStore()
+const profileItemsStore = useProfileItemsStore()
 const { isIconDialogOpen } = useUIState()
-const form = ref<Parameters<typeof iconsStore.createIcon>[0]>({ platform: "" as keyof typeof SOCIAL_ICONS, logo: "" as typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS], url: "" })
-const socialIconEntries = computed(() => Object.entries(SOCIAL_ICONS) as [keyof typeof SOCIAL_ICONS, (typeof SOCIAL_ICONS)[keyof typeof SOCIAL_ICONS]][])
+const form = ref({ platform: "", logo: "", url: "" })
+const socialIconEntries = computed(() => Object.entries(SOCIAL_ICONS) as [string, string][])
 
-function selectIcon(label: keyof typeof SOCIAL_ICONS, iconName: typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS]) {
+function selectIcon(label: string, iconName: string) {
   form.value.platform = label
   form.value.logo = iconName
 }
@@ -51,10 +51,13 @@ async function handleSubmit() {
     return
   }
 
-  const created = await iconsStore.createIcon(form.value)
-  if (created) {
-    handleCancel()
-  }
+  await profileItemsStore.createItem({
+    type: "ICON",
+    isPinned: false,
+    isVisible: true,
+    icon: { platform: form.value.platform, logo: form.value.logo, url: form.value.url },
+  })
+  handleCancel()
 }
 
 function handleCancel() {
@@ -63,19 +66,14 @@ function handleCancel() {
 }
 
 function resetForm() {
-  form.value.platform = "" as keyof typeof SOCIAL_ICONS
-  form.value.logo = "" as typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS]
+  form.value.platform = ""
+  form.value.logo = ""
   form.value.url = ""
 }
 
 // Reset form when dialog is opened
 watch(() => isIconDialogOpen.value, (open) => {
-  if (open) {
-    form.value.platform = "" as keyof typeof SOCIAL_ICONS
-    form.value.logo = "" as typeof SOCIAL_ICONS[keyof typeof SOCIAL_ICONS]
-    form.value.url = ""
-  }
-  else {
+  if (!open) {
     resetForm()
   }
 }, { immediate: true })

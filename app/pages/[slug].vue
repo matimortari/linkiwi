@@ -23,26 +23,26 @@
       </div>
 
       <ul v-if="visibleIcons.length" class="navigation-group justify-center">
-        <UserIcon
-          v-for="icon in visibleIcons" :key="icon.id"
-          :item="icon" :preferences="profilePreferences"
-          @click="handleClick(icon.id ?? '', 'icon')"
+        <UserSocialIcon
+          v-for="item in visibleIcons" :key="item.id"
+          :item="item" :preferences="profilePreferences"
+          @click="handleClick(item.id ?? '')"
         />
       </ul>
 
       <div v-if="visibleWidgets.length" class="flex w-full flex-col items-center gap-4 px-4">
-        <div v-for="widget in visibleWidgets" :key="widget.id" class="w-full max-w-xl">
-          <UserWidgetGithub v-if="widget.type === 'GITHUB'" :handle="widget.handle" :preferences="profilePreferences" />
-          <UserWidgetYoutube v-else-if="widget.type === 'YOUTUBE'" :handle="widget.handle" :preferences="profilePreferences" />
-          <UserWidgetSpotify v-else-if="widget.type === 'SPOTIFY'" :handle="widget.handle" :preferences="profilePreferences" />
+        <div v-for="item in visibleWidgets" :key="item.id" class="w-full max-w-xl">
+          <UserWidgetGithub v-if="item.widget?.type === 'GITHUB'" :handle="item.widget?.handle ?? ''" :preferences="profilePreferences" />
+          <UserWidgetYoutube v-else-if="item.widget?.type === 'YOUTUBE'" :handle="item.widget?.handle ?? ''" :preferences="profilePreferences" />
+          <UserWidgetSpotify v-else-if="item.widget?.type === 'SPOTIFY'" :handle="item.widget?.handle ?? ''" :preferences="profilePreferences" />
         </div>
       </div>
 
       <ul v-if="visibleLinks.length" class="flex w-full flex-col items-center gap-4">
         <UserLink
-          v-for="link in visibleLinks" :key="link.id"
-          :item="link" :preferences="profilePreferences"
-          @click="handleClick(link.id ?? '', 'link')"
+          v-for="item in visibleLinks" :key="item.id"
+          :item="item" :preferences="profilePreferences"
+          @click="handleClick(item.id ?? '')"
         />
       </ul>
 
@@ -64,16 +64,15 @@ const analyticsStore = useAnalyticsStore()
 const { userProfile, loading } = storeToRefs(userStore)
 const profilePreferences = computed(() => userProfile.value?.preferences ?? DEFAULT_PREFERENCES)
 const { backgroundStyle, profilePictureStyle, slugStyle, descriptionStyle } = useDynamicStyles(profilePreferences)
-const visibleLinks = computed(() => userProfile.value?.links?.filter(link => link.isVisible !== false) ?? [])
-const visibleIcons = computed(() => userProfile.value?.icons?.filter(icon => icon.isVisible !== false) ?? [])
-const visibleWidgets = computed(() => userProfile.value?.widgets?.filter(w => w.isVisible) ?? [])
+const visibleLinks = computed(() => (userProfile.value?.items || []).filter(item => item.type === "LINK" && item.link && item.isVisible !== false))
+const visibleIcons = computed(() => (userProfile.value?.items || []).filter(item => item.type === "ICON" && item.icon && item.isVisible !== false))
+const visibleWidgets = computed(() => (userProfile.value?.items || []).filter(item => ["GITHUB", "YOUTUBE", "SPOTIFY"].includes(item.type) && item.widget && item.isVisible !== false))
 
-async function handleClick(itemId: string, type: "link" | "icon") {
+async function handleClick(itemId: string) {
   if (!userProfile.value?.slug) {
     return
   }
-
-  type === "link" ? await analyticsStore.recordLinkClick(userProfile.value.slug, itemId) : await analyticsStore.recordIconClick(userProfile.value.slug, itemId)
+  await analyticsStore.recordItemClick(itemId)
 }
 
 onMounted(async () => {

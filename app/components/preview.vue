@@ -20,11 +20,11 @@
           </p>
 
           <ul v-if="visibleIcons.length" class="my-2 navigation-group w-full justify-center">
-            <UserIcon v-for="icon in visibleIcons" :key="icon.id" :item="icon" :preferences="preferences" />
+            <UserSocialIcon v-for="item in visibleIcons" :key="item.id" :item="item" :preferences="preferences" />
           </ul>
 
           <ul v-if="visibleLinks.length" class="flex w-full flex-col items-center gap-4">
-            <UserLink v-for="link in visibleLinks" :key="link.id" :item="link" :preferences="preferences" />
+            <UserLink v-for="item in visibleLinks" :key="item.id" :item="item" :preferences="preferences" />
           </ul>
 
           <p v-else :style="descriptionStyle">
@@ -60,12 +60,12 @@
         </div>
 
         <ul v-if="visibleIcons.length" class="navigation-group justify-center">
-          <UserIcon v-for="icon in visibleIcons" :key="icon.id" :item="icon" :preferences="preferences" />
+          <UserSocialIcon v-for="item in visibleIcons" :key="item.id" :item="item" :preferences="preferences" />
         </ul>
 
         <div class="w-full">
           <ul v-if="visibleLinks.length" class="flex flex-col items-center gap-4">
-            <UserLink v-for="link in visibleLinks" :key="link.id" :item="link" :preferences="preferences" />
+            <UserLink v-for="item in visibleLinks" :key="item.id" :item="item" :preferences="preferences" />
           </ul>
 
           <p v-else :style="descriptionStyle">
@@ -79,13 +79,12 @@
 
 <script setup lang="ts">
 const { user, preferences: storePreferences } = storeToRefs(useUserStore())
-const { links } = storeToRefs(useLinksStore())
-const { icons } = storeToRefs(useIconsStore())
+const { items } = storeToRefs(useProfileItemsStore())
 const { isPreviewOpen, openPreview, closePreview } = useUIState()
 const localPreferences = useState<UserPreferences | null>("localPreferences", () => null)
 const preferences = computed(() => localPreferences.value || storePreferences.value)
-const visibleLinks = computed(() => links.value.filter(link => link.isVisible !== false))
-const visibleIcons = computed(() => icons.value.filter(icon => icon.isVisible !== false))
+const visibleLinks = computed(() => items.value.filter(item => item.type === "LINK" && item.isVisible !== false))
+const visibleIcons = computed(() => items.value.filter(item => item.type === "ICON" && item.isVisible !== false))
 const { backgroundStyle, profilePictureStyle, slugStyle, descriptionStyle } = useDynamicStyles(preferences)
 </script>
 

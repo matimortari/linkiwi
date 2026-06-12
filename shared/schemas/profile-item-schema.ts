@@ -12,7 +12,7 @@ const schedulingSchema = {
 }
 
 const linkPayload = z.object({ url: urlSchema, label: z.string().min(1, "Label is required").max(100).transform(val => val.trim()) })
-const iconPayload = z.object({ url: urlSchema, platform: z.string().min(1).max(50) })
+const iconPayload = z.object({ url: urlSchema, platform: z.string().min(1).max(50), logo: z.string().min(1).max(100) })
 const widgetPayload = z.object({ type: z.enum(["GITHUB", "YOUTUBE", "SPOTIFY"]), handle: z.string().min(1, "Handle is required").max(300).transform(val => val.trim()) })
 
 const photoGridItemSchema = z.object({
