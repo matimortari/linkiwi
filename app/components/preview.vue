@@ -10,26 +10,34 @@
     <transition name="slide">
       <div v-if="isPreviewOpen" class="fixed top-0 left-0 z-40 size-full overflow-y-auto p-12 md:hidden" :style="backgroundStyle">
         <div class="flex max-h-full flex-col items-center justify-start gap-4 overflow-y-auto p-4 text-center">
-          <img :src="user.image" alt="Avatar" class="size-24 object-cover" :style="profilePictureStyle">
-          <p class="line-clamp-3 max-w-sm truncate whitespace-break-spaces" :style="slugStyle">
-            @{{ user.slug }}
-          </p>
+          <div class="flex flex-col items-center gap-2">
+            <img :src="user.image" alt="Avatar" class="size-24 object-cover" :style="profilePictureStyle">
+            <p class="line-clamp-3 max-w-sm truncate whitespace-break-spaces" :style="slugStyle">
+              @{{ user.slug }}
+            </p>
+            <p v-if="user.location" class="flex max-w-sm flex-row items-center gap-1 truncate text-sm/4 whitespace-break-spaces" :style="descriptionStyle">
+              <icon name="mdi:map-marker" size="15" />
+              <span>{{ user.location }}</span>
+              shed
+            </p>
+            <p v-if="user.description" class="line-clamp-3 max-w-sm truncate whitespace-break-spaces" :style="descriptionStyle">
+              {{ user.description }}
+            </p>
+          </div>
 
-          <p v-if="user.description" class="line-clamp-3 max-w-sm truncate whitespace-break-spaces" :style="descriptionStyle">
-            {{ user.description }}
-          </p>
-
-          <ul v-if="visibleIcons.length" class="my-2 navigation-group w-full justify-center">
+          <ul v-if="visibleIcons.length" class="navigation-group justify-center">
             <UserSocialIcon v-for="item in visibleIcons" :key="item.id" :item="item" :preferences="preferences" />
           </ul>
 
-          <ul v-if="visibleLinks.length" class="flex w-full flex-col items-center gap-4">
-            <UserLink v-for="item in visibleLinks" :key="item.id" :item="item" :preferences="preferences" />
+          <ul class="flex w-full max-w-xl flex-col items-center gap-4 px-4">
+            <template v-for="item in visiblePreviewItems" :key="item.id">
+              <UserLink v-if="item.type === 'LINK'" :item="item" :preferences="preferences" />
+              <span v-else-if="item.type === 'DIVIDER'" :style="dividerStyle" />
+              <div v-else-if="item.type === 'PHOTO_GRID'" :style="photoGridStyle">
+                <img v-for="photo in item.photoGrid?.photos" :key="photo.id" :src="photo.url" class="rounded-lg">
+              </div>
+            </template>
           </ul>
-
-          <p v-else :style="descriptionStyle">
-            No links yet.
-          </p>
         </div>
       </div>
     </transition>
@@ -54,6 +62,10 @@
           <p class="line-clamp-3 max-w-sm truncate whitespace-break-spaces" :style="slugStyle">
             @{{ user.slug }}
           </p>
+          <p v-if="user.location" class="flex max-w-sm flex-row items-center gap-1 truncate text-sm/4 whitespace-break-spaces" :style="descriptionStyle">
+            <icon name="mdi:map-marker" size="15" />
+            <span>{{ user.location }}</span>
+          </p>
           <p v-if="user.description" class="line-clamp-3 max-w-sm truncate leading-4 whitespace-break-spaces" :style="descriptionStyle">
             {{ user.description }}
           </p>
@@ -63,15 +75,23 @@
           <UserSocialIcon v-for="item in visibleIcons" :key="item.id" :item="item" :preferences="preferences" />
         </ul>
 
-        <div class="w-full">
-          <ul v-if="visibleLinks.length" class="flex flex-col items-center gap-4">
-            <UserLink v-for="item in visibleLinks" :key="item.id" :item="item" :preferences="preferences" />
-          </ul>
+        <ul class="flex w-full max-w-xl flex-col items-center gap-4 px-4">
+          <template v-for="item in visiblePreviewItems" :key="item.id">
+            <UserLink v-if="item.type === 'LINK'" :item="item" :preferences="preferences" />
+            <span v-else-if="item.type === 'DIVIDER'" :style="dividerStyle" />
+            <div v-else-if="item.type === 'PHOTO_GRID'" :style="photoGridStyle" class="grid grid-cols-2 gap-2 md:grid-cols-3">
+              <img
+                v-for="photo in item.photoGrid?.photos" :key="photo.id"
+                :src="photo.url" :alt="photo.alt ?? `Photo ${photo.order}`"
+                class="aspect-square w-full rounded-lg object-cover"
+              >
+            </div>
+          </template>
+        </ul>
 
-          <p v-else :style="descriptionStyle">
-            No links yet.
-          </p>
-        </div>
+        <p v-if="!visiblePreviewItems.length && !visibleIcons.length" :style="descriptionStyle">
+          No content yet.
+        </p>
       </div>
     </div>
   </div>
@@ -83,9 +103,9 @@ const { items } = storeToRefs(useProfileItemsStore())
 const { isPreviewOpen, openPreview, closePreview } = useUIState()
 const localPreferences = useState<UserPreferences | null>("localPreferences", () => null)
 const preferences = computed(() => localPreferences.value || storePreferences.value)
-const visibleLinks = computed(() => items.value.filter(item => item.type === "LINK" && item.isVisible !== false))
-const visibleIcons = computed(() => items.value.filter(item => item.type === "ICON" && item.isVisible !== false))
-const { backgroundStyle, profilePictureStyle, slugStyle, descriptionStyle } = useDynamicStyles(preferences)
+const { backgroundStyle, profilePictureStyle, slugStyle, descriptionStyle, dividerStyle, photoGridStyle } = useDynamicStyles(preferences)
+const visiblePreviewItems = computed(() => (items.value ?? []).filter(item => item.type !== "ICON" && item.type !== "WIDGET" && item.isVisible !== false).sort((a, b) => a.order - b.order))
+const visibleIcons = computed(() => (items.value ?? []).filter(item => item.type === "ICON" && item.isVisible !== false))
 </script>
 
 <style scoped>

@@ -4,7 +4,6 @@ const uiState = reactive<UIState>({
   dialogs: {
     user: false,
     share: false,
-    supportButton: false,
     item: {
       isOpen: false,
       selectedItem: null,
@@ -71,7 +70,6 @@ export function useUIState() {
 
   const isUserDialogOpen = computed(() => uiState.dialogs.user)
   const isShareDialogOpen = computed(() => uiState.dialogs.share)
-  const isSupportButtonDialogOpen = computed(() => uiState.dialogs.supportButton)
   const isItemDialogOpen = computed(() => uiState.dialogs.item.isOpen)
   const isLinkDialogOpen = computed(() => uiState.dialogs.link.isOpen)
   const isIconDialogOpen = computed(() => uiState.dialogs.icon.isOpen)
@@ -86,7 +84,6 @@ export function useUIState() {
     uiState,
     isUserDialogOpen,
     isShareDialogOpen,
-    isSupportButtonDialogOpen,
     isItemDialogOpen,
     isLinkDialogOpen,
     isIconDialogOpen,

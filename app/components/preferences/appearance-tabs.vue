@@ -1,36 +1,56 @@
 <template>
   <div v-if="props.activeTab === 'background'" class="card grid grid-cols-1 gap-2 md:grid-cols-2">
     <PreferencesRadioOptions v-model:value="localPrefs.backgroundType" name="backgroundType" label="Background Type" :options="BACKGROUND_TYPES" />
-
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-2 p-4">
+      <h6 class="py-2">
+        Colors
+      </h6>
       <PreferencesColorPicker id="backgroundColor" v-model:value="localPrefs.backgroundColor" label="Background Color" :disabled="isBackgroundGradient" />
       <PreferencesColorPicker id="backgroundGradientStart" v-model:value="localPrefs.backgroundGradientStart" label="Gradient Start Color" :disabled="isBackgroundFlat" />
       <PreferencesColorPicker id="backgroundGradientEnd" v-model:value="localPrefs.backgroundGradientEnd" label="Gradient End Color" :disabled="isBackgroundFlat" />
     </div>
   </div>
 
-  <div v-if="props.activeTab === 'user'" class="card grid grid-cols-1 gap-2 md:grid-cols-2">
-    <div class="flex flex-col gap-2">
+  <div v-if="props.activeTab === 'layout'" class="card grid grid-cols-1 gap-2 md:grid-cols-2">
+    <div class="flex flex-col gap-2 p-4">
+      <h6 class="py-2">
+        Header & Profile Options
+      </h6>
       <PreferencesSelect id="supportBanner" v-model:value="localPrefs.supportBanner" label="Support Banner" :options="BANNER_OPTIONS" />
       <PreferencesSelect id="profilePictureRadius" v-model:value="localPrefs.profilePictureRadius" label="Profile Picture Radius" :options="RADIUS_SIZES" />
       <PreferencesColorPicker id="profilePictureBorderColor" v-model:value="localPrefs.profilePictureBorderColor" label="Profile Picture Border Color" />
       <PreferencesSelect id="profilePictureBorderWidth" v-model:value="localPrefs.profilePictureBorderWidth" label="Profile Picture Border Width" :options="BORDER_WIDTHS" />
-      <PreferencesSelect id="slugFontFamily" v-model:value="localPrefs.slugFontFamily" label="Username Font Family" :options="FONT_FAMILIES" />
-      <PreferencesSelect id="slugTextSize" v-model:value="localPrefs.slugTextSize" label="Username Font Size" :options="FONT_SIZES" />
-      <PreferencesSelect id="slugTextWeight" v-model:value="localPrefs.slugTextWeight" label="Username Font Weight" :options="FONT_WEIGHTS" />
-      <PreferencesColorPicker id="slugTextColor" v-model:value="localPrefs.slugTextColor" label="Username Font Color" />
+
+      <h6 class="py-2">
+        Username Settings
+      </h6>
+      <PreferencesSelect id="slugFontFamily" v-model:value="localPrefs.slugFontFamily" label="Font Family" :options="FONT_FAMILIES" />
+      <PreferencesSelect id="slugTextSize" v-model:value="localPrefs.slugTextSize" label="Font Size" :options="FONT_SIZES" />
+      <PreferencesSelect id="slugTextWeight" v-model:value="localPrefs.slugTextWeight" label="Font Weight" :options="FONT_WEIGHTS" />
+      <PreferencesColorPicker id="slugTextColor" v-model:value="localPrefs.slugTextColor" label="Font Color" />
     </div>
 
-    <div class="flex flex-col gap-2">
-      <PreferencesSelect id="headerFontFamily" v-model:value="localPrefs.headerFontFamily" label="Header Font Family" :options="FONT_FAMILIES" />
-      <PreferencesSelect id="headerTextSize" v-model:value="localPrefs.headerTextSize" label="Header Font Size" :options="FONT_SIZES" />
-      <PreferencesSelect id="headerTextWeight" v-model:value="localPrefs.headerTextWeight" label="Header Font Weight" :options="FONT_WEIGHTS" />
-      <PreferencesColorPicker id="headerTextColor" v-model:value="localPrefs.headerTextColor" label="Header Font Color" />
+    <div class="flex flex-col gap-2 p-4">
+      <h6 class="py-2">
+        Display & Dividers
+      </h6>
+      <PreferencesCheckbox id="enableGuestbook" v-model:value="localPrefs.enableGuestbook" label="Enable Guestbook" />
+      <PreferencesCheckbox id="showLocation" v-model:value="localPrefs.showLocation" label="Show Location" />
+
+      <h6 class="py-2">
+        Divider Settings
+      </h6>
+      <PreferencesColorPicker id="dividerColor" v-model:value="localPrefs.dividerColor" label="Divider Color" />
+      <PreferencesSelect id="dividerThickness" v-model:value="localPrefs.dividerThickness" label="Thickness" :options="BORDER_WIDTHS" />
+      <PreferencesSelect id="dividerStyle" v-model:value="localPrefs.dividerStyle" label="Style" :options="DIVIDER_STYLES" />
     </div>
   </div>
 
   <div v-if="props.activeTab === 'links'" class="card grid grid-cols-1 gap-2 md:grid-cols-2">
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-2 p-4">
+      <h6 class="py-2">
+        Link Style
+      </h6>
       <PreferencesColorPicker id="linkBackgroundColor" v-model:value="localPrefs.linkBackgroundColor" label="Background Color" />
       <PreferencesColorPicker id="linkTextColor" v-model:value="localPrefs.linkTextColor" label="Font Color" />
       <PreferencesSelect id="linkFontFamily" v-model:value="localPrefs.linkFontFamily" label="Font Family" :options="FONT_FAMILIES" />
@@ -40,7 +60,10 @@
       <PreferencesSelect id="linkPadding" v-model:value="localPrefs.linkPadding" label="Padding" :options="LINK_PADDING_SIZES" />
     </div>
 
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-2 p-4">
+      <h6 class="py-2">
+        Behavior & Effects
+      </h6>
       <PreferencesColorPicker id="linkHoverBackgroundColor" v-model:value="localPrefs.linkHoverBackgroundColor" label="Hover Background Color" />
       <PreferencesCheckbox id="isLinkShadow" v-model:value="localPrefs.isLinkShadow" label="Enable Shadow" />
       <PreferencesColorPicker id="linkShadowColor" v-model:value="localPrefs.linkShadowColor" label="Shadow Color" :disabled="isLinkShadowDisabled" />
@@ -49,18 +72,24 @@
         label="Shadow Weight" :options="SHADOW_WEIGHTS"
         :disabled="isLinkShadowDisabled"
       />
-      <PreferencesCheckbox id="showLinkCopyButton" v-model:value="localPrefs.showLinkCopyButton" label="Show 'Copy to Clipboard' Button" />
+      <PreferencesCheckbox id="showLinkCopyButton" v-model:value="localPrefs.showLinkCopyButton" label="Show 'Copy Link' Button" />
     </div>
   </div>
 
   <div v-if="props.activeTab === 'icons'" class="card grid grid-cols-1 gap-2 md:grid-cols-2">
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-2 p-4">
+      <h6 class="py-2">
+        Appearance
+      </h6>
       <PreferencesColorPicker id="iconBackgroundColor" v-model:value="localPrefs.iconBackgroundColor" label="Background Color" />
       <PreferencesColorPicker id="iconLogoColor" v-model:value="localPrefs.iconLogoColor" label="Icon Color" />
       <PreferencesColorPicker id="iconHoverBackgroundColor" v-model:value="localPrefs.iconHoverBackgroundColor" label="Hover Background Color" />
     </div>
 
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-2 p-4">
+      <h6 class="py-2">
+        Shadows
+      </h6>
       <PreferencesCheckbox id="isIconShadow" v-model:value="localPrefs.isIconShadow" label="Enable Shadow" />
       <PreferencesColorPicker id="iconShadowColor" v-model:value="localPrefs.iconShadowColor" label="Shadow Color" :disabled="isIconShadowDisabled" />
       <PreferencesSelect
@@ -92,7 +121,5 @@ const isIconShadowDisabled = computed(() => !localPrefs.isIconShadow)
 watch(localPrefs, v => emit("update:preferences", { ...v }), { deep: true })
 
 // Update localPrefs if preferences prop changes
-watch(() => props.preferences, (newVal) => {
-  Object.assign(localPrefs, newVal)
-}, { deep: true })
+watch(() => props.preferences, newVal => Object.assign(localPrefs, newVal), { deep: true })
 </script>

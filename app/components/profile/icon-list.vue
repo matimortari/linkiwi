@@ -1,55 +1,39 @@
 <template>
-  <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:p-8">
-    <h3>
-      My Social Icons
-    </h3>
+  <div class="flex flex-col gap-3">
+    <Loading v-if="loading" />
 
-    <div class="flex flex-col gap-2">
-      <Loading v-if="loading" />
-      <Empty v-else-if="!icons.length" message="Your social icons help visitors connect with you. Add your first social icon!" icon-name="mdi:star-minus" />
-
-      <VueDraggable
-        v-else v-model="orderedIcons"
-        tag="ul" class="flex flex-row items-center gap-4!"
-        handle=".drag-handle" :animation="150"
-        @end="reorderIcon"
-      >
-        <li v-for="icon in orderedIcons" :key="icon.id" class="card relative flex size-20 items-center justify-center" :class="{ 'border-dashed! opacity-60': !icon.isVisible }">
-          <button class="drag-handle btn-ghost absolute top-0 left-0 cursor-move p-0.5!" aria-label="Drag to reorder">
-            <icon name="mdi:drag-vertical" size="20" class="text-muted" />
-          </button>
-
-          <nuxt-link :to="icon.url" class="btn-ghost" :aria-label="icon.platform">
-            <icon :name="icon.logo" :size="30" />
+    <template v-else>
+      <ul v-if="icons.length" class="flex flex-row flex-wrap items-center gap-3">
+        <li v-for="icon in icons" :key="icon.id" class="card relative flex size-16 items-center justify-center" :class="{ 'border-dashed! opacity-60': !icon.isVisible }">
+          <nuxt-link :to="icon.url" class="btn-ghost" :aria-label="icon.platform" target="_blank">
+            <icon :name="icon.logo" size="25" />
           </nuxt-link>
 
-          <button :aria-label="icon.isVisible ? 'Hide Icon' : 'Show Icon'" class="btn-ghost absolute top-0 right-0 flex items-center p-0.5!" @click="toggleVisibility(icon.id!, icon.isVisible ?? true)">
-            <icon :name="icon.isVisible !== false ? 'mdi:eye-outline' : 'mdi:eye-off-outline'" size="25" class="text-muted-foreground" />
+          <button :aria-label="icon.isVisible ? 'Hide Icon' : 'Show Icon'" class="btn-ghost absolute top-0 right-0 p-0.5!" @click="toggleVisibility(icon.id, icon.isVisible)">
+            <icon :name="icon.isVisible ? 'mdi:eye-outline' : 'mdi:eye-off-outline'" size="15" class="text-muted-foreground" />
           </button>
 
-          <button class="btn-ghost absolute right-0 bottom-0 flex items-center p-0.5!" aria-label="Delete Social Icon" @click="handleDeleteIcon(icon.id!)">
-            <icon name="mdi:remove-circle-outline" size="25" class="text-caption-danger" />
+          <button class="btn-ghost absolute right-0 bottom-0 p-0.5!" aria-label="Delete Social Icon" @click="handleDelete(icon.id)">
+            <icon name="mdi:remove-circle-outline" size="15" class="text-caption-danger" />
           </button>
         </li>
-      </VueDraggable>
+      </ul>
 
-      <button class="btn-primary self-end" @click="openDialog('icon')">
-        <icon name="mdi:star-plus" size="25" />
+      <button class="btn-ghost self-start text-sm" @click="openDialog('icon')">
+        <icon name="mdi:star-plus" size="20" />
         <span>Add Social Icon</span>
       </button>
-    </div>
+    </template>
   </div>
 
   <ProfileIconDialog :is-open="isIconDialogOpen" @close="closeDialog('icon')" />
 </template>
 
 <script setup lang="ts">
-import { VueDraggable } from "vue-draggable-plus"
-
 const profileItemsStore = useProfileItemsStore()
 const { loading } = storeToRefs(profileItemsStore)
 const { isIconDialogOpen, openDialog, closeDialog } = useUIState()
-const orderedIcons = ref<NormalizedIcon[]>([])
+
 const icons = computed<NormalizedIcon[]>(() => (profileItemsStore.items || []).filter((item: ProfileItem) => item.type === "ICON" && item.icon).map((item: ProfileItem) => ({
   id: item.id,
   platform: item.icon!.platform ?? "",
@@ -59,37 +43,14 @@ const icons = computed<NormalizedIcon[]>(() => (profileItemsStore.items || []).f
   order: item.order,
 })).sort((a, b) => a.order - b.order))
 
-async function reorderIcon() {
-  const previousOrder = [...orderedIcons.value]
-  const updates = orderedIcons.value.map((icon, index) => ({ id: icon.id!, order: index })).filter(({ id, order }) => {
-    const existing = icons.value.find(icon => icon.id === id)
-    return existing?.order !== order
-  })
-  if (!updates.length) {
-    return
-  }
-
-  const results = await Promise.all(updates.map(({ id, order }) => profileItemsStore.updateItem(id, { order })))
-  if (results.every(Boolean)) {
-    profileItemsStore.items.sort((a, b) => a.order - b.order)
-  }
-  else {
-    orderedIcons.value = previousOrder
-    await profileItemsStore.getItems()
-  }
+async function toggleVisibility(id: string, current: boolean) {
+  await profileItemsStore.updateItem(id, { isVisible: !current })
 }
 
-async function handleDeleteIcon(iconId: string) {
+async function handleDelete(id: string) {
   if (!confirm("Are you sure you want to delete this social icon?")) {
     return
   }
-  await profileItemsStore.deleteItem(iconId)
+  await profileItemsStore.deleteItem(id)
 }
-
-async function toggleVisibility(iconId: string, currentVisibility: boolean) {
-  await profileItemsStore.updateItem(iconId, { isVisible: !currentVisibility })
-}
-
-// Sync store icons to local orderedIcons
-watch(() => icons.value, newIcons => orderedIcons.value = [...newIcons], { immediate: true, deep: true })
 </script>

@@ -5,6 +5,71 @@
     </h3>
 
     <div class="flex flex-col gap-4">
+      <div class="card flex flex-col gap-3">
+        <h4>
+          Location
+        </h4>
+        <p class="text-caption">
+          Show your location on your profile page.
+        </p>
+
+        <div class="flex flex-col gap-2 md:flex-row md:items-end">
+          <div class="flex flex-1 flex-col gap-1">
+            <label for="location" class="text-sm font-medium">Location</label>
+            <input
+              id="location" v-model="locationForm.location"
+              type="text" maxlength="100"
+              placeholder="e.g. São Paulo, Brazil"
+            >
+          </div>
+          <PreferencesCheckbox id="showLocation" v-model:value="locationForm.showLocation" label="Show on profile" />
+        </div>
+
+        <div class="flex justify-end">
+          <button class="btn-primary" :disabled="locationLoading" @click="handleSaveLocation">
+            <icon :name="locationAction.icon.value" size="20" />
+            <span>Save</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="card flex flex-col gap-3">
+        <h4>
+          Profile Banner
+        </h4>
+        <p class="text-caption">
+          Upload a banner image to display at the top of your profile.
+        </p>
+
+        <div v-if="bannerPreview" class="relative overflow-hidden rounded-xl">
+          <img :src="bannerPreview" alt="Profile banner preview" class="h-32 w-full object-cover">
+          <button class="btn-danger absolute top-2 right-2 p-1!" aria-label="Remove banner" @click="handleRemoveBanner">
+            <icon name="mdi:close" size="20" />
+          </button>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <label class="btn-ghost cursor-pointer text-sm">
+            <icon name="mdi:upload" size="20" />
+            <span>{{ bannerPreview ? "Change Image" : "Upload Image" }}</span>
+            <input
+              ref="bannerInput" type="file"
+              class="hidden" accept="image/jpeg,image/png,image/webp"
+              @change="handleBannerFileChange"
+            >
+          </label>
+          <span class="text-xs text-muted-foreground">JPEG, PNG or WebP · max 5 MB</span>
+        </div>
+
+        <div v-if="bannerFile" class="flex justify-end">
+          <button class="btn-primary" :disabled="bannerLoading" @click="handleUploadBanner">
+            <icon :name="bannerLoading ? 'mdi:loading' : 'mdi:content-save-check'" size="20" :class="{ 'animate-spin': bannerLoading }" />
+            <span>Save Banner</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Guestbook -->
       <div class="card flex flex-col gap-2">
         <h4>
           Guestbook
@@ -14,20 +79,20 @@
         </p>
 
         <div class="flex items-center justify-between gap-2">
-          <PreferencesCheckbox id="enableGuestbook" v-model:value="preferences.enableGuestbook" label="Enable Guestbook" class="max-w-xs" />
+          <PreferencesCheckbox id="enableGuestbook" v-model:value="guestbookEnabled" label="Enable Guestbook" class="max-w-xs" />
 
-          <button class="btn-primary" @click="handleSubmit">
-            <icon :name="saveAction.icon.value" size="20" />
+          <button class="btn-primary" @click="handleSaveGuestbook">
+            <icon :name="guestbookAction.icon.value" size="20" />
             <span>Save</span>
           </button>
         </div>
 
-        <div v-if="preferences.enableGuestbook" class="card flex flex-col gap-2">
+        <div v-if="guestbookEnabled" class="card flex flex-col gap-2">
           <h5>
             Comments
           </h5>
 
-          <p v-if="comments.length === 0" class="text-caption">
+          <p v-if="!comments.length" class="text-caption">
             No comments yet.
           </p>
 
@@ -40,10 +105,8 @@
                   </p>
                   <span v-if="comment.email" class="text-xs text-muted-foreground">({{ comment.email }})</span>
                 </div>
-
                 <span class="text-caption">{{ formatDate(new Date(comment.createdAt)) }}</span>
               </div>
-
               <p class="text-sm text-muted-foreground">
                 {{ comment.message }}
               </p>
@@ -73,13 +136,62 @@
 const { createActionHandler } = useActionIcon()
 const { clear } = useUserSession()
 const userStore = useUserStore()
-const { preferences } = storeToRefs(userStore)
-const comments = computed(() => userStore.user?.comments ?? [])
-const saveAction = createActionHandler("mdi:content-save-check")
+const { user, preferences } = storeToRefs(userStore)
+const comments = computed(() => user.value?.comments ?? [])
+const locationLoading = ref(false)
+const locationAction = createActionHandler("mdi:content-save-check")
+const locationForm = ref({ location: user.value?.location ?? "", showLocation: preferences.value?.showLocation ?? false })
+const guestbookEnabled = ref(preferences.value?.enableGuestbook ?? false)
+const guestbookAction = createActionHandler("mdi:content-save-check")
+const bannerLoading = ref(false)
+const bannerInput = ref<HTMLInputElement | null>(null)
+const bannerFile = ref<File | null>(null)
+const bannerPreview = ref<string | null>(user.value?.banner?.url ?? null)
 
-async function handleSubmit() {
-  await userStore.updatePreferences({ enableGuestbook: preferences.value.enableGuestbook })
-  saveAction.triggerSuccess()
+async function handleSaveLocation() {
+  locationLoading.value = true
+  await Promise.all([
+    userStore.updateUser({ location: locationForm.value.location }),
+    userStore.updatePreferences({ showLocation: locationForm.value.showLocation }),
+  ])
+  locationAction.triggerSuccess()
+  locationLoading.value = false
+}
+
+function handleBannerFileChange(e: Event) {
+  const file = (e.target as HTMLInputElement).files?.[0]
+  if (!file) {
+    return
+  }
+  bannerFile.value = file
+  bannerPreview.value = URL.createObjectURL(file)
+}
+
+async function handleUploadBanner() {
+  if (!bannerFile.value) {
+    return
+  }
+  bannerLoading.value = true
+
+  // TODO: wire to POST /api/assets when endpoint is ready
+  // const formData = new FormData()
+  // formData.append("file", bannerFile.value)
+  // formData.append("label", "banner")
+  // await $fetch("/api/assets", { method: "POST", body: formData })
+
+  bannerLoading.value = false
+  bannerFile.value = null
+}
+
+async function handleRemoveBanner() {
+  // TODO: wire to DELETE /api/assets/banner when endpoint is ready
+  bannerPreview.value = null
+  bannerFile.value = null
+}
+
+async function handleSaveGuestbook() {
+  await userStore.updatePreferences({ enableGuestbook: guestbookEnabled.value })
+  guestbookAction.triggerSuccess()
 }
 
 async function handleDeleteUser() {
@@ -91,4 +203,21 @@ async function handleDeleteUser() {
   await clear()
   await navigateTo("/sign-in", { replace: true })
 }
+
+// Sync user data into local form state when store updates
+watch(() => user.value, (u) => {
+  if (!u) {
+    return
+  }
+  bannerPreview.value = u.banner?.url ?? null
+}, { deep: true })
+
+watch(() => preferences.value, (p) => {
+  if (!p) {
+    return
+  }
+
+  locationForm.value.showLocation = p.showLocation ?? false
+  guestbookEnabled.value = p.enableGuestbook ?? false
+}, { deep: true })
 </script>

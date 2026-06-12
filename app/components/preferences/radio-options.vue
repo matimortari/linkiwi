@@ -1,8 +1,8 @@
 <template>
-  <div class="flex w-full flex-col gap-4 p-2">
-    <p class="text-sm font-medium">
+  <div class="flex w-full flex-col gap-2 p-4">
+    <h6 class="py-2">
       {{ label }}
-    </p>
+    </h6>
 
     <div class="space-y-2" role="radiogroup" :aria-label="label">
       <label v-for="option in options" :key="option.value" class="group navigation-group cursor-pointer" :class="value === option.value ? '' : 'text-muted-foreground'">
