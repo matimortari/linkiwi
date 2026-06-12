@@ -82,6 +82,34 @@ export function useDynamicStyles(preferences: UserPreferences | null | Ref<UserP
     }
   })
 
+  const dividerStyle = computed(() => {
+    if (!pref.value) {
+      return {}
+    }
+
+    return {
+      width: "100%",
+      margin: "0.5rem 0",
+      height: "0",
+      borderTopWidth: pref.value.dividerThickness,
+      borderTopColor: pref.value.dividerColor,
+      borderTopStyle: pref.value.dividerStyle,
+    }
+  })
+
+  const photoGridStyle = computed(() => {
+    if (!pref.value) {
+      return {}
+    }
+
+    return {
+      display: "grid",
+      gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+      gap: "0.5rem",
+      width: "100%",
+    }
+  })
+
   return {
     backgroundStyle,
     profilePictureStyle,
@@ -92,5 +120,7 @@ export function useDynamicStyles(preferences: UserPreferences | null | Ref<UserP
     iconInnerStyle,
     linkStyle,
     linkInnerStyle,
+    dividerStyle,
+    photoGridStyle,
   }
 }
