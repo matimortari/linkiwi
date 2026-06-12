@@ -9,7 +9,11 @@
     <Loading v-if="loading" class="absolute inset-0 flex items-center justify-center backdrop-blur-sm" />
     <Empty v-else-if="!userProfile && !loading" :message="`User @${slug} not found.`" icon-name="mdi:account-off" />
 
-    <div v-else-if="userProfile" class="flex w-full flex-1 flex-col items-center gap-4 pt-4 pb-32 text-center" :style="backgroundStyle">
+    <div v-else-if="userProfile" class="flex w-full flex-1 flex-col items-center gap-4 py-20 text-center" :style="backgroundStyle">
+      <div v-if="userProfile.banner?.url" class="relative h-40 w-full overflow-hidden bg-slate-200 md:h-52">
+        <img :src="userProfile.banner.url" alt="Profile Banner" class="size-full object-cover">
+      </div>
+
       <UserSupportBanner v-if="profilePreferences.supportBanner !== 'NONE'" :preferences="profilePreferences" />
 
       <div class="flex flex-col items-center gap-2">
@@ -30,28 +34,23 @@
         />
       </ul>
 
-      <div v-if="visibleWidgets.length" class="flex w-full flex-col items-center gap-4 px-4">
-        <div v-for="item in visibleWidgets" :key="item.id" class="w-full max-w-xl">
-          <UserWidgetGithub v-if="item.widget?.type === 'GITHUB'" :handle="item.widget?.handle ?? ''" :preferences="profilePreferences" />
-          <UserWidgetYoutube v-else-if="item.widget?.type === 'YOUTUBE'" :handle="item.widget?.handle ?? ''" :preferences="profilePreferences" />
-          <UserWidgetSpotify v-else-if="item.widget?.type === 'SPOTIFY'" :handle="item.widget?.handle ?? ''" :preferences="profilePreferences" />
-        </div>
-      </div>
-
-      <ul v-if="visibleLinks.length" class="flex w-full flex-col items-center gap-4">
-        <UserLink
-          v-for="item in visibleLinks" :key="item.id"
-          :item="item" :preferences="profilePreferences"
-          @click="handleClick(item.id ?? '')"
-        />
+      <ul class="flex w-full max-w-xl flex-col items-center gap-4 px-4">
+        <template v-for="item in allItems" :key="item.id">
+          <UserLink v-if="item.type === 'LINK'" :item="item" :preferences="profilePreferences" @click="handleClick(item.id ?? '')" />
+          <UserPhotoGrid v-else-if="item.type === 'PHOTO_GRID'" :photos="item.photoGrid?.photos ?? []" :preferences="profilePreferences" />
+          <UserWidgetGithub v-if="item.type === 'WIDGET' && item.widget?.type === 'GITHUB'" :handle="item.widget?.handle ?? ''" :preferences="profilePreferences" />
+          <UserWidgetYoutube v-else-if="item.type === 'WIDGET' && item.widget?.type === 'YOUTUBE'" :handle="item.widget?.handle ?? ''" :preferences="profilePreferences" />
+          <UserWidgetSpotify v-else-if="item.type === 'WIDGET' && item.widget?.type === 'SPOTIFY'" :handle="item.widget?.handle ?? ''" :preferences="profilePreferences" />
+          <span v-else-if="item.type === 'DIVIDER'" :style="dividerStyle" />
+        </template>
       </ul>
 
-      <p v-else :style="descriptionStyle">
-        No links yet.
+      <p v-if="!allItems.length && !visibleIcons.length" :style="descriptionStyle">
+        No content yet.
       </p>
-    </div>
 
-    <UserGuestbook v-if="profilePreferences?.enableGuestbook" :user-id="userProfile?.id" />
+      <UserGuestbook v-if="profilePreferences?.enableGuestbook" :user-id="userProfile?.id" class="mt-8 w-full max-w-xl px-4" />
+    </div>
   </div>
 </template>
 
@@ -63,10 +62,9 @@ const userStore = useUserStore()
 const analyticsStore = useAnalyticsStore()
 const { userProfile, loading } = storeToRefs(userStore)
 const profilePreferences = computed(() => userProfile.value?.preferences ?? DEFAULT_PREFERENCES)
-const { backgroundStyle, profilePictureStyle, slugStyle, descriptionStyle } = useDynamicStyles(profilePreferences)
-const visibleLinks = computed(() => (userProfile.value?.items || []).filter(item => item.type === "LINK" && item.link && item.isVisible !== false))
-const visibleIcons = computed(() => (userProfile.value?.items || []).filter(item => item.type === "ICON" && item.icon && item.isVisible !== false))
-const visibleWidgets = computed(() => (userProfile.value?.items || []).filter(item => ["GITHUB", "YOUTUBE", "SPOTIFY"].includes(item.type) && item.widget && item.isVisible !== false))
+const { backgroundStyle, profilePictureStyle, slugStyle, descriptionStyle, dividerStyle } = useDynamicStyles(profilePreferences)
+const allItems = computed(() => (userProfile.value?.items ?? []).filter(i => i.type !== "ICON" && i.isVisible !== false).sort((a, b) => a.order - b.order))
+const visibleIcons = computed(() => (userProfile.value?.items ?? []).filter(i => i.type === "ICON" && i.isVisible !== false))
 
 async function handleClick(itemId: string) {
   if (!userProfile.value?.slug) {

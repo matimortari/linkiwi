@@ -15,8 +15,7 @@
       </header>
 
       <div class="flex flex-col gap-4">
-        <ProfileLinkList />
-        <ProfileIconList />
+        <ProfileItemList />
         <ProfileWidgetList />
       </div>
     </div>
