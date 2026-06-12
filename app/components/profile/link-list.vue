@@ -24,13 +24,13 @@
             </div>
 
             <div class="flex flex-row items-center gap-1">
-              <button :aria-label="link.isVisible ? 'Hide Link' : 'Show Link'" class="btn-ghost p-0.5!" @click="toggleVisibility(link.id!, link.isVisible ?? true)">
-                <icon :name="link.isVisible !== false ? 'mdi:eye-outline' : 'mdi:eye-off-outline'" size="25" class="text-muted-foreground" />
+              <button :aria-label="link.isVisible ? 'Hide Link' : 'Show Link'" class="btn-ghost p-0.5!" @click="toggleVisibility(link.id, link.isVisible)">
+                <icon :name="link.isVisible ? 'mdi:eye-outline' : 'mdi:eye-off-outline'" size="25" class="text-muted-foreground" />
               </button>
               <button aria-label="Update Link" class="btn-ghost p-0.5!" @click="handleUpdateLink(link)">
                 <icon name="mdi:circle-edit-outline" size="25" class="text-caption-info" />
               </button>
-              <button aria-label="Delete Link" class="btn-ghost p-0.5!" @click="handleDeleteLink(link.id!)">
+              <button aria-label="Delete Link" class="btn-ghost p-0.5!" @click="handleDeleteLink(link.id)">
                 <icon name="mdi:remove-circle-outline" size="25" class="text-caption-danger" />
               </button>
             </div>
@@ -55,38 +55,46 @@
 <script setup lang="ts">
 import { VueDraggable } from "vue-draggable-plus"
 
-const linksStore = useLinksStore()
-const { links, loading } = storeToRefs(linksStore)
+const profileItemsStore = useProfileItemsStore()
+const { loading } = storeToRefs(profileItemsStore)
 const { uiState, isLinkDialogOpen, openDialog, closeDialog } = useUIState()
-const orderedLinks = ref<Link[]>([])
+const orderedLinks = ref<NormalizedLink[]>([])
+const links = computed<NormalizedLink[]>(() => (profileItemsStore.items || []).filter((item: ProfileItem) => item.type === "LINK" && item.link).map((item: ProfileItem) => ({
+  id: item.id,
+  title: item.link!.label,
+  url: item.link!.url,
+  isVisible: item.isVisible,
+  order: item.order,
+})).sort((a, b) => a.order - b.order))
 
 function handleAddLink() {
   uiState.dialogs.link.selectedLink = null
   openDialog("link")
 }
 
-function handleUpdateLink(link: Link) {
-  uiState.dialogs.link.selectedLink = link
+function handleUpdateLink(link: NormalizedLink) {
+  const originalItem = profileItemsStore.items.find(item => item.id === link.id)
+  uiState.dialogs.link.selectedLink = originalItem || null
   openDialog("link")
 }
 
 async function reorderLink() {
   const previousOrder = [...orderedLinks.value]
-  const updates = orderedLinks.value.map((link, index) => ({ id: link.id!, order: index })).filter(({ id, order }) => {
-    const existing = links.value.find(link => link.id === id)
+  const updates = orderedLinks.value.map((link, index) => ({ id: link.id, order: index })).filter(({ id, order }) => {
+    const existing = links.value.find(l => l.id === id)
     return existing?.order !== order
   })
   if (!updates.length) {
     return
   }
 
-  const results = await Promise.all(updates.map(({ id, order }) => linksStore.updateLink(id, { order })))
+  const results = await Promise.all(updates.map(({ id, order }) => profileItemsStore.updateItem(id, { order })))
   if (results.every(Boolean)) {
-    linksStore.links.sort((a, b) => a.order - b.order)
+    profileItemsStore.items.sort((a, b) => a.order - b.order)
   }
   else {
     orderedLinks.value = previousOrder
-    await linksStore.getLinks()
+    await profileItemsStore.getItems()
   }
 }
 
@@ -94,16 +102,13 @@ async function handleDeleteLink(linkId: string) {
   if (!confirm("Are you sure you want to delete this link?")) {
     return
   }
-
-  await linksStore.deleteLink(linkId)
+  await profileItemsStore.deleteItem(linkId)
 }
 
 async function toggleVisibility(linkId: string, currentVisibility: boolean) {
-  await linksStore.updateLink(linkId, { isVisible: !currentVisibility })
+  await profileItemsStore.updateItem(linkId, { isVisible: !currentVisibility })
 }
 
 // Sync store links to local orderedLinks
-watch(() => links.value, (newLinks) => {
-  orderedLinks.value = [...newLinks]
-}, { immediate: true, deep: true })
+watch(() => links.value, newLinks => orderedLinks.value = [...newLinks], { immediate: true, deep: true })
 </script>

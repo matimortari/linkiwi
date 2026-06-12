@@ -111,8 +111,15 @@
 </template>
 
 <script setup lang="ts">
-const widgetsStore = useWidgetsStore()
-const { widgets, loading } = storeToRefs(widgetsStore)
+const profileItemsStore = useProfileItemsStore()
+const { loading } = storeToRefs(profileItemsStore)
+const widgets = computed<NormalizedWidget[]>(() => (profileItemsStore.items || []).filter((w: ProfileItem) => w.type === "WIDGET" && w.widget).map((w: ProfileItem) => ({
+  id: w.id,
+  isVisible: w.isVisible,
+  type: w.widget!.type,
+  handle: w.widget!.handle,
+})))
+
 const existingTypes = computed(() => widgets.value.map(w => w.type))
 const isAdding = ref(false)
 const newType = ref<WidgetType | null>(null)
@@ -133,7 +140,7 @@ function cancelAdd() {
   newHandle.value = ""
 }
 
-function toggleEdit(widget: Widget) {
+function toggleEdit(widget: NormalizedWidget) {
   if (editingId.value === widget.id) {
     cancelEdit()
     return
@@ -154,8 +161,8 @@ async function handleCreate() {
     return
   }
 
-  const created = await widgetsStore.createWidget({ type: newType.value, handle: newHandle.value })
-  if (created) {
+  const res = await profileItemsStore.createItem({ type: "WIDGET", isPinned: false, isVisible: true, widget: { type: newType.value, handle: newHandle.value } })
+  if (res) {
     cancelAdd()
   }
 }
@@ -165,20 +172,22 @@ async function handleUpdate(id: string) {
     return
   }
 
-  const updated = await widgetsStore.updateWidget(id, { handle: editHandle.value })
-  if (updated) {
+  const res = await profileItemsStore.updateItem(id, { widget: { handle: editHandle.value } })
+  if (res) {
     cancelEdit()
   }
 }
 
 async function handleToggleVisibility(id: string, current: boolean) {
-  await widgetsStore.updateWidget(id, { isVisible: !current })
+  await profileItemsStore.updateItem(id, { isVisible: !current })
 }
 
 async function handleDelete(id: string) {
   if (!confirm("Are you sure you want to delete this widget?")) {
     return
   }
-  await widgetsStore.deleteWidget(id)
+  await profileItemsStore.deleteItem(id)
 }
+
+onMounted(async () => await profileItemsStore.getItems())
 </script>

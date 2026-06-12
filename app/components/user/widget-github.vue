@@ -51,15 +51,15 @@ const props = defineProps<{
   preferences: UserPreferences
 }>()
 
-const widgetsStore = useWidgetsStore()
-const { widgetLoading } = storeToRefs(widgetsStore)
+const profileItemStore = useProfileItemsStore()
+const { widgetLoading } = storeToRefs(profileItemStore)
 const { linkStyle, linkInnerStyle, widgetTextStyle } = useDynamicStyles(toRef(props, "preferences"))
 const widgetType = "GITHUB" as const
 const data = ref<any>(null)
 const loading = computed(() => widgetLoading.value[widgetType])
 
 onMounted(async () => {
-  const res = await widgetsStore.getWidgetData(widgetType, props.handle)
+  const res = await profileItemStore.getWidgetData(widgetType, props.handle)
   data.value = res?.data || null
 })
 </script>
