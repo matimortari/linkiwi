@@ -64,7 +64,11 @@ export default defineNuxtConfig({
       { name: "Ubuntu Mono", provider: "google", global: true, weights: ["400"] },
     ],
   },
-  icon: { mode: "svg", clientBundle: { scan: true } },
+  icon: {
+    mode: "svg",
+    serverBundle: "remote",
+    clientBundle: { scan: true },
+  },
   ogImage: { enabled: false },
   robots: { disallow: ["/admin"] },
   site: { url: process.env.NUXT_PUBLIC_BASE_URL, name: "LinKiwi" },
