@@ -5,7 +5,7 @@
     </nuxt-link>
 
     <button v-if="preferences.showLinkCopyButton" class="absolute right-2 shrink-0 transition-transform hover:scale-110" aria-label="Copy Link" @click.stop="copyAction.triggerCopy(item.link?.url ?? '')">
-      <Icon :name="copyAction.icon.value" size="15" :style="{ color: preferences.linkTextColor }" />
+      <icon :name="copyAction.icon.value" size="15" :style="{ color: preferences.linkTextColor }" />
     </button>
   </li>
 </template>

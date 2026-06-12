@@ -5,7 +5,7 @@
       :aria-label="item.icon?.platform ?? ''" target="_blank"
       @click="handleClick"
     >
-      <Icon :name="item.icon?.logo ?? 'mdi:help'" size="20" :style="iconInnerStyle" />
+      <icon :name="item.icon?.logo ?? 'mdi:help'" size="20" :style="iconInnerStyle" />
     </nuxt-link>
   </li>
 </template>
