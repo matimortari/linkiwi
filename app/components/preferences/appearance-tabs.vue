@@ -1,7 +1,7 @@
 <template>
   <div v-if="props.activeTab === 'background'" class="card grid grid-cols-1 gap-2 md:grid-cols-2">
     <PreferencesRadioOptions v-model:value="localPrefs.backgroundType" name="backgroundType" label="Background Type" :options="BACKGROUND_TYPES" />
-    <div class="flex flex-col gap-2 p-4">
+    <div class="flex flex-col gap-2 p-2">
       <h6 class="py-2">
         Colors
       </h6>
@@ -12,9 +12,9 @@
   </div>
 
   <div v-if="props.activeTab === 'layout'" class="card grid grid-cols-1 gap-2 md:grid-cols-2">
-    <div class="flex flex-col gap-2 p-4">
+    <div class="flex flex-col gap-2 p-2">
       <h6 class="py-2">
-        Header & Profile Options
+        Header & Profile
       </h6>
       <PreferencesSelect id="supportBanner" v-model:value="localPrefs.supportBanner" label="Support Banner" :options="BANNER_OPTIONS" />
       <PreferencesSelect id="profilePictureRadius" v-model:value="localPrefs.profilePictureRadius" label="Profile Picture Radius" :options="RADIUS_SIZES" />
@@ -22,34 +22,28 @@
       <PreferencesSelect id="profilePictureBorderWidth" v-model:value="localPrefs.profilePictureBorderWidth" label="Profile Picture Border Width" :options="BORDER_WIDTHS" />
 
       <h6 class="py-2">
-        Username Settings
+        Dividers
+      </h6>
+      <PreferencesColorPicker id="dividerColor" v-model:value="localPrefs.dividerColor" label="Divider Color" />
+      <PreferencesSelect id="dividerThickness" v-model:value="localPrefs.dividerThickness" label="Thickness" :options="BORDER_WIDTHS" />
+      <PreferencesSelect id="dividerStyle" v-model:value="localPrefs.dividerStyle" label="Style" :options="DIVIDER_STYLES" />
+    </div>
+
+    <div class="flex flex-col gap-2 p-2">
+      <h6 class="py-2">
+        Username
       </h6>
       <PreferencesSelect id="slugFontFamily" v-model:value="localPrefs.slugFontFamily" label="Font Family" :options="FONT_FAMILIES" />
       <PreferencesSelect id="slugTextSize" v-model:value="localPrefs.slugTextSize" label="Font Size" :options="FONT_SIZES" />
       <PreferencesSelect id="slugTextWeight" v-model:value="localPrefs.slugTextWeight" label="Font Weight" :options="FONT_WEIGHTS" />
       <PreferencesColorPicker id="slugTextColor" v-model:value="localPrefs.slugTextColor" label="Font Color" />
     </div>
-
-    <div class="flex flex-col gap-2 p-4">
-      <h6 class="py-2">
-        Display & Dividers
-      </h6>
-      <PreferencesCheckbox id="enableGuestbook" v-model:value="localPrefs.enableGuestbook" label="Enable Guestbook" />
-      <PreferencesCheckbox id="showLocation" v-model:value="localPrefs.showLocation" label="Show Location" />
-
-      <h6 class="py-2">
-        Divider Settings
-      </h6>
-      <PreferencesColorPicker id="dividerColor" v-model:value="localPrefs.dividerColor" label="Divider Color" />
-      <PreferencesSelect id="dividerThickness" v-model:value="localPrefs.dividerThickness" label="Thickness" :options="BORDER_WIDTHS" />
-      <PreferencesSelect id="dividerStyle" v-model:value="localPrefs.dividerStyle" label="Style" :options="DIVIDER_STYLES" />
-    </div>
   </div>
 
   <div v-if="props.activeTab === 'links'" class="card grid grid-cols-1 gap-2 md:grid-cols-2">
-    <div class="flex flex-col gap-2 p-4">
+    <div class="flex flex-col gap-2 p-2">
       <h6 class="py-2">
-        Link Style
+        Base Styles
       </h6>
       <PreferencesColorPicker id="linkBackgroundColor" v-model:value="localPrefs.linkBackgroundColor" label="Background Color" />
       <PreferencesColorPicker id="linkTextColor" v-model:value="localPrefs.linkTextColor" label="Font Color" />
@@ -58,11 +52,12 @@
       <PreferencesSelect id="linkTextWeight" v-model:value="localPrefs.linkTextWeight" label="Font Weight" :options="FONT_WEIGHTS" />
       <PreferencesSelect id="linkBorderRadius" v-model:value="localPrefs.linkBorderRadius" label="Radius" :options="RADIUS_SIZES" />
       <PreferencesSelect id="linkPadding" v-model:value="localPrefs.linkPadding" label="Padding" :options="LINK_PADDING_SIZES" />
+      <PreferencesCheckbox id="showLinkCopyButton" v-model:value="localPrefs.showLinkCopyButton" label="Show 'Copy Link' Button" />
     </div>
 
-    <div class="flex flex-col gap-2 p-4">
+    <div class="flex flex-col gap-2 p-2">
       <h6 class="py-2">
-        Behavior & Effects
+        Shadows
       </h6>
       <PreferencesColorPicker id="linkHoverBackgroundColor" v-model:value="localPrefs.linkHoverBackgroundColor" label="Hover Background Color" />
       <PreferencesCheckbox id="isLinkShadow" v-model:value="localPrefs.isLinkShadow" label="Enable Shadow" />
@@ -72,21 +67,20 @@
         label="Shadow Weight" :options="SHADOW_WEIGHTS"
         :disabled="isLinkShadowDisabled"
       />
-      <PreferencesCheckbox id="showLinkCopyButton" v-model:value="localPrefs.showLinkCopyButton" label="Show 'Copy Link' Button" />
     </div>
   </div>
 
   <div v-if="props.activeTab === 'icons'" class="card grid grid-cols-1 gap-2 md:grid-cols-2">
-    <div class="flex flex-col gap-2 p-4">
+    <div class="flex flex-col gap-2 p-2">
       <h6 class="py-2">
-        Appearance
+        Base Styles
       </h6>
       <PreferencesColorPicker id="iconBackgroundColor" v-model:value="localPrefs.iconBackgroundColor" label="Background Color" />
       <PreferencesColorPicker id="iconLogoColor" v-model:value="localPrefs.iconLogoColor" label="Icon Color" />
       <PreferencesColorPicker id="iconHoverBackgroundColor" v-model:value="localPrefs.iconHoverBackgroundColor" label="Hover Background Color" />
     </div>
 
-    <div class="flex flex-col gap-2 p-4">
+    <div class="flex flex-col gap-2 p-2">
       <h6 class="py-2">
         Shadows
       </h6>

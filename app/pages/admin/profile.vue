@@ -16,7 +16,7 @@
 
       <div class="flex flex-col gap-4">
         <ProfileItemList />
-        <ProfileWidgetList />
+        <ProfileIconList />
       </div>
     </div>
 
