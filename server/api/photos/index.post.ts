@@ -4,8 +4,8 @@ export default defineEventHandler(async (event) => {
   // Rate limit: 30 requests per hour per IP
   await enforceRateLimit(event, `assets:upload:${sessionUser.id}`, 30)
 
-  const multipartData = await readMultipartFormData(event)
-  const fileField = multipartData?.find(part => part.name === "file")
+  const form = await readMultipartFormData(event)
+  const fileField = form?.find(part => part.name === "file")
   if (!fileField || !fileField.data) {
     throw createError({ status: 400, statusText: "No image file provided for upload" })
   }
@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
   const fileToUpload = new File([new Uint8Array(fileField.data)], fileField.filename || "upload.jpg", { type: fileField.type })
 
   const uploadedUrl = await uploadFile({
-    path: `users/${sessionUser.id}/assets`,
+    path: `user-assets/${sessionUser.id}`,
     file: fileToUpload,
     maxSize: 5 * 1024 * 1024, // 5MB
     allowedMimeTypes: ["image/jpeg", "image/png", "image/webp", "image/gif"],
@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
     },
   })
 
-  await deleteCached(CacheKeys.userAssets?.(sessionUser.id) || `user:assets:${sessionUser.id}`)
+  await deleteCached(CacheKeys.userAssets?.(sessionUser.id))
 
   return { success: true, newAsset }
 })
