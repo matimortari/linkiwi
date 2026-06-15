@@ -1,4 +1,4 @@
-import type { UpdateUserInput, UpdateUserPreferencesInput } from "#shared/schemas/user-schema"
+import type { UpdateUserInput, UpdateUserPreferencesInput, UserBannerInput } from "#shared/schemas/user-schema"
 
 export const useUserStore = defineStore("user", () => {
   const toast = useToast()
@@ -88,6 +88,27 @@ export const useUserStore = defineStore("user", () => {
     }
   }
 
+  async function updateUserBanner(data: UserBannerInput) {
+    loading.value = true
+
+    try {
+      const res = await $fetch<{ banner: UserBanner }>("/api/user/banner", { method: "PUT", body: data, credentials: "include" })
+      if (user.value && res.banner) {
+        user.value.banner = res.banner
+      }
+      return res
+    }
+    catch (err: unknown) {
+      const message = getErrorMessage(err, "Failed to update banner")
+      toast.error(message)
+      console.error("updateUserBanner error:", err)
+      throw err
+    }
+    finally {
+      loading.value = false
+    }
+  }
+
   async function updatePreferences(data: UpdateUserPreferencesInput) {
     loading.value = true
 
@@ -136,6 +157,7 @@ export const useUserStore = defineStore("user", () => {
     getUserProfile,
     updateUser,
     updateUserImage,
+    updateUserBanner,
     updatePreferences,
     deleteUser,
   }

@@ -5,7 +5,7 @@
     </h3>
 
     <Loading v-if="loading" />
-    <Empty v-else-if="!items.length" message="No links or social icons yet." icon-name="mdi:octagram-minus-outline" />
+    <Empty v-else-if="!items.length" message="Not enough data yet." icon-name="mdi:octagram-minus-outline" />
 
     <ul v-else class="grid grid-cols-1 gap-4 md:grid-cols-3">
       <li v-for="item in items" :key="item.id" class="card flex flex-col gap-2">

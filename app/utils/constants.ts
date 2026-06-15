@@ -94,7 +94,66 @@ export const DEFAULT_PREFERENCES: UserPreferences = {
   enableGuestbook: false,
 }
 
-// Widget configuration constants
+// Profile item type options
+export const ITEM_TYPES = [
+  { type: "LINK", label: "Link", icon: "mdi:link-variant" },
+  { type: "WIDGET", label: "Widget", icon: "mdi:shape-outline" },
+  { type: "DIVIDER", label: "Divider", icon: "mdi:minus" },
+  { type: "PHOTO_GRID", label: "Photo Grid", icon: "mdi:image-multiple-outline" },
+] as const
+
+// Supported platform options for social icons
+export const SOCIAL_ICONS = {
+  "Airbnb": "simple-icons:airbnb",
+  "Amazon": "simple-icons:amazon",
+  "App Store": "simple-icons:appstore",
+  "Apple Music": "simple-icons:applemusic",
+  "Apple Podcasts": "simple-icons:applepodcasts",
+  "Bandcamp": "simple-icons:bandcamp",
+  "Behance": "simple-icons:behance",
+  "Bluesky": "simple-icons:bluesky",
+  "Calendly": "simple-icons:calendly",
+  "CodePen": "simple-icons:codepen",
+  "Discord": "simple-icons:discord",
+  "Dribbble": "simple-icons:dribbble",
+  "Etsy": "simple-icons:etsy",
+  "Facebook": "simple-icons:facebook",
+  "GitHub": "simple-icons:github",
+  "Gmail": "simple-icons:gmail",
+  "Goodreads": "simple-icons:goodreads",
+  "Google Maps": "simple-icons:googlemaps",
+  "Google Play": "simple-icons:googleplay",
+  "Instagram": "simple-icons:instagram",
+  "Kickstarter": "simple-icons:kickstarter",
+  "Letterboxd": "simple-icons:letterboxd",
+  "LinkedIn": "simple-icons:linkedin",
+  "Mastodon": "simple-icons:mastodon",
+  "Medium": "simple-icons:medium",
+  "Notion": "simple-icons:notion",
+  "Patreon": "simple-icons:patreon",
+  "Pinterest": "simple-icons:pinterest",
+  "Reddit": "simple-icons:reddit",
+  "ResearchGate": "simple-icons:researchgate",
+  "Shopify": "simple-icons:shopify",
+  "Signal": "simple-icons:signal",
+  "Slack": "simple-icons:slack",
+  "Snapchat": "simple-icons:snapchat",
+  "SoundCloud": "simple-icons:soundcloud",
+  "Spotify": "simple-icons:spotify",
+  "Stack Overflow": "simple-icons:stackoverflow",
+  "Substack": "simple-icons:substack",
+  "Telegram": "simple-icons:telegram",
+  "Tiktok": "simple-icons:tiktok",
+  "Tripadvisor": "simple-icons:tripadvisor",
+  "Trello": "simple-icons:trello",
+  "Twitch": "simple-icons:twitch",
+  "Vimeo": "simple-icons:vimeo",
+  "Whatsapp": "simple-icons:whatsapp",
+  "X": "simple-icons:x",
+  "Yelp": "simple-icons:yelp",
+  "Youtube": "simple-icons:youtube",
+} as const
+
 export const WIDGET_OPTIONS: { type: WidgetType, label: string, icon: string }[] = [
   { type: "GITHUB", label: "GitHub", icon: "simple-icons:github" },
   { type: "YOUTUBE", label: "YouTube", icon: "simple-icons:youtube" },

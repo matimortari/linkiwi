@@ -27,14 +27,8 @@ export const useAssetsStore = defineStore("assets", () => {
     try {
       const formData = new FormData()
       formData.append("file", file)
-
-      const res = await $fetch<{ success: boolean, asset: UserAsset }>("/api/photos", {
-        method: "POST",
-        body: formData,
-        credentials: "include",
-      })
-
-      assets.value.unshift(res.asset)
+      const res = await $fetch<{ success: boolean, newAsset: UserAsset }>("/api/photos", { method: "POST", body: formData, credentials: "include" })
+      assets.value.unshift(res.newAsset)
       toast.success("Image uploaded successfully")
       return res
     }

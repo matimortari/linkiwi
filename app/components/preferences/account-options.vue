@@ -5,35 +5,7 @@
     </h3>
 
     <div class="flex flex-col gap-4">
-      <div class="card flex flex-col gap-3">
-        <h4>
-          Location
-        </h4>
-        <p class="text-caption">
-          Show your location on your profile page.
-        </p>
-
-        <div class="flex flex-col gap-2 md:flex-row md:items-end">
-          <div class="flex flex-1 flex-col gap-1">
-            <label for="location" class="text-sm font-medium">Location</label>
-            <input
-              id="location" v-model="locationForm.location"
-              type="text" maxlength="100"
-              placeholder="e.g. São Paulo, Brazil"
-            >
-          </div>
-          <PreferencesCheckbox id="showLocation" v-model:value="locationForm.showLocation" label="Show on profile" />
-        </div>
-
-        <div class="flex justify-end">
-          <button class="btn-primary" :disabled="locationLoading" @click="handleSaveLocation">
-            <icon :name="locationAction.icon.value" size="20" />
-            <span>Save</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="card flex flex-col gap-3">
+      <div class="card flex flex-col gap-2">
         <h4>
           Profile Banner
         </h4>
@@ -48,7 +20,7 @@
           </button>
         </div>
 
-        <div class="flex items-center gap-3">
+        <div class="navigation-group">
           <label class="btn-ghost cursor-pointer text-sm">
             <icon name="mdi:upload" size="20" />
             <span>{{ bannerPreview ? "Change Image" : "Upload Image" }}</span>
@@ -69,7 +41,8 @@
         </div>
       </div>
 
-      <!-- Guestbook -->
+      <PreferencesAssetManager />
+
       <div class="card flex flex-col gap-2">
         <h4>
           Guestbook
@@ -80,7 +53,6 @@
 
         <div class="flex items-center justify-between gap-2">
           <PreferencesCheckbox id="enableGuestbook" v-model:value="guestbookEnabled" label="Enable Guestbook" class="max-w-xs" />
-
           <button class="btn-primary" @click="handleSaveGuestbook">
             <icon :name="guestbookAction.icon.value" size="20" />
             <span>Save</span>
@@ -91,7 +63,6 @@
           <h5>
             Comments
           </h5>
-
           <p v-if="!comments.length" class="text-caption">
             No comments yet.
           </p>
@@ -116,13 +87,10 @@
       </div>
 
       <div class="card flex flex-col gap-2">
-        <h4>
-          Delete Account
-        </h4>
+        <h4>Delete Account</h4>
         <p class="text-caption-danger">
           This action is irreversible. All data will be lost.
         </p>
-
         <button class="btn-danger md:self-end" @click="handleDeleteUser">
           <icon name="mdi:user-remove" size="20" />
           <span>Delete Account</span>
@@ -136,27 +104,15 @@
 const { createActionHandler } = useActionIcon()
 const { clear } = useUserSession()
 const userStore = useUserStore()
+const assetsStore = useAssetsStore()
 const { user, preferences } = storeToRefs(userStore)
 const comments = computed(() => user.value?.comments ?? [])
-const locationLoading = ref(false)
-const locationAction = createActionHandler("mdi:content-save-check")
-const locationForm = ref({ location: user.value?.location ?? "", showLocation: preferences.value?.showLocation ?? false })
 const guestbookEnabled = ref(preferences.value?.enableGuestbook ?? false)
 const guestbookAction = createActionHandler("mdi:content-save-check")
 const bannerLoading = ref(false)
 const bannerInput = ref<HTMLInputElement | null>(null)
 const bannerFile = ref<File | null>(null)
 const bannerPreview = ref<string | null>(user.value?.banner?.url ?? null)
-
-async function handleSaveLocation() {
-  locationLoading.value = true
-  await Promise.all([
-    userStore.updateUser({ location: locationForm.value.location }),
-    userStore.updatePreferences({ showLocation: locationForm.value.showLocation }),
-  ])
-  locationAction.triggerSuccess()
-  locationLoading.value = false
-}
 
 function handleBannerFileChange(e: Event) {
   const file = (e.target as HTMLInputElement).files?.[0]
@@ -173,18 +129,22 @@ async function handleUploadBanner() {
   }
   bannerLoading.value = true
 
-  // TODO: wire to POST /api/assets when endpoint is ready
-  // const formData = new FormData()
-  // formData.append("file", bannerFile.value)
-  // formData.append("label", "banner")
-  // await $fetch("/api/assets", { method: "POST", body: formData })
-
-  bannerLoading.value = false
-  bannerFile.value = null
+  try {
+    const uploadedAsset = await assetsStore.uploadAsset(bannerFile.value)
+    if (uploadedAsset?.newAsset) {
+      await userStore.updateUserBanner({ url: uploadedAsset.newAsset.url, assetId: uploadedAsset.newAsset.id })
+    }
+    bannerFile.value = null
+    if (bannerInput.value) {
+      bannerInput.value.value = ""
+    }
+  }
+  finally {
+    bannerLoading.value = false
+  }
 }
 
 async function handleRemoveBanner() {
-  // TODO: wire to DELETE /api/assets/banner when endpoint is ready
   bannerPreview.value = null
   bannerFile.value = null
 }
@@ -201,7 +161,7 @@ async function handleDeleteUser() {
 
   await userStore.deleteUser()
   await clear()
-  await navigateTo("/sign-in", { replace: true })
+  await navigateTo("/", { replace: true })
 }
 
 // Sync user data into local form state when store updates
@@ -216,8 +176,6 @@ watch(() => preferences.value, (p) => {
   if (!p) {
     return
   }
-
-  locationForm.value.showLocation = p.showLocation ?? false
   guestbookEnabled.value = p.enableGuestbook ?? false
 }, { deep: true })
 </script>

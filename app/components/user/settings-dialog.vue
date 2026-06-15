@@ -30,6 +30,11 @@
         <input id="description" v-model="form.description" type="text" placeholder="Enter your description">
       </div>
 
+            <div class="flex max-w-md flex-col gap-2">
+        <label for="location" class="w-20 text-sm font-medium">Location</label>
+        <input id="location" v-model="form.location" type="text" placeholder="Enter your location">
+      </div>
+
       <footer class="flex flex-row items-center justify-end">
         <button class="btn-success" type="submit">
           Update Profile
@@ -45,7 +50,7 @@ const emit = defineEmits<{ close: [] }>()
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
 const { isUserDialogOpen } = useUIState()
-const form = ref({ name: "", slug: "", description: "", image: "" })
+const form = ref({ name: "", slug: "", description: "", location: "", image: "" })
 
 async function handleUpdateImage(event: Event) {
   const input = event.target as HTMLInputElement
@@ -66,7 +71,7 @@ async function handleSubmit() {
     return
   }
 
-  const updated = await userStore.updateUser({ name: form.value.name, slug: form.value.slug, description: form.value.description })
+  const updated = await userStore.updateUser({ name: form.value.name, slug: form.value.slug, description: form.value.description, location: form.value.location })
   if (!updated) {
     return
   }
@@ -82,6 +87,7 @@ watch(() => isUserDialogOpen.value, (open) => {
       name: user.value.name ?? "",
       slug: user.value.slug ?? "",
       description: user.value.description ?? "",
+      location: user.value.location ?? "",
       image: user.value.image ?? "",
     }
   }

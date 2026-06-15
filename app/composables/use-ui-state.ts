@@ -21,11 +21,15 @@ const uiState = reactive<UIState>({
       isOpen: false,
       selectedPhotos: null,
     },
+    widget: {
+      isOpen: false,
+      selectedWidget: null as ProfileItem | null,
+    },
   },
 })
 
 export function useUIState() {
-  const openDialog = (type: "user" | "share" | "item" | "link" | "icon" | "photoGrid", payload?: { item?: ProfileItem | null, activeType?: ProfileItemType | null }) => {
+  const openDialog = (type: "user" | "share" | "item" | "link" | "icon" | "photoGrid" | "widget", payload?: { item?: ProfileItem | null, activeType?: ProfileItemType | null }) => {
     if (type === "item") {
       uiState.dialogs.item.isOpen = true
       uiState.dialogs.item.selectedItem = payload?.item ?? null
@@ -52,12 +56,18 @@ export function useUIState() {
         uiState.dialogs.photoGrid.selectedPhotos = null
       }
     }
+    else if (type === "widget") {
+      uiState.dialogs.widget.isOpen = true
+      if (payload?.item !== undefined) {
+        uiState.dialogs.widget.selectedWidget = payload.item
+      }
+    }
     else {
       uiState.dialogs[type] = true
     }
   }
 
-  const closeDialog = (type: "user" | "share" | "item" | "link" | "icon" | "photoGrid") => {
+  const closeDialog = (type: "user" | "share" | "item" | "link" | "icon" | "photoGrid" | "widget") => {
     if (type === "item") {
       uiState.dialogs.item.isOpen = false
       uiState.dialogs.item.selectedItem = null
@@ -75,6 +85,10 @@ export function useUIState() {
       uiState.dialogs.photoGrid.isOpen = false
       uiState.dialogs.photoGrid.selectedPhotos = null
     }
+    else if (type === "widget") {
+      uiState.dialogs.widget.isOpen = false
+      uiState.dialogs.widget.selectedWidget = null
+    }
     else {
       uiState.dialogs[type] = false
     }
@@ -91,10 +105,12 @@ export function useUIState() {
   const isLinkDialogOpen = computed(() => uiState.dialogs.link.isOpen)
   const isIconDialogOpen = computed(() => uiState.dialogs.icon.isOpen)
   const isPhotoGridDialogOpen = computed(() => uiState.dialogs.photoGrid.isOpen)
+  const isWidgetDialogOpen = computed(() => uiState.dialogs.widget.isOpen)
   const selectedItem = computed(() => uiState.dialogs.item.selectedItem)
   const selectedLink = computed(() => uiState.dialogs.link.selectedLink)
   const selectedIcon = computed(() => uiState.dialogs.icon.selectedIcon)
   const selectedPhotos = computed(() => uiState.dialogs.photoGrid.selectedPhotos)
+  const selectedWidget = computed(() => uiState.dialogs.widget.selectedWidget)
   const activeItemType = computed(() => uiState.dialogs.item.activeType)
   const isSidebarOpen = computed(() => uiState.sidebar)
   const isPreviewOpen = computed(() => uiState.preview)
@@ -107,10 +123,12 @@ export function useUIState() {
     isLinkDialogOpen,
     isIconDialogOpen,
     isPhotoGridDialogOpen,
+    isWidgetDialogOpen,
     selectedItem,
     selectedLink,
     selectedIcon,
     selectedPhotos,
+    selectedWidget,
     activeItemType,
     isSidebarOpen,
     isPreviewOpen,
