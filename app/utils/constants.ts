@@ -92,7 +92,6 @@ export const DEFAULT_PREFERENCES: UserPreferences = {
   dividerStyle: "solid",
   supportBanner: "NONE",
   enableGuestbook: false,
-  showLocation: false,
 }
 
 // Widget configuration constants

@@ -39,13 +39,6 @@ enum WidgetType {
   SPOTIFY
 }
 
-enum SupportPlatform {
-  KO_FI
-  BUY_ME_A_COFFEE
-  PIX
-  CUSTOM
-}
-
 model Account {
   id                String   @id @default(cuid())
   userId            String
@@ -59,23 +52,22 @@ model Account {
 }
 
 model User {
-  id            String             @id @default(cuid())
-  email         String             @unique
-  name          String
-  image         String?
-  slug          String             @unique
-  description   String?
-  location      String?
-  preferences   UserPreferences?   @relation("UserPreferences")
-  banner        UserBanner?        @relation("UserBanner")
-  supportButton UserSupportButton?
-  items         ProfileItem[]
-  assets        UserAsset[]
-  views         PageView[]
-  comments      Comment[]
-  accounts      Account[]
-  createdAt     DateTime           @default(now())
-  updatedAt     DateTime           @updatedAt
+  id          String           @id @default(cuid())
+  email       String           @unique
+  name        String
+  image       String?
+  slug        String           @unique
+  description String?
+  location    String?
+  preferences UserPreferences? @relation("UserPreferences")
+  banner      UserBanner?      @relation("UserBanner")
+  items       ProfileItem[]
+  assets      UserAsset[]
+  views       PageView[]
+  comments    Comment[]
+  accounts    Account[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
 }
 
 model UserPreferences {
@@ -118,7 +110,6 @@ model UserPreferences {
   dividerStyle              String         @default("solid")
   supportBanner             SupportBanner  @default(NONE)
   enableGuestbook           Boolean        @default(false)
-  showLocation              Boolean        @default(false)
   user                      User           @relation("UserPreferences", fields: [userId], references: [id], onDelete: Cascade)
 }
 
@@ -211,16 +202,6 @@ model PhotoGridItem {
   asset   UserAsset?           @relation(fields: [assetId], references: [id], onDelete: SetNull)
 
   @@index([gridId, order])
-}
-
-model UserSupportButton {
-  userId           String          @id
-  isEnabled        Boolean         @default(false)
-  platform         SupportPlatform @default(CUSTOM)
-  url              String
-  thankYouMessage  String?
-  suggestedAmounts Int[]
-  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Comment {

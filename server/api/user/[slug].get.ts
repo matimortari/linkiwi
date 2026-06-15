@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
   const cacheKey = CacheKeys.userProfile(slug)
   const cached = await getCached<any>(cacheKey)
   if (cached) {
-    return { userProfile: cached }
+    return { profile: cached }
   }
 
   const now = new Date()
@@ -27,7 +27,6 @@ export default defineEventHandler(async (event) => {
       location: true,
       preferences: true,
       banner: { select: { url: true } },
-      supportButton: { select: { isEnabled: true, platform: true, url: true, suggestedAmounts: true, thankYouMessage: true } },
       items: {
         where: {
           isVisible: true,
@@ -41,17 +40,8 @@ export default defineEventHandler(async (event) => {
       },
     },
   })
-
   if (!profile) {
     throw createError({ status: 404, statusText: `User '${slug}' not found` })
-  }
-
-  // Privacy Guard: Strip fields explicitly disabled by user preferences
-  if (!profile.preferences?.showLocation) {
-    profile.location = null
-  }
-  if (!profile.supportButton?.isEnabled) {
-    profile.supportButton = null
   }
 
   await setCached(cacheKey, profile, CACHE_TTL.LONG)

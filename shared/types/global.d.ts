@@ -3,7 +3,6 @@ type SupportBanner = "NONE" | "LGBTQ_RIGHTS" | "ANTI_RACISM" | "MENTAL_HEALTH" |
 type ScheduleAction = "HIDE" | "DELETE"
 type ProfileItemType = "LINK" | "WIDGET" | "ICON" | "DIVIDER" | "PHOTO_GRID"
 type WidgetType = "GITHUB" | "YOUTUBE" | "SPOTIFY"
-type SupportPlatform = "KO_FI" | "BUY_ME_A_COFFEE" | "PIX" | "CUSTOM"
 
 interface User {
   id: string
@@ -15,7 +14,6 @@ interface User {
   location?: string | null
   preferences?: UserPreferences | null
   banner?: UserBanner | null
-  supportButton?: UserSupportButton | null
   items?: ProfileItem[]
   assets?: UserAsset[]
   views?: PageView[]
@@ -64,7 +62,6 @@ interface UserPreferences {
   dividerStyle?: DividerStyle
   supportBanner?: BannerOption
   enableGuestbook?: boolean
-  showLocation?: boolean
 }
 
 interface UserBanner {
@@ -143,16 +140,6 @@ interface PhotoGridItem {
   alt?: string | null
   asset?: UserAsset | null
 }
-
-interface UserSupportButton {
-  userId: string
-  isEnabled: boolean
-  platform: SupportPlatform
-  url: string
-  thankYouMessage?: string | null
-  suggestedAmounts: number[]
-}
-
 interface PageView {
   id: string
   userId: string
@@ -183,7 +170,6 @@ interface UIState {
   dialogs: {
     user: boolean
     share: boolean
-    supportButton: boolean
     item: {
       isOpen: boolean
       selectedItem: ProfileItem | null
@@ -196,6 +182,10 @@ interface UIState {
     icon: {
       isOpen: boolean
       selectedIcon: ProfileItem | null
+    }
+    photoGrid: {
+      isOpen: boolean
+      selectedPhotos: PhotoGridItem[] | null
     }
   }
 }

@@ -17,11 +17,11 @@ export function requireEnv(name: string): string {
  * Retrieves the authenticated user from the current session.
  * Throws 401 if no valid session exists.
  */
-export async function getUserFromSession(event: H3Event<EventHandlerRequest>): Promise<{ id: string, email: string, name: string, image: string | null }> {
+export async function getUserFromSession(event: H3Event<EventHandlerRequest>): Promise<User> {
   const session = await getUserSession(event)
   if (session?.user?.id) {
-    const { id, email, name, image } = session.user
-    return { id, email, name, image: image ?? null }
+    const { id, email, name, image, slug } = session.user
+    return { id, email, name, image: image ?? "", slug }
   }
 
   throw createError({ statusCode: 401, statusMessage: "Unauthorized" })

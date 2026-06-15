@@ -15,7 +15,6 @@ export default defineEventHandler(async (event) => {
     include: {
       preferences: true,
       banner: { select: { id: true, url: true, asset: true } },
-      supportButton: { select: { userId: true, url: true, isEnabled: true, platform: true, suggestedAmounts: true, thankYouMessage: true } },
     },
   })
   if (!user) {

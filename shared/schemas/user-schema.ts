@@ -59,17 +59,13 @@ export const updateUserPreferencesSchema = z.object({
   dividerStyle: z.string(),
   supportBanner: z.enum(["NONE", "LGBTQ_RIGHTS", "ANTI_RACISM", "MENTAL_HEALTH", "CLIMATE_ACTION"]),
   enableGuestbook: z.boolean(),
-  showLocation: z.boolean(),
 }).partial()
 
-export const userSupportButtonSchema = z.object({
-  isEnabled: z.boolean().default(false),
-  platform: z.enum(["KO_FI", "BUY_ME_A_COFFEE", "PIX", "CUSTOM"]).default("CUSTOM"),
+export const userBannerSchema = z.object({
   url: z.url("Invalid URL"),
-  thankYouMessage: z.string().max(500).nullable().optional(),
-  suggestedAmounts: z.array(z.number().int().positive()).max(5, "Maximum of 5 choices allowed"),
+  assetId: z.cuid2().nullable().optional(),
 })
 
 export type UpdateUserInput = z.infer<typeof updateUserSchema>
 export type UpdateUserPreferencesInput = z.infer<typeof updateUserPreferencesSchema>
-export type UserSupportButtonInput = z.infer<typeof userSupportButtonSchema>
+export type UserBannerInput = z.infer<typeof userBannerSchema>
