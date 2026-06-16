@@ -5,6 +5,7 @@ export const useUserStore = defineStore("user", () => {
   const user = ref<User | null>(null)
   const userProfile = ref<User | null>(null)
   const preferences = computed(() => user.value?.preferences ?? DEFAULT_PREFERENCES)
+  const assets = ref<UserAsset[]>([])
   const loading = ref(false)
 
   async function getUser() {
@@ -30,7 +31,7 @@ export const useUserStore = defineStore("user", () => {
     loading.value = true
 
     try {
-      const res = await $fetch<{ profile: User }>(`/api/user/${slug}`, { method: "GET" })
+      const res = await $fetch<{ profile: User }>(`/api/profiles/${slug}`, { method: "GET" })
       userProfile.value = res.profile
       return res
     }
@@ -130,6 +131,63 @@ export const useUserStore = defineStore("user", () => {
     }
   }
 
+  async function getAssets() {
+    loading.value = true
+
+    try {
+      const res = await $fetch<{ assets: UserAsset[] }>("/api/user/uploads", { method: "GET", credentials: "include" })
+      assets.value = res.assets
+      return res
+    }
+    catch (err) {
+      const message = getErrorMessage(err, "Failed to list media manager repository assets")
+      toast.error(message)
+      throw err
+    }
+    finally {
+      loading.value = false
+    }
+  }
+
+  async function uploadAsset(file: File) {
+    loading.value = true
+
+    try {
+      const formData = new FormData()
+      formData.append("file", file)
+      const res = await $fetch<{ success: boolean, newAsset: UserAsset }>("/api/user/uploads", { method: "POST", body: formData, credentials: "include" })
+      assets.value.unshift(res.newAsset)
+      toast.success("Image uploaded successfully")
+      return res
+    }
+    catch (err) {
+      const message = getErrorMessage(err, "Failed to upload image")
+      toast.error(message)
+      throw err
+    }
+    finally {
+      loading.value = false
+    }
+  }
+
+  async function deleteAsset(id: string) {
+    loading.value = true
+
+    try {
+      await $fetch(`/api/user/uploads/${id}`, { method: "DELETE", credentials: "include" })
+      assets.value = assets.value.filter(asset => asset.id !== id)
+      toast.success("Image deleted successfully")
+    }
+    catch (err) {
+      const message = getErrorMessage(err, "Failed to delete image")
+      toast.error(message)
+      throw err
+    }
+    finally {
+      loading.value = false
+    }
+  }
+
   async function deleteUser() {
     loading.value = true
 
@@ -153,12 +211,16 @@ export const useUserStore = defineStore("user", () => {
     user,
     userProfile,
     preferences,
+    assets,
     getUser,
     getUserProfile,
     updateUser,
     updateUserImage,
     updateUserBanner,
     updatePreferences,
+    getAssets,
+    uploadAsset,
+    deleteAsset,
     deleteUser,
   }
 })

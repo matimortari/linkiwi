@@ -84,23 +84,23 @@ export const useProfileItemsStore = defineStore("profile-items", () => {
     }
   }
 
-  async function getWidgetData(type: WidgetType, handle: string) {
-    widgetLoading.value[type] = true
-    widgetError.value[type] = false
+  async function getWidgetData(platform: WidgetType, handle: string) {
+    widgetLoading.value[platform] = true
+    widgetError.value[platform] = false
 
     try {
-      const res = await $fetch<{ data: any }>(`/api/widgets/${type.toLowerCase()}`, { method: "GET", query: { handle } })
+      const res = await $fetch<{ data: any }>(`/api/widgets/${platform.toLowerCase()}`, { method: "GET", query: { handle } })
       return res
     }
     catch (err: unknown) {
-      const message = getErrorMessage(err, `Failed to fetch data for ${type}"`)
+      const message = getErrorMessage(err, `Failed to fetch data for ${platform}"`)
       toast.error(message)
-      console.error(`getWidgetData(${type}) error:`, err)
-      widgetError.value[type] = true
+      console.error(`getWidgetData(${platform}) error:`, err)
+      widgetError.value[platform] = true
       throw err
     }
     finally {
-      widgetLoading.value[type] = false
+      widgetLoading.value[platform] = false
     }
   }
 

@@ -24,38 +24,36 @@ export default defineEventHandler(async (event) => {
     throw createError({ status: 403, statusText: "You do not have permission to modify this resource" })
   }
 
-  const { order, isPinned, isVisible, scheduledStart, scheduledEnd, scheduleAction, link, icon, widget, photoGrid } = result.data
-
   // Map global configuration properties
   const updatePayload: any = {
-    order,
-    isPinned,
-    isVisible,
-    scheduledStart,
-    scheduledEnd,
-    scheduleAction,
+    order: result.data.order,
+    isPinned: result.data.isPinned,
+    isVisible: result.data.isVisible,
+    scheduledStart: result.data.scheduledStart,
+    scheduledEnd: result.data.scheduledEnd,
+    scheduleAction: result.data.scheduleAction,
   }
-  if (existingItem.type === "LINK" && link) {
-    updatePayload.link = { update: link }
+  if (existingItem.type === "LINK" && result.data.link) {
+    updatePayload.link = { update: result.data.link }
   }
 
-  else if (existingItem.type === "ICON" && icon) {
-    if (icon.platform) {
-      const duplicateIcon = await db.profileItemIcon.findFirst({ where: { platform: icon.platform, itemId: { not: itemId }, item: { userId: sessionUser.id } } })
+  else if (existingItem.type === "ICON" && result.data.icon) {
+    if (result.data.icon.platform) {
+      const duplicateIcon = await db.profileItemIcon.findFirst({ where: { platform: result.data.icon.platform, itemId: { not: itemId }, item: { userId: sessionUser.id } } })
       if (duplicateIcon) {
-        throw createError({ status: 409, statusText: `A social icon badge for ${icon.platform} already exists.` })
+        throw createError({ status: 409, statusText: `A social icon badge for ${result.data.icon.platform} already exists.` })
       }
     }
-    updatePayload.icon = { update: icon }
+    updatePayload.icon = { update: result.data.icon }
   }
 
-  else if (existingItem.type === "WIDGET" && widget) {
-    updatePayload.widget = { update: widget }
+  else if (existingItem.type === "WIDGET" && result.data.widget) {
+    updatePayload.widget = { update: result.data.widget }
   }
 
-  else if (existingItem.type === "PHOTO_GRID" && photoGrid?.photos) {
+  else if (existingItem.type === "PHOTO_GRID" && result.data.photoGrid?.photos) {
     await db.photoGridItem.deleteMany({ where: { gridId: itemId } })
-    updatePayload.photoGrid = { update: { photos: { createMany: { data: photoGrid.photos } } } }
+    updatePayload.photoGrid = { update: { photos: { createMany: { data: result.data.photoGrid.photos } } } }
   }
 
   // Fire the single transaction update statement down to PostgreSQL

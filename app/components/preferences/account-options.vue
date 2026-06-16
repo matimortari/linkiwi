@@ -104,7 +104,6 @@
 const { createActionHandler } = useActionIcon()
 const { clear } = useUserSession()
 const userStore = useUserStore()
-const assetsStore = useAssetsStore()
 const { user, preferences } = storeToRefs(userStore)
 const comments = computed(() => user.value?.comments ?? [])
 const guestbookEnabled = ref(preferences.value?.enableGuestbook ?? false)
@@ -130,7 +129,7 @@ async function handleUploadBanner() {
   bannerLoading.value = true
 
   try {
-    const uploadedAsset = await assetsStore.uploadAsset(bannerFile.value)
+    const uploadedAsset = await userStore.uploadAsset(bannerFile.value)
     if (uploadedAsset?.newAsset) {
       await userStore.updateUserBanner({ url: uploadedAsset.newAsset.url, assetId: uploadedAsset.newAsset.id })
     }

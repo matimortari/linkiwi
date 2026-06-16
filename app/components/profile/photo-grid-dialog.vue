@@ -7,12 +7,12 @@
           <span class="text-xs text-muted-foreground">{{ selected.length }}/9 selected</span>
         </div>
 
-        <Loading v-if="assetsStore.loading" />
-        <Empty v-else-if="!assetsStore.assets.length" message="No images uploaded yet. Upload some from the Asset Manager." icon-name="mdi:image-off-outline" />
+        <Loading v-if="userStore.loading" />
+        <Empty v-else-if="!userStore.assets.length" message="No images uploaded yet. Upload some from the Asset Manager." icon-name="mdi:image-off-outline" />
 
         <div v-else class="scroll-area grid max-h-72 grid-cols-3 gap-2 overflow-y-auto pr-1">
           <button
-            v-for="asset in assetsStore.assets" :key="asset.id"
+            v-for="asset in userStore.assets" :key="asset.id"
             class="group relative aspect-square overflow-hidden rounded-xl border-2 transition-all"
             :class="isSelected(asset.id) ? 'border-primary' : 'border-transparent hover:border-muted-foreground'"
             :disabled="!isSelected(asset.id) && selected.length >= 9"
@@ -48,7 +48,7 @@
 const emit = defineEmits<{ close: [] }>()
 
 const profileItemsStore = useProfileItemsStore()
-const assetsStore = useAssetsStore()
+const userStore = useUserStore()
 const { isPhotoGridDialogOpen } = useUIState()
 const selected = ref<{ id: string, url: string }[]>([])
 
@@ -90,8 +90,8 @@ function handleCancel() {
 }
 
 watch(isPhotoGridDialogOpen, async (open) => {
-  if (open && !assetsStore.assets.length) {
-    await assetsStore.getAssets()
+  if (open && !userStore.assets.length) {
+    await userStore.getAssets()
   }
   if (!open) {
     selected.value = []
