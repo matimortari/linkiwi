@@ -3,6 +3,7 @@ import { userBannerSchema } from "#shared/schemas/user-schema"
 export default defineEventHandler(async (event) => {
   const sessionUser = await getUserFromSession(event)
 
+  // Rate limit: 10 banner updates per hour per user
   await enforceRateLimit(event, `user:banner:${sessionUser.id}`, 10)
 
   const body = await readBody(event)
@@ -24,7 +25,8 @@ export default defineEventHandler(async (event) => {
     update: { url: result.data.url, assetId: result.data.assetId },
   })
 
-  await deleteCached(CacheKeys.userProfile(sessionUser.slug))
+  const user = await db.user.findUnique({ where: { id: sessionUser.id }, select: { slug: true } })
+  await Promise.all([deleteCached(CacheKeys.userProfile(user?.slug || "")), deleteCached(CacheKeys.userData(sessionUser.id))])
 
   return { banner }
 })

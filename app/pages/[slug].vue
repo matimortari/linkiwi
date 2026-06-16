@@ -1,22 +1,22 @@
 <template>
-  <div class="relative flex min-h-screen flex-col items-center justify-center overflow-hidden">
+  <div class="relative flex min-h-screen flex-col items-center justify-center overflow-x-hidden">
     <ClientOnly>
       <nuxt-link to="/">
-        <img src="/assets/symbol.png" alt="Logo" width="30" class="absolute top-4 left-4 transition-transform hover:scale-105">
+        <img src="/assets/symbol.png" alt="Logo" width="30" class="absolute top-4 left-4 z-30 transition-transform hover:scale-105">
       </nuxt-link>
     </ClientOnly>
 
     <Loading v-if="loading" class="absolute inset-0 flex items-center justify-center backdrop-blur-sm" />
     <Empty v-else-if="!userProfile && !loading" :message="`User @${slug} not found.`" icon-name="mdi:account-off" />
 
-    <div v-else-if="userProfile" class="flex w-full flex-1 flex-col items-center gap-4 py-20 text-center" :style="backgroundStyle">
-      <div v-if="userProfile.banner?.url" class="relative h-40 w-full overflow-hidden bg-slate-200 md:h-52">
+    <div v-else-if="userProfile" class="flex w-full flex-1 flex-col items-center gap-4 pb-20 text-center" :style="backgroundStyle">
+      <div v-if="userProfile.banner?.url" class="relative h-44 w-full md:h-60">
         <img :src="userProfile.banner.url" alt="Profile Banner" class="size-full object-cover">
       </div>
 
       <UserSupportBanner v-if="profilePreferences.supportBanner !== 'NONE'" :preferences="profilePreferences" />
 
-      <div class="flex flex-col items-center gap-2">
+      <div class="flex flex-col items-center gap-2" :class="{ 'relative z-10 -mt-14 md:-mt-16': userProfile.banner?.url }">
         <img :src="userProfile.image" alt="Avatar" class="size-24 object-cover" :style="profilePictureStyle">
         <p :style="slugStyle">
           {{ `@${userProfile.slug}` }}
@@ -35,17 +35,15 @@
       </ul>
 
       <ul class="flex w-full max-w-xl flex-col items-center gap-4 px-4">
-        <template v-for="item in allItems" :key="item.id">
+        <template v-for="item in visibleItems" :key="item.id">
           <UserLink v-if="item.type === 'LINK'" :item="item" :preferences="profilePreferences" @click="handleClick(item.id ?? '')" />
           <UserPhotoGrid v-else-if="item.type === 'PHOTO_GRID'" :photos="item.photoGrid?.photos ?? []" :preferences="profilePreferences" />
-          <UserWidgetGithub v-if="item.type === 'WIDGET' && item.widget?.type === 'GITHUB'" :handle="item.widget?.handle ?? ''" :preferences="profilePreferences" />
-          <UserWidgetYoutube v-else-if="item.type === 'WIDGET' && item.widget?.type === 'YOUTUBE'" :handle="item.widget?.handle ?? ''" :preferences="profilePreferences" />
-          <UserWidgetSpotify v-else-if="item.type === 'WIDGET' && item.widget?.type === 'SPOTIFY'" :handle="item.widget?.handle ?? ''" :preferences="profilePreferences" />
+          <UserWidget v-else-if="item.type === 'WIDGET' && item.widget" :type="item.widget.type" :handle="item.widget.handle ?? ''" :preferences="profilePreferences" />
           <span v-else-if="item.type === 'DIVIDER'" :style="dividerStyle" />
         </template>
       </ul>
 
-      <p v-if="!allItems.length && !visibleIcons.length" :style="descriptionStyle">
+      <p v-if="!visibleItems.length && !visibleIcons.length" :style="descriptionStyle">
         No content yet.
       </p>
 
@@ -63,8 +61,9 @@ const analyticsStore = useAnalyticsStore()
 const { userProfile, loading } = storeToRefs(userStore)
 const profilePreferences = computed(() => userProfile.value?.preferences ?? DEFAULT_PREFERENCES)
 const { backgroundStyle, profilePictureStyle, slugStyle, descriptionStyle, dividerStyle } = useDynamicStyles(profilePreferences)
-const allItems = computed(() => (userProfile.value?.items ?? []).filter(i => i.type !== "ICON" && i.isVisible !== false).sort((a, b) => a.order - b.order))
+
 const visibleIcons = computed(() => (userProfile.value?.items ?? []).filter(i => i.type === "ICON" && i.isVisible !== false))
+const visibleItems = computed(() => (userProfile.value?.items ?? []).filter(i => i.type !== "ICON" && i.isVisible !== false).sort((a, b) => a.order - b.order))
 
 async function handleClick(itemId: string) {
   if (!userProfile.value?.slug) {

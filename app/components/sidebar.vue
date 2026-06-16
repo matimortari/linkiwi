@@ -41,10 +41,10 @@
       <nav class="flex flex-col gap-2" aria-label="Main Navigation">
         <nuxt-link
           v-for="link in SIDEBAR_NAV_LINKS" :key="link.url"
-          :to="link.url" class="btn-ghost justify-start!"
-          :class="{ 'bg-muted': route.path === link.url }" @click="closeSidebar()"
+          :to="link.url" class="navigation-group justify-start rounded-lg rounded-l-none p-2 text-sm font-semibold transition hover:bg-secondary/10"
+          :class="{ 'border-l-2 border-l-secondary!': route.path === link.url }"
         >
-          <icon :name="link.icon" size="25" />
+          <icon :name="link.icon" :class="{ 'text-secondary!': route.path === link.url }" size="25" @click="closeSidebar()" />
           <span>{{ link.label }}</span>
         </nuxt-link>
       </nav>
@@ -52,15 +52,15 @@
       <div class="border-t md:flex-1" />
 
       <nav class="flex flex-col gap-2" aria-label="Mobile Navigation Actions">
-        <button class="btn-ghost justify-start!" @click="openDialog('share')">
+        <button class="navigation-group justify-start rounded-lg rounded-l-none p-2 text-sm font-semibold transition hover:bg-secondary/10" @click="openDialog('share')">
           <icon name="mdi:share-variant-outline" size="25" />
           <span>Share</span>
         </button>
-        <button class="btn-ghost justify-start!" @click="toggleTheme">
+        <button class="navigation-group justify-start rounded-lg rounded-l-none p-2 text-sm font-semibold transition hover:bg-secondary/10" @click="toggleTheme">
           <icon :name="themeIcon" size="25" />
           <span>Toggle Theme</span>
         </button>
-        <button class="btn-ghost justify-start!" @click="signOut">
+        <button class="navigation-group justify-start rounded-lg rounded-l-none p-2 text-sm font-semibold transition hover:bg-secondary/10" @click="signOut">
           <icon name="mdi:logout" size="25" class="text-caption-danger" />
           <span>Sign Out</span>
         </button>
