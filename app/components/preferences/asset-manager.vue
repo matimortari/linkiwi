@@ -21,11 +21,11 @@
       </label>
     </div>
 
-    <Loading v-if="assetsStore.loading" />
-    <Empty v-else-if="!assetsStore.assets.length" message="No images uploaded yet." icon-name="mdi:image-off-outline" />
+    <Loading v-if="userStore.loading" />
+    <Empty v-else-if="!userStore.assets.length" message="No images uploaded yet." icon-name="mdi:image-off-outline" />
 
     <div v-else class="scroll-area grid max-h-72 grid-cols-3 gap-2 overflow-y-auto pr-1 md:grid-cols-4">
-      <div v-for="asset in assetsStore.assets" :key="asset.id" class="group relative aspect-square overflow-hidden rounded-xl border">
+      <div v-for="asset in userStore.assets" :key="asset.id" class="group relative aspect-square overflow-hidden rounded-xl border">
         <img :src="asset.url" :alt="asset.label ?? 'Asset'" class="size-full object-cover">
         <div class="absolute inset-0 flex flex-col items-end justify-between bg-black/0 p-1.5 opacity-0 transition-all group-hover:bg-black/30 group-hover:opacity-100">
           <button class="btn-danger p-1!" aria-label="Delete asset" @click="handleDelete(asset.id)">
@@ -43,11 +43,11 @@
 </template>
 
 <script setup lang="ts">
-const assetsStore = useAssetsStore()
+const userStore = useUserStore()
 
 onMounted(async () => {
-  if (!assetsStore.assets.length) {
-    await assetsStore.getAssets()
+  if (!userStore.assets.length) {
+    await userStore.getAssets()
   }
 })
 
@@ -57,7 +57,7 @@ async function handleUpload(e: Event) {
     return
   }
 
-  await Promise.all(Array.from(files).map(file => assetsStore.uploadAsset(file)))
+  await Promise.all(Array.from(files).map(file => userStore.uploadAsset(file)))
   ;(e.target as HTMLInputElement).value = ""
 }
 
@@ -65,6 +65,6 @@ async function handleDelete(id: string) {
   if (!confirm("Delete this image? It will be removed from any photo grids or banners using it.")) {
     return
   }
-  await assetsStore.deleteAsset(id)
+  await userStore.deleteAsset(id)
 }
 </script>

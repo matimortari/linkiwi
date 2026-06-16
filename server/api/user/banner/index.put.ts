@@ -11,9 +11,8 @@ export default defineEventHandler(async (event) => {
     throw createError({ status: 400, statusText: result.error.issues[0]?.message || "Invalid input" })
   }
 
-  const { url, assetId } = result.data
-  if (assetId) {
-    const asset = await db.userAsset.findUnique({ where: { id: assetId }, select: { userId: true } })
+  if (result.data.assetId) {
+    const asset = await db.userAsset.findUnique({ where: { id: result.data.assetId }, select: { userId: true } })
     if (!asset || asset.userId !== sessionUser.id) {
       throw createError({ status: 403, statusText: "Asset does not belong to this user" })
     }
@@ -21,8 +20,8 @@ export default defineEventHandler(async (event) => {
 
   const banner = await db.userBanner.upsert({
     where: { userId: sessionUser.id },
-    create: { userId: sessionUser.id, url, assetId },
-    update: { url, assetId },
+    create: { userId: sessionUser.id, url: result.data.url, assetId: result.data.assetId },
+    update: { url: result.data.url, assetId: result.data.assetId },
   })
 
   await deleteCached(CacheKeys.userProfile(sessionUser.slug))

@@ -46,7 +46,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
 
   async function recordItemClick(itemId: string) {
     try {
-      await $fetch("/api/items/click", { method: "POST", body: { type: "itemClick", itemId }, credentials: "include" })
+      await $fetch("/api/items/clicks", { method: "POST", body: { type: "itemClick", itemId }, credentials: "include" })
     }
     catch (err: unknown) {
       console.error("recordItemClick error:", err)
