@@ -264,16 +264,12 @@ h2 {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(320px, 520px);
     gap: 3rem;
-    padding-block: 6rem;
+    padding-block: 1rem;
   }
 
   .section-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 3rem;
-  }
-
-  h1 {
-    line-height: 1.1;
   }
 }
 

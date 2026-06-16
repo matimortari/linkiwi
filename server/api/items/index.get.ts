@@ -20,7 +20,6 @@ export default defineEventHandler(async (event) => {
       widget: true,
       photoGrid: { include: { photos: { orderBy: { order: "asc" } } } },
       _count: { select: { clicks: true } }, // Aggregates total clicks for each item on the fly
-
     },
   })
 
@@ -32,5 +31,5 @@ export default defineEventHandler(async (event) => {
 
   await setCached(cacheKey, formattedItems, CACHE_TTL.SHORT)
 
-  return { formattedItems }
+  return { items: formattedItems }
 })
