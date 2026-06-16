@@ -31,35 +31,36 @@ const { loading } = storeToRefs(profileItemsStore)
 
 // Map the unified items array down into the local structural variants
 const items = computed(() => {
-  return (profileItemsStore.items || []).filter((item: Record<string, any>) => item.type === "LINK" || item.type === "ICON").map((item: Record<string, any>) => {
-    if (item.type === "LINK") {
+  return (profileItemsStore.items || []).filter((item: ProfileItem) => item.type === "LINK" || item.type === "ICON").map((item: ProfileItem) => {
+    if (item.type === "LINK" && item.link) {
       return {
-        id: item.id!,
+        id: item.id,
         type: "link" as const,
-        title: item.title,
-        url: item.url,
+        title: item.link.label,
+        url: item.link.url,
+        logo: null,
       }
     }
-
-    return {
-      id: item.id!,
-      type: "icon" as const,
-      logo: item.logo,
-      platform: item.platform,
-      url: item.url,
+    if (item.type === "ICON" && item.icon) {
+      return {
+        id: item.id,
+        type: "icon" as const,
+        title: item.icon.platform ?? null,
+        url: item.icon.url,
+        logo: item.icon.logo ?? null,
+      }
     }
-  })
+    return null
+  }).filter(Boolean)
 })
 
 const clicksMap = computed(() => {
   const counts: Record<string, number> = {}
   for (const click of analyticsStore.itemClicks || []) {
-    const id = click.itemId
-    if (id) {
-      counts[id] = (counts[id] ?? 0) + 1
+    if (click.itemId) {
+      counts[click.itemId] = (counts[click.itemId] ?? 0) + 1
     }
   }
-
   return counts
 })
 
