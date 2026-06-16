@@ -1,8 +1,8 @@
 <template>
   <section
     id="hero" v-motion
-    :initial="{ opacity: 0, y: -40 }" :visible-once="{ opacity: 1, y: 0 }"
-    :duration="800" class="relative flex min-h-screen w-full items-center justify-between gap-8 overflow-hidden border-b"
+    :initial="{ opacity: 0 }" :visible-once="{ opacity: 1 }"
+    :duration="800" class="relative flex min-h-[75vh] w-full items-center justify-between gap-8 overflow-hidden border-b"
   >
     <img src="/assets/hero-backdrop.svg" alt="Hero background" class="hero-backdrop" aria-hidden="true">
 
@@ -53,12 +53,12 @@
         <div class="product-stack relative grid grid-cols-2 gap-4">
           <div v-for="platform in SHARE_PLATFORMS" :key="platform.id" class="card platform-card flex h-30 w-40 flex-col justify-between overflow-hidden md:h-36 md:w-56" :style="{ background: platform.color }">
             <div class="flex items-center justify-between">
-              <icon name="mdi:account-circle" size="30" class="text-white/60" />
-              <icon :name="platform.icon" size="25" class="text-[#eeeeee]" />
+              <icon name="mdi:account-circle" size="30" class="text-white/50" />
+              <icon :name="platform.icon" size="25" class="text-[#f9fafb]" />
             </div>
             <div class="flex min-w-0 flex-col items-start gap-1 overflow-hidden text-start">
-              <span class="text-sm font-medium text-[#eeeeee]">@alexjohnson</span>
-              <span class="truncate text-xs text-white/50">{{ baseURL.replace(/^https?:\/\//, "") }}/alexjohnson</span>
+              <span class="text-sm font-medium text-[#f9fafb]">@alexjohnson</span>
+              <span class="truncate text-xs text-[#e5e7eb]">{{ baseURL.replace(/^https?:\/\//, "") }}/alexjohnson</span>
             </div>
           </div>
 
@@ -138,7 +138,7 @@
                 <span class="font-semibold">Top Traffic Sources</span>
                 <div v-for="referral in MOCK_REFERRALS" :key="referral.source" class="flex items-center justify-between text-sm">
                   <div class="navigation-group gap-2">
-                    <icon name="mdi:link-variant" size="15" />
+                    <icon :name="referral.icon" size="15" />
                     <span>{{ referral.source }}</span>
                   </div>
                   <span class="font-semibold">{{ referral.percentage }}</span>

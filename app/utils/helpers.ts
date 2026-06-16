@@ -12,6 +12,48 @@ export function formatDate(date?: string | Date | null): string {
 }
 
 /**
+ * Formats a source string into a human-readable label.
+ */
+export function formatSourceLabel(source: string | null | undefined): string {
+  if (!source || typeof source !== "string" || source.trim() === "") {
+    return "Unknown"
+  }
+
+  const labels: Record<string, string> = {
+    direct: "Direct",
+    facebook: "Facebook",
+    twitter: "Twitter/X",
+    instagram: "Instagram",
+    linkedin: "LinkedIn",
+    reddit: "Reddit",
+    tiktok: "TikTok",
+    youtube: "YouTube",
+    pinterest: "Pinterest",
+    whatsapp: "WhatsApp",
+    telegram: "Telegram",
+    discord: "Discord",
+    mastodon: "Mastodon",
+    bluesky: "Bluesky",
+    google: "Google",
+    bing: "Bing",
+    yahoo: "Yahoo",
+    duckduckgo: "DuckDuckGo",
+    yandex: "Yandex",
+    slack: "Slack",
+    teams: "Microsoft Teams",
+    github: "GitHub",
+    gitlab: "GitLab",
+    medium: "Medium",
+    substack: "Substack",
+    email: "Email",
+    newsletter: "Newsletter",
+    unknown: "Unknown",
+  }
+
+  return labels[source] || source.charAt(0).toUpperCase() + source.slice(1)
+}
+
+/**
  * Extracts the error message from various error formats (Nuxt/H3/Zod).
  */
 export function getErrorMessage(err: unknown, fallback: string): string {

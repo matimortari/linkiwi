@@ -38,7 +38,7 @@
           Traffic Sources
         </h4>
 
-        <Empty v-if="!referrerStats.length" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
+        <Empty v-if="!topReferrers.length" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
 
         <div v-else>
           <AnalyticsBarChart v-if="referrerChartData" :chart-data="referrerChartData" />
@@ -60,7 +60,7 @@
               </thead>
 
               <tbody class="divide-y">
-                <tr v-for="stat in referrerStats" :key="stat.source" class="hover:bg-muted/20">
+                <tr v-for="stat in topReferrers" :key="stat.source" class="hover:bg-muted/20">
                   <td class="px-4 py-2 text-sm">
                     <div class="navigation-group">
                       <div class="rounded-full bg-muted p-1">
@@ -109,27 +109,8 @@
 const { createActionHandler } = useActionIcon()
 const analyticsStore = useAnalyticsStore()
 const userStore = useUserStore()
-const { totalViews, totalClicks, clickRate, joinedAt, pageViewsChartData, linkClicksChartData, iconClicksChartData, referrerChartData } = useAnalyticsData()
+const { totalViews, totalClicks, clickRate, joinedAt, pageViewsChartData, linkClicksChartData, iconClicksChartData, referrerChartData, topReferrers } = useAnalyticsData()
 const resetAction = createActionHandler("mdi:close")
-
-// Derive the tabular traffic metrics dynamically from the raw page view data
-const referrerStats = computed(() => {
-  if (!analyticsStore.pageViews.length) {
-    return []
-  }
-
-  const counts: Record<string, number> = {}
-  analyticsStore.pageViews.forEach((pv) => {
-    const sourceKey = pv.referrer || pv.source || "Direct / Unknown"
-    counts[sourceKey] = (counts[sourceKey] ?? 0) + 1
-  })
-
-  return Object.entries(counts).map(([label, count]) => {
-    const source = label.toLowerCase().replace(/https?:\/\/(www\.)?/, "").split(".")[0] || "unknown"
-    return { source, label, count, percentage: ((count / analyticsStore.pageViews.length) * 100).toFixed(1) }
-  }).sort((a, b) => b.count - a.count).slice(0, 6)
-})
-
 const summaryItems = computed(() => [
   { label: "Total Page Views", icon: "mdi:file-eye-outline", value: totalViews.value },
   { label: "Total Clicks", icon: "mdi:cursor-default-click-outline", value: totalClicks.value },

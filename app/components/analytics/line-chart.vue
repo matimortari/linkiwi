@@ -35,8 +35,8 @@ const chartOptions: ChartOptions<"line"> = {
     },
   },
   elements: {
-    line: { borderWidth: 2, borderColor: "#474b36", fill: false },
-    point: { radius: 4, hoverRadius: 8, backgroundColor: "#474b36", borderColor: "#e5e7eb", hoverBorderWidth: 2 },
+    line: { borderWidth: 2, borderColor: "#6366f1", fill: false },
+    point: { radius: 4, hoverRadius: 8, backgroundColor: "#6366f1", borderColor: "#6366f1", hoverBorderWidth: 2 },
   },
   scales: {
     x: {

@@ -1,38 +1,37 @@
 <template>
-  <Dialog :is-open="isUserDialogOpen" title="Edit Profile Info" @update:is-open="emit('close')">
+  <Dialog :is-open="isUserDialogOpen" title="Edit Profile" @update:is-open="emit('close')">
     <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
-      <div class="flex flex-col items-center border-b pb-4">
-        <div class="relative size-24">
-          <img :src="form.image" alt="Profile preview" class="size-full rounded-full border object-cover">
+      <div class="flex flex-row items-start gap-4">
+        <div class="relative shrink-0">
+          <img :src="form.image" alt="Profile preview" class="size-16 rounded-full border object-cover">
           <input
             id="image" type="file"
-            accept="image/*" class="absolute top-0 left-0 size-full opacity-0"
+            accept="image/*" class="absolute inset-0 size-full cursor-pointer opacity-0"
             @change="handleUpdateImage"
           >
-          <label class="btn absolute -bottom-2 -left-2 cursor-pointer" for="image" aria-label="Upload Profile Image">
-            <icon name="mdi:upload" size="20" />
+          <label class="btn absolute -right-2 -bottom-2 cursor-pointer p-1!" for="image" aria-label="Upload Profile Image">
+            <icon name="mdi:camera" size="15" />
           </label>
         </div>
-      </div>
 
-      <div class="flex max-w-md flex-col gap-2">
-        <label for="name" class="w-20 text-sm font-medium">Name</label>
-        <input id="name" v-model="form.name" type="text" placeholder="Enter your name">
-      </div>
-
-      <div class="flex max-w-md flex-col gap-2">
-        <label for="slug" class="w-20 text-sm font-medium">Slug</label>
-        <input id="slug" v-model="form.slug" type="text" placeholder="Enter your slug">
-      </div>
-
-      <div class="flex max-w-md flex-col gap-2">
-        <label for="description" class="w-20 text-sm font-medium">Description</label>
-        <input id="description" v-model="form.description" type="text" placeholder="Enter your description">
-      </div>
-
-            <div class="flex max-w-md flex-col gap-2">
-        <label for="location" class="w-20 text-sm font-medium">Location</label>
-        <input id="location" v-model="form.location" type="text" placeholder="Enter your location">
+        <div class="grid flex-1 grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1">
+            <label for="name" class="text-xs font-medium text-muted-foreground">Name</label>
+            <input id="name" v-model="form.name" type="text" placeholder="Your name">
+          </div>
+          <div class="flex flex-col gap-1">
+            <label for="slug" class="text-xs font-medium text-muted-foreground">Username</label>
+            <input id="slug" v-model="form.slug" type="text" placeholder="your-slug">
+          </div>
+          <div class="flex flex-col gap-1">
+            <label for="location" class="text-xs font-medium text-muted-foreground">Location</label>
+            <input id="location" v-model="form.location" type="text" placeholder="City, Country">
+          </div>
+          <div class="flex flex-col gap-1">
+            <label for="description" class="text-xs font-medium text-muted-foreground">Bio</label>
+            <input id="description" v-model="form.description" type="text" placeholder="A short bio">
+          </div>
+        </div>
       </div>
 
       <footer class="flex flex-row items-center justify-end">

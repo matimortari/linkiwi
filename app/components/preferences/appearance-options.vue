@@ -9,8 +9,8 @@
         <div class="navigation-group flex-wrap">
           <button
             v-for="t in APPEARANCE_TABS" :key="t.value"
-            class="btn-ghost justify-start! text-muted-foreground!" :class="{ 'bg-muted!': activeTab === t.value }"
-            @click="activeTab = t.value"
+            class="navigation-group justify-start rounded-lg rounded-b-none p-2 text-sm font-semibold transition-all hover:bg-muted/30"
+            :class="{ 'border-b-2 border-b-secondary!': activeTab === t.value }" @click="activeTab = t.value"
           >
             {{ t.label }}
           </button>

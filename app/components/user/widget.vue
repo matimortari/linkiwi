@@ -57,12 +57,12 @@
       <nuxt-link :to="data.videos[0].url" target="_blank" class="group relative block w-full overflow-hidden rounded-xl">
         <img v-if="data.videos[0].thumbnail" :src="data.videos[0].thumbnail" :alt="data.videos[0].title" class="aspect-video w-full rounded-xl object-cover transition-all group-hover:brightness-75">
         <div class="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div class="flex size-12 items-center justify-center rounded-full bg-black/70 transition-transform group-hover:scale-110">
-            <icon name="mdi:play" size="35" class="text-[#eeeeee]" />
+          <div class="flex size-12 items-center justify-center rounded-full bg-black/50 transition-transform group-hover:scale-110">
+            <icon name="mdi:play" size="35" class="text-[#f9fafb]" />
           </div>
         </div>
-        <div class="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/70 to-transparent p-2">
-          <p class="line-clamp-2 text-sm font-medium text-[#eeeeee]">
+        <div class="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/50 to-transparent p-2">
+          <p class="line-clamp-2 text-sm font-medium text-[#f9fafb]">
             {{ data.videos[0].title }}
           </p>
           <p class="mt-0.5 text-[10px]" :style="widgetTextStyle">
@@ -75,8 +75,8 @@
         <div v-for="video in data.videos.slice(1)" :key="video.id" class="group relative overflow-hidden rounded-xl bg-white/20">
           <nuxt-link :to="video.url" target="_blank" class="group relative block w-full overflow-hidden rounded-xl">
             <img v-if="video.thumbnail" :src="video.thumbnail" :alt="video.title" class="aspect-video w-full rounded-lg object-cover transition-all group-hover:brightness-75">
-            <div class="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/30">
-              <p class="absolute inset-x-0 bottom-0 line-clamp-2 w-full p-1 text-xs font-medium text-[#eeeeee] opacity-0 transition-opacity group-hover:opacity-100">
+            <div class="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/50">
+              <p class="absolute inset-x-0 bottom-0 line-clamp-2 w-full p-1 text-xs font-medium text-[#f9fafb] opacity-0 transition-opacity group-hover:opacity-100">
                 {{ video.title }}
               </p>
             </div>
