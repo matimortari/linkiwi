@@ -21,7 +21,9 @@ export default defineEventHandler(async (event) => {
   })
 
   await db.user.update({ where: { id: sessionUser.id }, data: { image: imageUrl } })
-  await deleteCached(CacheKeys.userData(sessionUser.id))
+
+  const user = await db.user.findUnique({ where: { id: sessionUser.id }, select: { slug: true } })
+  await Promise.all([deleteCached(CacheKeys.userProfile(user?.slug || "")), deleteCached(CacheKeys.userData(sessionUser.id))])
 
   return { imageUrl }
 })

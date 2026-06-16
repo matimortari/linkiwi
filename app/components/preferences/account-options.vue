@@ -34,8 +34,8 @@
         </div>
 
         <div v-if="bannerFile" class="flex justify-end">
-          <button class="btn-primary" :disabled="bannerLoading" @click="handleUploadBanner">
-            <icon :name="bannerLoading ? 'mdi:loading' : 'mdi:content-save-check'" size="20" :class="{ 'animate-spin': bannerLoading }" />
+          <button class="btn-primary" @click="handleUploadBanner">
+            <icon name="mdi:content-save-check" size="20" />
             <span>Save Banner</span>
           </button>
         </div>
@@ -108,7 +108,6 @@ const { user, preferences } = storeToRefs(userStore)
 const comments = computed(() => user.value?.comments ?? [])
 const guestbookEnabled = ref(preferences.value?.enableGuestbook ?? false)
 const guestbookAction = createActionHandler("mdi:content-save-check")
-const bannerLoading = ref(false)
 const bannerInput = ref<HTMLInputElement | null>(null)
 const bannerFile = ref<File | null>(null)
 const bannerPreview = ref<string | null>(user.value?.banner?.url ?? null)
@@ -126,26 +125,36 @@ async function handleUploadBanner() {
   if (!bannerFile.value) {
     return
   }
-  bannerLoading.value = true
 
-  try {
-    const uploadedAsset = await userStore.uploadAsset(bannerFile.value)
-    if (uploadedAsset?.newAsset) {
-      await userStore.updateUserBanner({ url: uploadedAsset.newAsset.url, assetId: uploadedAsset.newAsset.id })
-    }
-    bannerFile.value = null
-    if (bannerInput.value) {
-      bannerInput.value.value = ""
-    }
+  const uploadedAsset = await userStore.uploadAsset(bannerFile.value)
+  if (uploadedAsset?.newAsset) {
+    await userStore.updateUserBanner({ url: uploadedAsset.newAsset.url, assetId: uploadedAsset.newAsset.id })
   }
-  finally {
-    bannerLoading.value = false
+  bannerFile.value = null
+  if (bannerInput.value) {
+    bannerInput.value.value = ""
   }
 }
 
 async function handleRemoveBanner() {
+  if (bannerFile.value) {
+    bannerFile.value = null
+    bannerPreview.value = user.value?.banner?.url ?? null
+    if (bannerInput.value) {
+      bannerInput.value.value = ""
+    }
+    return
+  }
+
+  if (!user.value?.banner) {
+    return
+  }
+  if (!confirm("Are you sure you want to remove your profile banner?")) {
+    return
+  }
+
+  await userStore.deleteUserBanner()
   bannerPreview.value = null
-  bannerFile.value = null
 }
 
 async function handleSaveGuestbook() {

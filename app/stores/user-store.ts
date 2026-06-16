@@ -110,6 +110,26 @@ export const useUserStore = defineStore("user", () => {
     }
   }
 
+  async function deleteUserBanner() {
+    loading.value = true
+
+    try {
+      await $fetch("/api/user/banner", { method: "DELETE", credentials: "include" })
+      if (user.value) {
+        user.value.banner = null
+      }
+    }
+    catch (err: unknown) {
+      const message = getErrorMessage(err, "Failed to delete banner")
+      toast.error(message)
+      console.error("deleteUserBanner error:", err)
+      throw err
+    }
+    finally {
+      loading.value = false
+    }
+  }
+
   async function updatePreferences(data: UpdateUserPreferencesInput) {
     loading.value = true
 
@@ -217,6 +237,7 @@ export const useUserStore = defineStore("user", () => {
     updateUser,
     updateUserImage,
     updateUserBanner,
+    deleteUserBanner,
     updatePreferences,
     getAssets,
     uploadAsset,

@@ -14,9 +14,8 @@ export default defineEventHandler(async (event) => {
 
   const updatedPreferences = await db.userPreferences.update({ where: { userId: sessionUser.id }, data: result.data })
 
-  // Invalidate user data cache and profile cache
   const user = await db.user.findUnique({ where: { id: sessionUser.id }, select: { slug: true } })
-  await deleteCached(CacheKeys.userData(sessionUser.id), CacheKeys.userProfile(user?.slug || ""))
+  await Promise.all([deleteCached(CacheKeys.userData(sessionUser.id)), deleteCached(CacheKeys.userProfile(user?.slug || ""))])
 
   return { updatedPreferences }
 })
