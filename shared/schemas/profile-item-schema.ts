@@ -6,8 +6,8 @@ const schedulingSchema = {
   order: z.number().int().min(0).optional(),
   isPinned: z.boolean().default(false),
   isVisible: z.boolean().default(true),
-  scheduledStart: z.string().datetime({ message: "Invalid ISO datetime string" }).nullable().optional(),
-  scheduledEnd: z.string().datetime({ message: "Invalid ISO datetime string" }).nullable().optional(),
+  scheduledStart: z.iso.datetime({ message: "Invalid ISO datetime string" }).nullable().optional(),
+  scheduledEnd: z.iso.datetime({ message: "Invalid ISO datetime string" }).nullable().optional(),
   scheduleAction: z.enum(["HIDE", "DELETE"]).nullable().optional(),
 }
 

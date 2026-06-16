@@ -33,9 +33,10 @@
                 <span class="text-sm text-muted-foreground italic">Divider</span>
               </div>
               <ProfileItemRowActions
-                :item-id="item.id" :is-visible="item.isVisible"
-                :show-edit="false" @toggle="toggleVisibility(item.id, item.isVisible)"
-                @delete="handleDelete(item.id)"
+                :item="item" :is-scheduled="!!(item.scheduledStart || item.scheduledEnd)"
+                :show-schedule="true" :show-edit="false"
+                @toggle="toggleVisibility(item.id, item.isVisible)" @pin="togglePin(item.id, item.isPinned)"
+                @schedule="openSchedule(item)" @delete="handleDelete(item.id)"
               />
             </div>
 
@@ -51,9 +52,10 @@
                   </span>
                 </div>
                 <ProfileItemRowActions
-                  :item-id="item.id" :is-visible="item.isVisible"
-                  @toggle="toggleVisibility(item.id, item.isVisible)" @edit="handleEdit(item)"
-                  @delete="handleDelete(item.id)"
+                  :item="item" :is-scheduled="!!(item.scheduledStart || item.scheduledEnd)"
+                  :show-schedule="true" @toggle="toggleVisibility(item.id, item.isVisible)"
+                  @pin="togglePin(item.id, item.isPinned)"
+                  @schedule="openSchedule(item)" @delete="handleDelete(item.id)"
                 />
               </div>
               <nuxt-link :to="item.link.url" class="text-caption truncate pl-9 text-xs hover:underline" target="_blank">
@@ -75,9 +77,10 @@
                 </div>
               </div>
               <ProfileItemRowActions
-                :item-id="item.id" :is-visible="item.isVisible"
-                @toggle="toggleVisibility(item.id, item.isVisible)" @edit="handleEdit(item)"
-                @delete="handleDelete(item.id)"
+                :item="item" :is-scheduled="!!(item.scheduledStart || item.scheduledEnd)"
+                :show-schedule="true" @toggle="toggleVisibility(item.id, item.isVisible)"
+                @pin="togglePin(item.id, item.isPinned)" @schedule="openSchedule(item)"
+                @edit="handleEdit(item)" @delete="handleDelete(item.id)"
               />
             </div>
 
@@ -90,18 +93,14 @@
                 <span class="text-sm font-semibold" :class="{ 'text-muted-foreground': !item.isVisible }">Photo Grid</span>
               </div>
               <ProfileItemRowActions
-                :item-id="item.id" :is-visible="item.isVisible"
-                @toggle="toggleVisibility(item.id, item.isVisible)" @edit="handleEdit(item)"
-                @delete="handleDelete(item.id)"
+                :item="item" :is-scheduled="!!(item.scheduledStart || item.scheduledEnd)"
+                :show-schedule="true" @toggle="toggleVisibility(item.id, item.isVisible)"
+                @pin="togglePin(item.id, item.isPinned)" @schedule="openSchedule(item)"
+                @edit="handleEdit(item)" @delete="handleDelete(item.id)"
               />
             </div>
           </li>
         </VueDraggable>
-
-        <button class="btn-primary self-end">
-          <icon name="mdi:plus" size="25" />
-          <span>Add Item</span>
-        </button>
       </template>
     </div>
   </div>
@@ -109,6 +108,7 @@
   <ProfileLinkDialog :is-open="isLinkDialogOpen" @close="closeDialog('link')" />
   <ProfilePhotoGridDialog :is-open="uiState.dialogs.photoGrid.isOpen" @close="closeDialog('photoGrid')" />
   <ProfileWidgetDialog :is-open="isWidgetDialogOpen" @close="closeDialog('widget')" />
+  <ProfileScheduleDialog :is-open="isScheduleDialogOpen" :item="schedulingItem" @close="closeScheduleDialog" />
 </template>
 
 <script setup lang="ts">
@@ -118,7 +118,14 @@ const profileItemsStore = useProfileItemsStore()
 const { loading } = storeToRefs(profileItemsStore)
 const { uiState, isLinkDialogOpen, isWidgetDialogOpen, openDialog, closeDialog } = useUIState()
 const orderedItems = ref<ProfileItem[]>([])
-const mainItems = computed<ProfileItem[]>(() => (profileItemsStore.items || []).filter((item: ProfileItem) => item.type !== "ICON").sort((a, b) => a.order - b.order))
+const isScheduleDialogOpen = ref(false)
+const schedulingItem = ref<ProfileItem | null>(null)
+const mainItems = computed<ProfileItem[]>(() => (profileItemsStore.items || []).filter((item: ProfileItem) => item.type !== "ICON").sort((a, b) => {
+  if (a.isPinned !== b.isPinned) {
+    return a.isPinned ? -1 : 1
+  }
+  return a.order - b.order
+}))
 
 async function handlePickType(type: ProfileItemType) {
   if (type === "LINK") {
@@ -175,8 +182,22 @@ async function reorderItems() {
   }
 }
 
+async function togglePin(id: string, current: boolean) {
+  await profileItemsStore.updateItem(id, { isPinned: !current })
+}
+
 async function toggleVisibility(id: string, current: boolean) {
   await profileItemsStore.updateItem(id, { isVisible: !current })
+}
+
+function openSchedule(item: ProfileItem) {
+  schedulingItem.value = item
+  isScheduleDialogOpen.value = true
+}
+
+function closeScheduleDialog() {
+  isScheduleDialogOpen.value = false
+  schedulingItem.value = null
 }
 
 async function handleDelete(id: string) {

@@ -178,6 +178,11 @@ export const WIDGET_META: Record<WidgetType, { label: string, placeholder: strin
   SPOTIFY: { label: "Spotify Link", placeholder: "e.g. https://open.spotify.com/track/...", hint: "Paste a Spotify URL for a track, album, playlist, episode, or podcast." },
 }
 
+export const SCHEDULE_ACTION_OPTIONS = [
+  { value: "HIDE", label: "Hide", icon: "mdi:eye-off-outline" },
+  { value: "DELETE", label: "Delete", icon: "mdi:trash-can-outline" },
+] as const
+
 // REST method label styles for documentation display
 export const REST_METHOD_LABELS = {
   GET: "text-xs font-semibold text-[#0ec187]",
