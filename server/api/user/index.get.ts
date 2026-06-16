@@ -5,9 +5,9 @@ export default defineEventHandler(async (event) => {
   await enforceRateLimit(event, `user:get:${sessionUser.id}`, 200)
 
   const cacheKey = CacheKeys.userData(sessionUser.id)
-  const cachedUser = await getCached<any>(cacheKey)
-  if (cachedUser) {
-    return { user: cachedUser }
+  const cached = await getCached<any>(cacheKey)
+  if (cached) {
+    return { user: cached }
   }
 
   const user = await db.user.findUnique({

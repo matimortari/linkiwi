@@ -5,9 +5,9 @@ export default defineEventHandler(async (event) => {
   await enforceRateLimit(event, `assets:list:${sessionUser.id}`, 100)
 
   const cacheKey = CacheKeys.userAssets?.(sessionUser.id)
-  const cachedData = await getCached<any>(cacheKey)
-  if (cachedData) {
-    return { assets: cachedData }
+  const cached = await getCached<any>(cacheKey)
+  if (cached) {
+    return { assets: cached }
   }
 
   const assets = await db.userAsset.findMany({ where: { userId: sessionUser.id }, orderBy: { createdAt: "desc" } })

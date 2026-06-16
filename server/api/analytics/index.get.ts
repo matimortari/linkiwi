@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
   const cacheKey = `analytics:overview:${sessionUser.id}:${query.dateFrom || "all"}:${query.dateTo || "all"}`
   const cached = await getCached<any>(cacheKey)
   if (cached) {
-    return cached
+    return { data: cached }
   }
 
   // Concurrently pull page views and item clicks with the same date filter
