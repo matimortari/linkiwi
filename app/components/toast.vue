@@ -21,10 +21,10 @@
 <script setup lang="ts">
 const { toasts, dismiss } = useToast()
 const TOAST_ICONS: Record<Toast["type"], string> = {
-  success: "mdi:check-circle-outline",
-  warning: "mdi:alert-circle-outline",
-  info: "mdi:info-circle-outline",
-  error: "mdi:close-circle-outline",
+  danger: "ph:x-circle-bold",
+  success: "ph:check-circle-bold",
+  warning: "ph:warning-circle-bold",
+  info: "ph:info-bold",
 }
 </script>
 
@@ -67,11 +67,11 @@ const TOAST_ICONS: Record<Toast["type"], string> = {
   overflow: hidden;
 }
 
+.text-danger {
+  color: var(--danger);
+}
 .text-success {
   color: var(--success);
-}
-.text-error {
-  color: var(--danger);
 }
 .text-warning {
   color: var(--warning);

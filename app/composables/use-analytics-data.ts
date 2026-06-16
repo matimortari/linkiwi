@@ -54,33 +54,58 @@ export function useAnalyticsData() {
     if (!values.some(v => v > 0)) {
       return null
     }
-
-    return { labels, datasets: [{ label, data: values, backgroundColor: "#474b36" }] }
+    return { labels, datasets: [{ label, data: values, backgroundColor: "#6366f1" }] }
   }
 
   const pageViewsChartData = computed(() => stats.value.length ? buildChart(stats.value.map(s => s.pageViews), stats.value.map(s => s.date), "Page Views") : null)
   const linkClicksChartData = computed(() => stats.value.length ? buildChart(stats.value.map(s => s.linkClicks), stats.value.map(s => s.date), "Link Clicks") : null)
   const iconClicksChartData = computed(() => stats.value.length ? buildChart(stats.value.map(s => s.iconClicks), stats.value.map(s => s.date), "Social Icon Clicks") : null)
 
-  const referrerChartData = computed(() => {
+  const topReferrers = computed(() => {
     if (!pageViews.value.length) {
-      return null
+      return []
     }
 
     const counts: Record<string, number> = {}
     pageViews.value.forEach((pv) => {
-      const sourceKey = pv.referrer || pv.source || "Direct / Unknown"
-      counts[sourceKey] = (counts[sourceKey] ?? 0) + 1
+      const rawSource = pv.referrer || pv.source || "direct"
+      let cleanKey = rawSource.toLowerCase().trim()
+      if (cleanKey.includes("://") || cleanKey.includes(".")) {
+        cleanKey = cleanKey.replace(/https?:\/\/(www\.)?/, "").split(".")[0] || "unknown"
+      }
+
+      // Map domains to friendly labels
+      if (cleanKey === "youtu") {
+        cleanKey = "youtube"
+      }
+      if (cleanKey === "lnkd") {
+        cleanKey = "linkedin"
+      }
+      if (cleanKey === "fb") {
+        cleanKey = "facebook"
+      }
+
+      counts[cleanKey] = (counts[cleanKey] ?? 0) + 1
     })
 
-    const topReferrers = Object.entries(counts).map(([label, count]) => ({ label, count })).sort((a, b) => b.count - a.count).slice(0, 6)
+    return Object.entries(counts).map(([key, count]) => ({
+      source: key,
+      label: formatSourceLabel(key),
+      count,
+      percentage: ((count / pageViews.value.length) * 100).toFixed(1),
+    })).sort((a, b) => b.count - a.count).slice(0, 6)
+  })
 
+  const referrerChartData = computed(() => {
+    if (!topReferrers.value.length) {
+      return null
+    }
     return {
-      labels: topReferrers.map(r => r.label),
+      labels: topReferrers.value.map(r => r.label),
       datasets: [
         {
           label: "Traffic Sources",
-          data: topReferrers.map(r => r.count),
+          data: topReferrers.value.map(r => r.count),
           backgroundColor: ["#36a2eb", "#ff6384", "#4bc0c0", "#ff9f40", "#9966ff", "#ffcd56"],
         },
       ],
@@ -103,6 +128,7 @@ export function useAnalyticsData() {
     pageViewsChartData,
     linkClicksChartData,
     iconClicksChartData,
+    topReferrers,
     referrerChartData,
     normalizedRecords,
   }

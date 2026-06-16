@@ -4,98 +4,103 @@
       Account Options
     </h3>
 
-    <div class="flex flex-col gap-4">
-      <div class="card flex flex-col gap-2">
-        <h4>
-          Profile Banner
-        </h4>
-        <p class="text-caption">
-          Upload a banner image to display at the top of your profile.
-        </p>
-
-        <div v-if="bannerPreview" class="relative overflow-hidden rounded-xl">
-          <img :src="bannerPreview" alt="Profile banner preview" class="h-32 w-full object-cover">
-          <button class="btn-danger absolute top-2 right-2 p-1!" aria-label="Remove banner" @click="handleRemoveBanner">
-            <icon name="mdi:close" size="20" />
-          </button>
+    <div class="card flex flex-col gap-4">
+      <div class="flex items-start justify-between gap-2">
+        <div class="flex flex-col gap-2">
+          <h5>
+            Profile Banner
+          </h5>
+          <p class="text-caption text-xs">
+            Displayed at the top of your public profile.
+          </p>
         </div>
 
         <div class="navigation-group">
-          <label class="btn-ghost cursor-pointer text-sm">
+          <label class="btn-ghost shrink-0 cursor-pointer text-sm">
             <icon name="mdi:upload" size="20" />
-            <span>{{ bannerPreview ? "Change Image" : "Upload Image" }}</span>
+            <span>{{ bannerPreview ? "Change" : "Upload" }}</span>
             <input
               ref="bannerInput" type="file"
               class="hidden" accept="image/jpeg,image/png,image/webp"
               @change="handleBannerFileChange"
             >
           </label>
-          <span class="text-xs text-muted-foreground">JPEG, PNG or WebP · max 5 MB</span>
-        </div>
-
-        <div v-if="bannerFile" class="flex justify-end">
-          <button class="btn-primary" @click="handleUploadBanner">
-            <icon name="mdi:content-save-check" size="20" />
-            <span>Save Banner</span>
+          <button v-if="bannerPreview" class="btn-danger" aria-label="Remove banner" @click="handleRemoveBanner">
+            <icon name="mdi:close" size="20" />
           </button>
         </div>
       </div>
 
-      <PreferencesAssetManager />
-
-      <div class="card flex flex-col gap-2">
-        <h4>
-          Guestbook
-        </h4>
-        <p class="text-caption">
-          Allow visitors to leave comments on your profile page.
-        </p>
-
-        <div class="flex items-center justify-between gap-2">
-          <PreferencesCheckbox id="enableGuestbook" v-model:value="guestbookEnabled" label="Enable Guestbook" class="max-w-xs" />
-          <button class="btn-primary" @click="handleSaveGuestbook">
-            <icon :name="guestbookAction.icon.value" size="20" />
-            <span>Save</span>
-          </button>
-        </div>
-
-        <div v-if="guestbookEnabled" class="card flex flex-col gap-2">
-          <h5>
-            Comments
-          </h5>
-          <p v-if="!comments.length" class="text-caption">
-            No comments yet.
-          </p>
-
-          <div v-else class="scroll-area flex max-h-64 flex-col gap-2 overflow-y-auto pr-1">
-            <div v-for="comment in comments" :key="comment.id" class="card flex flex-col">
-              <div class="flex justify-between">
-                <div class="flex items-center gap-1">
-                  <p class="font-semibold">
-                    {{ comment.name }}
-                  </p>
-                  <span v-if="comment.email" class="text-xs text-muted-foreground">({{ comment.email }})</span>
-                </div>
-                <span class="text-caption">{{ formatDate(new Date(comment.createdAt)) }}</span>
-              </div>
-              <p class="text-sm text-muted-foreground">
-                {{ comment.message }}
-              </p>
-            </div>
-          </div>
-        </div>
+      <div v-if="bannerPreview" class="overflow-hidden rounded-lg">
+        <img :src="bannerPreview" alt="Banner preview" class="h-28 w-full object-cover">
       </div>
 
-      <div class="card flex flex-col gap-2">
-        <h4>Delete Account</h4>
-        <p class="text-caption-danger">
-          This action is irreversible. All data will be lost.
-        </p>
-        <button class="btn-danger md:self-end" @click="handleDeleteUser">
-          <icon name="mdi:user-remove" size="20" />
-          <span>Delete Account</span>
+      <div class="flex items-center justify-between">
+        <span class="text-xs text-muted-foreground">JPEG, PNG or WebP · max 5 MB</span>
+        <button v-if="bannerFile" class="btn-primary text-sm" @click="handleUploadBanner">
+          <icon name="mdi:content-save-check" size="20" />
+          <span>Save</span>
         </button>
       </div>
+    </div>
+
+    <PreferencesAssetManager />
+
+    <div class="card flex flex-col gap-4">
+      <div class="flex flex-col gap-2">
+        <h5>
+          Guestbook
+        </h5>
+        <p class="text-caption text-xs">
+          Allow visitors to leave comments on your profile.
+        </p>
+      </div>
+
+      <div class="flex items-center justify-between gap-2">
+        <PreferencesCheckbox id="enableGuestbook" v-model:value="guestbookEnabled" label="Enable Guestbook" class="max-w-xs" />
+        <button class="btn-primary" @click="handleSaveGuestbook">
+          <icon :name="guestbookAction.icon.value" size="20" />
+          <span>Save</span>
+        </button>
+      </div>
+
+      <template v-if="guestbookEnabled">
+        <p v-if="!comments.length" class="text-caption text-xs">
+          No comments yet.
+        </p>
+        <div v-else class="scroll-area flex max-h-56 flex-col gap-2 overflow-y-auto pr-1">
+          <div v-for="comment in comments" :key="comment.id" class="rounded-lg border bg-card p-3">
+            <div class="flex justify-between">
+              <div class="navigation-group">
+                <p class="text-sm font-semibold">
+                  {{ comment.name }}
+                </p>
+                <span v-if="comment.email" class="text-xs text-muted-foreground">({{ comment.email }})</span>
+              </div>
+              <span class="text-caption text-xs">{{ formatDate(new Date(comment.createdAt)) }}</span>
+            </div>
+            <p class="mt-1 text-sm text-muted-foreground">
+              {{ comment.message }}
+            </p>
+          </div>
+        </div>
+      </template>
+    </div>
+
+    <div class="flex items-center justify-between gap-2 rounded-xl border border-danger bg-danger/10 p-4">
+      <div class="flex flex-col gap-2">
+        <h5>
+          Delete Account
+        </h5>
+        <p class="text-caption-danger text-xs">
+          This action is irreversible. All data will be lost.
+        </p>
+      </div>
+
+      <button class="btn-danger shrink-0" @click="handleDeleteUser">
+        <icon name="mdi:user-remove" size="20" />
+        <span class="hidden md:inline">Delete</span>
+      </button>
     </div>
   </div>
 </template>

@@ -1,6 +1,6 @@
 <template>
   <div class="fixed inset-x-0 top-0 z-40 border-b bg-background/85 backdrop-blur-xl">
-    <div class="flex h-15 items-center justify-between px-4 md:px-12">
+    <div class="flex h-15 max-w-[100vw] items-center justify-between overflow-hidden px-4 md:px-12">
       <nav class="navigation-group gap-2!" aria-label="Content Navigation">
         <Logo />
       </nav>

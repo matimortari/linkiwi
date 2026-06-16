@@ -1,10 +1,10 @@
 <template>
   <div class="card flex flex-col gap-4">
-    <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between gap-2">
       <div class="flex flex-col gap-2">
-        <h4>
+        <h5>
           Asset Manager
-        </h4>
+        </h5>
         <p class="text-caption">
           Images you've uploaded. Used for banners and photo grids.
         </p>
@@ -24,14 +24,14 @@
     <Loading v-if="userStore.loading" />
     <Empty v-else-if="!userStore.assets.length" message="No images uploaded yet." icon-name="mdi:image-off-outline" />
 
-    <div v-else class="scroll-area grid max-h-72 grid-cols-3 gap-2 overflow-y-auto pr-1 md:grid-cols-4">
+    <div v-else class="scroll-area grid max-h-72 grid-cols-3 gap-2 overflow-y-auto pr-1 md:grid-cols-6">
       <div v-for="asset in userStore.assets" :key="asset.id" class="group relative aspect-square overflow-hidden rounded-xl border">
         <img :src="asset.url" :alt="asset.label ?? 'Asset'" class="size-full object-cover">
-        <div class="absolute inset-0 flex flex-col items-end justify-between bg-black/0 p-1.5 opacity-0 transition-all group-hover:bg-black/30 group-hover:opacity-100">
+        <div class="absolute inset-0 flex flex-col items-end justify-between bg-black/0 p-1 opacity-0 transition-all group-hover:bg-black/50 group-hover:opacity-100">
           <button class="btn-danger p-1!" aria-label="Delete asset" @click="handleDelete(asset.id)">
             <icon name="mdi:trash-can-outline" size="15" />
           </button>
-          <span v-if="asset.label" class="w-full truncate rounded-sm bg-black/50 px-1 py-0.5 text-xs text-white">{{ asset.label }}</span>
+          <span v-if="asset.label" class="[#eeeeee] w-full truncate rounded-sm bg-black/50 p-1 text-xs">{{ asset.label }}</span>
         </div>
       </div>
     </div>

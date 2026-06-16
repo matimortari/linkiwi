@@ -5,7 +5,7 @@
   </button>
 
   <!-- Mobile overlay -->
-  <div v-if="isOpen" class="fixed inset-0 z-20 bg-black/50 md:hidden" @click="closeSidebar()" />
+  <div v-if="isOpen" class="fixed inset-0 z-20 bg-black/70 md:hidden" @click="closeSidebar()" />
 
   <aside
     class="fixed top-0 left-0 z-30 size-full bg-card px-4 py-8 transition-transform ease-in-out md:static md:block md:w-56 md:translate-x-0 md:bg-transparent 2xl:w-64 2xl:py-12"
@@ -41,7 +41,7 @@
       <nav class="flex flex-col gap-2" aria-label="Main Navigation">
         <nuxt-link
           v-for="link in SIDEBAR_NAV_LINKS" :key="link.url"
-          :to="link.url" class="navigation-group justify-start rounded-lg rounded-l-none p-2 text-sm font-semibold transition hover:bg-secondary/10"
+          :to="link.url" class="navigation-group justify-start rounded-lg rounded-l-none p-2 text-sm font-semibold transition-all hover:bg-muted/30"
           :class="{ 'border-l-2 border-l-secondary!': route.path === link.url }"
         >
           <icon :name="link.icon" :class="{ 'text-secondary!': route.path === link.url }" size="25" @click="closeSidebar()" />
@@ -52,15 +52,15 @@
       <div class="border-t md:flex-1" />
 
       <nav class="flex flex-col gap-2" aria-label="Mobile Navigation Actions">
-        <button class="navigation-group justify-start rounded-lg rounded-l-none p-2 text-sm font-semibold transition hover:bg-secondary/10" @click="openDialog('share')">
+        <button class="navigation-group justify-start rounded-lg rounded-l-none p-2 text-sm font-semibold transition-all hover:bg-muted/30" @click="openDialog('share')">
           <icon name="mdi:share-variant-outline" size="25" />
           <span>Share</span>
         </button>
-        <button class="navigation-group justify-start rounded-lg rounded-l-none p-2 text-sm font-semibold transition hover:bg-secondary/10" @click="toggleTheme">
+        <button class="navigation-group justify-start rounded-lg rounded-l-none p-2 text-sm font-semibold transition-all hover:bg-muted/30" @click="toggleTheme">
           <icon :name="themeIcon" size="25" />
           <span>Toggle Theme</span>
         </button>
-        <button class="navigation-group justify-start rounded-lg rounded-l-none p-2 text-sm font-semibold transition hover:bg-secondary/10" @click="signOut">
+        <button class="navigation-group justify-start rounded-lg rounded-l-none p-2 text-sm font-semibold transition-all hover:bg-muted/30" @click="signOut">
           <icon name="mdi:logout" size="25" class="text-caption-danger" />
           <span>Sign Out</span>
         </button>

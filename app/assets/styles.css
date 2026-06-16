@@ -11,26 +11,25 @@
   --neutral-700: #374151;
   --neutral-800: #111827;
   --neutral-900: #030712;
-  --brand-primary: #77774a;
-  --brand-secondary: #474b36;
-  --red-dark: #a11f1f;
-  --red-light: #e69191;
-  --green-dark: #00754a;
-  --green-light: #81dbb3;
-  --orange-dark: #a64503;
-  --orange-light: #fad08c;
-  --blue-dark: #3773ba;
-  --blue-light: #a3c7f0;
+  --brand-primary: #4b3b92;
+  --brand-secondary: #82923b;
+  --red-dark: #811919;
+  --red-light: #c12525;
+  --green-dark: #005e3b;
+  --green-light: #008c59;
+  --orange-dark: #ae5f05;
+  --orange-light: #f88e13;
+  --blue-dark: #2c5c95;
+  --blue-light: #558ccd;
 
   --border-style: 1px solid var(--muted);
   --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   /* Theme tokens derived from core primitives */
   --background: var(--neutral-100);
-  --foreground: var(--neutral-900);
+  --foreground: var(--neutral-800);
   --card: var(--neutral-200);
-  --input: var(--neutral-300);
-  --muted: var(--neutral-400);
+  --muted: var(--neutral-300);
   --muted-foreground: var(--neutral-600);
   --primary: var(--brand-primary);
   --secondary: var(--brand-secondary);
@@ -49,16 +48,13 @@
   font-family: var(--font-default);
   overflow-x: hidden;
   scroll-behavior: smooth;
-  margin: 0;
-  padding: 0;
 }
 
 html.dark {
   --background: var(--neutral-900);
   --foreground: var(--neutral-200);
   --card: var(--neutral-800);
-  --input: var(--neutral-700);
-  --muted: var(--neutral-600);
+  --muted: var(--neutral-700);
   --muted-foreground: var(--neutral-400);
   --danger: var(--red-dark);
   --danger-foreground: var(--red-light);
@@ -75,7 +71,6 @@ html.dark {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
-  --color-input: var(--input);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-primary: var(--primary);
@@ -216,7 +211,7 @@ input,
 textarea,
 select {
   appearance: none;
-  background-color: var(--input);
+  background-color: var(--card);
   color: var(--foreground);
   border: var(--border-style);
   accent-color: var(--primary);
@@ -289,6 +284,7 @@ input[type="radio"]:checked::after {
   gap: 0.5rem;
   font-size: 0.875rem;
   font-weight: 600;
+  color: var(--neutral-100);
   border: var(--border-style);
   border-radius: 5rem;
   white-space: nowrap;
@@ -313,27 +309,21 @@ input[type="radio"]:checked::after {
 }
 .btn-primary {
   background-color: var(--primary);
-  color: #ffffff;
 }
 .btn-secondary {
   background-color: var(--secondary);
-  color: #ffffff;
 }
 .btn-danger {
   background-color: var(--danger);
-  color: var(--danger-foreground);
 }
 .btn-success {
   background-color: var(--success);
-  color: var(--success-foreground);
 }
 .btn-warning {
   background-color: var(--warning);
-  color: var(--warning-foreground);
 }
 .btn-info {
   background-color: var(--info);
-  color: var(--info-foreground);
 }
 .btn-ghost {
   background-color: transparent;
@@ -342,36 +332,6 @@ input[type="radio"]:checked::after {
 }
 .btn-ghost:hover {
   background-color: color-mix(in srgb, var(--muted) 60%, transparent);
-}
-
-/* Color matching utilities */
-.bg-primary {
-  background-color: var(--primary);
-  color: #ffffff;
-}
-.bg-secondary {
-  background-color: var(--secondary);
-  color: #ffffff;
-}
-.bg-muted {
-  background-color: var(--muted);
-  color: var(--muted-foreground);
-}
-.bg-danger {
-  background-color: var(--danger);
-  color: var(--danger-foreground);
-}
-.bg-success {
-  background-color: var(--success);
-  color: var(--success-foreground);
-}
-.bg-warning {
-  background-color: var(--warning);
-  color: var(--warning-foreground);
-}
-.bg-info {
-  background-color: var(--info);
-  color: var(--info-foreground);
 }
 
 /*

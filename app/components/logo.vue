@@ -1,7 +1,7 @@
 <template>
   <nuxt-link to="/" class="navigation-group shrink-0 transition-transform hover:scale-105">
     <ClientOnly>
-      <img src="/assets/symbol.png" alt="Logo" width="30">
+      <img src="/assets/symbol.png" alt="Logo" width="35">
       <img :src="themeTitle" alt="Wordmark" width="100">
 
       <template #fallback>

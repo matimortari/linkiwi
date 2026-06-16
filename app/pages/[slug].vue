@@ -2,7 +2,7 @@
   <div class="relative flex min-h-screen flex-col items-center justify-center overflow-x-hidden">
     <ClientOnly>
       <nuxt-link to="/">
-        <img src="/assets/symbol.png" alt="Logo" width="30" class="absolute top-4 left-4 z-30 transition-transform hover:scale-105">
+        <img src="/assets/symbol.png" alt="Logo" width="35" class="absolute top-4 left-4 z-30 transition-transform hover:scale-105">
       </nuxt-link>
     </ClientOnly>
 
@@ -10,16 +10,19 @@
     <Empty v-else-if="!userProfile && !loading" :message="`User @${slug} not found.`" icon-name="mdi:account-off" />
 
     <div v-else-if="userProfile" class="flex w-full flex-1 flex-col items-center gap-4 pb-20 text-center" :style="backgroundStyle">
-      <div v-if="userProfile.banner?.url" class="relative h-44 w-full md:h-60">
-        <img :src="userProfile.banner.url" alt="Profile Banner" class="size-full object-cover">
+      <UserSupportBanner v-if="profilePreferences.supportBanner !== 'NONE'" :preferences="profilePreferences" />
+      <div v-if="userProfile.banner?.url" class="w-full max-w-5xl overflow-hidden rounded-xl px-4 py-8">
+        <img :src="userProfile.banner.url" alt="Profile Banner" class="h-32 w-full rounded-xl object-cover md:h-44">
       </div>
 
-      <UserSupportBanner v-if="profilePreferences.supportBanner !== 'NONE'" :preferences="profilePreferences" />
-
-      <div class="flex flex-col items-center gap-2" :class="{ 'relative z-10 -mt-14 md:-mt-16': userProfile.banner?.url }">
+      <div class="flex flex-col items-center gap-4" :class="{ 'relative z-10 -mt-24': userProfile.banner?.url }">
         <img :src="userProfile.image" alt="Avatar" class="size-24 object-cover" :style="profilePictureStyle">
         <p :style="slugStyle">
           {{ `@${userProfile.slug}` }}
+        </p>
+        <p v-if="userProfile.location" class="flex items-center gap-1" :style="descriptionStyle">
+          <icon name="mdi:map-marker" size="15" />
+          <span>{{ userProfile.location }}</span>
         </p>
         <p v-if="userProfile.description" class="max-w-sm leading-4 whitespace-break-spaces" :style="descriptionStyle">
           {{ userProfile.description }}
@@ -63,7 +66,12 @@ const profilePreferences = computed(() => userProfile.value?.preferences ?? DEFA
 const { backgroundStyle, profilePictureStyle, slugStyle, descriptionStyle, dividerStyle } = useDynamicStyles(profilePreferences)
 
 const visibleIcons = computed(() => (userProfile.value?.items ?? []).filter(i => i.type === "ICON" && i.isVisible !== false))
-const visibleItems = computed(() => (userProfile.value?.items ?? []).filter(i => i.type !== "ICON" && i.isVisible !== false).sort((a, b) => a.order - b.order))
+const visibleItems = computed(() => (userProfile.value?.items ?? []).filter(i => i.type !== "ICON" && i.isVisible !== false).sort((a, b) => {
+  if (a.isPinned !== b.isPinned) {
+    return a.isPinned ? -1 : 1
+  }
+  return a.order - b.order
+}))
 
 async function handleClick(itemId: string) {
   if (!userProfile.value?.slug) {

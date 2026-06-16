@@ -9,57 +9,50 @@
 
       <template v-else>
         <div class="flex flex-col gap-2">
-          <p class="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-            Social Icons
-          </p>
-
           <Empty v-if="!icons.length" message="Pin quick links to your most important social profiles." icon-name="mdi:star" />
 
           <VueDraggable
             v-else v-model="orderedIcons"
-            tag="ul" class="flex flex-row flex-wrap items-center gap-3"
+            tag="ul" class="navigation-group flex-wrap"
             handle=".drag-handle" :animation="150"
             @end="reorderIcons"
           >
             <li
               v-for="icon in orderedIcons" :key="icon.id"
-              class="card relative flex size-20 items-center justify-center"
-              :class="{ 'border-dashed! opacity-60': !icon.isVisible }"
+              class="card relative flex size-18 items-center justify-center" :class="{ 'border-dashed! opacity-60': !icon.isVisible }"
             >
-              <button class="drag-handle btn-ghost absolute top-0 left-0 cursor-move p-0.5!" aria-label="Drag to reorder">
+              <button class="drag-handle btn-ghost absolute top-1 left-1 cursor-move p-0!" aria-label="Drag to reorder">
                 <icon name="mdi:drag-vertical" size="20" class="text-muted" />
               </button>
-              <nuxt-link :to="icon.url" class="btn-ghost" :aria-label="icon.platform" target="_blank">
-                <icon :name="icon.logo" size="30" />
+              <nuxt-link :to="icon.url" class="btn-ghost p-0!" :aria-label="icon.platform" target="_blank">
+                <icon :name="icon.logo" size="25" />
               </nuxt-link>
-              <button :aria-label="icon.isVisible ? 'Hide' : 'Show'" class="btn-ghost absolute top-0 right-0 p-0.5!" @click="toggleIconVisibility(icon.id, icon.isVisible)">
-                <icon :name="icon.isVisible ? 'mdi:eye-outline' : 'mdi:eye-off-outline'" size="18" class="text-muted-foreground" />
+              <button :aria-label="icon.isVisible ? 'Hide' : 'Show'" class="btn-ghost absolute top-1 right-1 p-0!" @click="toggleIconVisibility(icon.id, icon.isVisible)">
+                <icon :name="icon.isVisible ? 'mdi:eye-outline' : 'mdi:eye-off-outline'" size="20" class="text-muted-foreground" />
               </button>
-              <button class="btn-ghost absolute right-0 bottom-0 p-0.5!" aria-label="Delete" @click="handleDeleteIcon(icon.id)">
-                <icon name="mdi:remove-circle-outline" size="18" class="text-caption-danger" />
+              <button class="btn-ghost absolute right-1 bottom-1 p-0!" aria-label="Delete" @click="handleDeleteIcon(icon.id)">
+                <icon name="mdi:remove-circle-outline" size="20" class="text-caption-danger" />
               </button>
             </li>
           </VueDraggable>
         </div>
 
-        <hr class="border">
-
         <Empty v-if="!mainItems.length" message="Customize your profile by adding links and content." icon-name="mdi:shape" />
 
         <VueDraggable
           v-else v-model="orderedItems"
-          tag="ul" class="flex flex-col gap-3"
+          tag="ul" class="flex flex-col gap-2"
           handle=".drag-handle" :animation="150"
           @end="reorderItems"
         >
           <li v-for="item in orderedItems" :key="item.id">
-            <div v-if="item.type === 'DIVIDER'" class="card navigation-group justify-between py-2!" :class="{ 'border-dashed! opacity-60': !item.isVisible }">
+            <div v-if="item.type === 'DIVIDER'" class="navigation-group justify-between rounded-xl border px-3 py-2" :class="{ 'opacity-50': !item.isVisible }">
               <div class="navigation-group">
-                <button class="drag-handle btn-ghost cursor-move p-0.5!" aria-label="Drag to reorder">
+                <button class="drag-handle btn-ghost cursor-move p-0!" aria-label="Drag to reorder">
                   <icon name="mdi:drag-vertical" size="20" class="text-muted" />
                 </button>
                 <icon name="mdi:minus" size="20" class="text-muted-foreground" />
-                <span class="text-sm text-muted-foreground italic">Divider</span>
+                <span class="text-xs text-muted-foreground italic">Divider</span>
               </div>
               <ProfileItemRowActions
                 :item="item" :is-scheduled="!!(item.scheduledStart || item.scheduledEnd)"
@@ -69,43 +62,40 @@
               />
             </div>
 
-            <div v-else-if="item.type === 'LINK' && item.link" class="card flex flex-col gap-1" :class="{ 'border-dashed! opacity-60': !item.isVisible }">
+            <div v-else-if="item.type === 'LINK' && item.link" class="card flex flex-col gap-0.5 py-2!" :class="{ 'border-dashed! opacity-60': !item.isVisible }">
               <div class="flex items-center justify-between">
                 <div class="navigation-group min-w-0">
-                  <button class="drag-handle btn-ghost cursor-move p-0.5!" aria-label="Drag to reorder">
+                  <button class="drag-handle btn-ghost cursor-move p-0!" aria-label="Drag to reorder">
                     <icon name="mdi:drag-vertical" size="20" class="text-muted" />
                   </button>
                   <icon name="mdi:link-variant" size="20" class="shrink-0 text-muted-foreground" />
                   <span class="truncate text-sm font-semibold" :class="{ 'text-muted-foreground': !item.isVisible }">{{ item.link.label }}</span>
-                  <icon v-if="item.isPinned" name="mdi:pin" size="15" class="text-caption-info shrink-0" />
+                  <icon v-if="item.scheduledStart || item.scheduledEnd" name="mdi:calendar-clock" size="15" class="text-caption-info shrink-0" />
                 </div>
                 <ProfileItemRowActions
                   :item="item" :is-scheduled="!!(item.scheduledStart || item.scheduledEnd)"
-                  :show-schedule="true"
-                  @toggle="toggleItemVisibility(item.id, item.isVisible)"
-                  @pin="togglePin(item.id, item.isPinned)"
-                  @schedule="openSchedule(item)"
-                  @edit="handleEdit(item)"
-                  @delete="handleDeleteItem(item.id)"
+                  :show-schedule="true" @toggle="toggleItemVisibility(item.id, item.isVisible)"
+                  @pin="togglePin(item.id, item.isPinned)" @schedule="openSchedule(item)"
+                  @edit="handleEdit(item)" @delete="handleDeleteItem(item.id)"
                 />
               </div>
-              <nuxt-link :to="item.link.url" class="text-caption truncate pl-9 text-xs hover:underline" target="_blank">
+              <nuxt-link :to="item.link.url" class="truncate pl-8 text-xs text-muted-foreground hover:underline" target="_blank">
                 {{ item.link.url }}
               </nuxt-link>
             </div>
 
-            <div v-else-if="item.type === 'WIDGET' && item.widget" class="card navigation-group justify-between" :class="{ 'border-dashed! opacity-60': !item.isVisible }">
+            <div v-else-if="item.type === 'WIDGET' && item.widget" class="card navigation-group justify-between py-2!" :class="{ 'border-dashed! opacity-60': !item.isVisible }">
               <div class="navigation-group min-w-0">
-                <button class="drag-handle btn-ghost cursor-move p-0.5!" aria-label="Drag to reorder">
+                <button class="drag-handle btn-ghost cursor-move p-0!" aria-label="Drag to reorder">
                   <icon name="mdi:drag-vertical" size="20" class="text-muted" />
                 </button>
                 <icon :name="WIDGET_ICONS[item.widget.type]" size="20" class="shrink-0" />
                 <div class="flex min-w-0 flex-col">
                   <div class="navigation-group">
                     <span class="text-sm font-semibold" :class="{ 'text-muted-foreground': !item.isVisible }">{{ WIDGET_LABELS[item.widget.type] }}</span>
-                    <icon v-if="item.isPinned" name="mdi:pin" size="15" class="text-caption-info shrink-0" />
+                    <icon v-if="item.scheduledStart || item.scheduledEnd" name="mdi:calendar-clock" size="15" class="text-caption-info shrink-0" />
                   </div>
-                  <span class="text-caption truncate text-xs">{{ item.widget.handle }}</span>
+                  <span class="truncate text-xs text-muted-foreground">{{ item.widget.handle }}</span>
                 </div>
               </div>
               <ProfileItemRowActions
@@ -116,15 +106,15 @@
               />
             </div>
 
-            <div v-else-if="item.type === 'PHOTO_GRID'" class="card navigation-group justify-between" :class="{ 'border-dashed! opacity-60': !item.isVisible }">
+            <div v-else-if="item.type === 'PHOTO_GRID'" class="card navigation-group justify-between py-2!" :class="{ 'border-dashed! opacity-60': !item.isVisible }">
               <div class="navigation-group">
-                <button class="drag-handle btn-ghost cursor-move p-0.5!" aria-label="Drag to reorder">
+                <button class="drag-handle btn-ghost cursor-move p-0!" aria-label="Drag to reorder">
                   <icon name="mdi:drag-vertical" size="20" class="text-muted" />
                 </button>
                 <icon name="mdi:image-multiple-outline" size="20" class="text-muted-foreground" />
                 <div class="navigation-group">
                   <span class="text-sm font-semibold" :class="{ 'text-muted-foreground': !item.isVisible }">Photo Grid</span>
-                  <icon v-if="item.isPinned" name="mdi:pin" size="15" class="text-caption-info shrink-0" />
+                  <icon v-if="item.scheduledStart || item.scheduledEnd" name="mdi:calendar-clock" size="15" class="text-caption-info shrink-0" />
                 </div>
               </div>
               <ProfileItemRowActions
@@ -161,7 +151,7 @@
         </div>
 
         <button v-else class="btn-primary self-end" @click="isPicking = true">
-          <icon name="mdi:plus" size="25" />
+          <icon name="mdi:plus" size="20" />
           <span>Add Item</span>
         </button>
       </template>
