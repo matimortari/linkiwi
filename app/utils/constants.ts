@@ -96,11 +96,12 @@ export const DEFAULT_PREFERENCES: UserPreferences = {
 
 // Profile item type options
 export const ITEM_TYPES = [
-  { type: "LINK", label: "Link", icon: "mdi:link-variant" },
-  { type: "WIDGET", label: "Widget", icon: "mdi:shape-outline" },
-  { type: "DIVIDER", label: "Divider", icon: "mdi:minus" },
-  { type: "PHOTO_GRID", label: "Photo Grid", icon: "mdi:image-multiple-outline" },
-] as const
+  { type: "LINK" as ProfileItemType, label: "Link", icon: "mdi:link-variant" },
+  { type: "ICON" as ProfileItemType, label: "Social Icon", icon: "mdi:star-outline" },
+  { type: "WIDGET" as ProfileItemType, label: "Widget", icon: "mdi:shape-outline" },
+  { type: "DIVIDER" as ProfileItemType, label: "Divider", icon: "mdi:minus" },
+  { type: "PHOTO_GRID" as ProfileItemType, label: "Photo Grid", icon: "mdi:image-multiple-outline" },
+]
 
 // Supported platform options for social icons
 export const SOCIAL_ICONS = {

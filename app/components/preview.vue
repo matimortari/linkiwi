@@ -9,34 +9,49 @@
     <!-- Mobile full-screen preview -->
     <transition name="slide">
       <div v-if="isPreviewOpen" class="fixed top-0 left-0 z-40 size-full overflow-y-auto p-12 md:hidden" :style="backgroundStyle">
-        <div class="flex max-h-full flex-col items-center justify-start gap-4 overflow-y-auto p-4 text-center">
-          <div class="flex flex-col items-center gap-2">
-            <img :src="user.image" alt="Avatar" class="size-24 object-cover" :style="profilePictureStyle">
-            <p class="line-clamp-3 max-w-sm truncate whitespace-break-spaces" :style="slugStyle">
+        <div class="flex flex-col items-center justify-start gap-3 p-4 text-center">
+          <div class="flex flex-col items-center gap-1.5">
+            <img :src="user.image" alt="Avatar" class="size-16 object-cover" :style="profilePictureStyle">
+            <p :style="slugStyle">
               @{{ user.slug }}
             </p>
-            <p v-if="user.location" class="flex max-w-sm flex-row items-center gap-1 truncate text-sm/4 whitespace-break-spaces" :style="descriptionStyle">
+            <p v-if="user.location" class="flex items-center gap-1" :style="descriptionStyle">
               <icon name="mdi:map-marker" size="15" />
-              <span>{{ user.location }}</span>
-              shed
+              {{ user.location }}
             </p>
-            <p v-if="user.description" class="line-clamp-3 max-w-sm truncate whitespace-break-spaces" :style="descriptionStyle">
+            <p v-if="user.description" class="line-clamp-2 max-w-xs" :style="descriptionStyle">
               {{ user.description }}
             </p>
           </div>
 
-          <ul v-if="visibleIcons.length" class="navigation-group justify-center">
+          <ul v-if="visibleIcons.length" class="flex flex-row flex-wrap justify-center gap-1.5">
             <UserSocialIcon v-for="item in visibleIcons" :key="item.id" :item="item" :preferences="preferences" />
           </ul>
 
-          <ul class="flex w-full max-w-xl flex-col items-center gap-4 px-4">
+          <ul class="flex w-full flex-col items-center gap-2 px-2">
             <template v-for="item in visiblePreviewItems" :key="item.id">
               <UserLink v-if="item.type === 'LINK'" :item="item" :preferences="preferences" />
-              <span v-else-if="item.type === 'DIVIDER'" :style="dividerStyle" />
-              <div v-else-if="item.type === 'PHOTO_GRID'" :style="photoGridStyle">
-                <img v-for="photo in item.photoGrid?.photos" :key="photo.id" :src="photo.url" class="rounded-lg">
+              <span v-else-if="item.type === 'DIVIDER'" class="w-full" :style="dividerStyle" />
+              <div v-else-if="item.type === 'PHOTO_GRID' && item.photoGrid?.photos?.length" class="grid w-full grid-cols-3 gap-0.5 overflow-hidden rounded-lg">
+                <img
+                  v-for="photo in item.photoGrid.photos.slice(0, 9)" :key="photo.id"
+                  :src="photo.url" :alt="photo.alt ?? ''"
+                  class="aspect-square w-full object-cover"
+                >
+              </div>
+
+              <div v-else-if="item.type === 'WIDGET' && item.widget" class="flex w-full items-center gap-2 rounded-lg border px-3 py-2" :style="widgetCardStyle">
+                <icon :name="WIDGET_ICONS[item.widget.type]" size="20" class="shrink-0" />
+                <div class="flex min-w-0 flex-col text-left">
+                  <span class="text-xs font-semibold">{{ WIDGET_LABELS[item.widget.type] }}</span>
+                  <span class="truncate text-xs opacity-60">{{ item.widget.handle }}</span>
+                </div>
               </div>
             </template>
+
+            <p v-if="!visiblePreviewItems.length && !visibleIcons.length" class="text-xs opacity-50" :style="descriptionStyle">
+              No content yet.
+            </p>
           </ul>
         </div>
       </div>
@@ -55,43 +70,50 @@
           <icon name="mdi:wifi" size="15" />
         </div>
       </div>
-
-      <div class="flex flex-col items-center justify-start gap-4 overflow-y-auto p-4 text-center">
-        <div class="flex flex-col items-center gap-2">
-          <img :src="user.image" alt="Avatar" class="size-24 object-cover" :style="profilePictureStyle">
-          <p class="line-clamp-3 max-w-sm truncate whitespace-break-spaces" :style="slugStyle">
+      <div class="flex flex-col items-center justify-start gap-3 p-4 text-center">
+        <div class="flex flex-col items-center gap-1.5">
+          <img :src="user.image" alt="Avatar" class="size-16 object-cover" :style="profilePictureStyle">
+          <p :style="slugStyle">
             @{{ user.slug }}
           </p>
-          <p v-if="user.location" class="flex max-w-sm flex-row items-center gap-1 truncate text-sm/4 whitespace-break-spaces" :style="descriptionStyle">
+          <p v-if="user.location" class="flex items-center gap-1" :style="descriptionStyle">
             <icon name="mdi:map-marker" size="15" />
-            <span>{{ user.location }}</span>
+            {{ user.location }}
           </p>
-          <p v-if="user.description" class="line-clamp-3 max-w-sm truncate leading-4 whitespace-break-spaces" :style="descriptionStyle">
+          <p v-if="user.description" class="line-clamp-2 max-w-xs" :style="descriptionStyle">
             {{ user.description }}
           </p>
         </div>
 
-        <ul v-if="visibleIcons.length" class="navigation-group justify-center">
+        <ul v-if="visibleIcons.length" class="flex flex-row flex-wrap justify-center gap-1.5">
           <UserSocialIcon v-for="item in visibleIcons" :key="item.id" :item="item" :preferences="preferences" />
         </ul>
 
-        <ul class="flex w-full max-w-xl flex-col items-center gap-4 px-4">
+        <ul class="flex w-full flex-col items-center gap-2 px-2">
           <template v-for="item in visiblePreviewItems" :key="item.id">
             <UserLink v-if="item.type === 'LINK'" :item="item" :preferences="preferences" />
-            <span v-else-if="item.type === 'DIVIDER'" :style="dividerStyle" />
-            <div v-else-if="item.type === 'PHOTO_GRID'" :style="photoGridStyle" class="grid grid-cols-2 gap-2 md:grid-cols-3">
+            <span v-else-if="item.type === 'DIVIDER'" class="w-full" :style="dividerStyle" />
+            <div v-else-if="item.type === 'PHOTO_GRID' && item.photoGrid?.photos?.length" class="grid w-full grid-cols-3 gap-0.5 overflow-hidden rounded-lg">
               <img
-                v-for="photo in item.photoGrid?.photos" :key="photo.id"
-                :src="photo.url" :alt="photo.alt ?? `Photo ${photo.order}`"
-                class="aspect-square w-full rounded-lg object-cover"
+                v-for="photo in item.photoGrid.photos.slice(0, 9)" :key="photo.id"
+                :src="photo.url" :alt="photo.alt ?? ''"
+                class="aspect-square w-full object-cover"
               >
             </div>
-          </template>
-        </ul>
 
-        <p v-if="!visiblePreviewItems.length && !visibleIcons.length" :style="descriptionStyle">
-          No content yet.
-        </p>
+            <div v-else-if="item.type === 'WIDGET' && item.widget" class="flex w-full items-center gap-2 rounded-lg border px-3 py-2" :style="widgetCardStyle">
+              <icon :name="WIDGET_ICONS[item.widget.type]" size="20" class="shrink-0" />
+              <div class="flex min-w-0 flex-col text-left">
+                <span class="text-xs font-semibold">{{ WIDGET_LABELS[item.widget.type] }}</span>
+                <span class="truncate text-xs opacity-60">{{ item.widget.handle }}</span>
+              </div>
+            </div>
+          </template>
+
+          <p v-if="!visiblePreviewItems.length && !visibleIcons.length" class="text-xs opacity-50" :style="descriptionStyle">
+            No content yet.
+          </p>
+        </ul>
       </div>
     </div>
   </div>
@@ -103,9 +125,17 @@ const { items } = storeToRefs(useProfileItemsStore())
 const { isPreviewOpen, openPreview, closePreview } = useUIState()
 const localPreferences = useState<UserPreferences | null>("localPreferences", () => null)
 const preferences = computed(() => localPreferences.value || storePreferences.value)
-const { backgroundStyle, profilePictureStyle, slugStyle, descriptionStyle, dividerStyle, photoGridStyle } = useDynamicStyles(preferences)
-const visiblePreviewItems = computed(() => (items.value ?? []).filter(item => item.type !== "ICON" && item.type !== "WIDGET" && item.isVisible !== false).sort((a, b) => a.order - b.order))
+const { profilePictureStyle, slugStyle, descriptionStyle } = useDynamicStyles(computed(() => preferences.value))
+const { backgroundStyle, dividerStyle } = useDynamicStyles(preferences)
 const visibleIcons = computed(() => (items.value ?? []).filter(item => item.type === "ICON" && item.isVisible !== false))
+const visiblePreviewItems = computed(() => (items.value ?? []).filter(item => item.type !== "ICON" && item.isVisible !== false).sort((a, b) => {
+  if (a.isPinned !== b.isPinned) {
+    return a.isPinned ? -1 : 1
+  }
+  return a.order - b.order
+}))
+
+const widgetCardStyle = computed(() => ({ backgroundColor: preferences.value?.linkBackgroundColor ?? "#e2e8f0", color: preferences.value?.linkTextColor ?? "#475569" }))
 </script>
 
 <style scoped>
@@ -116,22 +146,16 @@ const visibleIcons = computed(() => (items.value ?? []).filter(item => item.type
 .scroll-hide::-webkit-scrollbar {
   display: none;
 }
-
-.slide-enter-from {
+.slide-enter-from,
+.slide-leave-to {
   transform: translateY(100%);
 }
-.slide-enter-to {
+.slide-enter-to,
+.slide-leave-from {
   transform: translateY(0);
 }
 .slide-enter-active {
   transition: transform 0.3s ease-out;
-}
-
-.slide-leave-from {
-  transform: translateY(0);
-}
-.slide-leave-to {
-  transform: translateY(100%);
 }
 .slide-leave-active {
   transition: transform 0.3s ease-in;

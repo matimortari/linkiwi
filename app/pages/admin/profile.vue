@@ -14,10 +14,7 @@
         </p>
       </header>
 
-      <div class="flex flex-col gap-4">
-        <ProfileItemList />
-        <ProfileIconList />
-      </div>
+      <ProfileItemList />
     </div>
 
     <Preview />

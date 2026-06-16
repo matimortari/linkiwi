@@ -1,25 +1,54 @@
 <template>
   <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:p-8">
     <h3>
-      Links
+      My Links
     </h3>
 
     <div class="flex flex-col gap-4">
       <Loading v-if="loading" />
 
       <template v-else>
-        <div class="navigation-group flex-wrap">
-          <button v-for="option in ITEM_TYPES" :key="option.type" class="card navigation-group p-2! hover:bg-muted!" @click="handlePickType(option.type)">
-            <icon :name="option.icon" size="20" />
-            <span class="text-sm">{{ option.label }}</span>
-          </button>
+        <div class="flex flex-col gap-2">
+          <p class="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+            Social Icons
+          </p>
+
+          <Empty v-if="!icons.length" message="Pin quick links to your most important social profiles." icon-name="mdi:star" />
+
+          <VueDraggable
+            v-else v-model="orderedIcons"
+            tag="ul" class="flex flex-row flex-wrap items-center gap-3"
+            handle=".drag-handle" :animation="150"
+            @end="reorderIcons"
+          >
+            <li
+              v-for="icon in orderedIcons" :key="icon.id"
+              class="card relative flex size-20 items-center justify-center"
+              :class="{ 'border-dashed! opacity-60': !icon.isVisible }"
+            >
+              <button class="drag-handle btn-ghost absolute top-0 left-0 cursor-move p-0.5!" aria-label="Drag to reorder">
+                <icon name="mdi:drag-vertical" size="20" class="text-muted" />
+              </button>
+              <nuxt-link :to="icon.url" class="btn-ghost" :aria-label="icon.platform" target="_blank">
+                <icon :name="icon.logo" size="30" />
+              </nuxt-link>
+              <button :aria-label="icon.isVisible ? 'Hide' : 'Show'" class="btn-ghost absolute top-0 right-0 p-0.5!" @click="toggleIconVisibility(icon.id, icon.isVisible)">
+                <icon :name="icon.isVisible ? 'mdi:eye-outline' : 'mdi:eye-off-outline'" size="18" class="text-muted-foreground" />
+              </button>
+              <button class="btn-ghost absolute right-0 bottom-0 p-0.5!" aria-label="Delete" @click="handleDeleteIcon(icon.id)">
+                <icon name="mdi:remove-circle-outline" size="18" class="text-caption-danger" />
+              </button>
+            </li>
+          </VueDraggable>
         </div>
+
+        <hr class="border">
 
         <Empty v-if="!mainItems.length" message="Customize your profile by adding links and content." icon-name="mdi:shape" />
 
         <VueDraggable
           v-else v-model="orderedItems"
-          tag="ul" class="flex flex-col gap-4"
+          tag="ul" class="flex flex-col gap-3"
           handle=".drag-handle" :animation="150"
           @end="reorderItems"
         >
@@ -34,9 +63,9 @@
               </div>
               <ProfileItemRowActions
                 :item="item" :is-scheduled="!!(item.scheduledStart || item.scheduledEnd)"
-                :show-schedule="true" :show-edit="false"
-                @toggle="toggleVisibility(item.id, item.isVisible)" @pin="togglePin(item.id, item.isPinned)"
-                @schedule="openSchedule(item)" @delete="handleDelete(item.id)"
+                :show-edit="false" :show-schedule="true"
+                @toggle="toggleItemVisibility(item.id, item.isVisible)" @pin="togglePin(item.id, item.isPinned)"
+                @schedule="openSchedule(item)" @delete="handleDeleteItem(item.id)"
               />
             </div>
 
@@ -47,15 +76,17 @@
                     <icon name="mdi:drag-vertical" size="20" class="text-muted" />
                   </button>
                   <icon name="mdi:link-variant" size="20" class="shrink-0 text-muted-foreground" />
-                  <span class="truncate text-sm font-semibold" :class="{ 'text-muted-foreground': !item.isVisible }">
-                    {{ item.link.label }}
-                  </span>
+                  <span class="truncate text-sm font-semibold" :class="{ 'text-muted-foreground': !item.isVisible }">{{ item.link.label }}</span>
+                  <icon v-if="item.isPinned" name="mdi:pin" size="15" class="text-caption-info shrink-0" />
                 </div>
                 <ProfileItemRowActions
                   :item="item" :is-scheduled="!!(item.scheduledStart || item.scheduledEnd)"
-                  :show-schedule="true" @toggle="toggleVisibility(item.id, item.isVisible)"
+                  :show-schedule="true"
+                  @toggle="toggleItemVisibility(item.id, item.isVisible)"
                   @pin="togglePin(item.id, item.isPinned)"
-                  @schedule="openSchedule(item)" @delete="handleDelete(item.id)"
+                  @schedule="openSchedule(item)"
+                  @edit="handleEdit(item)"
+                  @delete="handleDeleteItem(item.id)"
                 />
               </div>
               <nuxt-link :to="item.link.url" class="text-caption truncate pl-9 text-xs hover:underline" target="_blank">
@@ -70,17 +101,18 @@
                 </button>
                 <icon :name="WIDGET_ICONS[item.widget.type]" size="20" class="shrink-0" />
                 <div class="flex min-w-0 flex-col">
-                  <span class="text-sm font-semibold" :class="{ 'text-muted-foreground': !item.isVisible }">
-                    {{ WIDGET_LABELS[item.widget.type] }}
-                  </span>
+                  <div class="navigation-group">
+                    <span class="text-sm font-semibold" :class="{ 'text-muted-foreground': !item.isVisible }">{{ WIDGET_LABELS[item.widget.type] }}</span>
+                    <icon v-if="item.isPinned" name="mdi:pin" size="15" class="text-caption-info shrink-0" />
+                  </div>
                   <span class="text-caption truncate text-xs">{{ item.widget.handle }}</span>
                 </div>
               </div>
               <ProfileItemRowActions
                 :item="item" :is-scheduled="!!(item.scheduledStart || item.scheduledEnd)"
-                :show-schedule="true" @toggle="toggleVisibility(item.id, item.isVisible)"
+                :show-schedule="true" @toggle="toggleItemVisibility(item.id, item.isVisible)"
                 @pin="togglePin(item.id, item.isPinned)" @schedule="openSchedule(item)"
-                @edit="handleEdit(item)" @delete="handleDelete(item.id)"
+                @edit="handleEdit(item)" @delete="handleDeleteItem(item.id)"
               />
             </div>
 
@@ -90,24 +122,56 @@
                   <icon name="mdi:drag-vertical" size="20" class="text-muted" />
                 </button>
                 <icon name="mdi:image-multiple-outline" size="20" class="text-muted-foreground" />
-                <span class="text-sm font-semibold" :class="{ 'text-muted-foreground': !item.isVisible }">Photo Grid</span>
+                <div class="navigation-group">
+                  <span class="text-sm font-semibold" :class="{ 'text-muted-foreground': !item.isVisible }">Photo Grid</span>
+                  <icon v-if="item.isPinned" name="mdi:pin" size="15" class="text-caption-info shrink-0" />
+                </div>
               </div>
               <ProfileItemRowActions
                 :item="item" :is-scheduled="!!(item.scheduledStart || item.scheduledEnd)"
-                :show-schedule="true" @toggle="toggleVisibility(item.id, item.isVisible)"
+                :show-schedule="true" @toggle="toggleItemVisibility(item.id, item.isVisible)"
                 @pin="togglePin(item.id, item.isPinned)" @schedule="openSchedule(item)"
-                @edit="handleEdit(item)" @delete="handleDelete(item.id)"
+                @edit="handleEdit(item)" @delete="handleDeleteItem(item.id)"
               />
             </div>
           </li>
         </VueDraggable>
+
+        <!-- Add Row -->
+        <div v-if="isPicking" class="flex flex-col gap-3 rounded-2xl border bg-card p-4">
+          <p class="text-sm font-medium">
+            What do you want to add?
+          </p>
+          <div class="flex flex-row flex-wrap gap-2">
+            <button
+              v-for="option in ITEM_TYPES" :key="option.type"
+              class="card navigation-group p-2! hover:bg-muted!"
+              @click="handlePickType(option.type)"
+            >
+              <icon :name="option.icon" size="20" />
+              <span class="text-sm">{{ option.label }}</span>
+            </button>
+          </div>
+          <div class="flex justify-end">
+            <button class="btn-ghost text-sm" @click="isPicking = false">
+              <icon name="mdi:close" size="20" />
+              <span>Cancel</span>
+            </button>
+          </div>
+        </div>
+
+        <button v-else class="btn-primary self-end" @click="isPicking = true">
+          <icon name="mdi:plus" size="25" />
+          <span>Add Item</span>
+        </button>
       </template>
     </div>
   </div>
 
   <ProfileLinkDialog :is-open="isLinkDialogOpen" @close="closeDialog('link')" />
-  <ProfilePhotoGridDialog :is-open="uiState.dialogs.photoGrid.isOpen" @close="closeDialog('photoGrid')" />
+  <ProfileIconDialog :is-open="isIconDialogOpen" @close="closeDialog('icon')" />
   <ProfileWidgetDialog :is-open="isWidgetDialogOpen" @close="closeDialog('widget')" />
+  <ProfilePhotoGridDialog :is-open="uiState.dialogs.photoGrid.isOpen" @close="closeDialog('photoGrid')" />
   <ProfileScheduleDialog :is-open="isScheduleDialogOpen" :item="schedulingItem" @close="closeScheduleDialog" />
 </template>
 
@@ -116,10 +180,21 @@ import { VueDraggable } from "vue-draggable-plus"
 
 const profileItemsStore = useProfileItemsStore()
 const { loading } = storeToRefs(profileItemsStore)
-const { uiState, isLinkDialogOpen, isWidgetDialogOpen, openDialog, closeDialog } = useUIState()
-const orderedItems = ref<ProfileItem[]>([])
+const { uiState, isLinkDialogOpen, isIconDialogOpen, isWidgetDialogOpen, openDialog, closeDialog } = useUIState()
+const isPicking = ref(false)
 const isScheduleDialogOpen = ref(false)
 const schedulingItem = ref<ProfileItem | null>(null)
+const orderedItems = ref<ProfileItem[]>([])
+const orderedIcons = ref<NormalizedIcon[]>([])
+const icons = computed<NormalizedIcon[]>(() => (profileItemsStore.items || []).filter((item: ProfileItem) => item.type === "ICON" && item.icon).map((item: ProfileItem) => ({
+  id: item.id,
+  platform: item.icon!.platform ?? "",
+  url: item.icon!.url ?? "",
+  logo: item.icon!.logo ?? "",
+  isVisible: item.isVisible,
+  order: item.order,
+})).sort((a, b) => a.order - b.order))
+
 const mainItems = computed<ProfileItem[]>(() => (profileItemsStore.items || []).filter((item: ProfileItem) => item.type !== "ICON").sort((a, b) => {
   if (a.isPinned !== b.isPinned) {
     return a.isPinned ? -1 : 1
@@ -128,9 +203,14 @@ const mainItems = computed<ProfileItem[]>(() => (profileItemsStore.items || []).
 }))
 
 async function handlePickType(type: ProfileItemType) {
+  isPicking.value = false
   if (type === "LINK") {
     uiState.dialogs.link.selectedLink = null
     openDialog("link")
+    return
+  }
+  if (type === "ICON") {
+    openDialog("icon")
     return
   }
   if (type === "WIDGET") {
@@ -163,11 +243,16 @@ function handleEdit(item: ProfileItem) {
   }
 }
 
+async function reorderIcons() {
+  const updates = orderedIcons.value.map((icon, index) => ({ id: icon.id, order: index })).filter(({ id, order }) => icons.value.find(i => i.id === id)?.order !== order)
+  if (!updates.length) {
+    return
+  }
+  await Promise.all(updates.map(({ id, order }) => profileItemsStore.updateItem(id, { order })))
+}
+
 async function reorderItems() {
-  const updates = orderedItems.value.map((item, index) => ({ id: item.id, order: index })).filter(({ id, order }) => {
-    const existing = mainItems.value.find(i => i.id === id)
-    return existing?.order !== order
-  })
+  const updates = orderedItems.value.map((item, index) => ({ id: item.id, order: index })).filter(({ id, order }) => mainItems.value.find(i => i.id === id)?.order !== order)
   if (!updates.length) {
     return
   }
@@ -177,7 +262,7 @@ async function reorderItems() {
     profileItemsStore.items.sort((a, b) => a.order - b.order)
   }
   else {
-    orderedItems.value = [...orderedItems.value]
+    orderedItems.value = [...mainItems.value]
     await profileItemsStore.getItems()
   }
 }
@@ -186,7 +271,11 @@ async function togglePin(id: string, current: boolean) {
   await profileItemsStore.updateItem(id, { isPinned: !current })
 }
 
-async function toggleVisibility(id: string, current: boolean) {
+async function toggleItemVisibility(id: string, current: boolean) {
+  await profileItemsStore.updateItem(id, { isVisible: !current })
+}
+
+async function toggleIconVisibility(id: string, current: boolean) {
   await profileItemsStore.updateItem(id, { isVisible: !current })
 }
 
@@ -200,12 +289,20 @@ function closeScheduleDialog() {
   schedulingItem.value = null
 }
 
-async function handleDelete(id: string) {
+async function handleDeleteItem(id: string) {
   if (!confirm("Are you sure you want to delete this item?")) {
     return
   }
   await profileItemsStore.deleteItem(id)
 }
 
+async function handleDeleteIcon(id: string) {
+  if (!confirm("Are you sure you want to delete this social icon?")) {
+    return
+  }
+  await profileItemsStore.deleteItem(id)
+}
+
+watch(() => icons.value, newIcons => orderedIcons.value = [...newIcons], { immediate: true, deep: true })
 watch(() => mainItems.value, newItems => orderedItems.value = [...newItems], { immediate: true, deep: true })
 </script>
