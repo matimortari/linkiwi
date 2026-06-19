@@ -14,7 +14,7 @@
     "db:migrate": "prisma migrate dev"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.1068.0",
+    "@aws-sdk/client-s3": "3.1073.0",
     "@nuxt/content": "3.14.0",
     "@nuxtjs/color-mode": "4.0.0",
     "@nuxtjs/seo": "5.3.0",
@@ -26,7 +26,7 @@
     "chart.js": "4.5.1",
     "nuxt": "4.4.5",
     "nuxt-auth-utils": "0.5.29",
-    "pg": "8.21.0",
+    "pg": "8.22.0",
     "qrcode-generator": "2.0.4",
     "redis": "6.0.0",
     "vue-chartjs": "5.3.3",
@@ -40,7 +40,7 @@
     "@nuxt/fonts": "0.14.0",
     "@nuxt/icon": "2.2.3",
     "@tailwindcss/vite": "4.3.1",
-    "@types/node": "25.9.3",
+    "@types/node": "26.0.0",
     "eslint": "10.5.0",
     "eslint-plugin-better-tailwindcss": "4.6.0",
     "eslint-plugin-format": "2.0.0",
