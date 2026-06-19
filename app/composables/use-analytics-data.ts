@@ -1,5 +1,3 @@
-import type { AnalyticsRecordSchema } from "#shared/schemas/analytics-schema"
-
 export function useAnalyticsData() {
   const analyticsStore = useAnalyticsStore()
   const userStore = useUserStore()
@@ -112,10 +110,10 @@ export function useAnalyticsData() {
     }
   })
 
-  const normalizedRecords = computed<AnalyticsRecordSchema[]>(() => {
+  const normalizedRecords = computed(() => {
     const currentSlug = userStore.user?.slug ?? ""
-    const viewsLog = pageViews.value.map(pv => ({ type: "pageView" as const, slug: currentSlug, referrer: pv.referrer ?? null, createdAt: pv.createdAt ? String(pv.createdAt) : undefined }))
-    const clicksLog = analyticsStore.itemClicks.map(ic => ({ type: "itemClick" as const, itemId: String(ic.itemId), createdAt: ic.createdAt ? String(ic.createdAt) : undefined }))
+    const viewsLog = pageViews.value.map(pv => ({ type: "pageView", slug: currentSlug, referrer: pv.referrer ?? null, createdAt: pv.createdAt ? String(pv.createdAt) : undefined }))
+    const clicksLog = analyticsStore.itemClicks.map(ic => ({ type: "itemClick", itemId: String(ic.itemId), createdAt: ic.createdAt ? String(ic.createdAt) : undefined }))
     return [...viewsLog, ...clicksLog]
   })
 

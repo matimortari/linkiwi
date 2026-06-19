@@ -18,7 +18,7 @@ ChartJS.register(Title, Tooltip, Legend, LineElement, PointElement, CategoryScal
 const chartOptions: ChartOptions<"line"> = {
   responsive: true,
   maintainAspectRatio: false,
-  interaction: { intersect: false, mode: "index" as const },
+  interaction: { intersect: false, mode: "index" },
   plugins: {
     legend: { display: false },
     tooltip: {

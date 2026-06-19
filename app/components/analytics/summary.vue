@@ -108,7 +108,6 @@
 <script setup lang="ts">
 const { createActionHandler } = useActionIcon()
 const analyticsStore = useAnalyticsStore()
-const userStore = useUserStore()
 const { totalViews, totalClicks, clickRate, joinedAt, pageViewsChartData, linkClicksChartData, iconClicksChartData, referrerChartData, topReferrers } = useAnalyticsData()
 const resetAction = createActionHandler("mdi:close")
 const summaryItems = computed(() => [
@@ -152,5 +151,5 @@ async function handleDeleteAnalytics() {
   resetAction.triggerSuccess()
 }
 
-onMounted(async () => await Promise.all([analyticsStore.getAnalytics(), userStore.getUser()]))
+onMounted(async () => await analyticsStore.getAnalytics())
 </script>
