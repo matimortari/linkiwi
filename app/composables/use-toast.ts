@@ -19,7 +19,7 @@ export function useToast() {
   }
 
   function error(message: string, duration = 7000) {
-    return show(message, "error", duration)
+    return show(message, "danger", duration)
   }
 
   function warning(message: string, duration = 6000) {

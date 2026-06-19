@@ -1,38 +1,65 @@
 <template>
-  <aside
-    id="table-of-contents" :class="isOpen ? 'translate-y-0 md:translate-x-0' : 'translate-y-full md:translate-x-full'"
-    class="fixed inset-x-0 bottom-0 z-40 flex h-[80vh] w-full flex-col border-t bg-card shadow-xl transition-transform md:inset-y-0 md:right-0 md:left-auto md:z-20 md:h-screen md:w-80 md:translate-y-0 md:border-t-0 md:bg-transparent xl:w-80 xl:translate-x-0"
-  >
-    <div class="flex h-full flex-col p-4 md:pt-24">
-      <div class="flex items-center gap-1 border-b py-2 font-semibold text-muted-foreground uppercase">
-        <icon name="mdi:table-of-contents" size="20" class="text-primary" />
-        <p class="font-semibold tracking-wide text-muted-foreground uppercase">
-          On this page
-        </p>
-      </div>
-
-      <nav class="scroll-area flex-1 space-y-0.5 overflow-y-auto pr-2">
-        <nuxt-link
-          v-for="header in headers" :key="header.id"
-          :to="`#${header.id}`" :class="headerClasses(header)"
-          class="block transition-all hover:bg-muted/50 hover:text-primary" @click.prevent="emit('select', header.id)"
-        >
-          <div class="navigation-group">
-            <span v-if="header.method" :class="REST_METHOD_LABELS[header.method as keyof typeof REST_METHOD_LABELS]">{{ header.method }}</span>
-            <span class="wrap-break-words leading-tight">{{ header.text }}</span>
-          </div>
-        </nuxt-link>
-      </nav>
+  <nav v-if="headers.length" aria-label="Table of contents" class="flex h-full flex-col">
+    <div class="flex shrink-0 items-center gap-1 pb-2">
+      <icon name="mdi:table-of-contents" size="20" class="text-primary" />
+      <p class="text-caption tracking-wide uppercase">
+        On this page
+      </p>
     </div>
-  </aside>
+
+    <ul class="scroll-area flex flex-1 flex-col overflow-x-hidden overflow-y-auto">
+      <li v-for="header in headers" :key="header.id">
+        <nuxt-link
+          :to="`#${header.id}`" class="navigation-group text-start transition-colors"
+          :class="[headerClasses(header), activeId === header.id ? '-ml-0.5 border-l-2 border-primary pl-2 text-primary' : 'text-muted-foreground hover:text-foreground']"
+        >
+          <span v-if="header.method" :class="REST_METHOD_LABELS[header.method]">{{ header.method }}</span>
+          <span>{{ header.text }}</span>
+        </nuxt-link>
+      </li>
+    </ul>
+  </nav>
 </template>
 
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   headers: TocHeader[]
   isOpen: boolean
   headerClasses: (header: TocHeader) => string
 }>()
 
-const emit = defineEmits<{ select: [id: string] }>()
+const activeId = ref<string | null>(null)
+let observer: IntersectionObserver | null = null
+
+function setupObserver() {
+  if (observer) {
+    observer.disconnect()
+  }
+  if (!props.headers || props.headers.length === 0) {
+    return
+  }
+
+  observer = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (entry.isIntersecting) {
+        activeId.value = entry.target.id
+      }
+    }
+  }, { rootMargin: "0px 0px -80% 0px", threshold: 0 })
+
+  for (const header of props.headers) {
+    const el = document.getElementById(header.id)
+    if (el) {
+      observer.observe(el)
+    }
+  }
+}
+
+watch(() => props.headers, setupObserver, { immediate: true, deep: true })
+
+onUnmounted(() => {
+  if (observer) {
+    observer.disconnect()
+  }
+})
 </script>

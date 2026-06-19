@@ -155,10 +155,10 @@ function handleDownloadImage(logo: { name: string, image: string }, index: numbe
     return
   }
 
-  const link = document.createElement("a")
-  link.href = logo.image
-  link.download = logo.name.replace(/\s+/g, "-").toLowerCase()
-  link.click()
+  const a = document.createElement("a")
+  a.href = logo.image
+  a.download = logo.name.replace(/\s+/g, "-").toLowerCase()
+  a.click()
   actions[index].triggerSuccess()
 }
 
