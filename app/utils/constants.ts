@@ -4,7 +4,7 @@ import Symbol from "~/assets/symbol.png"
 import WordmarkDark from "~/assets/wordmark-dark.png"
 import WordmarkLight from "~/assets/wordmark-light.png"
 
-// Landing page constants
+// Landing page data
 export const PRODUCT_BULLETS = [
   { description: "Share your page across different platforms with ease", icon: "mdi:share-outline" },
   { description: "Generate a QR code for in-person sharing", icon: "mdi:qrcode" },
@@ -37,7 +37,7 @@ export const MOCK_REFERRALS = [
   { source: "Instagram", percentage: "20%", color: "#F472B6", icon: "simple-icons:instagram" },
 ]
 
-// Admin dashboard constants
+// Admin dashboard data
 export const SIDEBAR_NAV_LINKS = [
   { label: "Profile", url: "/admin/profile", icon: "mdi:home-outline" },
   { label: "Preferences", url: "/admin/preferences", icon: "mdi:cog-outline" },
@@ -184,8 +184,8 @@ export const SCHEDULE_ACTION_OPTIONS = [
   { value: "DELETE", label: "Delete", icon: "mdi:trash-can-outline" },
 ] as const
 
-// REST method label styles for documentation display
-export const REST_METHOD_LABELS = {
+// REST method label styles for API documentation display
+export const REST_METHOD_LABELS: Record<string, string> = {
   GET: "text-xs font-semibold text-[#0ec187]",
   POST: "text-xs font-semibold text-[#74a2e7]",
   PUT: "text-xs font-semibold text-[#cef1a7]",
@@ -198,7 +198,7 @@ export const OAUTH_PROVIDERS = [
   { name: "github", label: "Sign In With GitHub", icon: "simple-icons:github" },
 ]
 
-// Brand constants
+// Brand assets
 export const SYMBOLS = [
   { name: "Symbol", image: Symbol, bgClass: "bg-neutral-100" },
   { name: "Symbol Mono (dark)", image: SymbolMonoDark, bgClass: "bg-neutral-100" },

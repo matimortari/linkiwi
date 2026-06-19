@@ -1,27 +1,32 @@
 <template>
   <Masthead :is-toc-open="isTocOpen" @toggle-toc="isTocOpen = !isTocOpen" />
 
-  <div class="relative flex min-h-screen border-b">
+  <div class="relative flex min-h-screen w-full max-w-6xl">
     <div v-if="isTocOpen" aria-hidden="true" class="fixed inset-0 z-30 bg-black/70 backdrop-blur-sm xl:hidden" @click="isTocOpen = false" />
 
-    <div class="mx-auto px-4 xl:grid xl:grid-cols-[1fr_320px] xl:gap-8">
-      <button class="btn fixed bottom-6 left-6 z-30" aria-label="Scroll to top" @click="scrollToTop">
-        <icon name="mdi:arrow-up" size="25" />
-      </button>
+    <button class="btn fixed bottom-6 left-6 z-30" aria-label="Scroll to top" @click="scrollToTop">
+      <icon name="mdi:arrow-up" size="25" />
+    </button>
 
-      <main
-        v-motion :initial="{ opacity: 0, y: 10 }"
-        :enter="{ opacity: 1, y: 0 }" :duration="600"
-        class="prose"
-      >
-        <slot />
-      </main>
+    <main
+      v-motion :initial="{ opacity: 0, y: 10 }"
+      :enter="{ opacity: 1, y: 0 }" :duration="600"
+      class="prose"
+    >
+      <slot />
+    </main>
 
-      <TableOfContents :headers="headers" :is-open="isTocOpen" :header-classes="headerClasses" @select="scrollToHeader" />
-    </div>
+    <aside
+      class="fixed right-0 my-8 flex w-90 flex-col xl:right-8 xl:translate-x-0" :class="isTocOpen ? 'translate-x-0' : 'translate-x-full'"
+      :style="{ top: 'var(--masthead-height, 64px)', bottom: `${footerBottom}px` }"
+    >
+      <TableOfContents :headers="headers" :is-open="isTocOpen" :header-classes="headerClasses" />
+    </aside>
   </div>
 
-  <Footer />
+  <div ref="footerRef">
+    <Footer />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -29,17 +34,29 @@ const props = defineProps<{
   parseMethod?: boolean
 }>()
 
-const { headers, headerClasses, scrollToSection } = useContent({ selector: ".prose", parseMethod: props.parseMethod })
+const { headers, headerClasses } = useContent({ selector: ".prose", parseMethod: props.parseMethod })
 const isTocOpen = ref(false)
+const footerRef = ref<HTMLElement | null>(null)
+const footerBottom = ref(0)
+
+function updateFooterBottom() {
+  const el = footerRef.value
+  if (!el) {
+    return
+  }
+  footerBottom.value = document.documentElement.scrollHeight - el.getBoundingClientRect().top + window.scrollY
+}
 
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: "smooth" })
 }
 
-function scrollToHeader(id: string) {
-  scrollToSection(id)
-  isTocOpen.value = false
-}
+onMounted(() => {
+  updateFooterBottom()
+  window.addEventListener("resize", updateFooterBottom)
+})
+
+onUnmounted(() => window.removeEventListener("resize", updateFooterBottom))
 </script>
 
 <style scoped>
@@ -68,10 +85,11 @@ function scrollToHeader(id: string) {
 }
 @media (min-width: 1280px) {
   .prose {
-    margin-inline: 0;
     max-width: 100%;
+    margin-left: 20rem;
   }
 }
+
 .prose :deep(> :first-child) {
   margin-top: 0;
 }
