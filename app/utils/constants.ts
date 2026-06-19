@@ -5,19 +5,19 @@ import WordmarkDark from "~/assets/wordmark-dark.png"
 import WordmarkLight from "~/assets/wordmark-light.png"
 
 // Landing page data
-export const PRODUCT_BULLETS = [
+export const PRODUCT_BULLETS: { description: string, icon: string }[] = [
   { description: "Share your page across different platforms with ease", icon: "mdi:share-outline" },
   { description: "Generate a QR code for in-person sharing", icon: "mdi:qrcode" },
   { description: "Tag your links per source and track visitor engagement", icon: "mdi:chart-timeline-variant-shimmer" },
 ]
 
-export const ANALYTICS_BULLETS = [
+export const ANALYTICS_BULLETS: { description: string, icon: string }[] = [
   { description: "Real-time tracking for page views and clicks", icon: "mdi:clock-star-four-points-outline" },
   { description: "Monitor link and social icon clicks", icon: "mdi:cursor-default-click-outline" },
   { description: "See click rates and performance per link", icon: "mdi:chart-bar" },
 ]
 
-export const SHARE_PLATFORMS = [
+export const SHARE_PLATFORMS: { id: string, icon: string, color: string, rotate: number }[] = [
   { id: "whatsapp", icon: "simple-icons:whatsapp", color: "#25a244", rotate: -3 },
   { id: "linkedin", icon: "simple-icons:linkedin", color: "#0a66c2", rotate: -1 },
   { id: "facebook", icon: "simple-icons:facebook", color: "#1877f2", rotate: 1.5 },
@@ -31,20 +31,20 @@ export const MOCK_ANALYTICS = [
   { label: "Joined On", icon: "mdi:calendar-clock-outline", value: "Oct 12, 2025" },
 ]
 
-export const MOCK_REFERRALS = [
+export const MOCK_REFERRALS: { source: string, percentage: string, color: string, icon: string }[] = [
   { source: "LinkedIn", percentage: "45%", color: "#60A5FA", icon: "simple-icons:linkedin" },
   { source: "Reddit", percentage: "35%", color: "#FBBF24", icon: "simple-icons:reddit" },
   { source: "Instagram", percentage: "20%", color: "#F472B6", icon: "simple-icons:instagram" },
 ]
 
 // Admin dashboard data
-export const SIDEBAR_NAV_LINKS = [
+export const SIDEBAR_NAV_LINKS: { label: string, url: string, icon: string }[] = [
   { label: "Profile", url: "/admin/profile", icon: "mdi:home-outline" },
   { label: "Preferences", url: "/admin/preferences", icon: "mdi:cog-outline" },
   { label: "Analytics", url: "/admin/analytics", icon: "mdi:chart-bell-curve-cumulative" },
 ]
 
-export const APPEARANCE_TABS = [
+export const APPEARANCE_TABS: { label: string, value: string }[] = [
   { label: "Background", value: "background" },
   { label: "Layout", value: "layout" },
   { label: "Links", value: "links" },
@@ -95,16 +95,16 @@ export const DEFAULT_PREFERENCES: UserPreferences = {
 }
 
 // Profile item type options
-export const ITEM_TYPES = [
-  { type: "LINK" as ProfileItemType, label: "Link", icon: "mdi:link-variant" },
-  { type: "ICON" as ProfileItemType, label: "Social Icon", icon: "mdi:star-outline" },
-  { type: "WIDGET" as ProfileItemType, label: "Widget", icon: "mdi:shape-outline" },
-  { type: "DIVIDER" as ProfileItemType, label: "Divider", icon: "mdi:minus" },
-  { type: "PHOTO_GRID" as ProfileItemType, label: "Photo Grid", icon: "mdi:image-multiple-outline" },
+export const ITEM_TYPES: { type: ProfileItemType, label: string, icon: string }[] = [
+  { type: "LINK", label: "Link", icon: "mdi:link-variant" },
+  { type: "ICON", label: "Social Icon", icon: "mdi:star-outline" },
+  { type: "WIDGET", label: "Widget", icon: "mdi:shape-outline" },
+  { type: "DIVIDER", label: "Divider", icon: "mdi:minus" },
+  { type: "PHOTO_GRID", label: "Photo Grid", icon: "mdi:image-multiple-outline" },
 ]
 
 // Supported platform options for social icons
-export const SOCIAL_ICONS = {
+export const SOCIAL_ICONS: Record<string, string> = {
   "Airbnb": "simple-icons:airbnb",
   "Amazon": "simple-icons:amazon",
   "App Store": "simple-icons:appstore",
@@ -153,7 +153,7 @@ export const SOCIAL_ICONS = {
   "X": "simple-icons:x",
   "Yelp": "simple-icons:yelp",
   "Youtube": "simple-icons:youtube",
-} as const
+}
 
 export const WIDGET_OPTIONS: { type: WidgetType, label: string, icon: string }[] = [
   { type: "GITHUB", label: "GitHub", icon: "simple-icons:github" },
@@ -179,10 +179,10 @@ export const WIDGET_META: Record<WidgetType, { label: string, placeholder: strin
   SPOTIFY: { label: "Spotify Link", placeholder: "e.g. https://open.spotify.com/track/...", hint: "Paste a Spotify URL for a track, album, playlist, episode, or podcast." },
 }
 
-export const SCHEDULE_ACTION_OPTIONS = [
+export const SCHEDULE_ACTION_OPTIONS: { value: ScheduleAction, label: string, icon: string }[] = [
   { value: "HIDE", label: "Hide", icon: "mdi:eye-off-outline" },
   { value: "DELETE", label: "Delete", icon: "mdi:trash-can-outline" },
-] as const
+]
 
 // REST method label styles for API documentation display
 export const REST_METHOD_LABELS: Record<string, string> = {
@@ -193,24 +193,24 @@ export const REST_METHOD_LABELS: Record<string, string> = {
 }
 
 // OAuth providers
-export const OAUTH_PROVIDERS = [
+export const OAUTH_PROVIDERS: { name: string, label: string, icon: string }[] = [
   { name: "google", label: "Sign In With Google", icon: "simple-icons:google" },
   { name: "github", label: "Sign In With GitHub", icon: "simple-icons:github" },
 ]
 
 // Brand assets
-export const SYMBOLS = [
+export const SYMBOLS: { name: string, image: any, bgClass: string }[] = [
   { name: "Symbol", image: Symbol, bgClass: "bg-neutral-100" },
   { name: "Symbol Mono (dark)", image: SymbolMonoDark, bgClass: "bg-neutral-100" },
   { name: "Symbol Mono (light)", image: SymbolMonoLight, bgClass: "bg-neutral-900" },
 ]
 
-export const WORDMARKS = [
+export const WORDMARKS: { name: string, image: any, bgClass: string }[] = [
   { name: "Wordmark (dark)", image: WordmarkDark, bgClass: "bg-neutral-100" },
   { name: "Wordmark (light)", image: WordmarkLight, bgClass: "bg-neutral-900" },
 ]
 
-export const NEUTRAL_SCALE = [
+export const NEUTRAL_SCALE: { name: string, var: string, value: string }[] = [
   { name: "Neutral/100", var: "--neutral-100", value: "#f9fafb" },
   { name: "Neutral/200", var: "--neutral-200", value: "#f3f4f6" },
   { name: "Neutral/300", var: "--neutral-300", value: "#e5e7eb" },
@@ -222,12 +222,12 @@ export const NEUTRAL_SCALE = [
   { name: "Neutral/900", var: "--neutral-900", value: "#030712" },
 ]
 
-export const BRAND_COLORS = [
+export const BRAND_COLORS: { name: string, var: string, value: string }[] = [
   { name: "Primary", var: "--brand-primary", value: "#4b3b92" },
   { name: "Secondary", var: "--brand-secondary", value: "#82923b" },
 ]
 
-export const STATUS_COLORS = [
+export const STATUS_COLORS: { name: string, darkVar: string, darkVal: string, lightVar: string, lightVal: string }[] = [
   { name: "Danger", darkVar: "--red-dark", darkVal: "#811919", lightVar: "--red-light", lightVal: "#c12525" },
   { name: "Success", darkVar: "--green-dark", darkVal: "#005e3b", lightVar: "--green-light", lightVal: "#008c59" },
   { name: "Warning", darkVar: "--orange-dark", darkVal: "#ae5f05", lightVar: "--orange-light", lightVal: "#f88e13" },

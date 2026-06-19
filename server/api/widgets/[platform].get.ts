@@ -53,7 +53,7 @@ export default defineEventHandler(async (event) => {
         return { data: cached }
       }
 
-      const [userRes, reposRes] = await Promise.allSettled<any>([
+      const [userRes, reposRes] = await Promise.allSettled([
         $fetch<any>(`https://api.github.com/users/${handle}`, { headers: { Accept: "application/vnd.github+json" } }),
         $fetch<any[]>(`https://api.github.com/users/${handle}/repos`, { headers: { Accept: "application/vnd.github+json" }, query: { sort: "updated", per_page: 6, type: "owner" } }),
       ])
@@ -85,11 +85,9 @@ export default defineEventHandler(async (event) => {
       return { data }
     },
   }
-
-  // Guard clause against unsupported paths
   if (!platform || !(platform in handlers)) {
     throw createError({ status: 400, statusText: `Unsupported platform widget type: '${platform}'` })
   }
 
-  return await handlers[platform]()
+  return await (handlers[platform] as () => Promise<{ data: any }>)()
 })

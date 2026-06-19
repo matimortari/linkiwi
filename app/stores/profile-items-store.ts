@@ -2,7 +2,7 @@ import type { CreateProfileItemInput, UpdateProfileItemInput } from "#shared/sch
 
 export const useProfileItemsStore = defineStore("profile-items", () => {
   const toast = useToast()
-  const items = ref<any[]>([])
+  const items = ref<ProfileItem[]>([])
   const loading = ref(false)
   const widgetLoading = ref<Record<WidgetType, boolean>>({ GITHUB: false, YOUTUBE: false, SPOTIFY: false })
   const widgetError = ref<Record<WidgetType, boolean>>({ GITHUB: false, YOUTUBE: false, SPOTIFY: false })

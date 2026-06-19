@@ -90,14 +90,10 @@ export const BANNER_MESSAGES = {
 } as const
 
 export const BANNER_DESCRIPTIONS = {
-  LGBTQ_RIGHTS:
-    "Join the movement for equality and acceptance. Learn how you can support the community and advocate for change.",
-  ANTI_RACISM:
-    "Challenge racism and promote equity. Discover resources and actions to help build a more inclusive and just society.",
-  MENTAL_HEALTH:
-    "Learn how to access support, raise awareness, and promote mental well-being for yourself and others.",
-  CLIMATE_ACTION:
-    "The planet needs you. Take part in meaningful efforts to combat climate change and support a sustainable future.",
+  LGBTQ_RIGHTS: "Join the movement for equality and acceptance. Learn how you can support the community and advocate for change.",
+  ANTI_RACISM: "Challenge racism and promote equity. Discover resources and actions to help build a more inclusive and just society.",
+  MENTAL_HEALTH: "Learn how to access support, raise awareness, and promote mental well-being for yourself and others.",
+  CLIMATE_ACTION: "The planet needs you. Take part in meaningful efforts to combat climate change and support a sustainable future.",
 } as const
 
 export const BANNER_ICONS = {
@@ -133,4 +129,5 @@ export type FontWeight = (typeof FONT_WEIGHTS)[number]["value"]
 export type LinkFontSize = (typeof LINK_FONT_SIZES)[number]["value"]
 export type ShadowWeight = (typeof SHADOW_WEIGHTS)[number]["value"]
 export type LinkPaddingSize = (typeof LINK_PADDING_SIZES)[number]["value"]
+export type SupportBanner = Exclude<BannerOption, "NONE">
 export type BannerOption = (typeof BANNER_OPTIONS)[number]["value"]

@@ -2,7 +2,7 @@ import type { H3Event } from "h3"
 import type { RedisClientType } from "redis"
 import { createClient } from "redis"
 
-export const CACHE_TTL = { SHORT: 60, LONG: 300 } as const
+export const CACHE_TTL = { SHORT: 60, LONG: 300 }
 let redisClient: RedisClientType | null = null
 let connecting = false
 
@@ -62,7 +62,7 @@ export const CacheKeys = {
   userComments: (userId: string) => `user:comments:${userId}`,
   analytics: (userId: string) => `user:analytics:${userId}`,
   rateLimit: (identifier: string) => `ratelimit:${identifier}`,
-} as const
+}
 
 /**
  * Gets a value from cache and parses it as JSON.

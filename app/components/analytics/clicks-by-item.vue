@@ -10,7 +10,7 @@
     <ul v-else class="grid grid-cols-1 gap-4 md:grid-cols-3">
       <li v-for="item in items" :key="item.id" class="card flex flex-col gap-2">
         <div class="flex flex-row items-center justify-between font-semibold">
-          <icon v-if="item.type === 'icon'" :name="item.logo" :size="30" />
+          <icon v-if="item.type === 'icon' && item.logo" :name="item.logo" :size="30" />
           <span v-else>{{ item.title }}</span>
 
           <span class="text-caption-info text-sm font-medium">{{ clicksMap[item.id] ?? 0 }} clicks</span>
@@ -38,7 +38,7 @@ const items = computed(() => {
         type: "link" as const,
         title: item.link.label,
         url: item.link.url,
-        logo: null,
+        logo: null as string | null,
       }
     }
     if (item.type === "ICON" && item.icon) {
@@ -51,7 +51,7 @@ const items = computed(() => {
       }
     }
     return null
-  }).filter(Boolean)
+  }).filter((item): item is Exclude<typeof item, null> => item !== null)
 })
 
 const clicksMap = computed(() => {
