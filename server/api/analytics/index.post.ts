@@ -30,3 +30,33 @@ export default defineEventHandler(async (event) => {
 
   return { message: "Page view recorded successfully" }
 })
+
+defineRouteMeta({
+  openAPI: {
+    summary: "Record page view",
+    description: "Records a page view for a profile by slug. Self-views are silently ignored. Rate limited by IP.",
+    tags: ["Analytics"],
+    requestBody: {
+      required: true,
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            required: ["slug", "type"],
+            properties: {
+              slug: { type: "string" },
+              type: { type: "string", enum: ["pageView"] },
+              referrer: { type: "string" },
+            },
+          },
+        },
+      },
+    },
+    responses: {
+      200: { description: "Page view recorded, or self-view silently ignored" },
+      400: { description: "Invalid payload" },
+      404: { description: "Profile not found" },
+      429: { description: "Rate limit exceeded" },
+    },
+  },
+})

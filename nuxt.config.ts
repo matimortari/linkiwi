@@ -24,6 +24,14 @@ export default defineNuxtConfig({
     },
   },
   devServer: { host: "0.0.0.0" },
+  nitro: {
+    experimental: {
+      openAPI: true,
+    },
+    openAPI: {
+      production: "prerender",
+    },
+  },
   vite: {
     server: process.env.NUXT_PUBLIC_BASE_URL
       ? {

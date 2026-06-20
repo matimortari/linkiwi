@@ -28,3 +28,32 @@ export default defineEventHandler(async (event) => {
 
   return { message: "Item click recorded successfully", clickId: registeredClick.id }
 })
+
+defineRouteMeta({
+  openAPI: {
+    summary: "Record item click",
+    description: "Records a click on a profile item. Self-clicks are silently ignored. Rate limited by IP.",
+    tags: ["Items"],
+    requestBody: {
+      required: true,
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            required: ["itemId", "type"],
+            properties: {
+              itemId: { type: "string" },
+              type: { type: "string", enum: ["itemClick"] },
+            },
+          },
+        },
+      },
+    },
+    responses: {
+      200: { description: "Click recorded, or self-click silently ignored" },
+      400: { description: "Invalid payload" },
+      404: { description: "Item not found" },
+      429: { description: "Rate limit exceeded" },
+    },
+  },
+})

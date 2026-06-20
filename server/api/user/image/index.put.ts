@@ -27,3 +27,31 @@ export default defineEventHandler(async (event) => {
 
   return { imageUrl }
 })
+
+defineRouteMeta({
+  openAPI: {
+    summary: "Upload user avatar",
+    description: "Replaces the user's avatar. Accepts PNG, JPEG, or WebP up to 2 MB.",
+    tags: ["User"],
+    requestBody: {
+      required: true,
+      content: {
+        "multipart/form-data": {
+          schema: {
+            type: "object",
+            required: ["file"],
+            properties: {
+              file: { type: "string", format: "binary" },
+            },
+          },
+        },
+      },
+    },
+    responses: {
+      200: { description: "Avatar uploaded, returns `imageUrl`" },
+      400: { description: "Missing file, invalid type, or size exceeded" },
+      401: { description: "Unauthenticated" },
+      429: { description: "Rate limit exceeded" },
+    },
+  },
+})

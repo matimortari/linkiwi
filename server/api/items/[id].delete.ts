@@ -20,7 +20,26 @@ export default defineEventHandler(async (event) => {
   await db.profileItem.delete({ where: { id: itemId } })
 
   const user = await db.user.findUnique({ where: { id: sessionUser.id }, select: { slug: true } })
+
   await deleteCached(CacheKeys.userItems(sessionUser.id), CacheKeys.userProfile(user?.slug || ""))
 
   return { success: true, message: `${existingItem.type} component deleted successfully.` }
+})
+
+defineRouteMeta({
+  openAPI: {
+    summary: "Delete profile item",
+    description: "Deletes a profile item and all its nested data.",
+    tags: ["Items"],
+    parameters: [
+      { in: "path", name: "id", required: true, schema: { type: "string" }, description: "Item ID" },
+    ],
+    responses: {
+      200: { description: "Item deleted" },
+      401: { description: "Unauthenticated" },
+      403: { description: "Item belongs to a different user" },
+      404: { description: "Item not found" },
+      429: { description: "Rate limit exceeded" },
+    },
+  },
 })

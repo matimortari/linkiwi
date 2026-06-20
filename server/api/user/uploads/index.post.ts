@@ -34,3 +34,31 @@ export default defineEventHandler(async (event) => {
 
   return { success: true, newAsset }
 })
+
+defineRouteMeta({
+  openAPI: {
+    summary: "Upload asset",
+    description: "Uploads a new media asset. Accepts JPEG, PNG, WebP, or GIF up to 5 MB.",
+    tags: ["User"],
+    requestBody: {
+      required: true,
+      content: {
+        "multipart/form-data": {
+          schema: {
+            type: "object",
+            required: ["file"],
+            properties: {
+              file: { type: "string", format: "binary" },
+            },
+          },
+        },
+      },
+    },
+    responses: {
+      200: { description: "Asset uploaded, returns `newAsset`" },
+      400: { description: "Missing or invalid file" },
+      401: { description: "Unauthenticated" },
+      429: { description: "Rate limit exceeded" },
+    },
+  },
+})

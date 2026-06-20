@@ -52,7 +52,67 @@ export default defineEventHandler(async (event) => {
   })
 
   const user = await db.user.findUnique({ where: { id: sessionUser.id }, select: { slug: true } })
+
   await deleteCached(CacheKeys.userItems(sessionUser.id), CacheKeys.userProfile(user?.slug || ""))
 
   return { newItem }
+})
+
+defineRouteMeta({
+  openAPI: {
+    summary: "Create profile item",
+    description: "Creates a new profile item. Type determines which nested relation is created (LINK, ICON, WIDGET, PHOTO_GRID, DIVIDER). Icons are unique per platform per user.",
+    tags: ["Items"],
+    requestBody: {
+      required: true,
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            required: ["type"],
+            properties: {
+              type: { type: "string", enum: ["LINK", "WIDGET", "ICON", "DIVIDER", "PHOTO_GRID"] },
+              order: { type: "integer" },
+              isPinned: { type: "boolean" },
+              isVisible: { type: "boolean" },
+              scheduledStart: { type: "string", format: "date-time" },
+              scheduledEnd: { type: "string", format: "date-time" },
+              scheduleAction: { type: "string", enum: ["HIDE", "DELETE"] },
+              link: { type: "object", properties: { url: { type: "string" }, label: { type: "string" } } },
+              icon: { type: "object", properties: { url: { type: "string" }, platform: { type: "string" }, logo: { type: "string" } } },
+              widget: { type: "object", properties: { type: { type: "string", enum: ["GITHUB", "YOUTUBE", "SPOTIFY"] }, handle: { type: "string" } } },
+              photoGrid: {
+                type: "object",
+                required: ["photos"],
+                properties: {
+                  photos: {
+                    type: "array",
+                    minItems: 1,
+                    maxItems: 12,
+                    items: {
+                      type: "object",
+                      required: ["url", "order"],
+                      properties: {
+                        assetId: { type: "string", description: "Optional user asset ID" },
+                        url: { type: "string", format: "uri" },
+                        order: { type: "integer", minimum: 0 },
+                        alt: { type: "string", description: "Optional alt text, max 200 characters" },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    responses: {
+      200: { description: "Created item with type-specific nested data" },
+      400: { description: "Validation error" },
+      401: { description: "Unauthenticated" },
+      409: { description: "Icon for this platform already exists" },
+      429: { description: "Rate limit exceeded" },
+    },
+  },
 })
