@@ -48,3 +48,20 @@ export default defineEventHandler(async (event) => {
 
   return { profile }
 })
+
+defineRouteMeta({
+  openAPI: {
+    summary: "Get public profile",
+    description: "Returns a user's public profile by slug, including visible and currently scheduled items. Cached with long TTL. Rate limited by IP.",
+    tags: ["Profiles"],
+    parameters: [
+      { in: "path", name: "slug", required: true, schema: { type: "string" }, description: "User's unique slug" },
+    ],
+    responses: {
+      200: { description: "Public profile with items, preferences, and banner" },
+      400: { description: "Slug is required" },
+      404: { description: "Profile not found" },
+      429: { description: "Rate limit exceeded" },
+    },
+  },
+})

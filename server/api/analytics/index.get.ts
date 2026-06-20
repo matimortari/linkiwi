@@ -31,7 +31,25 @@ export default defineEventHandler(async (event) => {
   ])
 
   const data = { pageViews, itemClicks }
+
   await setCached(cacheKey, data, CACHE_TTL.SHORT)
 
   return { data }
+})
+
+defineRouteMeta({
+  openAPI: {
+    summary: "Get analytics",
+    description: "Returns the authenticated user's page views and item clicks. Supports optional date range filtering.",
+    tags: ["Analytics"],
+    parameters: [
+      { in: "query", name: "dateFrom", schema: { type: "string", format: "date-time" } },
+      { in: "query", name: "dateTo", schema: { type: "string", format: "date-time" } },
+    ],
+    responses: {
+      200: { description: "Page views and item clicks within the given range" },
+      401: { description: "Unauthenticated" },
+      429: { description: "Rate limit exceeded" },
+    },
+  },
 })

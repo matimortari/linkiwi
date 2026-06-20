@@ -43,6 +43,7 @@ export default defineEventHandler(async (event) => {
       }
 
       await setCached(cacheKey, data, 30 * 60)
+
       return { data }
     },
 
@@ -82,6 +83,7 @@ export default defineEventHandler(async (event) => {
       }
 
       await setCached(cacheKey, data, 60 * 60)
+
       return { data }
     },
   }
@@ -90,4 +92,22 @@ export default defineEventHandler(async (event) => {
   }
 
   return await (handlers[platform] as () => Promise<{ data: any }>)()
+})
+
+defineRouteMeta({
+  openAPI: {
+    summary: "Get widget data",
+    description: "Fetches live data for a platform widget. Supported platforms: `github`, `youtube`. Responses are cached (GitHub: 1h, YouTube: 30min).",
+    tags: ["Widgets"],
+    parameters: [
+      { in: "path", name: "platform", required: true, schema: { type: "string", enum: ["github", "youtube"] }, description: "Platform identifier" },
+      { in: "query", name: "handle", required: true, schema: { type: "string" }, description: "Platform username or channel handle" },
+    ],
+    responses: {
+      200: { description: "Platform data (profile info and recent content)" },
+      400: { description: "Missing handle or unsupported platform" },
+      404: { description: "Platform user or channel not found" },
+      429: { description: "Rate limit exceeded" },
+    },
+  },
 })

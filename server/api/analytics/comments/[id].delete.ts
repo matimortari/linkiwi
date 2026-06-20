@@ -19,7 +19,26 @@ export default defineEventHandler(async (event) => {
   await db.comment.delete({ where: { id: commentId } })
 
   const user = await db.user.findUnique({ where: { id: sessionUser.id }, select: { slug: true } })
+
   await deleteCached(CacheKeys.userComments(sessionUser.id), CacheKeys.userProfile(user?.slug || ""))
 
   return { success: true, message: "Comment deleted successfully." }
+})
+
+defineRouteMeta({
+  openAPI: {
+    summary: "Delete comment",
+    description: "Deletes a guestbook comment. Only the profile owner can delete their own comments.",
+    tags: ["Analytics"],
+    parameters: [
+      { in: "path", name: "id", required: true, schema: { type: "string" }, description: "Comment ID" },
+    ],
+    responses: {
+      200: { description: "Comment deleted" },
+      401: { description: "Unauthenticated" },
+      403: { description: "Comment belongs to a different user" },
+      404: { description: "Comment not found" },
+      429: { description: "Rate limit exceeded" },
+    },
+  },
 })

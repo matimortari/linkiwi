@@ -25,3 +25,35 @@ export default defineEventHandler(async (event) => {
 
   return { newComment }
 })
+
+defineRouteMeta({
+  openAPI: {
+    summary: "Post guestbook comment",
+    description: "Posts a comment to a user's guestbook. Requires the target user to have guestbook enabled. Rate limited by IP.",
+    tags: ["Analytics"],
+    requestBody: {
+      required: true,
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            required: ["userId", "name", "message"],
+            properties: {
+              userId: { type: "string" },
+              name: { type: "string" },
+              email: { type: "string", format: "email" },
+              message: { type: "string" },
+            },
+          },
+        },
+      },
+    },
+    responses: {
+      200: { description: "Comment posted" },
+      400: { description: "Validation error" },
+      403: { description: "Guestbook disabled by user" },
+      404: { description: "Target profile not found" },
+      429: { description: "Rate limit exceeded" },
+    },
+  },
+})

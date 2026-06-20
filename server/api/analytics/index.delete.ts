@@ -64,3 +64,22 @@ export default defineEventHandler(async (event) => {
 
   return { success: true, message: `Successfully deleted ${purgedCount} entries.` }
 })
+
+defineRouteMeta({
+  openAPI: {
+    summary: "Delete analytics data",
+    description: "Deletes the user's analytics records. Optionally filter by type and/or date range. Capped at 50,000 rows per operation.",
+    tags: ["Analytics"],
+    parameters: [
+      { in: "query", name: "type", schema: { type: "string", enum: ["pageView", "itemClick"] }, description: "Omit to delete both" },
+      { in: "query", name: "dateFrom", schema: { type: "string", format: "date-time" } },
+      { in: "query", name: "dateTo", schema: { type: "string", format: "date-time" } },
+    ],
+    responses: {
+      200: { description: "Records deleted, returns purge count" },
+      400: { description: "Invalid type parameter" },
+      401: { description: "Unauthenticated" },
+      429: { description: "Rate limit exceeded" },
+    },
+  },
+})
