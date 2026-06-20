@@ -169,6 +169,7 @@ export const useUserStore = defineStore("user", () => {
     }
   }
 
+<<<<<<< Updated upstream
   async function uploadAsset(file: File) {
     loading.value = true
 
@@ -208,6 +209,30 @@ export const useUserStore = defineStore("user", () => {
     }
   }
 
+||||||| Stash base
+  async function updateSupportButton(data: UserSupportButtonInput) {
+    loading.value = true
+
+    try {
+      const res = await $fetch<{ supportButton: UserSupportButton }>("/api/user/support-button", { method: "PUT", body: data, credentials: "include" })
+      if (user.value) {
+        user.value.supportButton = res.supportButton
+      }
+      return res
+    }
+    catch (err: unknown) {
+      const message = getErrorMessage(err, "Failed to update support button")
+      toast.error(message)
+      console.error("updateSupportButton error:", err)
+      throw err
+    }
+    finally {
+      loading.value = false
+    }
+  }
+
+=======
+>>>>>>> Stashed changes
   async function deleteUser() {
     loading.value = true
 
@@ -239,9 +264,16 @@ export const useUserStore = defineStore("user", () => {
     updateUserBanner,
     deleteUserBanner,
     updatePreferences,
+<<<<<<< Updated upstream
     getAssets,
     uploadAsset,
     deleteAsset,
+||||||| Stash base
+    updateBanner,
+    updateSupportButton,
+=======
+    updateBanner,
+>>>>>>> Stashed changes
     deleteUser,
   }
 })

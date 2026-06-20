@@ -20,7 +20,7 @@
         <p :style="slugStyle">
           {{ `@${userProfile.slug}` }}
         </p>
-        <p v-if="userProfile.location" class="flex items-center gap-1" :style="descriptionStyle">
+        <p v-if="userProfile.location" class="flex max-w-sm flex-row items-center gap-1 truncate text-sm/4 whitespace-break-spaces" :style="descriptionStyle">
           <icon name="mdi:map-marker" size="15" />
           <span>{{ userProfile.location }}</span>
         </p>
@@ -64,7 +64,6 @@ const analyticsStore = useAnalyticsStore()
 const { userProfile, loading } = storeToRefs(userStore)
 const profilePreferences = computed(() => userProfile.value?.preferences ?? DEFAULT_PREFERENCES)
 const { backgroundStyle, profilePictureStyle, slugStyle, descriptionStyle, dividerStyle } = useDynamicStyles(profilePreferences)
-
 const visibleIcons = computed(() => (userProfile.value?.items ?? []).filter(i => i.type === "ICON" && i.isVisible !== false))
 const visibleItems = computed(() => (userProfile.value?.items ?? []).filter(i => i.type !== "ICON" && i.isVisible !== false).sort((a, b) => {
   if (a.isPinned !== b.isPinned) {
