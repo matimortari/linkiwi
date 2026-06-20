@@ -15,13 +15,6 @@
     >
       <slot />
     </main>
-
-    <aside
-      class="fixed right-0 my-8 flex w-90 flex-col xl:right-8 xl:translate-x-0" :class="isTocOpen ? 'translate-x-0' : 'translate-x-full'"
-      :style="{ top: 'var(--masthead-height, 64px)', bottom: `${footerBottom}px` }"
-    >
-      <TableOfContents :headers="headers" :is-open="isTocOpen" :header-classes="headerClasses" />
-    </aside>
   </div>
 
   <div ref="footerRef">
@@ -30,11 +23,6 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
-  parseMethod?: boolean
-}>()
-
-const { headers, headerClasses } = useContent({ selector: ".prose", parseMethod: props.parseMethod })
 const isTocOpen = ref(false)
 const footerRef = ref<HTMLElement | null>(null)
 const footerBottom = ref(0)
