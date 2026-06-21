@@ -35,7 +35,7 @@
       </div>
 
       <aside class="auth-aside" aria-hidden="true">
-        <img src="/assets/sign-in-image.png" alt="Sign In Background" class="size-full object-cover">
+        <img src="/assets/sign-in-backdrop.png" alt="Sign In Background" class="size-full object-cover">
       </aside>
     </div>
   </section>
