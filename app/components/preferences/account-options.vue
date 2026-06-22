@@ -288,6 +288,7 @@
 const { createActionHandler } = useActionIcon()
 const { clear } = useUserSession()
 const userStore = useUserStore()
+const analyticsStore = useAnalyticsStore()
 const { user, preferences } = storeToRefs(userStore)
 const comments = computed(() => user.value?.comments ?? [])
 const guestbookEnabled = ref(preferences.value?.enableGuestbook ?? false)
@@ -399,4 +400,6 @@ watch(() => preferences.value, (p) => {
   }
   guestbookEnabled.value = p.enableGuestbook ?? false
 }, { deep: true })
+
+onMounted(async () => await analyticsStore.getComments())
 </script>

@@ -10,7 +10,9 @@ export default defineEventHandler(async (event) => {
   const dateFilter = (dateFrom || dateTo) ? { createdAt: { ...(dateFrom && { gte: dateFrom }), ...(dateTo && { lte: dateTo }) } } : {}
 
   // Dynamic cache key that changes when date ranges are applied
-  const cacheKey = `analytics:overview:${sessionUser.id}:${query.dateFrom || "all"}:${query.dateTo || "all"}`
+  const cacheKeySuffix = dateFrom || dateTo ? `:${dateFrom?.toISOString() ?? ""}:${dateTo?.toISOString() ?? ""}` : ""
+  const cacheKey = `${CacheKeys.analytics(sessionUser.id)}${cacheKeySuffix}`
+
   const cached = await getCached<any>(cacheKey)
   if (cached) {
     return { data: cached }
