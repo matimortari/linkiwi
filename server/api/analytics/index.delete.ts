@@ -60,7 +60,7 @@ export default defineEventHandler(async (event) => {
 
   const user = await db.user.findUnique({ where: { id: sessionUser.id }, select: { slug: true } })
 
-  await deleteCached(`analytics:overview:${sessionUser.id}:${query.dateFrom || "all"}:${query.dateTo || "all"}`, CacheKeys.analytics(sessionUser.id), CacheKeys.userProfile(user?.slug || ""))
+  await deleteCached(CacheKeys.analytics(sessionUser.id), CacheKeys.userProfile(user?.slug || ""))
 
   return { success: true, message: `Successfully deleted ${purgedCount} entries.` }
 })

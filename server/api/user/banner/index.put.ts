@@ -19,15 +19,20 @@ export default defineEventHandler(async (event) => {
     }
   }
 
+  // Find the existing banner to check if it's being replaced by a different asset
+  const existingBanner = await db.userBanner.findUnique({ where: { userId: sessionUser.id }, select: { assetId: true } })
   const banner = await db.userBanner.upsert({
     where: { userId: sessionUser.id },
     create: { userId: sessionUser.id, url: result.data.url, assetId: result.data.assetId },
     update: { url: result.data.url, assetId: result.data.assetId },
   })
+  if (existingBanner?.assetId && existingBanner.assetId !== result.data.assetId) {
+    await db.userAsset.delete({ where: { id: existingBanner.assetId } }).catch(() => {})
+  }
 
   const user = await db.user.findUnique({ where: { id: sessionUser.id }, select: { slug: true } })
 
-  await Promise.all([deleteCached(CacheKeys.userProfile(user?.slug || "")), deleteCached(CacheKeys.userData(sessionUser.id))])
+  await Promise.all([deleteCached(CacheKeys.userProfile(user?.slug || "")), deleteCached(CacheKeys.userData(sessionUser.id)), deleteCached(CacheKeys.userAssets(sessionUser.id))])
 
   return { banner }
 })
