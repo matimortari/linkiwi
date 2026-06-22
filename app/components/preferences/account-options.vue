@@ -31,7 +31,6 @@
         </div>
       </div>
 
-<<<<<<< Updated upstream
       <div v-if="bannerPreview" class="overflow-hidden rounded-lg">
         <img :src="bannerPreview" alt="Banner preview" class="h-28 w-full object-cover">
       </div>
@@ -41,184 +40,6 @@
         <button v-if="bannerFile" class="btn-primary text-sm" @click="handleUploadBanner">
           <icon name="mdi:content-save-check" size="20" />
           <span>Save</span>
-||||||| Stash base
-      <PreferencesAssetManager />
-
-      <!-- Support Button -->
-      <div class="card flex flex-col gap-3">
-        <h4>
-          Support Button
-        </h4>
-        <p class="text-caption">
-          Let visitors support you via Ko-fi, Buy Me a Coffee, Pix, or a custom link.
-        </p>
-
-        <PreferencesCheckbox id="supportEnabled" v-model:value="supportForm.isEnabled" label="Enable support button" class="max-w-xs" />
-
-        <template v-if="supportForm.isEnabled">
-          <div class="flex flex-col gap-2">
-            <label class="text-sm font-medium">Platform</label>
-            <div class="flex flex-row flex-wrap gap-2">
-              <button
-                v-for="opt in SUPPORT_PLATFORM_OPTIONS" :key="opt.value"
-                class="card navigation-group p-2! hover:bg-muted!" :class="{ 'bg-muted!': supportForm.platform === opt.value }"
-                @click="supportForm.platform = opt.value"
-              >
-                <icon :name="opt.icon" size="20" />
-                <span class="text-sm">{{ opt.label }}</span>
-              </button>
-            </div>
-          </div>
-
-          <div class="flex flex-col gap-1">
-            <label for="supportUrl" class="text-sm font-medium">URL</label>
-            <input id="supportUrl" v-model="supportForm.url" type="url" placeholder="https://ko-fi.com/yourname">
-          </div>
-
-          <div class="flex flex-col gap-1">
-            <label for="thankYou" class="text-sm font-medium">
-              Thank You Message <span class="text-muted-foreground">(optional)</span>
-            </label>
-            <input
-              id="thankYou" v-model="supportForm.thankYouMessage"
-              type="text" maxlength="500"
-              placeholder="Thank you for your support!"
-            >
-          </div>
-
-          <div class="flex flex-col gap-1">
-            <label class="text-sm font-medium">
-              Suggested Amounts <span class="text-muted-foreground">(optional, max 5)</span>
-            </label>
-            <div class="flex flex-wrap gap-2">
-              <!-- Fixed: iterate by index, not value -->
-              <div v-for="(_, i) in supportForm.suggestedAmounts" :key="i" class="navigation-group rounded-lg border px-2 py-1">
-                <span class="text-sm">$</span>
-                <input v-model.number="supportForm.suggestedAmounts[i]" type="number" min="1" class="w-14 border-none bg-transparent p-0 text-sm focus:ring-0">
-                <button class="btn-ghost p-0.5!" @click="supportForm.suggestedAmounts.splice(i, 1)">
-                  <icon name="mdi:close" size="14" class="text-muted-foreground" />
-                </button>
-              </div>
-              <button v-if="supportForm.suggestedAmounts.length < 5" class="btn-ghost text-sm" @click="supportForm.suggestedAmounts.push(5)">
-                <icon name="mdi:plus" size="20" />
-                Add
-              </button>
-            </div>
-          </div>
-        </template>
-
-        <div class="flex justify-end">
-          <button class="btn-primary" :disabled="supportLoading" @click="handleSaveSupport">
-            <icon :name="supportAction.icon.value" size="20" />
-            <span>Save</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Guestbook -->
-      <div class="card flex flex-col gap-2">
-        <h4>Guestbook</h4>
-        <p class="text-caption">
-          Allow visitors to leave comments on your profile page.
-        </p>
-
-        <div class="flex items-center justify-between gap-2">
-          <PreferencesCheckbox id="enableGuestbook" v-model:value="guestbookEnabled" label="Enable Guestbook" class="max-w-xs" />
-          <button class="btn-primary" @click="handleSaveGuestbook">
-            <icon :name="guestbookAction.icon.value" size="20" />
-            <span>Save</span>
-          </button>
-        </div>
-
-        <div v-if="guestbookEnabled" class="card flex flex-col gap-2">
-          <h5>Comments</h5>
-          <p v-if="!comments.length" class="text-caption">
-            No comments yet.
-          </p>
-          <div v-else class="scroll-area flex max-h-64 flex-col gap-2 overflow-y-auto pr-1">
-            <div v-for="comment in comments" :key="comment.id" class="card flex flex-col">
-              <div class="flex justify-between">
-                <div class="flex items-center gap-1">
-                  <p class="font-semibold">
-                    {{ comment.name }}
-                  </p>
-                  <span v-if="comment.email" class="text-xs text-muted-foreground">({{ comment.email }})</span>
-                </div>
-                <span class="text-caption">{{ formatDate(new Date(comment.createdAt)) }}</span>
-              </div>
-              <p class="text-sm text-muted-foreground">
-                {{ comment.message }}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card flex flex-col gap-2">
-        <h4>
-          Delete Account
-        </h4>
-        <p class="text-caption-danger">
-          This action is irreversible. All data will be lost.
-        </p>
-
-        <button class="btn-danger md:self-end" @click="handleDeleteUser">
-          <icon name="mdi:user-remove" size="20" />
-          <span>Delete Account</span>
-=======
-      <PreferencesAssetManager />
-
-      <!-- Guestbook -->
-      <div class="card flex flex-col gap-2">
-        <h4>Guestbook</h4>
-        <p class="text-caption">
-          Allow visitors to leave comments on your profile page.
-        </p>
-
-        <div class="flex items-center justify-between gap-2">
-          <PreferencesCheckbox id="enableGuestbook" v-model:value="guestbookEnabled" label="Enable Guestbook" class="max-w-xs" />
-          <button class="btn-primary" @click="handleSaveGuestbook">
-            <icon :name="guestbookAction.icon.value" size="20" />
-            <span>Save</span>
-          </button>
-        </div>
-
-        <div v-if="guestbookEnabled" class="card flex flex-col gap-2">
-          <h5>Comments</h5>
-          <p v-if="!comments.length" class="text-caption">
-            No comments yet.
-          </p>
-          <div v-else class="scroll-area flex max-h-64 flex-col gap-2 overflow-y-auto pr-1">
-            <div v-for="comment in comments" :key="comment.id" class="card flex flex-col">
-              <div class="flex justify-between">
-                <div class="flex items-center gap-1">
-                  <p class="font-semibold">
-                    {{ comment.name }}
-                  </p>
-                  <span v-if="comment.email" class="text-xs text-muted-foreground">({{ comment.email }})</span>
-                </div>
-                <span class="text-caption">{{ formatDate(new Date(comment.createdAt)) }}</span>
-              </div>
-              <p class="text-sm text-muted-foreground">
-                {{ comment.message }}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card flex flex-col gap-2">
-        <h4>
-          Delete Account
-        </h4>
-        <p class="text-caption-danger">
-          This action is irreversible. All data will be lost.
-        </p>
-
-        <button class="btn-danger md:self-end" @click="handleDeleteUser">
-          <icon name="mdi:user-remove" size="20" />
-          <span>Delete Account</span>
->>>>>>> Stashed changes
         </button>
       </div>
     </div>
@@ -249,14 +70,19 @@
         </p>
         <div v-else class="scroll-area flex max-h-56 flex-col gap-2 overflow-y-auto pr-1">
           <div v-for="comment in comments" :key="comment.id" class="rounded-lg border bg-card p-3">
-            <div class="flex justify-between">
-              <div class="navigation-group">
+            <div class="flex items-start justify-between gap-2">
+              <div class="navigation-group min-w-0">
                 <p class="text-sm font-semibold">
                   {{ comment.name }}
                 </p>
                 <span v-if="comment.email" class="text-xs text-muted-foreground">({{ comment.email }})</span>
               </div>
-              <span class="text-caption text-xs">{{ formatDate(new Date(comment.createdAt)) }}</span>
+              <div class="navigation-group shrink-0">
+                <span class="text-caption text-xs">{{ formatDate(new Date(comment.createdAt)) }}</span>
+                <button class="btn-ghost p-0!" aria-label="Delete comment" @click="handleDeleteComment(comment.id)">
+                  <icon name="mdi:delete-outline" size="15" />
+                </button>
+              </div>
             </div>
             <p class="mt-1 text-sm text-muted-foreground">
               {{ comment.message }}
@@ -290,7 +116,7 @@ const { clear } = useUserSession()
 const userStore = useUserStore()
 const analyticsStore = useAnalyticsStore()
 const { user, preferences } = storeToRefs(userStore)
-const comments = computed(() => user.value?.comments ?? [])
+const { comments } = storeToRefs(analyticsStore)
 const guestbookEnabled = ref(preferences.value?.enableGuestbook ?? false)
 const guestbookAction = createActionHandler("mdi:content-save-check")
 const bannerInput = ref<HTMLInputElement | null>(null)
@@ -340,40 +166,20 @@ async function handleRemoveBanner() {
 
   await userStore.deleteUserBanner()
   bannerPreview.value = null
-<<<<<<< Updated upstream
-||||||| Stash base
   bannerFile.value = null
-}
-
-const supportLoading = ref(false)
-const supportAction = createActionHandler("mdi:content-save-check")
-const supportForm = ref({
-  isEnabled: user.value?.supportButton?.isEnabled ?? false,
-  platform: user.value?.supportButton?.platform ?? "CUSTOM" as const,
-  url: user.value?.supportButton?.url ?? "",
-  thankYouMessage: user.value?.supportButton?.thankYouMessage ?? "",
-  suggestedAmounts: [...(user.value?.supportButton?.suggestedAmounts ?? [])],
-})
-
-async function handleSaveSupport() {
-  supportLoading.value = true
-  try {
-    await userStore.updateSupportButton(supportForm.value)
-    supportAction.triggerSuccess()
-  }
-  finally {
-    supportLoading.value = false
-  }
-}
-
-=======
-  bannerFile.value = null
->>>>>>> Stashed changes
 }
 
 async function handleSaveGuestbook() {
   await userStore.updatePreferences({ enableGuestbook: guestbookEnabled.value })
   guestbookAction.triggerSuccess()
+}
+
+async function handleDeleteComment(id: string) {
+  if (!confirm("Delete this comment?")) {
+    return
+  }
+
+  await analyticsStore.deleteComment(id)
 }
 
 async function handleDeleteUser() {

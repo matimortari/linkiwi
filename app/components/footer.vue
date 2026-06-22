@@ -63,7 +63,6 @@ const FOOTER_SECTIONS = computed(() => [
   {
     title: "Resources",
     links: [
-      { label: "API Reference", href: "/api-spec" },
       { label: "Brand Assets", href: "/brand" },
       { label: "Privacy Policy", href: "/legal/privacy" },
       { label: "Terms of Service", href: "/legal/terms" },

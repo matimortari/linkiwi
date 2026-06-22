@@ -20,9 +20,7 @@
         <div class="flex gap-2">
           <button
             v-for="opt in SCHEDULE_ACTION_OPTIONS" :key="opt.value"
-            type="button"
-            class="card navigation-group p-2! hover:bg-muted!"
-            :class="{ 'bg-muted!': form.scheduleAction === opt.value }"
+            class="card navigation-group p-2! hover:bg-muted!" :class="{ 'bg-muted!': form.scheduleAction === opt.value }"
             @click="form.scheduleAction = opt.value"
           >
             <icon :name="opt.icon" size="18" />

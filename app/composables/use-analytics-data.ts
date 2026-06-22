@@ -3,7 +3,7 @@ export function useAnalyticsData() {
   const userStore = useUserStore()
 
   // Helper function to bucket records by calendar date
-  function groupByDate<T extends Record<string, any>>(items: T[], dateKey: keyof T & string = "createdAt"): Record<string, number> {
+  function groupByDate<T extends Record<string, any>>(items: T[], dateKey: string): Record<string, number> {
     const result: Record<string, number> = {}
     for (const item of items) {
       const raw = item[dateKey]

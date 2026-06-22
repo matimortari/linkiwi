@@ -29,13 +29,7 @@ const uiState = reactive<UIState>({
 })
 
 export function useUIState() {
-<<<<<<< Updated upstream
   const openDialog = (type: "user" | "share" | "item" | "link" | "icon" | "photoGrid" | "widget", payload?: { item?: ProfileItem | null, activeType?: ProfileItemType | null }) => {
-||||||| Stash base
-  const openDialog = (type: "user" | "share" | "supportButton" | "item" | "link" | "icon" | "photoGrid", payload?: { item?: ProfileItem | null, activeType?: ProfileItemType | null }) => {
-=======
-  const openDialog = (type: "user" | "share" | "item" | "link" | "icon" | "photoGrid", payload?: { item?: ProfileItem | null, activeType?: ProfileItemType | null }) => {
->>>>>>> Stashed changes
     if (type === "item") {
       uiState.dialogs.item.isOpen = true
       uiState.dialogs.item.selectedItem = payload?.item ?? null
@@ -73,13 +67,7 @@ export function useUIState() {
     }
   }
 
-<<<<<<< Updated upstream
   const closeDialog = (type: "user" | "share" | "item" | "link" | "icon" | "photoGrid" | "widget") => {
-||||||| Stash base
-  const closeDialog = (type: "user" | "share" | "supportButton" | "item" | "link" | "icon" | "photoGrid") => {
-=======
-  const closeDialog = (type: "user" | "share" | "item" | "link" | "icon" | "photoGrid") => {
->>>>>>> Stashed changes
     if (type === "item") {
       uiState.dialogs.item.isOpen = false
       uiState.dialogs.item.selectedItem = null
