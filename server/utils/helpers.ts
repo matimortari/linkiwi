@@ -31,17 +31,16 @@ export async function getUserFromSession(event: H3Event<EventHandlerRequest>): P
  * Generates a unique slug based on the provided base string.
  */
 export async function generateSlug(base: string = ""): Promise<string> {
-  const cleaned = base.normalize("NFKD").replace(/[\u0300-\u036F]/g, "").toLowerCase().replace(/[^\w-]/g, "").replace(/[-\s]+/g, "-").replace(/^-+|-+$/g, "")
+  const cleaned = base.normalize("NFKD").replace(/[\u0300-\u036F]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+/, "").replace(/-+$/, "")
   for (let attempt = 0; attempt < 10; attempt++) {
-    const suffix = crypto.randomUUID().slice(0, 6)
-    const slug = cleaned ? `${cleaned}-${suffix}` : suffix
+    const slug = attempt === 0 ? cleaned : `${cleaned}-${crypto.randomUUID().slice(0, 6)}`
     const exists = await db.user.findUnique({ where: { slug }, select: { id: true } })
     if (!exists) {
       return slug
     }
   }
 
-  return crypto.randomUUID().replace(/-/g, "").slice(0, 12)
+  return crypto.randomUUID().replaceAll("-", "").slice(0, 12)
 }
 
 /**

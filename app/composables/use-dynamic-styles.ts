@@ -28,9 +28,7 @@ export function useDynamicStyles(preferences: UserPreferences | null | Ref<UserP
     fontFamily: pref.value?.headerFontFamily,
   }))
 
-  const widgetTextStyle = computed(() => ({
-    color: pref.value?.headerTextColor,
-  }))
+  const widgetTextStyle = computed(() => ({ color: pref.value?.headerTextColor }))
 
   function iconStyle(isHovered?: boolean) {
     if (!pref.value) {
@@ -50,11 +48,7 @@ export function useDynamicStyles(preferences: UserPreferences | null | Ref<UserP
     }
   }
 
-  const iconInnerStyle = computed(() => {
-    if (pref.value) {
-      return { color: pref.value.iconLogoColor }
-    }
-  })
+  const iconInnerStyle = computed(() => pref.value ? { color: pref.value.iconLogoColor } : {})
 
   function linkStyle(isHovered?: boolean) {
     if (!pref.value) {
@@ -76,11 +70,7 @@ export function useDynamicStyles(preferences: UserPreferences | null | Ref<UserP
     }
   }
 
-  const linkInnerStyle = computed(() => {
-    if (pref.value) {
-      return { color: pref.value.linkTextColor, fontWeight: pref.value.linkTextWeight, fontFamily: pref.value.linkFontFamily, fontSize: pref.value.linkTextSize }
-    }
-  })
+  const linkInnerStyle = computed(() => pref.value ? { color: pref.value.linkTextColor, fontWeight: pref.value.linkTextWeight, fontFamily: pref.value.linkFontFamily, fontSize: pref.value.linkTextSize } : {})
 
   const dividerStyle = computed(() => {
     if (!pref.value) {

@@ -117,8 +117,6 @@ export const BANNER_LINKS = {
   CLIMATE_ACTION: "https://www.nrdc.org",
 } as const
 
-export type SocialPlatform = keyof typeof SOCIAL_ICONS
-export type SocialIconValue = (typeof SOCIAL_ICONS)[SocialPlatform]
 export type RadiusSize = (typeof RADIUS_SIZES)[number]["value"]
 export type BackgroundOption = (typeof BACKGROUND_TYPES)[number]["value"]
 export type BorderWidth = (typeof BORDER_WIDTHS)[number]["value"]

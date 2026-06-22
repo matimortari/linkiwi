@@ -2,8 +2,8 @@
   <div v-if="type === 'SPOTIFY' && spotifyEmbedUrl" class="w-full overflow-hidden rounded-xl" :style="linkStyle()">
     <iframe
       :src="spotifyEmbedUrl" width="100%"
-      height="152" frameborder="0"
-      loading="lazy" style="border-radius: 12px"
+      height="152" loading="lazy"
+      style="border-radius: 12px"
       allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
     />
   </div>

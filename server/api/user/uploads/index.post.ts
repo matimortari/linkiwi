@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
 
   const form = await readMultipartFormData(event)
   const fileField = form?.find(part => part.name === "file")
-  if (!fileField || !fileField.data) {
+  if (!fileField?.data) {
     throw createError({ status: 400, statusText: "No image file provided for upload" })
   }
 

@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ChartData, ChartOptions, InteractionModeMap } from "chart.js"
+import type { ChartData, ChartOptions } from "chart.js"
 import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from "chart.js"
 import { Bar } from "vue-chartjs"
 
@@ -18,7 +18,7 @@ ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 const chartOptions: ChartOptions<"bar"> = {
   responsive: true,
   maintainAspectRatio: false,
-  interaction: { intersect: false, mode: "index" as keyof InteractionModeMap },
+  interaction: { intersect: false, mode: "index" },
   plugins: {
     legend: { display: false },
     tooltip: {
