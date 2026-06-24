@@ -11,7 +11,6 @@ export default defineEventHandler(async (event) => {
   if (!result.success) {
     throw createError({ status: 400, statusText: result.error.issues[0]?.message || "Invalid input" })
   }
-
   if (result.data.assetId) {
     const asset = await db.userAsset.findUnique({ where: { id: result.data.assetId }, select: { userId: true } })
     if (!asset || asset.userId !== sessionUser.id) {
@@ -27,7 +26,15 @@ export default defineEventHandler(async (event) => {
     update: { url: result.data.url, assetId: result.data.assetId },
   })
   if (existingBanner?.assetId && existingBanner.assetId !== result.data.assetId) {
-    await db.userAsset.delete({ where: { id: existingBanner.assetId } }).catch(() => {})
+    const assetId = existingBanner.assetId
+    const [photoCount, bannerCount] = await Promise.all([db.photoGridItem.count({ where: { assetId } }), db.userBanner.count({ where: { assetId } })])
+    if (photoCount === 0 && bannerCount === 0) {
+      const asset = await db.userAsset.findUnique({ where: { id: assetId }, select: { url: true } })
+      if (asset) {
+        await deleteFile(asset.url).catch(() => {})
+        await db.userAsset.delete({ where: { id: assetId } }).catch(() => {})
+      }
+    }
   }
 
   const user = await db.user.findUnique({ where: { id: sessionUser.id }, select: { slug: true } })
