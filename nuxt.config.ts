@@ -27,9 +27,13 @@ export default defineNuxtConfig({
   nitro: {
     experimental: {
       openAPI: true,
+      tasks: true,
     },
     openAPI: {
       production: "prerender",
+    },
+    scheduledTasks: {
+      "*/15 * * * *": ["items:scheduled-delete"],
     },
   },
   vite: {
