@@ -185,7 +185,7 @@ interface UIState {
     }
     photoGrid: {
       isOpen: boolean
-      selectedPhotos: PhotoGridItem[] | null
+      selectedPhotoGrid: ProfileItem | null
     }
     widget: {
       isOpen: boolean

@@ -12,7 +12,7 @@
       <icon :name="props.item?.isVisible ? 'mdi:eye-outline' : 'mdi:eye-off-outline'" size="20" class="text-muted-foreground" />
     </button>
 
-    <button v-if="props.showEdit !== false" aria-label="Edit" class="btn-ghost p-0!" @click="emit('edit')">
+    <button v-if="props.showEdit" aria-label="Edit" class="btn-ghost p-0!" @click="emit('edit')">
       <icon name="mdi:circle-edit-outline" size="20" class="text-caption-info" />
     </button>
 
@@ -23,12 +23,15 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   item?: ProfileItem
   isScheduled?: boolean
   showEdit?: boolean
   showSchedule?: boolean
-}>()
+}>(), {
+  showEdit: true,
+  showSchedule: false,
+})
 
 const emit = defineEmits<{
   toggle: []

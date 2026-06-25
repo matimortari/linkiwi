@@ -55,6 +55,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
 
   async function deleteAnalytics(options?: { type?: "pageView" | "itemClick", dateFrom?: string, dateTo?: string }) {
     loading.value = true
+    
     try {
       const query: Record<string, string> = {}
       if (options?.type) {

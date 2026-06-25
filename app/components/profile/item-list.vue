@@ -219,17 +219,15 @@ async function handlePickType(type: ProfileItemType) {
 
 function handleEdit(item: ProfileItem) {
   if (item.type === "LINK") {
-    uiState.dialogs.link.selectedLink = item
-    openDialog("link")
+    openDialog("link", { item })
     return
   }
   if (item.type === "WIDGET") {
-    uiState.dialogs.widget.selectedWidget = item
-    openDialog("widget")
+    openDialog("widget", { item })
     return
   }
   if (item.type === "PHOTO_GRID") {
-    openDialog("photoGrid")
+    openDialog("photoGrid", { item })
   }
 }
 
