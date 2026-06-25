@@ -53,8 +53,8 @@ export default defineEventHandler(async (event) => {
 
 defineRouteMeta({
   openAPI: {
-    summary: "Get public profile",
-    description: "Returns a user's public profile by slug, including visible and currently scheduled items. Cached with long TTL. Rate limited by IP.",
+    summary: "Get user public profile",
+    description: "Returns a user's public profile, including visible and currently scheduled items. Cached with long TTL. Rate limited by IP.",
     tags: ["Profiles"],
     parameters: [
       { in: "path", name: "slug", required: true, schema: { type: "string" }, description: "User's unique slug" },

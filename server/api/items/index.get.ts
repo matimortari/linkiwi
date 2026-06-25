@@ -36,11 +36,11 @@ export default defineEventHandler(async (event) => {
 
 defineRouteMeta({
   openAPI: {
-    summary: "List profile items",
-    description: "Returns all profile items for the authenticated user, ordered by position, with click counts.",
+    summary: "Get profile items",
+    description: "Returns all profile items for the current user, ordered by position, with click counts.",
     tags: ["Items"],
     responses: {
-      200: { description: "List of items with type-specific data and clickCount" },
+      200: { description: "User profile items with type-specific data and click counts" },
       401: { description: "Unauthenticated" },
       429: { description: "Rate limit exceeded" },
     },

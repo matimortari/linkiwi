@@ -19,11 +19,11 @@ export default defineEventHandler(async (event) => {
 
 defineRouteMeta({
   openAPI: {
-    summary: "List user assets",
-    description: "Returns all uploaded media assets for the authenticated user.",
+    summary: "Get user assets",
+    description: "Returns the user's uploaded assets.",
     tags: ["User"],
     responses: {
-      200: { description: "List of assets" },
+      200: { description: "User uploaded assets" },
       401: { description: "Unauthenticated" },
       429: { description: "Rate limit exceeded" },
     },

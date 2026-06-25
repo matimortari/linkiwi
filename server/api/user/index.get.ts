@@ -10,10 +10,7 @@ export default defineEventHandler(async (event) => {
     return { user: cached }
   }
 
-  const user = await db.user.findUnique({
-    where: { id: sessionUser.id },
-    include: { preferences: true, banner: { select: { id: true, url: true, asset: true } } },
-  })
+  const user = await db.user.findUnique({ where: { id: sessionUser.id }, include: { preferences: true, banner: true } })
   if (!user) {
     throw createError({ status: 404, statusText: "User not found" })
   }
@@ -29,7 +26,7 @@ defineRouteMeta({
     description: "Returns the authenticated user's profile, preferences, and banner.",
     tags: ["User"],
     responses: {
-      200: { description: "User with preferences and banner" },
+      200: { description: "User details, preferences, and banner" },
       401: { description: "Unauthenticated" },
       404: { description: "User not found" },
       429: { description: "Rate limit exceeded" },

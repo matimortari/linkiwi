@@ -27,14 +27,14 @@ export default defineEventHandler(async (event) => {
 
 defineRouteMeta({
   openAPI: {
-    summary: "Delete comment",
-    description: "Deletes a guestbook comment. Only the profile owner can delete their own comments.",
+    summary: "Delete guestbook comment",
+    description: "Deletes a guestbook comment for the current user.",
     tags: ["Analytics"],
     parameters: [
       { in: "path", name: "id", required: true, schema: { type: "string" }, description: "Comment ID" },
     ],
     responses: {
-      200: { description: "Comment deleted" },
+      200: { description: "Guestbook comment deleted" },
       401: { description: "Unauthenticated" },
       403: { description: "Comment belongs to a different user" },
       404: { description: "Comment not found" },

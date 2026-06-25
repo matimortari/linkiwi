@@ -97,14 +97,14 @@ export default defineEventHandler(async (event) => {
 defineRouteMeta({
   openAPI: {
     summary: "Get widget data",
-    description: "Fetches live data for a platform widget. Supported platforms: `github`, `youtube`. Responses are cached (GitHub: 1h, YouTube: 30min).",
+    description: "Fetches live data for a platform widget.",
     tags: ["Widgets"],
     parameters: [
       { in: "path", name: "platform", required: true, schema: { type: "string", enum: ["github", "youtube"] }, description: "Platform identifier" },
-      { in: "query", name: "handle", required: true, schema: { type: "string" }, description: "Platform username or channel handle" },
+      { in: "query", name: "handle", required: true, schema: { type: "string" }, description: "Handle for the platform user or channel" },
     ],
     responses: {
-      200: { description: "Platform data (profile info and recent content)" },
+      200: { description: "Platform data for widget" },
       400: { description: "Missing handle or unsupported platform" },
       404: { description: "Platform user or channel not found" },
       429: { description: "Rate limit exceeded" },

@@ -41,8 +41,8 @@ export default defineEventHandler(async (event) => {
 
 defineRouteMeta({
   openAPI: {
-    summary: "Get analytics",
-    description: "Returns the authenticated user's page views and item clicks. Supports optional date range filtering.",
+    summary: "Get profile analytics",
+    description: "Returns the current user's page views and item clicks, with optional date range filtering.",
     tags: ["Analytics"],
     parameters: [
       { in: "query", name: "dateFrom", schema: { type: "string", format: "date-time" } },

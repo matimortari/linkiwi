@@ -44,11 +44,11 @@ export default defineEventHandler(async (event) => {
 
 defineRouteMeta({
   openAPI: {
-    summary: "Delete current user",
-    description: "Permanently deletes the account, all associated assets, and clears the session.",
+    summary: "Delete user account",
+    description: "Permanently deletes the user's account, all associated assets, and clears the session.",
     tags: ["User"],
     responses: {
-      200: { description: "Account and assets deleted" },
+      200: { description: "User account and all associated data deleted" },
       401: { description: "Unauthenticated" },
       404: { description: "User not found" },
       429: { description: "Rate limit exceeded" },

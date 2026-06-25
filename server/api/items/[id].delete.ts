@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
 defineRouteMeta({
   openAPI: {
     summary: "Delete profile item",
-    description: "Deletes a profile item and all its nested data.",
+    description: "Deletes a profile item for the current user.",
     tags: ["Items"],
     parameters: [
       { in: "path", name: "id", required: true, schema: { type: "string" }, description: "Item ID" },

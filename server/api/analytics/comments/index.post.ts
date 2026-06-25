@@ -28,8 +28,8 @@ export default defineEventHandler(async (event) => {
 
 defineRouteMeta({
   openAPI: {
-    summary: "Post guestbook comment",
-    description: "Posts a comment to a user's guestbook. Requires the target user to have guestbook enabled. Rate limited by IP.",
+    summary: "Post comment to guestbook",
+    description: "Posts a comment to the current user's guestbook.",
     tags: ["Analytics"],
     requestBody: {
       required: true,
@@ -39,17 +39,17 @@ defineRouteMeta({
             type: "object",
             required: ["userId", "name", "message"],
             properties: {
-              userId: { type: "string" },
-              name: { type: "string" },
-              email: { type: "string", format: "email" },
-              message: { type: "string" },
+              userId: { type: "string", description: "ID of the user to post the comment to" },
+              name: { type: "string", description: "Name of the commenter" },
+              email: { type: "string", format: "email", description: "Email of the commenter" },
+              message: { type: "string", description: "Message of the comment" },
             },
           },
         },
       },
     },
     responses: {
-      200: { description: "Comment posted" },
+      200: { description: "Guestbook comment posted" },
       400: { description: "Validation error" },
       403: { description: "Guestbook disabled by user" },
       404: { description: "Target profile not found" },

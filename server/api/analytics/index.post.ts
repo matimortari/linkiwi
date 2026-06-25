@@ -34,7 +34,7 @@ export default defineEventHandler(async (event) => {
 defineRouteMeta({
   openAPI: {
     summary: "Record page view",
-    description: "Records a page view for a profile by slug. Self-views are silently ignored. Rate limited by IP.",
+    description: "Records a page view for a profile. Self-views are silently ignored.",
     tags: ["Analytics"],
     requestBody: {
       required: true,
@@ -44,9 +44,9 @@ defineRouteMeta({
             type: "object",
             required: ["slug", "type"],
             properties: {
-              slug: { type: "string" },
-              type: { type: "string", enum: ["pageView"] },
-              referrer: { type: "string" },
+              slug: { type: "string", description: "Slug of the profile to record the page view for" },
+              type: { type: "string", enum: ["pageView"], description: "Type of analytics record" },
+              referrer: { type: "string", description: "Referrer URL for the page view" },
             },
           },
         },

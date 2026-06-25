@@ -46,8 +46,8 @@ export default defineEventHandler(async (event) => {
 
 defineRouteMeta({
   openAPI: {
-    summary: "Set profile banner",
-    description: "Creates or replaces the user's profile banner. Can reference an existing user asset via `assetId` or provide a direct URL.",
+    summary: "Set user banner",
+    description: "Creates or replaces the user's banner. Can reference an existing user asset or provide a direct URL.",
     tags: ["User"],
     requestBody: {
       required: true,
@@ -57,15 +57,15 @@ defineRouteMeta({
             type: "object",
             required: ["url"],
             properties: {
-              url: { type: "string", format: "uri" },
-              assetId: { type: "string", description: "Must belong to the authenticated user" },
+              url: { type: "string", format: "uri", description: "Banner URL" },
+              assetId: { type: "string", description: "User asset ID" },
             },
           },
         },
       },
     },
     responses: {
-      200: { description: "Banner set" },
+      200: { description: "User banner set" },
       400: { description: "Validation error" },
       401: { description: "Unauthenticated" },
       403: { description: "Asset belongs to a different user" },

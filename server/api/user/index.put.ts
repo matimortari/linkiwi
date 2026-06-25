@@ -49,8 +49,8 @@ export default defineEventHandler(async (event) => {
 
 defineRouteMeta({
   openAPI: {
-    summary: "Update current user",
-    description: "Updates the user's profile fields. Slug must be unique.",
+    summary: "Update user details",
+    description: "Updates the user's details.",
     tags: ["User"],
     requestBody: {
       required: true,
@@ -59,17 +59,17 @@ defineRouteMeta({
           schema: {
             type: "object",
             properties: {
-              name: { type: "string" },
-              slug: { type: "string" },
-              description: { type: "string" },
-              location: { type: "string" },
+              name: { type: "string", description: "User name" },
+              slug: { type: "string", description: "User username (unique)" },
+              description: { type: "string", description: "User description (optional)" },
+              location: { type: "string", description: "User location (optional)" },
             },
           },
         },
       },
     },
     responses: {
-      200: { description: "Updated user profile" },
+      200: { description: "Updated user details" },
       400: { description: "Validation error" },
       401: { description: "Unauthenticated" },
       409: { description: "Slug already taken" },
