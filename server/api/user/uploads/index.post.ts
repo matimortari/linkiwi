@@ -38,7 +38,7 @@ export default defineEventHandler(async (event) => {
 defineRouteMeta({
   openAPI: {
     summary: "Upload asset",
-    description: "Uploads a new media asset. Accepts JPEG, PNG, WebP, or GIF up to 5 MB.",
+    description: "Uploads a new user asset. Accepts JPEG, PNG, WebP, or GIF formats for up to 5 MB.",
     tags: ["User"],
     requestBody: {
       required: true,
@@ -55,7 +55,7 @@ defineRouteMeta({
       },
     },
     responses: {
-      200: { description: "Asset uploaded, returns `newAsset`" },
+      200: { description: "User asset uploaded, returns" },
       400: { description: "Missing or invalid file" },
       401: { description: "Unauthenticated" },
       429: { description: "Rate limit exceeded" },

@@ -19,11 +19,11 @@ export default defineEventHandler(async (event) => {
 
 defineRouteMeta({
   openAPI: {
-    summary: "List guestbook comments",
-    description: "Returns all guestbook comments for the authenticated user.",
+    summary: "Get guestbook comments",
+    description: "Returns all guestbook comments for the current user.",
     tags: ["Analytics"],
     responses: {
-      200: { description: "List of comments" },
+      200: { description: "Guestbook comments" },
       401: { description: "Unauthenticated" },
       429: { description: "Rate limit exceeded" },
     },

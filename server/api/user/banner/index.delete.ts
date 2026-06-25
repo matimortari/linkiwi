@@ -20,11 +20,11 @@ export default defineEventHandler(async (event) => {
 
 defineRouteMeta({
   openAPI: {
-    summary: "Delete profile banner",
-    description: "Removes the user's active profile banner.",
+    summary: "Delete user banner",
+    description: "Removes the user's active banner.",
     tags: ["User"],
     responses: {
-      200: { description: "Banner deleted" },
+      200: { description: "User banner deleted" },
       401: { description: "Unauthenticated" },
       404: { description: "No active banner found" },
       429: { description: "Rate limit exceeded" },

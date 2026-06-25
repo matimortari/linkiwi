@@ -28,14 +28,14 @@ export default defineEventHandler(async (event) => {
 
 defineRouteMeta({
   openAPI: {
-    summary: "Delete asset",
-    description: "Deletes a media asset from storage. Only the owning user can delete their assets.",
+    summary: "Delete user asset",
+    description: "Deletes a user's uploaded asset.",
     tags: ["User"],
     parameters: [
       { in: "path", name: "id", required: true, schema: { type: "string" }, description: "Asset ID" },
     ],
     responses: {
-      200: { description: "Asset deleted" },
+      200: { description: "User asset deleted" },
       401: { description: "Unauthenticated" },
       403: { description: "Asset belongs to a different user" },
       404: { description: "Asset not found" },

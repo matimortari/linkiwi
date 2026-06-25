@@ -164,6 +164,30 @@ interface Comment {
   createdAt: Date | string
 }
 
+interface NormalizedLink {
+  id: string
+  title: string
+  url: string
+  isVisible: boolean
+  order: number
+}
+
+interface NormalizedIcon {
+  id: string
+  platform: string
+  url: string
+  logo: string
+  isVisible: boolean
+  order: number
+}
+
+interface NormalizedWidget {
+  id: string
+  isVisible: boolean
+  type: WidgetType
+  handle: string
+}
+
 interface UIState {
   sidebar: boolean
   preview: boolean
@@ -194,40 +218,9 @@ interface UIState {
   }
 }
 
-interface TocHeader {
-  id: string
-  text: string
-  method?: string
-  level: number
-}
-
 interface Toast {
   id: string
   message: string
   type: "danger" | "success" | "warning" | "info"
   duration?: number
-}
-
-interface NormalizedLink {
-  id: string
-  title: string
-  url: string
-  isVisible: boolean
-  order: number
-}
-
-interface NormalizedIcon {
-  id: string
-  platform: string
-  url: string
-  logo: string
-  isVisible: boolean
-  order: number
-}
-
-interface NormalizedWidget {
-  id: string
-  isVisible: boolean
-  type: WidgetType
-  handle: string
 }
