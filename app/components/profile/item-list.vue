@@ -56,8 +56,8 @@
               </div>
               <ProfileItemRowActions
                 :item="item" :is-scheduled="!!(item.scheduledStart || item.scheduledEnd)"
-                :show-edit="false" :show-schedule="true"
-                @toggle="toggleItemVisibility(item.id, item.isVisible)" @pin="togglePin(item.id, item.isPinned)"
+                :show-edit="false" @toggle="toggleItemVisibility(item.id, item.isVisible)"
+                @pin="togglePin(item.id, item.isPinned)"
                 @schedule="openSchedule(item)" @delete="handleDeleteItem(item.id)"
               />
             </div>
@@ -70,13 +70,12 @@
                   </button>
                   <icon name="mdi:link-variant" size="20" class="shrink-0 text-muted-foreground" />
                   <span class="truncate text-sm font-semibold" :class="{ 'text-muted-foreground': !item.isVisible }">{{ item.link.label }}</span>
-                  <icon v-if="item.scheduledStart || item.scheduledEnd" name="mdi:calendar-clock" size="15" class="text-caption-info shrink-0" />
                 </div>
                 <ProfileItemRowActions
                   :item="item" :is-scheduled="!!(item.scheduledStart || item.scheduledEnd)"
-                  :show-schedule="true" @toggle="toggleItemVisibility(item.id, item.isVisible)"
-                  @pin="togglePin(item.id, item.isPinned)" @schedule="openSchedule(item)"
-                  @edit="handleEdit(item)" @delete="handleDeleteItem(item.id)"
+                  @toggle="toggleItemVisibility(item.id, item.isVisible)" @pin="togglePin(item.id, item.isPinned)"
+                  @schedule="openSchedule(item)" @edit="handleEdit(item)"
+                  @delete="handleDeleteItem(item.id)"
                 />
               </div>
               <nuxt-link :to="item.link.url" class="truncate pl-8 text-xs text-muted-foreground hover:underline" target="_blank">
@@ -100,9 +99,9 @@
               </div>
               <ProfileItemRowActions
                 :item="item" :is-scheduled="!!(item.scheduledStart || item.scheduledEnd)"
-                :show-schedule="true" @toggle="toggleItemVisibility(item.id, item.isVisible)"
-                @pin="togglePin(item.id, item.isPinned)" @schedule="openSchedule(item)"
-                @edit="handleEdit(item)" @delete="handleDeleteItem(item.id)"
+                @toggle="toggleItemVisibility(item.id, item.isVisible)" @pin="togglePin(item.id, item.isPinned)"
+                @schedule="openSchedule(item)" @edit="handleEdit(item)"
+                @delete="handleDeleteItem(item.id)"
               />
             </div>
 
@@ -119,9 +118,9 @@
               </div>
               <ProfileItemRowActions
                 :item="item" :is-scheduled="!!(item.scheduledStart || item.scheduledEnd)"
-                :show-schedule="true" @toggle="toggleItemVisibility(item.id, item.isVisible)"
-                @pin="togglePin(item.id, item.isPinned)" @schedule="openSchedule(item)"
-                @edit="handleEdit(item)" @delete="handleDeleteItem(item.id)"
+                @toggle="toggleItemVisibility(item.id, item.isVisible)" @pin="togglePin(item.id, item.isPinned)"
+                @schedule="openSchedule(item)" @edit="handleEdit(item)"
+                @delete="handleDeleteItem(item.id)"
               />
             </div>
           </li>

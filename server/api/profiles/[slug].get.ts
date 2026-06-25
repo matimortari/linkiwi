@@ -44,7 +44,9 @@ export default defineEventHandler(async (event) => {
     throw createError({ status: 404, statusText: `User '${slug}' not found` })
   }
 
-  await setCached(cacheKey, profile, CACHE_TTL.LONG)
+  const hasActiveSchedule = profile.items.some(item => item.scheduledStart && item.scheduledEnd && new Date(item.scheduledEnd) > new Date(item.scheduledStart))
+
+  await setCached(cacheKey, profile, hasActiveSchedule ? CACHE_TTL.SHORT : CACHE_TTL.LONG)
 
   return { profile }
 })
