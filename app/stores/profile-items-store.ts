@@ -47,6 +47,7 @@ export const useProfileItemsStore = defineStore("profile-items", () => {
 
   async function updateItem(id: string, data: UpdateProfileItemInput) {
     loading.value = true
+
     try {
       const res = await $fetch<{ updatedItem: ProfileItem }>(`/api/items/${id}`, { method: "PUT", body: data, credentials: "include" })
       const index = items.value.findIndex(item => item.id === id)

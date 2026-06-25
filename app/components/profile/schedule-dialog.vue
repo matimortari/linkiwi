@@ -59,7 +59,6 @@ const props = defineProps<{ isOpen: boolean, item: ProfileItem | null }>()
 const emit = defineEmits<{ close: [] }>()
 
 const profileItemsStore = useProfileItemsStore()
-
 const form = ref({
   scheduledStart: "",
   scheduledEnd: "",
@@ -67,14 +66,11 @@ const form = ref({
 })
 
 function toDatetimeLocal(val: string | Date | null | undefined) {
-  if (!val) {
-    return ""
-  }
-  return new Date(val).toISOString().slice(0, 16)
+  return toDatetimeLocalValue(val)
 }
 
 function toISOOrNull(val: string) {
-  return val ? new Date(val).toISOString() : null
+  return fromDatetimeLocalValue(val)
 }
 
 async function handleSubmit() {

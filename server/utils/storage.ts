@@ -40,8 +40,24 @@ export async function uploadFile({ path, file, maxSize, allowedMimeTypes, oldFil
 }
 
 /**
+ * Shared default assets must never be deleted from blob storage.
+ */
+export function isProtectedDefaultFile(url: string): boolean {
+  if (!url.startsWith(`${r2PublicUrl}/`)) {
+    return false
+  }
+
+  const key = url.slice(`${r2PublicUrl}/`.length)
+  return key.startsWith("defaults/")
+}
+
+/**
  * Deletes a file from Blob storage given its URL.
  */
 export async function deleteFile(url: string): Promise<void> {
+  if (isProtectedDefaultFile(url)) {
+    return
+  }
+
   await s3.send(new DeleteObjectCommand({ Bucket: r2BucketName, Key: url.replace(`${r2PublicUrl}/`, "") }))
 }

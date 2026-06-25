@@ -1,5 +1,5 @@
 <template>
-  <Dialog :is-open="isPhotoGridDialogOpen" title="Add Photo Grid" @update:is-open="emit('close')">
+  <Dialog :is-open="isPhotoGridDialogOpen" :title="isUpdateMode ? 'Edit Photo Grid' : 'Add Photo Grid'" @update:is-open="emit('close')">
     <div class="flex flex-col gap-4">
       <div class="flex flex-col gap-2">
         <div class="flex items-center justify-between">
@@ -49,8 +49,10 @@ const emit = defineEmits<{ close: [] }>()
 
 const profileItemsStore = useProfileItemsStore()
 const userStore = useUserStore()
-const { isPhotoGridDialogOpen } = useUIState()
+const { isPhotoGridDialogOpen, selectedPhotoGrid } = useUIState()
 const selected = ref<{ id: string, url: string }[]>([])
+const editingId = ref<string | null>(null)
+const isUpdateMode = computed(() => !!editingId.value)
 
 function isSelected(id: string) {
   return selected.value.some(a => a.id === id)
@@ -74,27 +76,55 @@ async function handleSubmit() {
     return
   }
 
-  await profileItemsStore.createItem({
-    type: "PHOTO_GRID",
-    isPinned: false,
-    isVisible: true,
-    photoGrid: { photos: selected.value.map((a, i) => ({ assetId: a.id, url: a.url, order: i })) },
-  })
+  const photoGrid = {
+    photos: selected.value.map((a, i) => ({ assetId: a.id, url: a.url, order: i })),
+  }
+
+  if (isUpdateMode.value && editingId.value) {
+    await profileItemsStore.updateItem(editingId.value, { photoGrid })
+  }
+  else {
+    await profileItemsStore.createItem({
+      type: "PHOTO_GRID",
+      isPinned: false,
+      isVisible: true,
+      photoGrid,
+    })
+  }
 
   handleCancel()
 }
 
 function handleCancel() {
-  selected.value = []
+  resetForm()
   emit("close")
 }
+
+function resetForm() {
+  editingId.value = null
+  selected.value = []
+}
+
+function loadPhotoGrid(item: ProfileItem | null) {
+  if (item?.photoGrid?.photos?.length) {
+    editingId.value = item.id
+    selected.value = [...item.photoGrid.photos]
+      .sort((a, b) => a.order - b.order)
+      .map(photo => ({ id: photo.assetId ?? photo.id, url: photo.url }))
+  }
+  else {
+    resetForm()
+  }
+}
+
+watch(selectedPhotoGrid, loadPhotoGrid, { immediate: true })
 
 watch(isPhotoGridDialogOpen, async (open) => {
   if (open && !userStore.assets.length) {
     await userStore.getAssets()
   }
   if (!open) {
-    selected.value = []
+    resetForm()
   }
 })
 </script>

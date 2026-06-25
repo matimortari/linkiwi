@@ -12,6 +12,51 @@ export function formatDate(date?: string | Date | null): string {
 }
 
 /**
+ * Formats a Date/ISO string for `<input type="datetime-local">` using local time.
+ */
+export function toDatetimeLocalValue(value: string | Date | null | undefined): string {
+  if (!value) {
+    return ""
+  }
+
+  const date = typeof value === "string" ? new Date(value) : value
+  if (Number.isNaN(date.getTime())) {
+    return ""
+  }
+
+  const pad = (part: number) => String(part).padStart(2, "0")
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`
+}
+
+/**
+ * Parses a `datetime-local` value as local time and returns an ISO UTC string.
+ */
+export function fromDatetimeLocalValue(value: string): string | null {
+  if (!value) {
+    return null
+  }
+
+  const [datePart, timePart] = value.split("T")
+  if (!datePart || !timePart) {
+    return null
+  }
+
+  const [year, month, day] = datePart.split("-").map(Number)
+  const [hours, minutes] = timePart.split(":").map(Number)
+  if ([year, month, day, hours, minutes].some(Number.isNaN)) {
+    return null
+  }
+
+  const date = new Date(year!, month! - 1, day!, hours!, minutes!)
+
+  if (Number.isNaN(date.getTime())) {
+    return null
+  }
+
+  return date.toISOString()
+}
+
+/**
  * Formats a source string into a human-readable label.
  */
 export function formatSourceLabel(source: string | null | undefined): string {

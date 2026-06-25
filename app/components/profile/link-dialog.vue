@@ -64,9 +64,12 @@ function resetForm() {
   form.value.url = ""
 }
 
-// Reset form when dialog is opened or when selectedLink changes
-watch(() => selectedLink.value, (item) => {
-  if (item && item.link) {
+watch([() => isLinkDialogOpen.value, () => selectedLink.value], ([open, item]) => {
+  if (!open) {
+    return
+  }
+
+  if (item?.link) {
     editingLinkId.value = item.id
     form.value.title = item.link.label
     form.value.url = item.link.url

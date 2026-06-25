@@ -19,7 +19,7 @@ const uiState = reactive<UIState>({
     },
     photoGrid: {
       isOpen: false,
-      selectedPhotos: null,
+      selectedPhotoGrid: null,
     },
     widget: {
       isOpen: false,
@@ -49,11 +49,11 @@ export function useUIState() {
     }
     else if (type === "photoGrid") {
       uiState.dialogs.photoGrid.isOpen = true
-      if (payload?.item) {
-        uiState.dialogs.photoGrid.selectedPhotos = payload.item.photoGrid?.photos ?? []
+      if (payload?.item !== undefined) {
+        uiState.dialogs.photoGrid.selectedPhotoGrid = payload.item
       }
       else {
-        uiState.dialogs.photoGrid.selectedPhotos = null
+        uiState.dialogs.photoGrid.selectedPhotoGrid = null
       }
     }
     else if (type === "widget") {
@@ -83,7 +83,7 @@ export function useUIState() {
     }
     else if (type === "photoGrid") {
       uiState.dialogs.photoGrid.isOpen = false
-      uiState.dialogs.photoGrid.selectedPhotos = null
+      uiState.dialogs.photoGrid.selectedPhotoGrid = null
     }
     else if (type === "widget") {
       uiState.dialogs.widget.isOpen = false
@@ -109,7 +109,7 @@ export function useUIState() {
   const selectedItem = computed(() => uiState.dialogs.item.selectedItem)
   const selectedLink = computed(() => uiState.dialogs.link.selectedLink)
   const selectedIcon = computed(() => uiState.dialogs.icon.selectedIcon)
-  const selectedPhotos = computed(() => uiState.dialogs.photoGrid.selectedPhotos)
+  const selectedPhotoGrid = computed(() => uiState.dialogs.photoGrid.selectedPhotoGrid)
   const selectedWidget = computed(() => uiState.dialogs.widget.selectedWidget)
   const activeItemType = computed(() => uiState.dialogs.item.activeType)
   const isSidebarOpen = computed(() => uiState.sidebar)
@@ -127,7 +127,7 @@ export function useUIState() {
     selectedItem,
     selectedLink,
     selectedIcon,
-    selectedPhotos,
+    selectedPhotoGrid,
     selectedWidget,
     activeItemType,
     isSidebarOpen,
