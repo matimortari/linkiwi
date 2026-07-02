@@ -36,7 +36,11 @@ const props = defineProps<{
 
 const emit = defineEmits<{ "update:preferences": [value: UserPreferences] }>()
 
-const selectedTheme = ref("")
+function findActiveThemeTitle(prefs: UserPreferences): string {
+  return THEMES.find(theme => Object.entries(theme.preferences).every(([key, value]) => prefs[key as keyof UserPreferences] === value))?.title ?? ""
+}
+
+const selectedTheme = ref(findActiveThemeTitle(props.preferences))
 const themeStyles = THEMES.map((theme) => {
   const { backgroundStyle, iconStyle, linkStyle } = useDynamicStyles(ref(theme.preferences))
   return { backgroundStyle, iconStyle, linkStyle }
@@ -51,4 +55,8 @@ function handleThemeSelection(title: string) {
   selectedTheme.value = title
   emit("update:preferences", { ...props.preferences, ...theme.preferences })
 }
+
+watch(() => props.preferences, (prefs) => {
+  selectedTheme.value = findActiveThemeTitle(prefs)
+}, { deep: true })
 </script>
