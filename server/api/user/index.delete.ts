@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
     select: { slug: true, image: true, banner: { select: { url: true } }, assets: { select: { url: true } } },
   })
   if (!accountData) {
-    throw createError({ status: 404, statusText: "User account not found" })
+    throw createError({ statusCode: 404, statusMessage: "User account not found" })
   }
 
   await deleteCached(CacheKeys.userData(sessionUser.id), CacheKeys.userProfile(accountData.slug))

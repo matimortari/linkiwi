@@ -20,13 +20,13 @@ export const s3 = new S3Client({
  */
 export async function uploadFile({ path, file, maxSize, allowedMimeTypes, oldFile }: { path: string, file: File, maxSize: number, allowedMimeTypes: string[], oldFile?: string }): Promise<string> {
   if (!file || !(file instanceof File)) {
-    throw createError({ status: 400, statusText: "No file uploaded" })
+    throw createError({ statusCode: 400, statusMessage: "No file uploaded" })
   }
   if (allowedMimeTypes.length && !allowedMimeTypes.includes(file.type)) {
-    throw createError({ status: 415, statusText: `Unsupported file type: ${file.type}` })
+    throw createError({ statusCode: 415, statusMessage: `Unsupported file type: ${file.type}` })
   }
   if (file.size > maxSize) {
-    throw createError({ status: 413, statusText: "File too large" })
+    throw createError({ statusCode: 413, statusMessage: "File too large" })
   }
 
   const key = `${path}/${crypto.randomUUID()}.${file.name.split(".").pop()?.toLowerCase()}`

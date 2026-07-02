@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   const result = updateUserSchema.safeParse(body)
   if (!result.success) {
-    throw createError({ status: 400, statusText: result.error.issues[0]?.message || "Invalid input" })
+    throw createError({ statusCode: 400, statusMessage: result.error.issues[0]?.message || "Invalid input" })
   }
 
   // Get old slug before update to invalidate old cache key
@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
   if (result.data.slug && result.data.slug !== oldUser?.slug) {
     const existingUser = await db.user.findUnique({ where: { slug: result.data.slug } })
     if (existingUser) {
-      throw createError({ status: 409, statusText: "This username is already taken. Please choose a different one." })
+      throw createError({ statusCode: 409, statusMessage: "This username is already taken. Please choose a different one." })
     }
   }
 

@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
 
   const user = await db.user.findUnique({ where: { id: sessionUser.id }, include: { preferences: true, banner: true } })
   if (!user) {
-    throw createError({ status: 404, statusText: "User not found" })
+    throw createError({ statusCode: 404, statusMessage: "User not found" })
   }
 
   await setCached(cacheKey, user, CACHE_TTL.SHORT)

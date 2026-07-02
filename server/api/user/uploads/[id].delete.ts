@@ -2,7 +2,7 @@ export default defineEventHandler(async (event) => {
   const sessionUser = await getUserFromSession(event)
   const assetId = getRouterParam(event, "id")
   if (!assetId) {
-    throw createError({ status: 400, statusText: "Asset identifier is required" })
+    throw createError({ statusCode: 400, statusMessage: "Asset identifier is required" })
   }
 
   // Rate limit: 30 requests per hour per IP
@@ -10,10 +10,10 @@ export default defineEventHandler(async (event) => {
 
   const targetAsset = await db.userAsset.findUnique({ where: { id: assetId }, select: { userId: true, url: true } })
   if (!targetAsset) {
-    throw createError({ status: 404, statusText: "Requested media asset not found" })
+    throw createError({ statusCode: 404, statusMessage: "Requested media asset not found" })
   }
   if (targetAsset.userId !== sessionUser.id) {
-    throw createError({ status: 403, statusText: "You do not have permission to delete this asset" })
+    throw createError({ statusCode: 403, statusMessage: "You do not have permission to delete this asset" })
   }
 
   await deleteFile(targetAsset.url)

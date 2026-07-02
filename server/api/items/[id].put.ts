@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
   const sessionUser = await getUserFromSession(event)
   const itemId = getRouterParam(event, "id")
   if (!itemId) {
-    throw createError({ status: 400, statusText: "Item ID is required" })
+    throw createError({ statusCode: 400, statusMessage: "Item ID is required" })
   }
 
   // Rate limit: 50 item modifications per hour per account
@@ -13,15 +13,15 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   const result = updateProfileItemSchema.safeParse(body)
   if (!result.success) {
-    throw createError({ status: 400, statusText: result.error.issues[0]?.message || "Invalid input" })
+    throw createError({ statusCode: 400, statusMessage: result.error.issues[0]?.message || "Invalid input" })
   }
 
   const existingItem = await db.profileItem.findUnique({ where: { id: itemId }, select: { userId: true, type: true } })
   if (!existingItem) {
-    throw createError({ status: 404, statusText: "Profile item not found" })
+    throw createError({ statusCode: 404, statusMessage: "Profile item not found" })
   }
   if (existingItem.userId !== sessionUser.id) {
-    throw createError({ status: 403, statusText: "You do not have permission to modify this resource" })
+    throw createError({ statusCode: 403, statusMessage: "You do not have permission to modify this resource" })
   }
 
   // Map global configuration properties
@@ -41,7 +41,7 @@ export default defineEventHandler(async (event) => {
     if (result.data.icon.platform) {
       const duplicateIcon = await db.profileItemIcon.findFirst({ where: { platform: result.data.icon.platform, itemId: { not: itemId }, item: { userId: sessionUser.id } } })
       if (duplicateIcon) {
-        throw createError({ status: 409, statusText: `A social icon badge for ${result.data.icon.platform} already exists.` })
+        throw createError({ statusCode: 409, statusMessage: `A social icon badge for ${result.data.icon.platform} already exists.` })
       }
     }
     updatePayload.icon = { update: result.data.icon }

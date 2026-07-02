@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   const result = createProfileItemSchema.safeParse(body)
   if (!result.success) {
-    throw createError({ status: 400, statusText: result.error.issues[0]?.message || "Invalid input" })
+    throw createError({ statusCode: 400, statusMessage: result.error.issues[0]?.message || "Invalid input" })
   }
 
   // Calculate the dynamic sequencing slot across all components globally
@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
   else if (result.data.type === "ICON") {
     const existingIcon = await db.profileItemIcon.findFirst({ where: { item: { userId: sessionUser.id }, platform: result.data.icon.platform } })
     if (existingIcon) {
-      throw createError({ status: 409, statusText: `An icon badge for ${result.data.icon.platform} already exists.` })
+      throw createError({ statusCode: 409, statusMessage: `An icon badge for ${result.data.icon.platform} already exists.` })
     }
     nestedRelationData.icon = { create: result.data.icon }
   }

@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
 
   const existingBanner = await db.userBanner.findUnique({ where: { userId: sessionUser.id } })
   if (!existingBanner) {
-    throw createError({ status: 404, statusText: "No active profile banner found to delete" })
+    throw createError({ statusCode: 404, statusMessage: "No active profile banner found to delete" })
   }
 
   await db.userBanner.delete({ where: { userId: sessionUser.id } })

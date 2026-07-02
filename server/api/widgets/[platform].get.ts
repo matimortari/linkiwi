@@ -2,7 +2,7 @@ export default defineEventHandler(async (event) => {
   const platform = getRouterParam(event, "platform")?.toLowerCase()
   const { handle } = getQuery(event)
   if (!handle || typeof handle !== "string") {
-    throw createError({ status: 400, statusText: "Handle query parameter is required" })
+    throw createError({ statusCode: 400, statusMessage: "Handle query parameter is required" })
   }
 
   const handlers: Record<string, () => Promise<{ data: any }>> = {
@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
       const channelRes = await $fetch<any>("https://www.googleapis.com/youtube/v3/channels", { query: { part: "snippet,statistics", ...channelQuery, key: youTubeApiKey } }).catch(() => null)
       const channel = channelRes?.items?.[0]
       if (!channel) {
-        throw createError({ status: 404, statusText: `YouTube channel '${handle}' not found` })
+        throw createError({ statusCode: 404, statusMessage: `YouTube channel '${handle}' not found` })
       }
 
       const searchRes = await $fetch<any>("https://www.googleapis.com/youtube/v3/search", { query: { part: "snippet", channelId: channel.id, order: "date", type: "video", maxResults: 5, key: youTubeApiKey } }).catch(() => null)
@@ -59,7 +59,7 @@ export default defineEventHandler(async (event) => {
         $fetch<any[]>(`https://api.github.com/users/${handle}/repos`, { headers: { Accept: "application/vnd.github+json" }, query: { sort: "updated", per_page: 6, type: "owner" } }),
       ])
       if (userRes.status === "rejected") {
-        throw createError({ status: 404, statusText: `GitHub user '${handle}' not found` })
+        throw createError({ statusCode: 404, statusMessage: `GitHub user '${handle}' not found` })
       }
 
       const user = userRes.value
@@ -88,7 +88,7 @@ export default defineEventHandler(async (event) => {
     },
   }
   if (!platform || !(platform in handlers)) {
-    throw createError({ status: 400, statusText: `Unsupported platform widget type: '${platform}'` })
+    throw createError({ statusCode: 400, statusMessage: `Unsupported platform widget type: '${platform}'` })
   }
 
   return await (handlers[platform] as () => Promise<{ data: any }>)()

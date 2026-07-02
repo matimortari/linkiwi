@@ -1,7 +1,7 @@
 <template>
   <div class="flex min-h-screen flex-col items-center justify-center gap-4 p-4 text-center md:items-start md:p-12 md:text-start">
     <h1>
-      {{ error.status }} – {{ error.statusText || "An unexpected error has occurred." }}
+      {{ error.status }} – {{ error.statusMessage || "An unexpected error has occurred." }}
     </h1>
 
     <p class="flex flex-col gap-2 text-lg/6 text-muted-foreground">

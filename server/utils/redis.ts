@@ -192,6 +192,6 @@ export async function enforceRateLimit(event: H3Event, identifier: string, limit
 
   if (!result.allowed) {
     setHeader(event, "Retry-After", Math.ceil((result.reset - Date.now()) / 1000))
-    throw createError({ statusCode: 429, statusText: "Too many requests. Please try again later." })
+    throw createError({ statusCode: 429, statusMessage: "Too many requests. Please try again later." })
   }
 }
