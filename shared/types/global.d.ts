@@ -190,6 +190,14 @@ interface NormalizedWidget {
   handle: string
 }
 
+interface DateParts {
+  year: string
+  month: string
+  day: string
+  hour: string
+  minute: string
+}
+
 interface UIState {
   sidebar: boolean
   preview: boolean
