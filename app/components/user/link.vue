@@ -1,7 +1,8 @@
 <template>
   <li class="relative flex w-full max-w-80 min-w-32 flex-row items-center justify-center" :style="linkStyle(isHovered)" @mouseenter="isHovered = true" @mouseleave="isHovered = false">
-    <nuxt-link :to="item.link?.url" class="flex size-full items-center justify-center" target="_blank" @click="handleClick">
-      <span class="mx-2 inline-block truncate px-4 text-center" :style="linkInnerStyle">{{ item.link?.label }}</span>
+    <nuxt-link :to="item.link?.url" class="flex size-full items-center justify-center gap-2 px-2" target="_blank" @click="handleClick">
+      <img v-if="item.link?.imageUrl" :src="item.link.imageUrl" :alt="item.link.label" class="size-8 shrink-0 rounded-full object-cover">
+      <span class="inline-block truncate px-2 text-center" :class="{ 'px-4': !item.link?.imageUrl }" :style="linkInnerStyle">{{ item.link?.label }}</span>
     </nuxt-link>
 
     <button v-if="preferences.showLinkCopyButton" class="absolute right-2 shrink-0 transition-transform hover:scale-110" aria-label="Copy Link" @click.stop="copyAction.triggerCopy(item.link?.url ?? '')">

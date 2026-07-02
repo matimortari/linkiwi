@@ -6,7 +6,7 @@
           Asset Manager
         </h5>
         <p class="text-caption">
-          Images you've uploaded. Used for banners and photo grids.
+          Images you've uploaded. Used for banners, link images, and photo grids.
         </p>
       </div>
 
