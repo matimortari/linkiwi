@@ -2,7 +2,6 @@ const uiState = reactive<UIState>({
   sidebar: false,
   preview: false,
   dialogs: {
-    user: false,
     share: false,
     item: {
       isOpen: false,
@@ -29,7 +28,7 @@ const uiState = reactive<UIState>({
 })
 
 export function useUIState() {
-  const openDialog = (type: "user" | "share" | "item" | "link" | "icon" | "photoGrid" | "widget", payload?: { item?: ProfileItem | null, activeType?: ProfileItemType | null }) => {
+  const openDialog = (type: "share" | "item" | "link" | "icon" | "photoGrid" | "widget", payload?: { item?: ProfileItem | null, activeType?: ProfileItemType | null }) => {
     if (type === "item") {
       uiState.dialogs.item.isOpen = true
       uiState.dialogs.item.selectedItem = payload?.item ?? null
@@ -67,7 +66,7 @@ export function useUIState() {
     }
   }
 
-  const closeDialog = (type: "user" | "share" | "item" | "link" | "icon" | "photoGrid" | "widget") => {
+  const closeDialog = (type: "share" | "item" | "link" | "icon" | "photoGrid" | "widget") => {
     if (type === "item") {
       uiState.dialogs.item.isOpen = false
       uiState.dialogs.item.selectedItem = null
@@ -99,7 +98,6 @@ export function useUIState() {
   const openPreview = () => (uiState.preview = true)
   const closePreview = () => (uiState.preview = false)
 
-  const isUserDialogOpen = computed(() => uiState.dialogs.user)
   const isShareDialogOpen = computed(() => uiState.dialogs.share)
   const isItemDialogOpen = computed(() => uiState.dialogs.item.isOpen)
   const isLinkDialogOpen = computed(() => uiState.dialogs.link.isOpen)
@@ -117,7 +115,6 @@ export function useUIState() {
 
   return {
     uiState,
-    isUserDialogOpen,
     isShareDialogOpen,
     isItemDialogOpen,
     isLinkDialogOpen,

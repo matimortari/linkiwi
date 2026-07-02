@@ -37,10 +37,10 @@ export const MOCK_REFERRALS: { source: string, percentage: string, color: string
   { source: "Instagram", percentage: "20%", color: "#F472B6", icon: "simple-icons:instagram" },
 ]
 
-// Admin dashboard data
+// Admin dashboard links and appearance tabs
 export const SIDEBAR_NAV_LINKS: { label: string, url: string, icon: string }[] = [
   { label: "Profile", url: "/admin/profile", icon: "mdi:home-outline" },
-  { label: "Preferences", url: "/admin/preferences", icon: "mdi:cog-outline" },
+  { label: "Appearance", url: "/admin/appearance", icon: "mdi:palette-outline" },
   { label: "Analytics", url: "/admin/analytics", icon: "mdi:chart-bell-curve-cumulative" },
 ]
 
@@ -49,7 +49,6 @@ export const APPEARANCE_TABS: { label: string, value: string }[] = [
   { label: "Layout", value: "layout" },
   { label: "Links", value: "links" },
   { label: "Social Icons", value: "icons" },
-  { label: "Themes", value: "themes" },
 ]
 
 // Default user preferences for new accounts or resets
