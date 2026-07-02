@@ -6,9 +6,9 @@
       class="min-h-screen w-full space-y-4 border-b-0! p-4 md:w-2/3 md:rounded-t-2xl md:border"
     >
       <header class="flex flex-col gap-2">
-        <h2 v-motion :initial="{ opacity: 0 }" :enter="{ opacity: 1 }" :duration="800">
+        <h3>
           Preferences
-        </h2>
+        </h3>
         <p class="text-caption">
           Manage your profile.
         </p>

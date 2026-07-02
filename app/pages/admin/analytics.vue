@@ -6,9 +6,9 @@
       class="min-h-screen w-full space-y-4 border-r-0! border-b-0! p-4 md:rounded-tl-2xl md:border"
     >
       <header class="flex flex-col gap-2">
-        <h2 v-motion :initial="{ opacity: 0 }" :enter="{ opacity: 1 }" :duration="800">
+        <h3>
           Analytics
-        </h2>
+        </h3>
         <p class="text-caption">
           View your profile analytics.
         </p>
