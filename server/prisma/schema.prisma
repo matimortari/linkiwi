@@ -135,6 +135,7 @@ model UserAsset {
   user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   banner    UserBanner?
   photos    PhotoGridItem[]
+  links     ProfileItemLink[]
   createdAt DateTime        @default(now())
 
   @@index([userId])
@@ -164,10 +165,13 @@ model ProfileItem {
 }
 
 model ProfileItemLink {
-  itemId String      @id
-  url    String
-  label  String
-  item   ProfileItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  itemId   String      @id
+  url      String
+  label    String
+  assetId  String?
+  imageUrl String?
+  item     ProfileItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  asset    UserAsset?  @relation(fields: [assetId], references: [id], onDelete: SetNull)
 }
 
 model ProfileItemWidget {
