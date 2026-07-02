@@ -60,7 +60,7 @@ interface UserPreferences {
   dividerColor?: string
   dividerThickness?: BorderWidth
   dividerStyle?: DividerStyle
-  supportBanner?: BannerOption
+  supportBanner?: SupportBanner
   enableGuestbook?: boolean
 }
 

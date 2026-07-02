@@ -14,12 +14,11 @@
 
 ## Features
 
-- **User Authentication:** Sign in using your Google or GitHub account.
-- **Admin Dashboard:** Manage your links, profile settings, and customization options from the dedicated admin interface.
-- **Custom Profile Page:** Design your landing page with your key links and information. Pick from many themes, and feel free to customize colors, fonts, and layouts to match your style.
-- **Link Management:** Add, edit, and organize links to your social profiles, websites, and other online resources. You can pin social icons to enhance visibility for your most important platforms.
+- **Authentication:** OAuth via Google or GitHub providers.
+- **Link and Profile Management:** Manage your links and profile settings from the dedicated interface. Add, edit, and organize links to your social profiles, websites, and other online resources. You can pin social icons to enhance visibility for your most important platforms.
+- **Profile Analytics:** Monitor insights for your profile page, such as total views and clicks on individual links.
+- **Customization:** Pick your page's theme from predefined themes or customize it with your own colors, fonts, and layouts to match your style.
 - **Platform Widgets:** Embed live data from GitHub, Spotify, and YouTube directly on your profile page.
-- **Analytics Dashboard:** Monitor insights for your profile page, such as total views and clicks on individual links.
 
 ## Stack
 
