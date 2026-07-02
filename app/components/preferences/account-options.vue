@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:p-8">
-    <h3>
+    <h4>
       Account Options
-    </h3>
+    </h4>
 
     <div class="card flex flex-col gap-4">
       <div class="flex items-start justify-between gap-2">
