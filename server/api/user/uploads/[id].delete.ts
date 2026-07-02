@@ -16,6 +16,8 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 403, statusMessage: "You do not have permission to delete this asset" })
   }
 
+  await db.profileItemLink.updateMany({ where: { assetId }, data: { imageUrl: null } })
+
   await deleteFile(targetAsset.url)
   await db.userAsset.delete({ where: { id: assetId } })
 

@@ -68,7 +68,8 @@
                   <button class="drag-handle btn-ghost cursor-move p-0!" aria-label="Drag to reorder">
                     <icon name="mdi:drag-vertical" size="20" class="text-muted" />
                   </button>
-                  <icon name="mdi:link-variant" size="20" class="shrink-0 text-muted-foreground" />
+                  <img v-if="item.link.imageUrl" :src="item.link.imageUrl" :alt="item.link.label" class="size-6 shrink-0 rounded-full object-cover">
+                  <icon v-else name="mdi:link-variant" size="20" class="shrink-0 text-muted-foreground" />
                   <span class="truncate text-sm font-semibold" :class="{ 'text-muted-foreground': !item.isVisible }">{{ item.link.label }}</span>
                 </div>
                 <ProfileItemRowActions
