@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:p-8">
-    <h3>
+    <h4>
       Clicks by Item
-    </h3>
+    </h4>
 
     <Loading v-if="loading" />
     <Empty v-else-if="!items.length" message="Not enough data yet." icon-name="mdi:octagram-minus-outline" />

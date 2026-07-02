@@ -14,9 +14,9 @@
           <div v-if="isMobile" class="h-1 w-20 self-center rounded-full bg-current opacity-20" />
 
           <header class="flex flex-row items-center justify-between gap-4 border-b pb-2">
-            <h3 id="dialog-title">
+            <h4 id="dialog-title">
               {{ title }}
-            </h3>
+            </h4>
 
             <button aria-label="Close Dialog" class="btn-ghost" @mousedown="emit('update:isOpen', false)">
               <icon name="mdi:close" size="20" />
