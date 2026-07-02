@@ -2,7 +2,7 @@ export default defineEventHandler(async (event) => {
   const sessionUser = await getUserFromSession(event)
   const commentId = getRouterParam(event, "id")
   if (!commentId) {
-    throw createError({ status: 400, statusText: "Comment ID is required" })
+    throw createError({ statusCode: 400, statusMessage: "Comment ID is required" })
   }
 
   // Rate limit: 30 deletion requests per hour per user
@@ -10,10 +10,10 @@ export default defineEventHandler(async (event) => {
 
   const existingComment = await db.comment.findUnique({ where: { id: commentId }, select: { userId: true } })
   if (!existingComment) {
-    throw createError({ status: 404, statusText: "Comment not found" })
+    throw createError({ statusCode: 404, statusMessage: "Comment not found" })
   }
   if (existingComment.userId !== sessionUser.id) {
-    throw createError({ status: 403, statusText: "You do not have permission to delete this comment." })
+    throw createError({ statusCode: 403, statusMessage: "You do not have permission to delete this comment." })
   }
 
   await db.comment.delete({ where: { id: commentId } })

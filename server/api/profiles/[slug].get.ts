@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
 
   const slug = getRouterParam(event, "slug")
   if (!slug) {
-    throw createError({ status: 400, statusText: "Slug is required" })
+    throw createError({ statusCode: 400, statusMessage: "Slug is required" })
   }
 
   const cacheKey = CacheKeys.userProfile(slug)
@@ -41,7 +41,7 @@ export default defineEventHandler(async (event) => {
     },
   })
   if (!profile) {
-    throw createError({ status: 404, statusText: `User '${slug}' not found` })
+    throw createError({ statusCode: 404, statusMessage: `User '${slug}' not found` })
   }
 
   const hasActiveSchedule = profile.items.some(item => item.scheduledStart && item.scheduledEnd && new Date(item.scheduledEnd) > new Date(item.scheduledStart))

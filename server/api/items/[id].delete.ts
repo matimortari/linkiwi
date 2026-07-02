@@ -2,7 +2,7 @@ export default defineEventHandler(async (event) => {
   const sessionUser = await getUserFromSession(event)
   const itemId = getRouterParam(event, "id")
   if (!itemId) {
-    throw createError({ status: 400, statusText: "Item ID is required" })
+    throw createError({ statusCode: 400, statusMessage: "Item ID is required" })
   }
 
   // Rate limit: 50 deletions per hour per account
@@ -10,10 +10,10 @@ export default defineEventHandler(async (event) => {
 
   const existingItem = await db.profileItem.findUnique({ where: { id: itemId }, select: { userId: true, type: true } })
   if (!existingItem) {
-    throw createError({ status: 404, statusText: "Profile item not found" })
+    throw createError({ statusCode: 404, statusMessage: "Profile item not found" })
   }
   if (existingItem.userId !== sessionUser.id) {
-    throw createError({ status: 403, statusText: "You do not have permission to delete this resource" })
+    throw createError({ statusCode: 403, statusMessage: "You do not have permission to delete this resource" })
   }
 
   // Delete the item (cascade will handle related records)

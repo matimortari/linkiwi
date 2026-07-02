@@ -9,12 +9,12 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   const result = userBannerSchema.safeParse(body)
   if (!result.success) {
-    throw createError({ status: 400, statusText: result.error.issues[0]?.message || "Invalid input" })
+    throw createError({ statusCode: 400, statusMessage: result.error.issues[0]?.message || "Invalid input" })
   }
   if (result.data.assetId) {
     const asset = await db.userAsset.findUnique({ where: { id: result.data.assetId }, select: { userId: true } })
     if (!asset || asset.userId !== sessionUser.id) {
-      throw createError({ status: 403, statusText: "Asset does not belong to this user" })
+      throw createError({ statusCode: 403, statusMessage: "Asset does not belong to this user" })
     }
   }
 

@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
 
   const query = getQuery(event)
   if (query.type && !["pageView", "itemClick"].includes(query.type as string)) {
-    throw createError({ status: 400, statusText: "Invalid analytics data collection type" })
+    throw createError({ statusCode: 400, statusMessage: "Invalid analytics data collection type" })
   }
 
   // Construct standard date constraint block matching index patterns
