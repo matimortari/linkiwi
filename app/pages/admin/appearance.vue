@@ -7,17 +7,15 @@
     >
       <header class="flex flex-col gap-2">
         <h3>
-          Preferences
+          Appearance
         </h3>
         <p class="text-caption">
-          Manage your profile.
+          Customize how your public profile looks.
         </p>
       </header>
 
-      <div class="flex flex-col gap-4">
-        <PreferencesAppearanceOptions />
-        <PreferencesAccountOptions />
-      </div>
+      <PreferencesAppearanceOptions />
+      <PreferencesThemeTab :preferences="themePreferences" @update:preferences="handleThemeApply" />
     </div>
 
     <Preview />
@@ -30,12 +28,19 @@
 
 <script setup lang="ts">
 const { public: { baseURL } } = useRuntimeConfig()
-const { user, loading } = storeToRefs(useUserStore())
+const userStore = useUserStore()
+const { user, loading } = storeToRefs(userStore)
+
+const themePreferences = computed(() => user.value?.preferences ?? DEFAULT_PREFERENCES)
+
+async function handleThemeApply(prefs: UserPreferences) {
+  await userStore.updatePreferences(prefs)
+}
 
 useHead({
-  title: "Preferences",
-  link: [{ rel: "canonical", href: `${baseURL}/admin/preferences` }],
-  meta: [{ name: "description", content: "LinKiwi preferences page." }],
+  title: "Appearance",
+  link: [{ rel: "canonical", href: `${baseURL}/admin/appearance` }],
+  meta: [{ name: "description", content: "Customize your LinKiwi profile appearance." }],
 })
 
 definePageMeta({ layout: "admin", middleware: "auth" })
