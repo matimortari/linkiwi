@@ -7,8 +7,8 @@
     <Loading v-if="loading" />
     <Empty v-else-if="!items.length" message="Not enough data yet." icon-name="mdi:octagram-minus-outline" />
 
-    <ul v-else class="grid grid-cols-1 gap-4 md:grid-cols-3">
-      <li v-for="item in items" :key="item.id" class="card flex flex-col gap-2">
+    <ul v-else class="grid grid-cols-1 gap-2 md:grid-cols-3 xl:grid-cols-4">
+      <li v-for="item in items" :key="item.id" class="card flex flex-col gap-1">
         <div class="flex flex-row items-center justify-between font-semibold">
           <icon v-if="item.type === 'icon' && item.logo" :name="item.logo" :size="30" />
           <span v-else>{{ item.title }}</span>
@@ -27,7 +27,7 @@
 <script setup lang="ts">
 const profileItemsStore = useProfileItemsStore()
 const analyticsStore = useAnalyticsStore()
-const { loading } = storeToRefs(profileItemsStore)
+const loading = computed(() => profileItemsStore.loading || analyticsStore.loading)
 
 // Map the unified items array down into the local structural variants
 const items = computed(() => {
@@ -64,5 +64,5 @@ const clicksMap = computed(() => {
   return counts
 })
 
-onMounted(async () => await Promise.all([analyticsStore.getAnalytics(), profileItemsStore.getItems()]))
+onMounted(async () => await profileItemsStore.getItems())
 </script>

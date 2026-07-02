@@ -40,7 +40,7 @@ const chartOptions: ChartOptions<"bar"> = {
       ticks: { font: { size: 10 }, maxRotation: 45, minRotation: 0 },
     },
     y: {
-      beginAtZero: false,
+      beginAtZero: true,
       grid: { color: "rgba(0, 0, 0, 0.05)" },
       ticks: { font: { size: 10 }, precision: 0, padding: 8 },
     },
