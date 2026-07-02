@@ -28,7 +28,7 @@
         </div>
       </div>
 
-      <PreferencesAppearanceTabs v-model:preferences="preferences" v-model:active-tab="activeTab" />
+      <AppearanceTabs v-model:preferences="preferences" v-model:active-tab="activeTab" />
     </div>
   </div>
 </template>

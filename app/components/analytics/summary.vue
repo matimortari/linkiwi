@@ -24,7 +24,7 @@
               <label class="text-caption text-xs">From</label>
               <input
                 v-model="fromDisplay" type="text"
-                placeholder="yyyy/mm/dd" class="max-w-44 text-sm"
+                placeholder="yyyy/mm/dd" class="max-w-32 text-sm md:max-w-44"
                 :class="{ 'border-danger!': fromDisplay && !dateFrom }"
                 @blur="fromDisplay = commitDate(fromDisplay, 'dateFrom')"
               >
@@ -34,7 +34,7 @@
               <label class="text-caption text-xs">To</label>
               <input
                 v-model="toDisplay" type="text"
-                placeholder="yyyy/mm/dd" class="max-w-44 text-sm"
+                placeholder="yyyy/mm/dd" class="max-w-32 text-sm md:max-w-44"
                 :class="{ 'border-danger!': toDisplay && !dateTo }"
                 @blur="toDisplay = commitDate(toDisplay, 'dateTo')"
               >

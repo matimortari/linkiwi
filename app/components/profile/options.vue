@@ -43,7 +43,7 @@
         <div class="flex items-start justify-between gap-2">
           <div class="flex flex-col gap-1">
             <span class="text-sm font-medium">Banner</span>
-            <p class="text-caption text-xs">
+            <p class="text-caption">
               Displayed at the top of your public profile.
             </p>
           </div>
@@ -80,12 +80,12 @@
         <div class="flex items-center justify-between gap-2">
           <div class="flex flex-col gap-1">
             <span class="text-sm font-medium">Guestbook</span>
-            <p class="text-caption text-xs">
+            <p class="text-caption">
               Allow visitors to leave comments on your profile.
             </p>
           </div>
           <div class="navigation-group">
-            <PreferencesCheckbox id="enableGuestbook" v-model:value="guestbookEnabled" label="Enable" class="max-w-xs" />
+            <Checkbox id="enableGuestbook" v-model:value="guestbookEnabled" label="Enable" class="max-w-xs" />
             <button class="btn-primary" @click="handleSaveGuestbook">
               <icon :name="guestbookAction.icon.value" size="20" />
               <span>Save</span>
@@ -94,7 +94,7 @@
         </div>
 
         <template v-if="guestbookEnabled">
-          <p v-if="!comments.length" class="text-caption text-xs">
+          <p v-if="!comments.length" class="text-caption">
             No comments yet.
           </p>
           <div v-else class="scroll-area flex max-h-56 flex-col gap-2 overflow-y-auto pr-1">
@@ -107,7 +107,7 @@
                   <span v-if="comment.email" class="text-xs text-muted-foreground">({{ comment.email }})</span>
                 </div>
                 <div class="navigation-group shrink-0">
-                  <span class="text-caption text-xs">{{ formatDate(new Date(comment.createdAt)) }}</span>
+                  <span class="text-caption">{{ formatDate(new Date(comment.createdAt)) }}</span>
                   <button class="btn-ghost p-0!" aria-label="Delete comment" @click="handleDeleteComment(comment.id)">
                     <icon name="mdi:delete-outline" size="15" />
                   </button>
@@ -125,14 +125,45 @@
         <button class="flex w-full items-center justify-between text-left" @click="assetsOpen = !assetsOpen">
           <div class="flex flex-col gap-1">
             <span class="text-sm font-medium">Assets</span>
-            <p class="text-caption text-xs">
-              Uploaded images for banners, links and photo grids.
+            <p class="text-caption">
+              Images you've uploaded. Used for banners, links and photo grids.
             </p>
           </div>
           <icon :name="assetsOpen ? 'mdi:chevron-up' : 'mdi:chevron-down'" size="20" class="shrink-0 text-muted-foreground" />
         </button>
 
-        <PreferencesAssetManager v-if="assetsOpen" />
+        <template v-if="assetsOpen">
+          <div class="flex items-center justify-between gap-2">
+            <label class="btn-ghost shrink-0 cursor-pointer text-sm">
+              <icon name="mdi:upload" size="20" />
+              <span>Upload</span>
+              <input
+                type="file" class="hidden"
+                accept="image/jpeg,image/png,image/webp,image/gif" multiple
+                @change="handleAssetUpload"
+              >
+            </label>
+          </div>
+
+          <Loading v-if="userStore.loading" />
+          <Empty v-else-if="!userStore.assets.length" message="No images uploaded yet." icon-name="mdi:image-off-outline" />
+
+          <div v-else class="scroll-area grid max-h-72 grid-cols-3 gap-2 overflow-y-auto pr-1 md:grid-cols-6">
+            <div v-for="asset in userStore.assets" :key="asset.id" class="group relative aspect-square overflow-hidden rounded-xl border">
+              <img :src="asset.url" :alt="asset.label ?? 'Asset'" class="size-full object-cover">
+              <div class="absolute inset-0 flex flex-col items-end justify-between bg-black/0 p-1 opacity-0 transition-all group-hover:bg-black/50 group-hover:opacity-100">
+                <button class="btn-danger p-1!" aria-label="Delete asset" @click="handleAssetDelete(asset.id)">
+                  <icon name="mdi:trash-can-outline" size="15" />
+                </button>
+                <span v-if="asset.label" class="w-full truncate rounded-sm bg-black/50 p-1 text-xs text-[#eeeeee]">{{ asset.label }}</span>
+              </div>
+            </div>
+          </div>
+
+          <p class="text-xs text-muted-foreground">
+            JPEG, PNG, WebP or GIF · max 5 MB per file
+          </p>
+        </template>
       </div>
     </div>
   </div>
@@ -223,6 +254,7 @@ async function handleDeleteComment(id: string) {
   if (!confirm("Delete this comment?")) {
     return
   }
+
   await analyticsStore.deleteComment(id)
 }
 
@@ -238,5 +270,27 @@ watch(() => preferences.value?.enableGuestbook, (val) => {
   }
 })
 
-onMounted(async () => await analyticsStore.getComments())
+async function handleAssetUpload(e: Event) {
+  const files = (e.target as HTMLInputElement).files
+  if (!files?.length) {
+    return
+  }
+
+  await Promise.all(Array.from(files).map(file => userStore.uploadAsset(file)))
+  ;(e.target as HTMLInputElement).value = ""
+}
+
+async function handleAssetDelete(id: string) {
+  if (!confirm("Delete this image? It will be removed from any photo grids or banners using it.")) {
+    return
+  }
+  await userStore.deleteAsset(id)
+}
+
+onMounted(async () => {
+  await analyticsStore.getComments()
+  if (!userStore.assets.length) {
+    await userStore.getAssets()
+  }
+})
 </script>

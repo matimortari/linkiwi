@@ -33,7 +33,7 @@ const TOAST_ICONS: Record<Toast["type"], string> = {
   position: fixed;
   bottom: 1.5rem;
   right: 1.5rem;
-  z-index: 50;
+  z-index: 60;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
