@@ -127,5 +127,4 @@ export type FontWeight = (typeof FONT_WEIGHTS)[number]["value"]
 export type LinkFontSize = (typeof LINK_FONT_SIZES)[number]["value"]
 export type ShadowWeight = (typeof SHADOW_WEIGHTS)[number]["value"]
 export type LinkPaddingSize = (typeof LINK_PADDING_SIZES)[number]["value"]
-export type SupportBanner = Exclude<BannerOption, "NONE">
 export type BannerOption = (typeof BANNER_OPTIONS)[number]["value"]
