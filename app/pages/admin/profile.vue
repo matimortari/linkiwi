@@ -15,7 +15,7 @@
       </header>
 
       <ProfileItemList />
-      <PreferencesProfileOptions />
+      <ProfileOptions />
     </div>
 
     <Preview />

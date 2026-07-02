@@ -4,10 +4,8 @@
       <div class="flex flex-col gap-1">
         <label class="text-caption">Start (optional)</label>
         <input
-          v-model="startDisplay"
-          type="text"
-          placeholder="yyyy/mm/dd hh:mm"
-          :class="{ 'border-danger!': startDisplay && !form.scheduledStart }"
+          v-model="startDisplay" type="text"
+          placeholder="yyyy/mm/dd hh:mm" :class="{ 'border-danger!': startDisplay && !form.scheduledStart }"
           @blur="startDisplay = commitDisplay(startDisplay, 'scheduledStart')"
         >
       </div>
@@ -15,10 +13,8 @@
       <div class="flex flex-col gap-1">
         <label class="text-caption">End (optional)</label>
         <input
-          v-model="endDisplay"
-          type="text"
-          placeholder="yyyy/mm/dd hh:mm"
-          :class="{ 'border-danger!': endDisplay && !form.scheduledEnd }"
+          v-model="endDisplay" type="text"
+          placeholder="yyyy/mm/dd hh:mm" :class="{ 'border-danger!': endDisplay && !form.scheduledEnd }"
           @blur="endDisplay = commitDisplay(endDisplay, 'scheduledEnd')"
         >
       </div>
@@ -28,9 +24,8 @@
         <div class="flex gap-2">
           <button
             v-for="opt in SCHEDULE_ACTION_OPTIONS" :key="opt.value"
-            type="button"
-            class="card navigation-group p-2! hover:bg-muted!" :class="{ 'bg-muted!': form.scheduleAction === opt.value }"
-            @click="form.scheduleAction = opt.value"
+            type="button" class="card navigation-group p-2! hover:bg-muted!"
+            :class="{ 'bg-muted!': form.scheduleAction === opt.value }" @click="form.scheduleAction = opt.value"
           >
             <icon :name="opt.icon" size="20" />
             <span class="text-sm">{{ opt.label }}</span>

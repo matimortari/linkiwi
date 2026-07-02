@@ -14,8 +14,8 @@
         </p>
       </header>
 
-      <PreferencesAppearanceOptions />
-      <PreferencesThemeTab :preferences="themePreferences" @update:preferences="handleThemeApply" />
+      <AppearanceOptions />
+      <AppearanceThemes :preferences="themePreferences" @update:preferences="handleThemeApply" />
     </div>
 
     <Preview />

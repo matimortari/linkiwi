@@ -155,4 +155,24 @@ const visiblePreviewItems = computed(() => (items.value ?? []).filter(item => it
 .scroll-hide::-webkit-scrollbar {
   display: none;
 }
+
+.slide-enter-from {
+  transform: translateY(100%);
+}
+.slide-enter-to {
+  transform: translateY(0);
+}
+.slide-enter-active {
+  transition: transform 0.3s ease-out;
+}
+
+.slide-leave-from {
+  transform: translateY(0);
+}
+.slide-leave-to {
+  transform: translateY(100%);
+}
+.slide-leave-active {
+  transition: transform 0.3s ease-in;
+}
 </style>
