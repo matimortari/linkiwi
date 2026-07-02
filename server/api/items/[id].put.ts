@@ -34,7 +34,22 @@ export default defineEventHandler(async (event) => {
     scheduleAction: result.data.scheduleAction,
   }
   if (existingItem.type === "LINK" && result.data.link) {
-    updatePayload.link = { update: result.data.link }
+    const linkUpdate: Record<string, unknown> = { ...result.data.link }
+    if ("assetId" in result.data.link) {
+      if (result.data.link.assetId) {
+        const asset = await db.userAsset.findUnique({ where: { id: result.data.link.assetId }, select: { userId: true, url: true } })
+        if (!asset || asset.userId !== sessionUser.id) {
+          throw createError({ statusCode: 403, statusMessage: "Asset does not belong to this user" })
+        }
+        linkUpdate.assetId = result.data.link.assetId
+        linkUpdate.imageUrl = asset.url
+      }
+      else {
+        linkUpdate.assetId = null
+        linkUpdate.imageUrl = null
+      }
+    }
+    updatePayload.link = { update: linkUpdate }
   }
 
   else if (existingItem.type === "ICON" && result.data.icon) {
@@ -91,7 +106,7 @@ defineRouteMeta({
               scheduledStart: { type: "string", format: "date-time", description: "Date and time to start the schedule" },
               scheduledEnd: { type: "string", format: "date-time", description: "Date and time to end the schedule" },
               scheduleAction: { type: "string", enum: ["HIDE", "DELETE"], description: "Action to take when the schedule is reached" },
-              link: { type: "object", properties: { url: { type: "string", description: "URL of the link" }, label: { type: "string", description: "Label of the link" } } },
+              link: { type: "object", properties: { url: { type: "string", description: "URL of the link" }, label: { type: "string", description: "Label of the link" }, assetId: { type: "string", nullable: true, description: "Optional user asset ID for the link image" } } },
               icon: { type: "object", properties: { url: { type: "string", description: "URL of the social icon" }, platform: { type: "string", description: "Platform of the icon" }, logo: { type: "string", description: "Logo of the icon" } } },
               widget: { type: "object", properties: { type: { type: "string", enum: ["GITHUB", "YOUTUBE", "SPOTIFY"] }, handle: { type: "string" } } },
               photoGrid: {

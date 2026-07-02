@@ -109,6 +109,8 @@ interface ProfileItemLink {
   itemId: string
   url: string
   label: string
+  assetId?: string | null
+  imageUrl?: string | null
 }
 
 interface ProfileItemWidget {
