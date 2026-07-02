@@ -29,6 +29,7 @@
 <script setup lang="ts">
 const { public: { baseURL } } = useRuntimeConfig()
 const { user, loading } = storeToRefs(useUserStore())
+const analyticsStore = useAnalyticsStore()
 
 useHead({
   title: "Analytics",
@@ -37,4 +38,6 @@ useHead({
 })
 
 definePageMeta({ layout: "admin", middleware: "auth" })
+
+onMounted(async () => await analyticsStore.getAnalytics())
 </script>

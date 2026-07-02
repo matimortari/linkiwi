@@ -26,12 +26,12 @@
                 <span>Change Picture</span>
                 <input type="file" accept="image/*" class="hidden" @change="handleUpdateImage">
               </label>
-              <button class="text-caption navigation-group rounded-lg p-2 whitespace-nowrap text-danger-foreground hover:bg-danger/20" @click="signOut">
+              <button class="text-caption navigation-group rounded-lg p-2 whitespace-nowrap text-danger-foreground hover:bg-muted" @click="signOut">
                 <icon name="mdi:logout" size="15" />
                 <span>Sign Out</span>
               </button>
               <button class="text-caption navigation-group rounded-lg p-2 whitespace-nowrap text-danger-foreground hover:bg-danger/20" @click="handleDeleteUser">
-                <icon name="mdi:user-remove" size="15" />
+                <icon name="mdi:user-remove" size="15" class="text-caption-danger" />
                 <span>Delete Account</span>
               </button>
             </div>
