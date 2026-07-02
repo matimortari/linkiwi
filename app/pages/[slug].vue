@@ -1,5 +1,5 @@
 <template>
-  <div class="relative flex min-h-screen flex-col items-center justify-center overflow-x-hidden">
+  <div class="relative flex min-h-screen flex-col items-center overflow-x-hidden">
     <ClientOnly>
       <nuxt-link to="/">
         <img src="/assets/symbol.png" alt="Logo" width="35" class="absolute top-4 left-4 z-30 transition-transform hover:scale-105">
@@ -11,11 +11,12 @@
 
     <div v-else-if="userProfile" class="flex w-full flex-1 flex-col items-center gap-4 pb-20 text-center" :style="backgroundStyle">
       <UserSupportBanner v-if="profilePreferences.supportBanner !== 'NONE'" :preferences="profilePreferences" />
-      <div v-if="userProfile.banner?.url" class="w-full max-w-5xl overflow-hidden rounded-xl px-4 py-8">
+
+      <div v-if="userProfile.banner?.url" class="w-full max-w-5xl overflow-hidden rounded-xl px-4 py-12">
         <img :src="userProfile.banner.url" alt="Profile Banner" class="h-32 w-full rounded-xl object-cover md:h-44">
       </div>
 
-      <div class="flex flex-col items-center gap-4" :class="{ 'relative z-10 -mt-24': userProfile.banner?.url }">
+      <div class="flex flex-col items-center gap-4" :class="userProfile.banner?.url ? 'relative z-10 -mt-24' : 'pt-16'">
         <img :src="userProfile.image" alt="Avatar" class="size-24 object-cover" :style="profilePictureStyle">
         <p :style="slugStyle">
           {{ `@${userProfile.slug}` }}
@@ -42,7 +43,7 @@
           <UserLink v-if="item.type === 'LINK'" :item="item" :preferences="profilePreferences" @click="handleClick(item.id ?? '')" />
           <UserPhotoGrid v-else-if="item.type === 'PHOTO_GRID'" :photos="item.photoGrid?.photos ?? []" :preferences="profilePreferences" />
           <UserWidget v-else-if="item.type === 'WIDGET' && item.widget" :type="item.widget.type" :handle="item.widget.handle ?? ''" :preferences="profilePreferences" />
-          <span v-else-if="item.type === 'DIVIDER'" :style="dividerStyle" />
+          <span v-else-if="item.type === 'DIVIDER'" class="w-full max-w-80" :style="dividerStyle" />
         </template>
       </ul>
 
@@ -50,7 +51,7 @@
         No content yet.
       </p>
 
-      <UserGuestbook v-if="profilePreferences?.enableGuestbook" :user-id="userProfile?.id" class="mt-8 w-full max-w-xl px-4" />
+      <UserGuestbook v-if="profilePreferences?.enableGuestbook" :user-id="userProfile?.id" class="w-full max-w-xl px-4" />
     </div>
   </div>
 </template>

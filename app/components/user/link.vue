@@ -1,13 +1,17 @@
 <template>
-  <li class="relative flex w-full max-w-80 min-w-32 flex-row items-center justify-center" :style="linkStyle(isHovered)" @mouseenter="isHovered = true" @mouseleave="isHovered = false">
-    <nuxt-link :to="item.link?.url" class="flex size-full items-center justify-center gap-2 px-2" target="_blank" @click="handleClick">
-      <img v-if="item.link?.imageUrl" :src="item.link.imageUrl" :alt="item.link.label" class="size-8 shrink-0 rounded-full object-cover">
-      <span class="inline-block truncate px-2 text-center" :class="{ 'px-4': !item.link?.imageUrl }" :style="linkInnerStyle">{{ item.link?.label }}</span>
-    </nuxt-link>
+  <li class="flex w-full max-w-80 min-w-32">
+    <nuxt-link
+      :to="item.link?.url" class="relative flex w-full items-center justify-center gap-2"
+      :style="linkStyle(isHovered)" @mouseenter="isHovered = true"
+      @mouseleave="isHovered = false" @click="handleClick"
+    >
+      <img v-if="item.link?.imageUrl" :src="item.link.imageUrl" :alt="item.link.label" class="absolute left-2 size-8 shrink-0 rounded-full object-cover">
+      <span class="inline-block truncate text-center" :style="linkInnerStyle">{{ item.link?.label }}</span>
 
-    <button v-if="preferences.showLinkCopyButton" class="absolute right-2 shrink-0 transition-transform hover:scale-110" aria-label="Copy Link" @click.stop="copyAction.triggerCopy(item.link?.url ?? '')">
-      <icon :name="copyAction.icon.value" size="15" :style="{ color: preferences.linkTextColor }" />
-    </button>
+      <button v-if="preferences.showLinkCopyButton" class="absolute inset-y-0 right-2 flex shrink-0 items-center transition-transform hover:scale-110" aria-label="Copy Link" @click.stop="copyAction.triggerCopy(item.link?.url ?? '')">
+        <icon :name="copyAction.icon.value" size="15" :style="{ color: preferences.linkTextColor }" />
+      </button>
+    </nuxt-link>
   </li>
 </template>
 
