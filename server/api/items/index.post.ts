@@ -19,7 +19,17 @@ export default defineEventHandler(async (event) => {
   // Build out conditional block inputs for nested relations
   const nestedRelationData: any = {}
   if (result.data.type === "LINK") {
-    nestedRelationData.link = { create: result.data.link }
+    let assetId: string | null = null
+    let imageUrl: string | null = null
+    if (result.data.link.assetId) {
+      const asset = await db.userAsset.findUnique({ where: { id: result.data.link.assetId }, select: { userId: true, url: true } })
+      if (!asset || asset.userId !== sessionUser.id) {
+        throw createError({ statusCode: 403, statusMessage: "Asset does not belong to this user" })
+      }
+      assetId = result.data.link.assetId
+      imageUrl = asset.url
+    }
+    nestedRelationData.link = { create: { ...result.data.link, assetId, imageUrl } }
   }
   else if (result.data.type === "ICON") {
     const existingIcon = await db.profileItemIcon.findFirst({ where: { item: { userId: sessionUser.id }, platform: result.data.icon.platform } })
@@ -78,7 +88,7 @@ defineRouteMeta({
               scheduledStart: { type: "string", format: "date-time", description: "Date and time to start the schedule" },
               scheduledEnd: { type: "string", format: "date-time", description: "Date and time to end the schedule" },
               scheduleAction: { type: "string", enum: ["HIDE", "DELETE"], description: "Action to take when the schedule is reached" },
-              link: { type: "object", properties: { url: { type: "string", description: "URL of the link" }, label: { type: "string", description: "Label of the link" } } },
+              link: { type: "object", properties: { url: { type: "string", description: "URL of the link" }, label: { type: "string", description: "Label of the link" }, assetId: { type: "string", nullable: true, description: "Optional user asset ID for the link image" } } },
               icon: { type: "object", properties: { url: { type: "string", description: "URL of the social icon" }, platform: { type: "string", description: "Platform of the icon" }, logo: { type: "string", description: "Logo of the icon" } } },
               widget: { type: "object", properties: { type: { type: "string", enum: ["GITHUB", "YOUTUBE", "SPOTIFY"] }, handle: { type: "string", description: "Handle for widgets" } } },
               photoGrid: {
