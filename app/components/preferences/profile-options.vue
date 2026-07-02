@@ -144,15 +144,20 @@ const userStore = useUserStore()
 const analyticsStore = useAnalyticsStore()
 const { user, preferences } = storeToRefs(userStore)
 const { comments } = storeToRefs(analyticsStore)
-
-// Profile form
 const profileForm = ref({ name: "", slug: "", description: "", location: "" })
 const profileAction = createActionHandler("mdi:content-save-check")
+const bannerInput = ref<HTMLInputElement | null>(null)
+const bannerFile = ref<File | null>(null)
+const bannerPreview = ref<string | null>(user.value?.banner?.url ?? null)
+const assetsOpen = ref(false)
+const guestbookEnabled = ref(preferences.value?.enableGuestbook ?? false)
+const guestbookAction = createActionHandler("mdi:content-save-check")
 
 async function handleSaveProfile() {
   if (!user.value?.id || !profileForm.value.name || !profileForm.value.slug) {
     return
   }
+
   await userStore.updateUser({ name: profileForm.value.name, slug: profileForm.value.slug, description: profileForm.value.description, location: profileForm.value.location })
   await userStore.getUser()
   profileAction.triggerSuccess()
@@ -164,16 +169,12 @@ watch(user, (u) => {
   }
 }, { immediate: true })
 
-// Banner
-const bannerInput = ref<HTMLInputElement | null>(null)
-const bannerFile = ref<File | null>(null)
-const bannerPreview = ref<string | null>(user.value?.banner?.url ?? null)
-
 function handleBannerFileChange(e: Event) {
   const file = (e.target as HTMLInputElement).files?.[0]
   if (!file) {
     return
   }
+
   bannerFile.value = file
   bannerPreview.value = URL.createObjectURL(file)
 }
@@ -182,6 +183,7 @@ async function handleUploadBanner() {
   if (!bannerFile.value) {
     return
   }
+
   const uploadedAsset = await userStore.uploadAsset(bannerFile.value)
   if (uploadedAsset?.newAsset) {
     await userStore.updateUserBanner({ url: uploadedAsset.newAsset.url, assetId: uploadedAsset.newAsset.id })
@@ -212,19 +214,6 @@ async function handleRemoveBanner() {
   bannerFile.value = null
 }
 
-watch(() => user.value?.banner?.url, (url) => {
-  if (!bannerFile.value) {
-    bannerPreview.value = url ?? null
-  }
-})
-
-// Assets collapsible
-const assetsOpen = ref(false)
-
-// Guestbook
-const guestbookEnabled = ref(preferences.value?.enableGuestbook ?? false)
-const guestbookAction = createActionHandler("mdi:content-save-check")
-
 async function handleSaveGuestbook() {
   await userStore.updatePreferences({ enableGuestbook: guestbookEnabled.value })
   guestbookAction.triggerSuccess()
@@ -236,6 +225,12 @@ async function handleDeleteComment(id: string) {
   }
   await analyticsStore.deleteComment(id)
 }
+
+watch(() => user.value?.banner?.url, (url) => {
+  if (!bannerFile.value) {
+    bannerPreview.value = url ?? null
+  }
+})
 
 watch(() => preferences.value?.enableGuestbook, (val) => {
   if (val !== undefined) {
