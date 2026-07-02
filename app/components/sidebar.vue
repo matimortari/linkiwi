@@ -14,11 +14,27 @@
     <div class="flex h-full flex-col gap-8 px-12 md:px-0">
       <div class="navigation-group w-full gap-4!">
         <div v-if="user" class="flex w-full items-center gap-4">
-          <div class="relative size-12 shrink-0">
-            <img :src="user.image" alt="Avatar" class="size-full rounded-full border object-cover select-none">
-            <button class="btn-primary absolute -right-2 -bottom-2 p-1!" aria-label="Edit Profile Information" @click="openDialog('user')">
-              <icon name="mdi:square-edit-outline" size="20" />
+          <div ref="avatarDropdownRef" class="relative size-12 shrink-0">
+            <img :src="user.image" alt="Avatar" class="size-full cursor-pointer rounded-full border object-cover select-none" @click="dropdownOpen = !dropdownOpen">
+            <button class="btn-primary absolute -right-2 -bottom-2 p-1!" aria-label="Profile options" @click.stop="dropdownOpen = !dropdownOpen">
+              <icon name="mdi:chevron-down" size="15" />
             </button>
+
+            <div v-if="dropdownOpen" class="absolute top-14 left-0 z-50 flex min-w-40 flex-col gap-1 rounded-xl border bg-card p-1 shadow-lg">
+              <label class="text-caption navigation-group cursor-pointer rounded-lg p-2 whitespace-nowrap hover:bg-muted">
+                <icon name="mdi:camera" size="15" />
+                <span>Change Picture</span>
+                <input type="file" accept="image/*" class="hidden" @change="handleUpdateImage">
+              </label>
+              <button class="text-caption navigation-group rounded-lg p-2 whitespace-nowrap text-danger-foreground hover:bg-danger/20" @click="signOut">
+                <icon name="mdi:logout" size="15" />
+                <span>Sign Out</span>
+              </button>
+              <button class="text-caption navigation-group rounded-lg p-2 whitespace-nowrap text-danger-foreground hover:bg-danger/20" @click="handleDeleteUser">
+                <icon name="mdi:user-remove" size="15" />
+                <span>Delete Account</span>
+              </button>
+            </div>
           </div>
 
           <div class="flex w-full min-w-0 flex-col overflow-hidden">
@@ -41,7 +57,7 @@
       <nav class="flex flex-col gap-2" aria-label="Main Navigation">
         <nuxt-link
           v-for="link in SIDEBAR_NAV_LINKS" :key="link.url"
-          :to="link.url" class="navigation-group justify-start rounded-lg rounded-l-none p-2 text-sm font-semibold transition-all hover:bg-muted/30"
+          :to="link.url" class="text-caption navigation-group justify-start rounded-lg rounded-l-none p-2 transition-all hover:bg-muted/30"
           :class="{ 'border-l-2 border-l-secondary!': route.path === link.url }"
         >
           <icon :name="link.icon" :class="{ 'text-secondary!': route.path === link.url }" size="25" @click="closeSidebar()" />
@@ -52,17 +68,13 @@
       <div class="border-t md:flex-1" />
 
       <nav class="flex flex-col gap-2" aria-label="Mobile Navigation Actions">
-        <button class="navigation-group justify-start rounded-lg rounded-l-none p-2 text-sm font-semibold transition-all hover:bg-muted/30" @click="openDialog('share')">
+        <button class="text-caption navigation-group justify-start rounded-lg rounded-l-none p-2 transition-all hover:bg-muted/30" @click="openDialog('share')">
           <icon name="mdi:share-variant-outline" size="25" />
           <span>Share</span>
         </button>
-        <button class="navigation-group justify-start rounded-lg rounded-l-none p-2 text-sm font-semibold transition-all hover:bg-muted/30" @click="toggleTheme">
+        <button class="text-caption navigation-group justify-start rounded-lg rounded-l-none p-2 transition-all hover:bg-muted/30" @click="toggleTheme">
           <icon :name="themeIcon" size="25" />
           <span>Toggle Theme</span>
-        </button>
-        <button class="navigation-group justify-start rounded-lg rounded-l-none p-2 text-sm font-semibold transition-all hover:bg-muted/30" @click="signOut">
-          <icon name="mdi:logout" size="25" class="text-caption-danger" />
-          <span>Sign Out</span>
         </button>
       </nav>
     </div>
@@ -72,7 +84,6 @@
     </div>
   </aside>
 
-  <UserSettingsDialog :is-open="isUserDialogOpen" @close="closeDialog('user')" />
   <UserShareDialog :is-open="isShareDialogOpen" @close="closeDialog('share')" />
 </template>
 
@@ -83,8 +94,40 @@ defineProps<{
 
 const route = useRoute()
 const { toggleTheme, themeIcon } = useTheme()
-const { isUserDialogOpen, isShareDialogOpen, openDialog, closeDialog, closeSidebar, openSidebar } = useUIState()
-const { user } = storeToRefs(useUserStore())
+const { isShareDialogOpen, openDialog, closeDialog, closeSidebar, openSidebar } = useUIState()
+const userStore = useUserStore()
+const { user } = storeToRefs(userStore)
+const { clear } = useUserSession()
+const dropdownOpen = ref(false)
+const avatarDropdownRef = ref<HTMLElement | null>(null)
+
+useClickOutside(avatarDropdownRef, () => {
+  dropdownOpen.value = false
+}, { escapeKey: true })
+
+async function handleUpdateImage(event: Event) {
+  const file = (event.target as HTMLInputElement).files?.[0]
+  if (!file) {
+    return
+  }
+
+  dropdownOpen.value = false
+  const res = await userStore.updateUserImage(file)
+  if (res?.imageUrl && user.value) {
+    user.value.image = res.imageUrl
+  }
+}
+
+async function handleDeleteUser() {
+  dropdownOpen.value = false
+  if (!confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+    return
+  }
+
+  await userStore.deleteUser()
+  await clear()
+  await navigateTo("/", { replace: true })
+}
 </script>
 
 <style scoped>

@@ -93,8 +93,6 @@
       />
     </div>
   </div>
-
-  <PreferencesThemeTab v-if="props.activeTab === 'themes'" :preferences="preferences" @update:preferences="v => emit('update:preferences', v)" />
 </template>
 
 <script setup lang="ts">
