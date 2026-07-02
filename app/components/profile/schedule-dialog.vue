@@ -128,8 +128,14 @@ watch(() => props.item, (item) => {
 }, { immediate: true })
 
 async function handleSubmit() {
-  form.value.scheduledStart = parseDisplay(startDisplay.value)
-  form.value.scheduledEnd = parseDisplay(endDisplay.value)
+  startDisplay.value = commitDisplay(startDisplay.value, "scheduledStart")
+  endDisplay.value = commitDisplay(endDisplay.value, "scheduledEnd")
+
+  const hasInvalidStart = startDisplay.value.trim() && !form.value.scheduledStart
+  const hasInvalidEnd = endDisplay.value.trim() && !form.value.scheduledEnd
+  if (hasInvalidStart || hasInvalidEnd) {
+    return
+  }
 
   await profileItemsStore.updateItem(props.item!.id, {
     scheduledStart: fromDatetimeLocalValue(form.value.scheduledStart),
