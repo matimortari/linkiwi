@@ -6,7 +6,7 @@
 
     <div class="flex flex-col gap-2">
       <div class="flex flex-col justify-between gap-2 md:flex-row">
-        <div class="navigation-group flex-wrap">
+        <div class="navigation-group">
           <button
             v-for="t in APPEARANCE_TABS" :key="t.value"
             class="navigation-group justify-start rounded-lg rounded-b-none p-2 text-sm font-semibold transition-all hover:bg-muted/30"

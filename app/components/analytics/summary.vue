@@ -23,9 +23,9 @@
             <div class="flex flex-col gap-1">
               <label class="text-caption text-xs">From</label>
               <input
-                v-model="fromDisplay" type="text"
-                placeholder="yyyy/mm/dd" class="max-w-32 text-sm md:max-w-44"
-                :class="{ 'border-danger!': fromDisplay && !dateFrom }"
+                v-model="fromDisplay" v-maska="'####/##/##'"
+                type="text" placeholder="yyyy/mm/dd"
+                class="max-w-32 text-sm md:max-w-44" :class="{ 'border-danger!': fromDisplay && !dateFrom }"
                 @blur="fromDisplay = commitDate(fromDisplay, 'dateFrom')"
               >
             </div>
@@ -33,22 +33,20 @@
             <div class="flex flex-col gap-1">
               <label class="text-caption text-xs">To</label>
               <input
-                v-model="toDisplay" type="text"
-                placeholder="yyyy/mm/dd" class="max-w-32 text-sm md:max-w-44"
-                :class="{ 'border-danger!': toDisplay && !dateTo }"
+                v-model="toDisplay" v-maska="'####/##/##'"
+                type="text" placeholder="yyyy/mm/dd"
+                class="max-w-32 text-sm md:max-w-44" :class="{ 'border-danger!': toDisplay && !dateTo }"
                 @blur="toDisplay = commitDate(toDisplay, 'dateTo')"
               >
             </div>
           </div>
 
           <div class="navigation-group self-end">
-            <button type="button" class="btn-ghost text-sm" :disabled="!dateFrom && !dateTo" @click="handleClearFilter">
-              <icon name="mdi:filter-remove-outline" size="20" />
-              <span>Reset</span>
-            </button>
             <button type="button" class="btn-primary" @click="handleApplyFilter">
               <icon name="mdi:filter-outline" size="20" />
-              <span>Apply</span>
+            </button>
+            <button type="button" class="btn-ghost" :disabled="!dateFrom && !dateTo" @click="handleClearFilter">
+              <icon name="mdi:filter-remove-outline" size="20" />
             </button>
             <button class="btn-danger" title="Delete all analytics data" @click="handleDeleteAnalytics">
               <icon :name="resetAction.icon.value" size="20" />
@@ -139,6 +137,8 @@
 </template>
 
 <script setup lang="ts">
+import { vMaska } from "maska/vue"
+
 const { createActionHandler } = useActionIcon()
 const analyticsStore = useAnalyticsStore()
 const { totalViews, totalClicks, clickRate, joinedAt, pageViewsChartData, linkClicksChartData, iconClicksChartData, referrerChartData, topReferrers } = useAnalyticsData()

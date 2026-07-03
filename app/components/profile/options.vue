@@ -77,14 +77,15 @@
       </div>
 
       <div class="card flex flex-col gap-4">
-        <div class="flex items-center justify-between gap-2">
+        <div class="flex flex-col items-start justify-between gap-2 md:flex-row md:items-center">
           <div class="flex flex-col gap-1">
             <span class="text-sm font-medium">Guestbook</span>
             <p class="text-caption">
               Allow visitors to leave comments on your profile.
             </p>
           </div>
-          <div class="navigation-group">
+
+          <div class="navigation-group self-end">
             <Checkbox id="enableGuestbook" v-model:value="guestbookEnabled" label="Enable" class="max-w-xs" />
             <button class="btn-primary" @click="handleSaveGuestbook">
               <icon :name="guestbookAction.icon.value" size="20" />
