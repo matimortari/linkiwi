@@ -200,7 +200,7 @@ h2 {
   margin-inline: auto;
   width: 100%;
   max-width: 1280px;
-  padding-inline: 1.25rem;
+  padding-inline: 2rem;
 }
 
 .hero-shell {
@@ -256,10 +256,6 @@ h2 {
 }
 
 @media (min-width: 768px) {
-  .section-shell {
-    padding-inline: 2rem;
-  }
-
   .hero-shell {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(320px, 520px);

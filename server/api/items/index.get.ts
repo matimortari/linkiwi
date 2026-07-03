@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
     return { ...rest, clickCount: _count.clicks }
   })
 
-  await setCached(cacheKey, formattedItems, CACHE_TTL.SHORT)
+  await setCached(cacheKey, formattedItems, 60)
 
   return { items: formattedItems }
 })

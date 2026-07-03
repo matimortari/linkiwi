@@ -8,10 +8,16 @@ const r2SecretAccessKey = requireEnv("R2_SECRET_ACCESS_KEY")
 const r2BucketName = requireEnv("R2_BUCKET_NAME")
 const r2PublicUrl = requireEnv("R2_PUBLIC_URL")
 
+/**
+ * S3 client instance for interacting with R2 Blob storage.
+ */
 export const s3 = new S3Client({
   region: "auto",
   endpoint: r2Endpoint,
-  credentials: { accessKeyId: r2AccessKeyId, secretAccessKey: r2SecretAccessKey },
+  credentials: {
+    accessKeyId: r2AccessKeyId,
+    secretAccessKey: r2SecretAccessKey,
+  },
 })
 
 /**
@@ -40,24 +46,17 @@ export async function uploadFile({ path, file, maxSize, allowedMimeTypes, oldFil
 }
 
 /**
+ * Deletes a file from Blob storage given its URL.
  * Shared default assets must never be deleted from blob storage.
  */
-export function isProtectedDefaultFile(url: string): boolean {
-  if (!url.startsWith(`${r2PublicUrl}/`)) {
-    return false
-  }
-
-  const key = url.slice(`${r2PublicUrl}/`.length)
-  return key.startsWith("defaults/")
-}
-
-/**
- * Deletes a file from Blob storage given its URL.
- */
 export async function deleteFile(url: string): Promise<void> {
-  if (isProtectedDefaultFile(url)) {
-    return
-  }
+  const prefix = `${r2PublicUrl}/`
+  if (url.startsWith(prefix)) {
+    const key = url.slice(prefix.length)
+    if (key.startsWith("defaults/")) {
+      return
+    }
 
-  await s3.send(new DeleteObjectCommand({ Bucket: r2BucketName, Key: url.replace(`${r2PublicUrl}/`, "") }))
+    await s3.send(new DeleteObjectCommand({ Bucket: r2BucketName, Key: key }))
+  }
 }

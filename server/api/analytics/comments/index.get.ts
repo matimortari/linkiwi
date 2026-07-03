@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
 
   const comments = await db.comment.findMany({ where: { userId: sessionUser.id }, orderBy: { createdAt: "desc" } })
 
-  await setCached(cacheKey, comments, CACHE_TTL.SHORT)
+  await setCached(cacheKey, comments, 60)
 
   return { comments }
 })

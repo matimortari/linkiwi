@@ -46,7 +46,7 @@ export default defineEventHandler(async (event) => {
 
   const hasActiveSchedule = profile.items.some(item => item.scheduledStart && item.scheduledEnd && new Date(item.scheduledEnd) > new Date(item.scheduledStart))
 
-  await setCached(cacheKey, profile, hasActiveSchedule ? CACHE_TTL.SHORT : CACHE_TTL.LONG)
+  await setCached(cacheKey, profile, hasActiveSchedule ? 60 : 300)
 
   return { profile }
 })

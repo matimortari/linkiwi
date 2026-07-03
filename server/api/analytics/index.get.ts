@@ -34,7 +34,7 @@ export default defineEventHandler(async (event) => {
 
   const data = { pageViews, itemClicks }
 
-  await setCached(cacheKey, data, CACHE_TTL.SHORT)
+  await setCached(cacheKey, data, 60)
 
   return { data }
 })

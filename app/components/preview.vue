@@ -146,6 +146,16 @@ const visiblePreviewItems = computed(() => (items.value ?? []).filter(item => it
   }
   return a.order - b.order
 }))
+
+function scrollLock(locked: boolean) {
+  const val = locked ? "hidden" : ""
+  document.documentElement.style.overflow = val
+  document.body.style.overflow = val
+}
+
+watch(isPreviewOpen, scrollLock)
+
+onBeforeUnmount(() => scrollLock(false))
 </script>
 
 <style scoped>

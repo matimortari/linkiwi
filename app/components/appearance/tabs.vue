@@ -1,7 +1,7 @@
 <template>
   <div v-if="props.activeTab === 'background'" class="card grid grid-cols-1 gap-2 md:grid-cols-2">
     <RadioOptions v-model:value="localPrefs.backgroundType" name="backgroundType" label="Background Type" :options="BACKGROUND_TYPES" />
-    <div class="flex flex-col gap-2 p-2">
+    <div class="flex flex-col gap-2 md:p-2">
       <h6 class="py-2">
         Colors
       </h6>
@@ -12,7 +12,7 @@
   </div>
 
   <div v-if="props.activeTab === 'layout'" class="card grid grid-cols-1 gap-2 md:grid-cols-2">
-    <div class="flex flex-col gap-2 p-2">
+    <div class="flex flex-col gap-2 md:p-2">
       <h6 class="py-2">
         Header & Profile
       </h6>
@@ -29,7 +29,7 @@
       <Selector id="dividerStyle" v-model:value="localPrefs.dividerStyle" label="Style" :options="DIVIDER_STYLES" />
     </div>
 
-    <div class="flex flex-col gap-2 p-2">
+    <div class="flex flex-col gap-2 md:p-2">
       <h6 class="py-2">
         Username
       </h6>
@@ -41,7 +41,7 @@
   </div>
 
   <div v-if="props.activeTab === 'links'" class="card grid grid-cols-1 gap-2 md:grid-cols-2">
-    <div class="flex flex-col gap-2 p-2">
+    <div class="flex flex-col gap-2 md:p-2">
       <h6 class="py-2">
         Base Styles
       </h6>
@@ -55,7 +55,7 @@
       <Checkbox id="showLinkCopyButton" v-model:value="localPrefs.showLinkCopyButton" label="Show 'Copy Link' Button" />
     </div>
 
-    <div class="flex flex-col gap-2 p-2">
+    <div class="flex flex-col gap-2 md:p-2">
       <h6 class="py-2">
         Shadows
       </h6>
@@ -71,7 +71,7 @@
   </div>
 
   <div v-if="props.activeTab === 'icons'" class="card grid grid-cols-1 gap-2 md:grid-cols-2">
-    <div class="flex flex-col gap-2 p-2">
+    <div class="flex flex-col gap-2 md:p-2">
       <h6 class="py-2">
         Base Styles
       </h6>
@@ -80,7 +80,7 @@
       <ColorPicker id="iconHoverBackgroundColor" v-model:value="localPrefs.iconHoverBackgroundColor" label="Hover Background Color" />
     </div>
 
-    <div class="flex flex-col gap-2 p-2">
+    <div class="flex flex-col gap-2 md:p-2">
       <h6 class="py-2">
         Shadows
       </h6>

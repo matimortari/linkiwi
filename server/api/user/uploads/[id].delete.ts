@@ -22,7 +22,6 @@ export default defineEventHandler(async (event) => {
   await db.userAsset.delete({ where: { id: assetId } })
 
   const user = await db.user.findUnique({ where: { id: sessionUser.id }, select: { slug: true } })
-
   await deleteCached(CacheKeys.userAssets?.(sessionUser.id) || `user:assets:${sessionUser.id}`, CacheKeys.userItems(sessionUser.id), CacheKeys.userProfile(user?.slug || ""))
 
   return { success: true, message: "Media asset completely removed from cloud storage." }

@@ -2,7 +2,6 @@ import type { H3Event } from "h3"
 import type { RedisClientType } from "redis"
 import { createClient } from "redis"
 
-export const CACHE_TTL = { SHORT: 60, LONG: 300 }
 let redisClient: RedisClientType | null = null
 let connecting = false
 

@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 404, statusMessage: "User not found" })
   }
 
-  await setCached(cacheKey, user, CACHE_TTL.SHORT)
+  await setCached(cacheKey, user, 60)
 
   return { user }
 })

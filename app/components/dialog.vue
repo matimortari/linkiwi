@@ -2,7 +2,7 @@
   <teleport to="body">
     <transition :name="isMobile ? 'slide-up' : 'fade'">
       <div
-        v-if="isOpen" class="fixed inset-0 z-50 flex bg-black/70 backdrop-blur-xs"
+        v-if="isOpen" class="fixed inset-0 z-50 flex bg-black/50 backdrop-blur-xs"
         :class="isMobile ? 'items-end justify-center' : 'items-center justify-center'" @mousedown.self="emit('update:isOpen', false)"
       >
         <div
@@ -50,14 +50,28 @@ function onEscape(e: KeyboardEvent) {
   }
 }
 
+function scrollLock(locked: boolean) {
+  const val = locked ? "hidden" : ""
+  document.documentElement.style.overflow = val
+  document.body.style.overflow = val
+}
+
+watch(() => props.isOpen, scrollLock)
+
 onMounted(() => {
   const mql = globalThis.matchMedia("(max-width: 767px)")
   isMobile.value = mql.matches
   mql.addEventListener("change", e => isMobile.value = e.matches)
   document.addEventListener("keydown", onEscape)
+  if (props.isOpen) {
+    scrollLock(true)
+  }
 })
 
-onBeforeUnmount(() => document.removeEventListener("keydown", onEscape))
+onBeforeUnmount(() => {
+  document.removeEventListener("keydown", onEscape)
+  scrollLock(false)
+})
 </script>
 
 <style scoped>

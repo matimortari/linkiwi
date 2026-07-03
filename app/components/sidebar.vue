@@ -5,7 +5,7 @@
   </button>
 
   <!-- Mobile overlay -->
-  <div v-if="isOpen" class="fixed inset-0 z-20 bg-black/70 md:hidden" @click="closeSidebar()" />
+  <div v-if="isOpen" class="fixed inset-0 z-20 bg-black/50 backdrop-blur-xs md:hidden" @click="closeSidebar()" />
 
   <aside
     class="fixed top-0 left-0 z-30 size-full bg-card px-4 py-8 transition-transform ease-in-out md:static md:block md:w-56 md:translate-x-0 md:bg-transparent 2xl:w-64 2xl:py-12"
@@ -59,8 +59,9 @@
           v-for="link in SIDEBAR_NAV_LINKS" :key="link.url"
           :to="link.url" class="text-caption navigation-group justify-start rounded-lg rounded-l-none p-2 transition-all hover:bg-muted/30"
           :class="{ 'border-l-2 border-l-secondary!': route.path === link.url }"
+          @click="closeSidebar()"
         >
-          <icon :name="link.icon" :class="{ 'text-secondary!': route.path === link.url }" size="25" @click="closeSidebar()" />
+          <icon :name="link.icon" :class="{ 'text-secondary!': route.path === link.url }" size="25" />
           <span>{{ link.label }}</span>
         </nuxt-link>
       </nav>
@@ -100,10 +101,7 @@ const { user } = storeToRefs(userStore)
 const { clear } = useUserSession()
 const dropdownOpen = ref(false)
 const avatarDropdownRef = ref<HTMLElement | null>(null)
-
-useClickOutside(avatarDropdownRef, () => {
-  dropdownOpen.value = false
-}, { escapeKey: true })
+useClickOutside(avatarDropdownRef, () => dropdownOpen.value = false, { escapeKey: true })
 
 async function handleUpdateImage(event: Event) {
   const file = (event.target as HTMLInputElement).files?.[0]

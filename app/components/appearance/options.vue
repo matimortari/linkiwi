@@ -4,31 +4,29 @@
       Appearance
     </h4>
 
-    <div class="flex flex-col gap-2">
-      <div class="flex flex-col justify-between gap-2 md:flex-row">
-        <div class="navigation-group">
-          <button
-            v-for="t in APPEARANCE_TABS" :key="t.value"
-            class="navigation-group justify-start rounded-lg rounded-b-none p-2 text-sm font-semibold transition-all hover:bg-muted/30"
-            :class="{ 'border-b-2 border-b-secondary!': activeTab === t.value }" @click="activeTab = t.value"
-          >
-            {{ t.label }}
-          </button>
-        </div>
-
-        <div class="navigation-group">
-          <button class="btn-danger" @click="handleResetPreferences">
-            <icon :name="resetAction.icon.value" size="20" />
-            <span>Reset</span>
-          </button>
-          <button class="btn-primary" @click="handleUpdatePreferences">
-            <icon :name="saveAction.icon.value" size="20" />
-            <span>Save</span>
-          </button>
-        </div>
+    <div class="flex flex-col gap-4">
+      <div class="navigation-group">
+        <button
+          v-for="t in APPEARANCE_TABS" :key="t.value"
+          class="navigation-group justify-start rounded-lg rounded-b-none p-2 text-sm font-semibold whitespace-nowrap transition-all hover:bg-muted/30"
+          :class="{ 'border-b-2 border-b-secondary!': activeTab === t.value }" @click="activeTab = t.value"
+        >
+          {{ t.label }}
+        </button>
       </div>
 
       <AppearanceTabs v-model:preferences="preferences" v-model:active-tab="activeTab" />
+
+      <div class="navigation-group self-end">
+        <button class="btn-danger" @click="handleResetPreferences">
+          <icon :name="resetAction.icon.value" size="20" />
+          <span>Reset</span>
+        </button>
+        <button class="btn-primary" @click="handleUpdatePreferences">
+          <icon :name="saveAction.icon.value" size="20" />
+          <span>Save</span>
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -49,6 +47,10 @@ async function handleUpdatePreferences() {
 }
 
 async function handleResetPreferences() {
+  if (!confirm("Reset all appearance settings to default?")) {
+    return
+  }
+
   preferences.value = { ...DEFAULT_PREFERENCES }
   await userStore.updatePreferences(preferences.value)
   resetAction.triggerSuccess()

@@ -11,8 +11,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const assets = await db.userAsset.findMany({ where: { userId: sessionUser.id }, orderBy: { createdAt: "desc" } })
-
-  await setCached(cacheKey, assets, CACHE_TTL.SHORT)
+  await setCached(cacheKey, assets, 60)
 
   return { assets }
 })

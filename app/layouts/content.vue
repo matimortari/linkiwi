@@ -1,8 +1,8 @@
 <template>
   <Masthead :is-toc-open="isTocOpen" @toggle-toc="isTocOpen = !isTocOpen" />
 
-  <div class="relative flex min-h-screen w-full max-w-6xl">
-    <div v-if="isTocOpen" aria-hidden="true" class="fixed inset-0 z-30 bg-black/70 backdrop-blur-sm xl:hidden" @click="isTocOpen = false" />
+  <div class="relative flex min-h-screen w-full max-w-7xl">
+    <div v-if="isTocOpen" aria-hidden="true" class="fixed inset-0 z-30 bg-black/50 backdrop-blur-xs xl:hidden" @click="isTocOpen = false" />
 
     <button class="btn fixed bottom-6 left-6 z-30" aria-label="Scroll to top" @click="scrollToTop">
       <icon name="mdi:arrow-up" size="25" />

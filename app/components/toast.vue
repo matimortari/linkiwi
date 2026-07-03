@@ -20,12 +20,6 @@
 
 <script setup lang="ts">
 const { toasts, dismiss } = useToast()
-const TOAST_ICONS: Record<Toast["type"], string> = {
-  danger: "ph:x-circle-bold",
-  success: "ph:check-circle-bold",
-  warning: "ph:warning-circle-bold",
-  info: "ph:info-bold",
-}
 </script>
 
 <style scoped>
@@ -39,14 +33,6 @@ const TOAST_ICONS: Record<Toast["type"], string> = {
   gap: 0.5rem;
   max-width: 24rem;
   pointer-events: none;
-}
-@media (max-width: 640px) {
-  .toast-container {
-    left: 1rem;
-    right: 1rem;
-    bottom: 1rem;
-    max-width: none;
-  }
 }
 
 .toast {

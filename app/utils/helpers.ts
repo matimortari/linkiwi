@@ -104,15 +104,15 @@ export function formatSourceLabel(source: string | null | undefined): string {
 export function getErrorMessage(err: unknown, fallback: string): string {
   if (err && typeof err === "object") {
     const e = err as {
-      data?: { statusMessage?: string, message?: string, issues?: Array<{ message: string }> }
-      statusMessage?: string
+      data?: { statusText?: string, message?: string, issues?: Array<{ message: string }> }
+      statusText?: string
       message?: string
     }
     if (e.data?.issues?.length) {
       return e.data.issues.map(i => i.message).join(", ")
     }
 
-    return e.data?.statusMessage || e.data?.message || e.statusMessage || e.message || fallback
+    return e.data?.statusText || e.data?.message || e.statusText || e.message || fallback
   }
 
   return fallback
