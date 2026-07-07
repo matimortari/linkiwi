@@ -42,6 +42,7 @@
 <script setup lang="ts">
 const { themeTitle } = useTheme()
 const { loggedIn } = useUserSession()
+const { signOut } = useSession()
 
 const FOOTER_SECTIONS = computed(() => [
   {

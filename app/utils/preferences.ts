@@ -1,4 +1,3 @@
-// Available user preference options
 export const BACKGROUND_TYPES = [
   { value: "FLAT", label: "Flat" },
   { value: "GRADIENT", label: "Gradient" },

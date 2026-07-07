@@ -1,4 +1,3 @@
-// Available themes for users to choose from
 export const THEMES: { title: string, preferences: UserPreferences }[] = [
   {
     title: "Arctic White",

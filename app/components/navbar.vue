@@ -25,4 +25,5 @@
 <script setup lang="ts">
 const { toggleTheme, themeIcon } = useTheme()
 const { loggedIn } = useUserSession()
+const { signOut } = useSession()
 </script>

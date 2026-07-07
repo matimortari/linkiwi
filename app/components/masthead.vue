@@ -36,4 +36,5 @@ const emit = defineEmits<{ toggleToc: [] }>()
 
 const { toggleTheme, themeIcon } = useTheme()
 const { loggedIn } = useUserSession()
+const { signOut } = useSession()
 </script>

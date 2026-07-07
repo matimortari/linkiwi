@@ -57,48 +57,6 @@ export function fromDatetimeLocalValue(value: string): string | null {
 }
 
 /**
- * Formats a source string into a human-readable label.
- */
-export function formatSourceLabel(source: string | null | undefined): string {
-  if (!source || typeof source !== "string" || source.trim() === "") {
-    return "Unknown"
-  }
-
-  const labels: Record<string, string> = {
-    direct: "Direct",
-    facebook: "Facebook",
-    twitter: "Twitter/X",
-    instagram: "Instagram",
-    linkedin: "LinkedIn",
-    reddit: "Reddit",
-    tiktok: "TikTok",
-    youtube: "YouTube",
-    pinterest: "Pinterest",
-    whatsapp: "WhatsApp",
-    telegram: "Telegram",
-    discord: "Discord",
-    mastodon: "Mastodon",
-    bluesky: "Bluesky",
-    google: "Google",
-    bing: "Bing",
-    yahoo: "Yahoo",
-    duckduckgo: "DuckDuckGo",
-    yandex: "Yandex",
-    slack: "Slack",
-    teams: "Microsoft Teams",
-    github: "GitHub",
-    gitlab: "GitLab",
-    medium: "Medium",
-    substack: "Substack",
-    email: "Email",
-    newsletter: "Newsletter",
-    unknown: "Unknown",
-  }
-
-  return labels[source] || source.charAt(0).toUpperCase() + source.slice(1)
-}
-
-/**
  * Extracts the error message from various error formats (Nuxt/H3/Zod).
  */
 export function getErrorMessage(err: unknown, fallback: string): string {
@@ -116,22 +74,4 @@ export function getErrorMessage(err: unknown, fallback: string): string {
   }
 
   return fallback
-}
-
-/**
- * Signs in the user by redirecting to the provider's authentication endpoint.
- */
-export function signIn(provider: string) {
-  navigateTo(`/api/auth/${provider}`, { external: true })
-}
-
-/**
-  Signs out the current user by calling the logout endpoint and clearing the session.
- */
-export async function signOut() {
-  const { clear } = useUserSession()
-
-  await $fetch("/api/auth/logout", { method: "POST", credentials: "include" })
-  await clear()
-  await navigateTo("/")
 }

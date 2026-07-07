@@ -2,41 +2,35 @@ import logoDark from "~/assets/wordmark-dark.png"
 import logoLight from "~/assets/wordmark-light.png"
 
 export function useTheme() {
-  const colorMode = useState<"light" | "dark">("theme", () => "light")
+  const colorMode = useState<"dark" | "light">("theme", () => "dark")
   const storageKey = "nuxt-color-mode"
-
-  const updateHtmlClass = () => {
-    const html = globalThis.document.documentElement
-    html.classList.remove("light", "dark")
-    html.classList.add(colorMode.value)
-  }
+  const themeIcon = computed(() => colorMode.value === "light" ? "ph:moon-stars-bold" : "ph:sun-horizon-bold")
+  const themeTitle = computed(() => colorMode.value === "light" ? logoDark : logoLight)
 
   const toggleTheme = () => {
-    colorMode.value = colorMode.value === "dark" ? "light" : "dark"
+    colorMode.value = colorMode.value === "light" ? "dark" : "light"
     globalThis.localStorage.setItem(storageKey, colorMode.value)
-    updateHtmlClass()
+    globalThis.document.documentElement.classList.remove("dark", "light")
+    globalThis.document.documentElement.classList.add(colorMode.value)
   }
 
   onMounted(() => {
     const saved = globalThis.localStorage.getItem(storageKey)
-    if (saved === "dark" || saved === "light") {
+    if (saved === "light" || saved === "dark") {
       colorMode.value = saved
     }
     else {
-      const prefersDark = globalThis.matchMedia("(prefers-color-scheme: dark)").matches
-      colorMode.value = prefersDark ? "dark" : "light"
+      colorMode.value = globalThis.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark"
     }
 
-    updateHtmlClass()
+    globalThis.document.documentElement.classList.remove("dark", "light")
+    globalThis.document.documentElement.classList.add(colorMode.value)
   })
-
-  const themeIcon = computed(() => colorMode.value === "light" ? "mdi:weather-night" : "mdi:weather-sunny")
-  const themeTitle = computed(() => colorMode.value === "light" ? logoDark : logoLight)
 
   return {
     colorMode,
-    toggleTheme,
     themeIcon,
     themeTitle,
+    toggleTheme,
   }
 }

@@ -95,6 +95,7 @@ defineProps<{
 
 const route = useRoute()
 const { toggleTheme, themeIcon } = useTheme()
+const { signOut } = useSession()
 const { isShareDialogOpen, openDialog, closeDialog, closeSidebar, openSidebar } = useUIState()
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)

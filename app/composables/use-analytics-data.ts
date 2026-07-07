@@ -2,6 +2,46 @@ export function useAnalyticsData() {
   const analyticsStore = useAnalyticsStore()
   const userStore = useUserStore()
 
+  // Helper function to format referrer source label
+  function formatSourceLabel(source: string | null | undefined): string {
+    if (!source || typeof source !== "string" || source.trim() === "") {
+      return "Unknown"
+    }
+
+    const labels: Record<string, string> = {
+      direct: "Direct",
+      facebook: "Facebook",
+      twitter: "Twitter/X",
+      instagram: "Instagram",
+      linkedin: "LinkedIn",
+      reddit: "Reddit",
+      tiktok: "TikTok",
+      youtube: "YouTube",
+      pinterest: "Pinterest",
+      whatsapp: "WhatsApp",
+      telegram: "Telegram",
+      discord: "Discord",
+      mastodon: "Mastodon",
+      bluesky: "Bluesky",
+      google: "Google",
+      bing: "Bing",
+      yahoo: "Yahoo",
+      duckduckgo: "DuckDuckGo",
+      yandex: "Yandex",
+      slack: "Slack",
+      teams: "Microsoft Teams",
+      github: "GitHub",
+      gitlab: "GitLab",
+      medium: "Medium",
+      substack: "Substack",
+      email: "Email",
+      newsletter: "Newsletter",
+      unknown: "Unknown",
+    }
+
+    return labels[source] || source.charAt(0).toUpperCase() + source.slice(1)
+  }
+
   // Helper function to bucket records by calendar date
   function groupByDate<T extends Record<string, any>>(items: T[], dateKey: string): Record<string, number> {
     const result: Record<string, number> = {}
@@ -19,6 +59,14 @@ export function useAnalyticsData() {
     }
 
     return result
+  }
+
+  // Chart data builder
+  function buildChart(values: number[], labels: string[], label: string) {
+    if (!values.some(v => v > 0)) {
+      return null
+    }
+    return { labels, datasets: [{ label, data: values, backgroundColor: "#6366f1" }] }
   }
 
   const pageViews = computed(() => analyticsStore.pageViews)
@@ -46,14 +94,6 @@ export function useAnalyticsData() {
   const totalClicks = computed(() => analyticsStore.itemClicks.length)
   const clickRate = computed(() => totalViews.value ? ((totalClicks.value / totalViews.value) * 100).toFixed(2) : "0")
   const joinedAt = computed(() => userStore.user?.createdAt)
-
-  // Chart data builder
-  function buildChart(values: number[], labels: string[], label: string) {
-    if (!values.some(v => v > 0)) {
-      return null
-    }
-    return { labels, datasets: [{ label, data: values, backgroundColor: "#6366f1" }] }
-  }
 
   const pageViewsChartData = computed(() => stats.value.length ? buildChart(stats.value.map(s => s.pageViews), stats.value.map(s => s.date), "Page Views") : null)
   const linkClicksChartData = computed(() => stats.value.length ? buildChart(stats.value.map(s => s.linkClicks), stats.value.map(s => s.date), "Link Clicks") : null)
@@ -110,13 +150,6 @@ export function useAnalyticsData() {
     }
   })
 
-  const normalizedRecords = computed(() => {
-    const currentSlug = userStore.user?.slug ?? ""
-    const viewsLog = pageViews.value.map(pv => ({ type: "pageView", slug: currentSlug, referrer: pv.referrer ?? null, createdAt: pv.createdAt ? String(pv.createdAt) : undefined }))
-    const clicksLog = analyticsStore.itemClicks.map(ic => ({ type: "itemClick", itemId: String(ic.itemId), createdAt: ic.createdAt ? String(ic.createdAt) : undefined }))
-    return [...viewsLog, ...clicksLog]
-  })
-
   return {
     stats,
     totalViews,
@@ -128,6 +161,5 @@ export function useAnalyticsData() {
     iconClicksChartData,
     topReferrers,
     referrerChartData,
-    normalizedRecords,
   }
 }

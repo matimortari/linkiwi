@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 const { public: { baseURL } } = useRuntimeConfig()
-useSessionMonitor()
+useSession()
 
 useHead({
   htmlAttrs: { lang: "en" },
