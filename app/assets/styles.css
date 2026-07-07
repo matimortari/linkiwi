@@ -199,6 +199,8 @@ h6 {
     border: none;
     max-height: 90dvh;
     box-shadow: 0 -2px 8px 0px rgba(0, 0, 0, 0.15);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
   }
 }
 .overlay > section {

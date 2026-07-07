@@ -4,7 +4,7 @@
   </h1>
 
   <div v-for="(section, index) in LEGAL_PAGES[slug]?.content" :key="index">
-    <h2>
+    <h2 :id="slugify(section.title)">
       {{ section.title }}
     </h2>
 

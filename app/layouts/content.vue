@@ -4,17 +4,36 @@
   <div class="relative flex min-h-screen w-full max-w-7xl">
     <div v-if="isTocOpen" aria-hidden="true" class="fixed inset-0 z-30 bg-black/50 backdrop-blur-xs xl:hidden" @click="isTocOpen = false" />
 
-    <button class="btn fixed bottom-6 left-6 z-30" aria-label="Scroll to top" @click="scrollToTop">
-      <icon name="mdi:arrow-up" size="25" />
-    </button>
+    <aside
+      id="table-of-contents" class="fixed top-15 left-0 z-30 h-[calc(100vh-4.5rem)] w-[20rem] overflow-y-auto bg-card p-8 transition-transform md:z-20 xl:sticky xl:top-[5.3rem] xl:h-[calc(100vh-5.3rem)] xl:translate-x-0"
+      :class="isTocOpen ? 'translate-x-0' : '-translate-x-full'"
+    >
+      <p class="mb-4 text-sm font-bold tracking-wider text-muted-foreground uppercase">
+        On this page
+      </p>
+      <nav class="flex flex-col gap-2">
+        <nuxt-link
+          v-for="heading in headings" :key="heading.id"
+          :to="`#${heading.id}`" class="text-sm transition-colors hover:text-primary"
+          :class="activeId === heading.id ? 'font-semibold text-primary' : 'text-muted-foreground'"
+          @click="isTocOpen = false"
+        >
+          {{ heading.text }}
+        </nuxt-link>
+      </nav>
+    </aside>
 
     <main
       v-motion :initial="{ opacity: 0, y: 10 }"
       :enter="{ opacity: 1, y: 0 }" :duration="600"
-      class="prose"
+      class="prose min-w-0 flex-1"
     >
       <slot />
     </main>
+
+    <button class="btn fixed bottom-6 left-6 z-30" aria-label="Scroll to top" @click="scrollToTop">
+      <icon name="mdi:arrow-up" size="25" />
+    </button>
   </div>
 
   <div ref="footerRef">
@@ -23,9 +42,13 @@
 </template>
 
 <script setup lang="ts">
+const route = useRoute()
 const isTocOpen = ref(false)
 const footerRef = ref<HTMLElement | null>(null)
 const footerBottom = ref(0)
+const headings = ref<{ id: string, text: string }[]>([])
+const activeId = ref("")
+let observer: IntersectionObserver | null = null
 
 function updateFooterBottom() {
   const el = footerRef.value
@@ -39,12 +62,45 @@ function scrollToTop() {
   window.scrollTo({ top: 0, behavior: "smooth" })
 }
 
+function extractHeadings() {
+  const domHeadings = document.querySelectorAll(".prose h2")
+  headings.value = Array.from(domHeadings).map(el => ({
+    id: el.id,
+    text: el.textContent || "",
+  }))
+  initObserver()
+}
+
+function initObserver() {
+  if (observer) {
+    observer.disconnect()
+  }
+
+  observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        activeId.value = entry.target.id
+      }
+    })
+  }, { rootMargin: "-20% 0px -80% 0px" })
+
+  document.querySelectorAll(".prose h2").forEach(el => observer!.observe(el))
+}
+
 onMounted(() => {
   updateFooterBottom()
   window.addEventListener("resize", updateFooterBottom)
+  nextTick(() => extractHeadings())
 })
 
-onUnmounted(() => window.removeEventListener("resize", updateFooterBottom))
+watch(() => route.path, () => nextTick(() => extractHeadings()))
+
+onUnmounted(() => {
+  window.removeEventListener("resize", updateFooterBottom)
+  if (observer) {
+    observer.disconnect()
+  }
+})
 </script>
 
 <style scoped>
@@ -74,7 +130,6 @@ onUnmounted(() => window.removeEventListener("resize", updateFooterBottom))
 @media (min-width: 1280px) {
   .prose {
     max-width: 100%;
-    margin-left: 20rem;
   }
 }
 
