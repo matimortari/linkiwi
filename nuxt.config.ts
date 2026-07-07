@@ -25,24 +25,18 @@ export default defineNuxtConfig({
   },
   devServer: { host: "0.0.0.0" },
   nitro: {
-    experimental: {
-      openAPI: true,
-      tasks: true,
-    },
-    openAPI: {
-      production: "prerender",
-    },
-    scheduledTasks: {
-      "*/15 * * * *": ["items:scheduled-delete"],
-    },
+    experimental: { tasks: true },
+    scheduledTasks: { "*/15 * * * *": ["items:scheduled-delete"] },
   },
   vite: {
-    server: process.env.NUXT_PUBLIC_BASE_URL
-      ? {
-          allowedHosts: [new URL(process.env.NUXT_PUBLIC_BASE_URL).hostname],
-          hmr: { protocol: "wss", host: new URL(process.env.NUXT_PUBLIC_BASE_URL).hostname, port: Number(new URL(process.env.NUXT_PUBLIC_BASE_URL).port) || 3000 },
-        }
-      : {},
+    server: {
+      allowedHosts: [new URL(process.env.NUXT_PUBLIC_BASE_URL!).hostname],
+      hmr: {
+        protocol: "wss",
+        host: new URL(process.env.NUXT_PUBLIC_BASE_URL!).hostname,
+        port: Number(new URL(process.env.NUXT_PUBLIC_BASE_URL!).port),
+      },
+    },
     plugins: [tailwindcss() as any],
   },
   app: {
@@ -81,7 +75,14 @@ export default defineNuxtConfig({
     serverBundle: "remote",
     clientBundle: { scan: true },
   },
-  ogImage: { enabled: false },
-  robots: { disallow: ["/admin"] },
-  site: { url: process.env.NUXT_PUBLIC_BASE_URL, name: "LinKiwi" },
+  ogImage: {
+    enabled: false,
+  },
+  robots: {
+    disallow: ["/admin"],
+  },
+  site: {
+    url: process.env.NUXT_PUBLIC_BASE_URL,
+    name: "LinKiwi",
+  },
 })

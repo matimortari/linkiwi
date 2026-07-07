@@ -2,17 +2,17 @@
 
 /* Color palette and core design primitives */
 :root {
-  --neutral-100: #f9fafb;
-  --neutral-200: #f3f4f6;
-  --neutral-300: #e5e7eb;
-  --neutral-400: #9ca3af;
-  --neutral-500: #6b7280;
-  --neutral-600: #4b5563;
-  --neutral-700: #374151;
-  --neutral-800: #111827;
-  --neutral-900: #030712;
-  --brand-primary: #4b3b92;
-  --brand-secondary: #82923b;
+  --neutral-100: #fafafa;
+  --neutral-200: #f4f4f5;
+  --neutral-300: #d4d4d8;
+  --neutral-400: #a1a1aa;
+  --neutral-500: #71717a;
+  --neutral-600: #52525b;
+  --neutral-700: #3f3f46;
+  --neutral-800: #18181b;
+  --neutral-900: #09090b;
+  --brand-primary: #365941;
+  --brand-secondary: #659371;
   --red-dark: #811919;
   --red-light: #c12525;
   --green-dark: #005e3b;

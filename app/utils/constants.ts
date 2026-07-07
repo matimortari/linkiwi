@@ -210,20 +210,20 @@ export const WORDMARKS: { name: string, image: any, bgClass: string }[] = [
 ]
 
 export const NEUTRAL_SCALE: { name: string, var: string, value: string }[] = [
-  { name: "Neutral/100", var: "--neutral-100", value: "#f9fafb" },
-  { name: "Neutral/200", var: "--neutral-200", value: "#f3f4f6" },
-  { name: "Neutral/300", var: "--neutral-300", value: "#e5e7eb" },
-  { name: "Neutral/400", var: "--neutral-400", value: "#9ca3af" },
-  { name: "Neutral/500", var: "--neutral-500", value: "#6b7280" },
-  { name: "Neutral/600", var: "--neutral-600", value: "#4b5563" },
-  { name: "Neutral/700", var: "--neutral-700", value: "#374151" },
-  { name: "Neutral/800", var: "--neutral-800", value: "#111827" },
-  { name: "Neutral/900", var: "--neutral-900", value: "#030712" },
+  { name: "Neutral/100", var: "--neutral-100", value: "#fafafa" },
+  { name: "Neutral/200", var: "--neutral-200", value: "#f4f4f5" },
+  { name: "Neutral/300", var: "--neutral-300", value: "#d4d4d8" },
+  { name: "Neutral/400", var: "--neutral-400", value: "#a1a1aa" },
+  { name: "Neutral/500", var: "--neutral-500", value: "#71717a" },
+  { name: "Neutral/600", var: "--neutral-600", value: "#52525b" },
+  { name: "Neutral/700", var: "--neutral-700", value: "#3f3f46" },
+  { name: "Neutral/800", var: "--neutral-800", value: "#18181b" },
+  { name: "Neutral/900", var: "--neutral-900", value: "#09090b" },
 ]
 
 export const BRAND_COLORS: { name: string, var: string, value: string }[] = [
-  { name: "Primary", var: "--brand-primary", value: "#4b3b92" },
-  { name: "Secondary", var: "--brand-secondary", value: "#82923b" },
+  { name: "Primary", var: "--brand-primary", value: "#365941" },
+  { name: "Secondary", var: "--brand-secondary", value: "#659371" },
 ]
 
 export const STATUS_COLORS: { name: string, darkVar: string, darkVal: string, lightVar: string, lightVal: string }[] = [
