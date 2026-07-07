@@ -55,7 +55,7 @@ const FOOTER_SECTIONS = computed(() => [
         ]
       : [
           { label: "Profile", href: "/admin/profile" },
-          { label: "Preferences", href: "/admin/preferences" },
+          { label: "Appearance", href: "/admin/apperance" },
           { label: "Analytics", href: "/admin/analytics" },
           { label: "Sign out", action: signOut },
         ]

@@ -5,7 +5,7 @@
     <div v-if="isTocOpen" aria-hidden="true" class="fixed inset-0 z-30 bg-black/50 backdrop-blur-xs xl:hidden" @click="isTocOpen = false" />
 
     <aside
-      id="table-of-contents" class="fixed top-15 left-0 z-30 h-[calc(100vh-4.5rem)] w-[20rem] overflow-y-auto bg-card p-8 transition-transform md:z-20 xl:sticky xl:top-[5.3rem] xl:h-[calc(100vh-5.3rem)] xl:translate-x-0"
+      id="table-of-contents" class="fixed top-15 left-0 z-30 h-[calc(100vh-4.5rem)] w-[20rem] overflow-y-auto bg-background p-8 transition-transform md:z-20 xl:sticky xl:top-[5.3rem] xl:h-[calc(100vh-5.3rem)] xl:translate-x-0"
       :class="isTocOpen ? 'translate-x-0' : '-translate-x-full'"
     >
       <p class="mb-4 text-sm font-bold tracking-wider text-muted-foreground uppercase">
@@ -109,12 +109,6 @@ onUnmounted(() => {
   margin-bottom: 3rem;
   width: 100%;
   max-width: 860px;
-  border: 1px solid color-mix(in srgb, var(--muted) 65%, transparent);
-  border-radius: var(--border-radius);
-  background-color: var(--background);
-  box-shadow:
-    0 10px 30px -10px rgba(0, 0, 0, 0.1),
-    0 1px 3px rgba(0, 0, 0, 0.05);
   padding: clamp(1.2rem, 2vw, 2rem);
   padding-inline: 1rem;
   padding-bottom: 2.5rem;
@@ -122,6 +116,8 @@ onUnmounted(() => {
 }
 @media (min-width: 768px) {
   .prose {
+    border: 1px solid color-mix(in srgb, var(--muted) 65%, transparent);
+    border-radius: var(--border-radius);
     padding-inline: 1.5rem;
     padding-bottom: 3.5rem;
     margin-top: 5.3rem;
