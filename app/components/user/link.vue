@@ -1,5 +1,5 @@
 <template>
-  <li class="flex w-full max-w-80 min-w-32">
+  <li class="flex w-full min-w-32">
     <nuxt-link
       :to="item.link?.url" class="relative flex w-full items-center justify-center gap-2"
       :style="linkStyle(isHovered)" @mouseenter="isHovered = true"

@@ -21,11 +21,6 @@
             </button>
 
             <div v-if="dropdownOpen" class="absolute top-14 left-0 z-50 flex min-w-40 flex-col gap-1 rounded-xl border bg-card p-1 shadow-lg">
-              <label class="text-caption navigation-group cursor-pointer rounded-lg p-2 whitespace-nowrap hover:bg-muted">
-                <icon name="mdi:camera" size="15" />
-                <span>Change Picture</span>
-                <input type="file" accept="image/*" class="hidden" @change="handleUpdateImage">
-              </label>
               <button class="text-caption navigation-group rounded-lg p-2 whitespace-nowrap text-danger-foreground hover:bg-muted" @click="signOut">
                 <icon name="mdi:logout" size="15" />
                 <span>Sign Out</span>
@@ -103,19 +98,6 @@ const { clear } = useUserSession()
 const dropdownOpen = ref(false)
 const avatarDropdownRef = ref<HTMLElement | null>(null)
 useClickOutside(avatarDropdownRef, () => dropdownOpen.value = false, { escapeKey: true })
-
-async function handleUpdateImage(event: Event) {
-  const file = (event.target as HTMLInputElement).files?.[0]
-  if (!file) {
-    return
-  }
-
-  dropdownOpen.value = false
-  const res = await userStore.updateUserImage(file)
-  if (res?.imageUrl && user.value) {
-    user.value.image = res.imageUrl
-  }
-}
 
 async function handleDeleteUser() {
   dropdownOpen.value = false

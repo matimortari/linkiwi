@@ -13,7 +13,7 @@
     </button>
 
     <button v-if="props.showEdit" aria-label="Edit" class="btn-ghost p-0!" @click="emit('edit')">
-      <icon name="mdi:circle-edit-outline" size="20" class="text-caption-info" />
+      <icon name="mdi:circle-edit-outline" size="20" class="text-muted-foreground" />
     </button>
 
     <button aria-label="Delete" class="btn-ghost p-0!" @click="emit('delete')">

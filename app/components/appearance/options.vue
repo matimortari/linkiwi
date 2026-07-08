@@ -1,11 +1,7 @@
 <template>
-  <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:p-8">
-    <h4>
-      Appearance
-    </h4>
-
-    <div class="flex flex-col gap-4">
-      <div class="navigation-group">
+  <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4">
+    <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <div class="navigation-group overflow-x-auto">
         <button
           v-for="t in APPEARANCE_TABS" :key="t.value"
           class="navigation-group justify-start rounded-lg rounded-b-none p-2 text-sm font-semibold whitespace-nowrap transition-all hover:bg-muted/30"
@@ -15,12 +11,10 @@
         </button>
       </div>
 
-      <AppearanceTabs v-model:preferences="preferences" v-model:active-tab="activeTab" />
-
-      <div class="navigation-group self-end">
+      <div class="navigation-group shrink-0 self-end">
         <button class="btn-danger" @click="handleResetPreferences">
           <icon :name="resetAction.icon.value" size="20" />
-          <span>Reset</span>
+          <span>Reset All</span>
         </button>
         <button class="btn-primary" @click="handleUpdatePreferences">
           <icon :name="saveAction.icon.value" size="20" />
@@ -28,6 +22,8 @@
         </button>
       </div>
     </div>
+
+    <AppearanceTabs v-model:preferences="preferences" v-model:active-tab="activeTab" />
   </div>
 </template>
 
@@ -35,7 +31,7 @@
 const { createActionHandler } = useActionIcon()
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
-const activeTab = ref("background")
+const activeTab = ref("base")
 const preferences = ref<UserPreferences>({ ...DEFAULT_PREFERENCES })
 const localPreferences = useState<UserPreferences | null>("localPreferences", () => null)
 const saveAction = createActionHandler("mdi:content-save-check")

@@ -58,7 +58,7 @@ interface UserPreferences {
   iconShadowColor?: string
   iconShadowWeight?: ShadowWeight
   dividerColor?: string
-  dividerThickness?: BorderWidth
+  dividerThickness?: DividerThickness
   dividerStyle?: DividerStyle
   supportBanner?: SupportBanner
   enableGuestbook?: boolean

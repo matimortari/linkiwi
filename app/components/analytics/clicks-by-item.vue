@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:p-8">
+  <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4">
     <h4>
       Clicks by Item
     </h4>

@@ -36,21 +36,17 @@
             <template v-for="item in visiblePreviewItems" :key="item.id">
               <UserLink v-if="item.type === 'LINK'" :item="item" :preferences="preferences" />
               <span v-else-if="item.type === 'DIVIDER'" class="w-full" :style="dividerStyle" />
-              <div v-else-if="item.type === 'PHOTO_GRID' && item.photoGrid?.photos?.length" class="grid w-full grid-cols-3 gap-0.5 overflow-hidden rounded-lg">
-                <img
-                  v-for="photo in item.photoGrid.photos.slice(0, 9)" :key="photo.id"
-                  :src="photo.url" :alt="photo.alt ?? ''"
-                  class="aspect-square w-full object-cover"
-                >
-              </div>
+              <UserPhotoGrid v-else-if="item.type === 'PHOTO_GRID' && item.photoGrid?.photos?.length" :photos="item.photoGrid.photos.slice(0, 9)" :preferences="preferences" />
 
-              <div v-else-if="item.type === 'WIDGET' && item.widget" class="flex w-full items-center gap-2 rounded-lg border px-3 py-2" :style="widgetCardStyle">
-                <icon :name="WIDGET_ICONS[item.widget.type]" size="20" class="shrink-0" />
-                <div class="flex min-w-0 flex-col text-left">
-                  <span class="text-xs font-semibold">{{ WIDGET_LABELS[item.widget.type] }}</span>
-                  <span class="truncate text-xs opacity-60">{{ item.widget.handle }}</span>
+              <li v-else-if="item.type === 'WIDGET' && item.widget" class="flex w-full min-w-32">
+                <div class="flex w-full items-center gap-2 overflow-hidden" :style="linkStyle()">
+                  <icon :name="WIDGET_ICONS[item.widget.type]" size="20" class="shrink-0" :style="linkInnerStyle" />
+                  <div class="flex min-w-0 flex-col text-left">
+                    <span class="truncate text-xs font-semibold" :style="linkInnerStyle">{{ WIDGET_LABELS[item.widget.type] }}</span>
+                    <span class="truncate text-xs opacity-60" :style="linkInnerStyle">{{ item.widget.handle }}</span>
+                  </div>
                 </div>
-              </div>
+              </li>
             </template>
 
             <p v-if="!visiblePreviewItems.length && !visibleIcons.length" class="text-xs opacity-50" :style="descriptionStyle">
@@ -105,20 +101,16 @@
             <template v-for="item in visiblePreviewItems" :key="item.id">
               <UserLink v-if="item.type === 'LINK'" :item="item" :preferences="preferences" />
               <span v-else-if="item.type === 'DIVIDER'" class="w-full" :style="dividerStyle" />
-              <div v-else-if="item.type === 'PHOTO_GRID' && item.photoGrid?.photos?.length" class="grid w-full grid-cols-3 gap-0.5 overflow-hidden rounded-lg">
-                <img
-                  v-for="photo in item.photoGrid.photos.slice(0, 9)" :key="photo.id"
-                  :src="photo.url" :alt="photo.alt ?? ''"
-                  class="aspect-square w-full object-cover"
-                >
-              </div>
-              <div v-else-if="item.type === 'WIDGET' && item.widget" class="flex w-full items-center gap-2 rounded-lg border px-3 py-2" :style="widgetCardStyle">
-                <icon :name="WIDGET_ICONS[item.widget.type]" size="20" class="shrink-0" />
-                <div class="flex min-w-0 flex-col text-left">
-                  <span class="text-xs font-semibold">{{ WIDGET_LABELS[item.widget.type] }}</span>
-                  <span class="truncate text-xs opacity-60">{{ item.widget.handle }}</span>
+              <UserPhotoGrid v-else-if="item.type === 'PHOTO_GRID' && item.photoGrid?.photos?.length" :photos="item.photoGrid.photos.slice(0, 9)" :preferences="preferences" />
+              <li v-else-if="item.type === 'WIDGET' && item.widget" class="flex w-full min-w-32">
+                <div class="flex w-full items-center gap-2 overflow-hidden" :style="linkStyle()">
+                  <icon :name="WIDGET_ICONS[item.widget.type]" size="20" class="shrink-0" :style="linkInnerStyle" />
+                  <div class="flex min-w-0 flex-col text-left">
+                    <span class="truncate text-xs font-semibold" :style="linkInnerStyle">{{ WIDGET_LABELS[item.widget.type] }}</span>
+                    <span class="truncate text-xs opacity-60" :style="linkInnerStyle">{{ item.widget.handle }}</span>
+                  </div>
                 </div>
-              </div>
+              </li>
             </template>
             <p v-if="!visiblePreviewItems.length && !visibleIcons.length" class="text-xs opacity-50" :style="descriptionStyle">
               No content yet.
@@ -135,11 +127,21 @@ const { user, preferences: storePreferences } = storeToRefs(useUserStore())
 const { items } = storeToRefs(useProfileItemsStore())
 const { isPreviewOpen, openPreview, closePreview } = useUIState()
 const localPreferences = useState<UserPreferences | null>("localPreferences", () => null)
-const preferences = computed(() => localPreferences.value || storePreferences.value)
-const { profilePictureStyle, slugStyle, descriptionStyle } = useDynamicStyles(computed(() => preferences.value))
+const pendingThemeTitle = useState<string | null>("pendingThemeTitle", () => null)
+
+const preferences = computed(() => {
+  const base = localPreferences.value || storePreferences.value
+  if (!pendingThemeTitle.value) {
+    return base
+  }
+
+  const theme = THEMES.find(t => t.title === pendingThemeTitle.value)
+  return theme ? { ...base, ...theme.preferences } : base
+})
+
+const { profilePictureStyle, slugStyle, descriptionStyle, linkStyle, linkInnerStyle } = useDynamicStyles(computed(() => preferences.value))
 const { backgroundStyle, dividerStyle } = useDynamicStyles(preferences)
 const visibleIcons = computed(() => (items.value ?? []).filter(item => item.type === "ICON" && item.isVisible !== false))
-const widgetCardStyle = computed(() => ({ backgroundColor: preferences.value?.linkBackgroundColor ?? "#e2e8f0", color: preferences.value?.linkTextColor ?? "#475569" }))
 const visiblePreviewItems = computed(() => (items.value ?? []).filter(item => item.type !== "ICON" && item.isVisible !== false).sort((a, b) => {
   if (a.isPinned !== b.isPinned) {
     return a.isPinned ? -1 : 1

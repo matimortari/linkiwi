@@ -24,6 +24,13 @@ export const DIVIDER_STYLES = [
   { label: "Dotted", value: "dotted" },
 ] as const
 
+export const DIVIDER_THICKNESSES = [
+  { label: "None", value: "0" },
+  { label: "Thin", value: "2px" },
+  { label: "Medium", value: "3px" },
+  { label: "Thick", value: "5px" },
+] as const
+
 export const FONT_FAMILIES = [
   { label: "Roboto", value: "'Roboto', sans-serif" },
   { label: "Noto Sans", value: "'Noto Sans', sans-serif" },
@@ -120,6 +127,7 @@ export type RadiusSize = (typeof RADIUS_SIZES)[number]["value"]
 export type BackgroundOption = (typeof BACKGROUND_TYPES)[number]["value"]
 export type BorderWidth = (typeof BORDER_WIDTHS)[number]["value"]
 export type DividerStyle = (typeof DIVIDER_STYLES)[number]["value"]
+export type DividerThickness = (typeof DIVIDER_THICKNESSES)[number]["value"]
 export type FontFamily = (typeof FONT_FAMILIES)[number]["value"]
 export type FontSize = (typeof FONT_SIZES)[number]["value"]
 export type FontWeight = (typeof FONT_WEIGHTS)[number]["value"]

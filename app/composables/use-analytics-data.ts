@@ -69,10 +69,20 @@ export function useAnalyticsData() {
     return { labels, datasets: [{ label, data: values, backgroundColor: "#6366f1" }] }
   }
 
+  function buildChartFromGroupedCounts(countsByDate: Record<string, number>, label: string) {
+    const dates = Object.keys(countsByDate).sort((a, b) => a.localeCompare(b))
+    if (!dates.length) {
+      return null
+    }
+    return buildChart(dates.map(date => countsByDate[date] ?? 0), dates, label)
+  }
+
   const pageViews = computed(() => analyticsStore.pageViews)
   const linkClicks = computed(() => analyticsStore.itemClicks.filter(c => c.item?.type === "LINK"))
   const iconClicks = computed(() => analyticsStore.itemClicks.filter(c => c.item?.type === "ICON"))
   const widgetClicks = computed(() => analyticsStore.itemClicks.filter(c => c.item?.type === "WIDGET"))
+  const linkClicksByDate = computed(() => groupByDate(linkClicks.value, "createdAt"))
+  const iconClicksByDate = computed(() => groupByDate(iconClicks.value, "createdAt"))
 
   const stats = computed(() => {
     const viewsByDate = groupByDate(pageViews.value, "createdAt")
@@ -96,8 +106,8 @@ export function useAnalyticsData() {
   const joinedAt = computed(() => userStore.user?.createdAt)
 
   const pageViewsChartData = computed(() => stats.value.length ? buildChart(stats.value.map(s => s.pageViews), stats.value.map(s => s.date), "Page Views") : null)
-  const linkClicksChartData = computed(() => stats.value.length ? buildChart(stats.value.map(s => s.linkClicks), stats.value.map(s => s.date), "Link Clicks") : null)
-  const iconClicksChartData = computed(() => stats.value.length ? buildChart(stats.value.map(s => s.iconClicks), stats.value.map(s => s.date), "Social Icon Clicks") : null)
+  const linkClicksChartData = computed(() => buildChartFromGroupedCounts(linkClicksByDate.value, "Link Clicks"))
+  const iconClicksChartData = computed(() => buildChartFromGroupedCounts(iconClicksByDate.value, "Social Icon Clicks"))
 
   const topReferrers = computed(() => {
     if (!pageViews.value.length) {

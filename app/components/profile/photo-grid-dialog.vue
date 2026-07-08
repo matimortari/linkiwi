@@ -10,17 +10,15 @@
         <Loading v-if="userStore.loading" />
         <Empty v-else-if="!userStore.assets.length" message="No images uploaded yet. Upload some from the Asset Manager." icon-name="mdi:image-off-outline" />
 
-        <div v-else class="scroll-area grid max-h-72 grid-cols-3 gap-2 overflow-y-auto pr-1">
+        <div v-else class="scroll-area flex max-h-40 flex-wrap gap-2 overflow-y-auto pr-1">
           <button
             v-for="asset in userStore.assets" :key="asset.id"
-            class="group relative aspect-square overflow-hidden rounded-xl border-2 transition-all"
-            :class="isSelected(asset.id) ? 'border-primary' : 'border-transparent hover:border-muted-foreground'"
-            :disabled="!isSelected(asset.id) && selected.length >= 9"
-            @click="toggleAsset(asset)"
+            class="group relative size-14 shrink-0 overflow-hidden rounded-lg border-2 transition-all" :class="isSelected(asset.id) ? 'border-primary' : 'border-transparent hover:border-muted-foreground'"
+            :disabled="!isSelected(asset.id) && selected.length >= 9" @click="toggleAsset(asset)"
           >
             <img :src="asset.url" :alt="asset.label ?? 'Asset'" class="size-full object-cover">
             <div v-if="isSelected(asset.id)" class="absolute inset-0 flex items-center justify-center bg-primary/30">
-              <span class="[#eeeeee] flex size-6 items-center justify-center rounded-full bg-primary text-xs font-bold">
+              <span class="text-primary-foreground flex size-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold">
                 {{ selectedIndex(asset.id) + 1 }}
               </span>
             </div>

@@ -105,11 +105,11 @@
         <div class="order-2 flex flex-col items-center gap-4 text-center md:order-1 md:items-start md:text-start">
           <p class="text-lead">
             Get insights into how your audience engages with your content.
-            Track views, clicks, and traffic sources all in one place.
-            Make data-driven decisions to optimize your online presence.
+            Track views, clicks, and traffic sources all in one place to
+            optimize your online presence.
           </p>
 
-          <div class="flex flex-col gap-3">
+          <div class="flex flex-col gap-4">
             <div v-for="bullet in ANALYTICS_BULLETS" :key="bullet.description" class="navigation-group text-start">
               <div class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-secondary/15">
                 <icon :name="bullet.icon" size="20" class="text-secondary" />
@@ -161,11 +161,11 @@
       </h2>
 
       <p class="text-caption max-w-sm">
-        Create an account and get started in minutes!
+        Create an account for free and get started in minutes!
       </p>
 
       <nuxt-link to="/sign-in" class="btn-primary">
-        <span>Create Your Page</span>
+        <span>Get Started</span>
         <icon name="mdi:arrow-right" size="20" />
       </nuxt-link>
     </div>

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="props.activeTab === 'background'" class="card grid grid-cols-1 gap-2 md:grid-cols-2">
+  <div v-if="props.activeTab === 'base'" class="card grid grid-cols-1 gap-2 md:grid-cols-2">
     <RadioOptions v-model:value="localPrefs.backgroundType" name="backgroundType" label="Background Type" :options="BACKGROUND_TYPES" />
     <div class="flex flex-col gap-2 md:p-2">
       <h6 class="py-2">
@@ -25,7 +25,7 @@
         Dividers
       </h6>
       <ColorPicker id="dividerColor" v-model:value="localPrefs.dividerColor" label="Divider Color" />
-      <Selector id="dividerThickness" v-model:value="localPrefs.dividerThickness" label="Thickness" :options="BORDER_WIDTHS" />
+      <Selector id="dividerThickness" v-model:value="localPrefs.dividerThickness" label="Thickness" :options="DIVIDER_THICKNESSES" />
       <Selector id="dividerStyle" v-model:value="localPrefs.dividerStyle" label="Style" :options="DIVIDER_STYLES" />
     </div>
 

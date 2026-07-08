@@ -87,18 +87,12 @@ export function useDynamicStyles(preferences: UserPreferences | null | Ref<UserP
     }
   })
 
-  const photoGridStyle = computed(() => {
-    if (!pref.value) {
-      return {}
-    }
-
-    return {
-      display: "grid",
-      gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-      gap: "0.5rem",
-      width: "100%",
-    }
-  })
+  const photoGridInnerStyle = computed(() => ({
+    display: "grid",
+    gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+    gap: "0.5rem",
+    width: "100%",
+  }))
 
   return {
     backgroundStyle,
@@ -111,6 +105,6 @@ export function useDynamicStyles(preferences: UserPreferences | null | Ref<UserP
     linkStyle,
     linkInnerStyle,
     dividerStyle,
-    photoGridStyle,
+    photoGridInnerStyle,
   }
 }

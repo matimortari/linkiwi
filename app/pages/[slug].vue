@@ -9,55 +9,69 @@
     <Loading v-if="loading" class="absolute inset-0 flex items-center justify-center backdrop-blur-sm" />
     <Empty v-else-if="!userProfile && !loading" :message="`User @${slug} not found.`" icon-name="mdi:account-off" />
 
-    <div v-else-if="userProfile" class="flex w-full flex-1 flex-col items-center gap-4 pb-20 text-center" :style="backgroundStyle">
+    <div v-else-if="userProfile" class="flex w-full flex-1 flex-col items-center pb-20 text-center" :style="backgroundStyle">
       <UserSupportBanner v-if="profilePreferences.supportBanner !== 'NONE'" :preferences="profilePreferences" />
+      <UserGuestbook v-if="profilePreferences?.enableGuestbook" :user-id="userProfile?.id" />
 
-      <div v-if="userProfile.banner?.url" class="w-full max-w-5xl overflow-hidden rounded-xl px-4 py-12">
-        <img :src="userProfile.banner.url" alt="Profile Banner" class="h-32 w-full rounded-xl object-cover md:h-44">
+      <div v-if="userProfile.banner?.url" class="w-full max-w-2xl px-4 pt-12">
+        <img :src="userProfile.banner.url" alt="Profile Banner" class="h-32 w-full rounded-xl object-cover md:h-40">
       </div>
 
-      <div class="flex flex-col items-center gap-4" :class="userProfile.banner?.url ? 'relative z-10 -mt-24' : 'pt-16'">
-        <img :src="userProfile.image" alt="Avatar" class="size-24 object-cover" :style="profilePictureStyle">
-        <p :style="slugStyle">
-          {{ `@${userProfile.slug}` }}
-        </p>
-        <p v-if="userProfile.location" class="flex max-w-sm flex-row items-center gap-1 truncate text-sm/4 whitespace-break-spaces" :style="descriptionStyle">
-          <icon name="mdi:map-marker" size="15" />
-          <span>{{ userProfile.location }}</span>
-        </p>
-        <p v-if="userProfile.description" class="max-w-sm leading-4 whitespace-break-spaces" :style="descriptionStyle">
-          {{ userProfile.description }}
-        </p>
+      <div class="flex w-full max-w-3xl flex-col items-center gap-4 px-4">
+        <div class="flex flex-col items-center gap-2" :class="userProfile.banner?.url ? 'relative z-10 -mt-12' : 'pt-12'">
+          <img :src="userProfile.image" alt="Avatar" class="size-24 object-cover" :style="profilePictureStyle">
+          <p :style="slugStyle">
+            {{ `@${userProfile.slug}` }}
+          </p>
+          <p v-if="userProfile.location" class="flex max-w-sm flex-row items-center gap-1 truncate text-sm/4 whitespace-break-spaces" :style="descriptionStyle">
+            <icon name="mdi:map-marker" size="15" />
+            <span>{{ userProfile.location }}</span>
+          </p>
+          <p v-if="userProfile.description" class="max-w-sm leading-4 whitespace-break-spaces" :style="descriptionStyle">
+            {{ userProfile.description }}
+          </p>
+        </div>
+
+        <ul v-if="visibleIcons.length" class="navigation-group justify-center">
+          <UserSocialIcon
+            v-for="item in visibleIcons" :key="item.id"
+            :item="item" :preferences="profilePreferences"
+            @click="handleClick(item.id ?? '')"
+          />
+        </ul>
+
+        <div class="flex w-full max-w-md flex-col items-center">
+          <ul class="flex w-full flex-col items-center gap-4">
+            <template v-for="item in visibleItems" :key="item.id">
+              <UserLink v-if="item.type === 'LINK'" :item="item" :preferences="profilePreferences" @click="handleClick(item.id ?? '')" />
+              <UserPhotoGrid v-else-if="item.type === 'PHOTO_GRID'" :photos="item.photoGrid?.photos ?? []" :preferences="profilePreferences" />
+              <UserWidget v-else-if="item.type === 'WIDGET' && item.widget" :type="item.widget.type" :handle="item.widget.handle ?? ''" :preferences="profilePreferences" />
+              <span v-else-if="item.type === 'DIVIDER'" class="w-full" :style="dividerStyle" />
+            </template>
+          </ul>
+
+          <p v-if="!visibleItems.length && !visibleIcons.length" :style="descriptionStyle">
+            No content yet.
+          </p>
+        </div>
       </div>
+    </div>
 
-      <ul v-if="visibleIcons.length" class="navigation-group justify-center">
-        <UserSocialIcon
-          v-for="item in visibleIcons" :key="item.id"
-          :item="item" :preferences="profilePreferences"
-          @click="handleClick(item.id ?? '')"
-        />
-      </ul>
-
-      <ul class="flex w-full max-w-xl flex-col items-center gap-4 px-4">
-        <template v-for="item in visibleItems" :key="item.id">
-          <UserLink v-if="item.type === 'LINK'" :item="item" :preferences="profilePreferences" @click="handleClick(item.id ?? '')" />
-          <UserPhotoGrid v-else-if="item.type === 'PHOTO_GRID'" :photos="item.photoGrid?.photos ?? []" :preferences="profilePreferences" />
-          <UserWidget v-else-if="item.type === 'WIDGET' && item.widget" :type="item.widget.type" :handle="item.widget.handle ?? ''" :preferences="profilePreferences" />
-          <span v-else-if="item.type === 'DIVIDER'" class="w-full max-w-80" :style="dividerStyle" />
-        </template>
-      </ul>
-
-      <p v-if="!visibleItems.length && !visibleIcons.length" :style="descriptionStyle">
-        No content yet.
-      </p>
-
-      <UserGuestbook v-if="profilePreferences?.enableGuestbook" :user-id="userProfile?.id" class="w-full max-w-xl px-4" />
+    <div v-if="!loading" class="pointer-events-none fixed inset-x-0 bottom-4 z-20 flex justify-center px-4">
+      <nuxt-link to="/" class="pointer-events-auto navigation-group rounded-full border bg-card p-2.5 shadow-sm backdrop-blur-sm transition-transform hover:scale-105">
+        <span class="text-xs font-medium text-muted-foreground">Made with</span>
+        <ClientOnly>
+          <img src="/assets/symbol.png" alt="LinKiwi" width="20" class="size-5 shrink-0">
+          <img :src="themeTitle" alt="LinKiwi" width="72">
+        </ClientOnly>
+      </nuxt-link>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 const { public: { baseURL } } = useRuntimeConfig()
+const { themeTitle } = useTheme()
 const route = useRoute()
 const slug = computed(() => route.params.slug as string)
 const userStore = useUserStore()

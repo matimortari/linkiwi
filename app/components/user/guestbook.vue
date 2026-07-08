@@ -1,7 +1,7 @@
 <template>
-  <div class="fixed top-4 right-4 z-40 flex flex-col items-end gap-2">
+  <div class="fixed right-4 bottom-4 z-40 flex flex-col items-end gap-2">
     <transition name="slide-fade">
-      <div v-if="isOpen" class="overlay absolute top-4 right-4 flex w-80 flex-col gap-2 md:w-96">
+      <div v-if="isOpen" class="overlay absolute right-0 bottom-full mb-2 flex w-80 flex-col gap-2 md:w-96">
         <div class="flex items-center justify-between border-b pb-2">
           <h5>
             Leave a message
@@ -76,10 +76,10 @@ async function handleSubmitComment() {
 }
 .slide-fade-enter-from {
   opacity: 0;
-  transform: translateY(20px) scale(0.95);
+  transform: translateY(12px) scale(0.95);
 }
 .slide-fade-leave-to {
   opacity: 0;
-  transform: translateY(10px) scale(0.98);
+  transform: translateY(8px) scale(0.98);
 }
 </style>

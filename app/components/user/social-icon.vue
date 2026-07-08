@@ -1,11 +1,11 @@
 <template>
-  <li class="flex size-10 items-center justify-center rounded-full" :style="iconStyle(isHovered)" @mouseenter="isHovered = true" @mouseleave="isHovered = false">
+  <li class="flex size-12 items-center justify-center rounded-full" :style="iconStyle(isHovered)" @mouseenter="isHovered = true" @mouseleave="isHovered = false">
     <nuxt-link
       :to="item.icon?.url" class="flex size-full items-center justify-center"
       :aria-label="item.icon?.platform ?? ''" target="_blank"
       @click="handleClick"
     >
-      <icon :name="item.icon?.logo ?? 'mdi:help'" size="20" :style="iconInnerStyle" />
+      <icon :name="item.icon?.logo ?? 'mdi:help'" size="25" :style="iconInnerStyle" />
     </nuxt-link>
   </li>
 </template>

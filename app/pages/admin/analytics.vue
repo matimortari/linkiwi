@@ -3,19 +3,15 @@
     <div
       v-motion :initial="{ opacity: 0, x: -20 }"
       :visible="{ opacity: 1, x: 0 }" :duration="800"
-      class="min-h-screen w-full space-y-4 border-r-0! border-b-0! p-4 md:rounded-tl-2xl md:border"
+      class="min-h-screen w-full space-y-4 border-r-0! border-b-0! p-4 md:rounded-tl-2xl md:border md:p-8"
     >
-      <header class="flex flex-col gap-2">
-        <h3>
-          Analytics
-        </h3>
-        <p class="text-caption">
-          View your profile analytics.
-        </p>
-      </header>
+      <h3>
+        Analytics
+      </h3>
 
       <div class="flex flex-col gap-4">
-        <AnalyticsSummary />
+        <AnalyticsHighlights />
+        <AnalyticsCharts />
         <AnalyticsClicksByItem />
       </div>
     </div>

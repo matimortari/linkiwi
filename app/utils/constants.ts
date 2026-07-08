@@ -7,14 +7,14 @@ import WordmarkLight from "~/assets/wordmark-light.png"
 // Landing page data
 export const PRODUCT_BULLETS: { description: string, icon: string }[] = [
   { description: "Share your page across different platforms with ease", icon: "mdi:share-outline" },
-  { description: "Generate a QR code for in-person sharing", icon: "mdi:qrcode" },
-  { description: "Tag your links per source and track visitor engagement", icon: "mdi:chart-timeline-variant-shimmer" },
+  { description: "Tag links by source and track engagement", icon: "mdi:chart-timeline-variant-shimmer" },
+  { description: "Generate a QR code to share your page anywhere", icon: "mdi:qrcode" },
 ]
 
 export const ANALYTICS_BULLETS: { description: string, icon: string }[] = [
   { description: "Real-time tracking for page views and clicks", icon: "mdi:clock-star-four-points-outline" },
-  { description: "Monitor link and social icon clicks", icon: "mdi:cursor-default-click-outline" },
-  { description: "See click rates and performance per link", icon: "mdi:chart-bar" },
+  { description: "Monitor engagement for your links and social icons", icon: "mdi:cursor-default-click-outline" },
+  { description: "Compare click rates across your links", icon: "mdi:chart-bar" },
 ]
 
 export const SHARE_PLATFORMS: { id: string, icon: string, color: string, rotate: number }[] = [
@@ -45,7 +45,7 @@ export const SIDEBAR_NAV_LINKS: { label: string, url: string, icon: string }[] =
 ]
 
 export const APPEARANCE_TABS: { label: string, value: string }[] = [
-  { label: "Background", value: "background" },
+  { label: "Base", value: "base" },
   { label: "Layout", value: "layout" },
   { label: "Links", value: "links" },
   { label: "Social Icons", value: "icons" },
@@ -87,7 +87,7 @@ export const DEFAULT_PREFERENCES: UserPreferences = {
   iconLogoColor: "#475569",
   iconHoverBackgroundColor: "#cbd5e1",
   dividerColor: "#e2e8f0",
-  dividerThickness: "1px",
+  dividerThickness: "2px",
   dividerStyle: "solid",
   supportBanner: "NONE",
   enableGuestbook: false,
