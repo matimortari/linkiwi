@@ -1,12 +1,23 @@
 <template>
   <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4">
-    <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4">
-      <h4>
-        Page Views Over Time
-      </h4>
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
+      <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:col-span-3">
+        <h4>
+          Page Views Over Time
+        </h4>
 
-      <Empty v-if="!pageViewsChartData" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
-      <AnalyticsLineChart v-else :chart-data="pageViewsChartData" />
+        <Empty v-if="!pageViewsChartData" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
+        <AnalyticsLineChart v-else :chart-data="pageViewsChartData" />
+      </div>
+
+      <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:col-span-1">
+        <h4>
+          Clicks per Link
+        </h4>
+
+        <Empty v-if="!clicksPerLinkChartData" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
+        <AnalyticsDonutChart v-else :chart-data="clicksPerLinkChartData" />
+      </div>
     </div>
 
     <div class="grid grid-cols-1 gap-4 md:grid-cols-3 md:items-stretch">
@@ -94,7 +105,8 @@
 </template>
 
 <script setup lang="ts">
-const { pageViewsChartData, linkClicksChartData, iconClicksChartData, referrerChartData, topReferrers } = useAnalyticsData()
+const profileItemsStore = useProfileItemsStore()
+const { pageViewsChartData, linkClicksChartData, iconClicksChartData, clicksPerLinkChartData, referrerChartData, topReferrers } = useAnalyticsData()
 
 function getSourceIcon(source: string): string {
   const icons: Record<string, string> = {
@@ -118,6 +130,12 @@ function getSourceIcon(source: string): string {
 
   return icons[source] || "mdi:web"
 }
+
+onMounted(async () => {
+  if (!profileItemsStore.items.length) {
+    await profileItemsStore.getItems()
+  }
+})
 </script>
 
 <style scoped>

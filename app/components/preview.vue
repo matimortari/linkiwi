@@ -1,6 +1,6 @@
 <template>
   <!-- Mobile toggle -->
-  <button class="btn fixed bottom-4 left-1/2 z-50 -translate-x-1/2 md:hidden!" aria-label="Toggle Mobile Preview" @click="isPreviewOpen ? closePreview() : openPreview()">
+  <button class="btn fixed bottom-4 left-1/2 z-40 -translate-x-1/2 md:hidden!" aria-label="Toggle Mobile Preview" @click="isPreviewOpen ? closePreview() : openPreview()">
     <icon :name="isPreviewOpen ? 'mdi:eye-off' : 'mdi:eye'" size="25" />
     <span>{{ isPreviewOpen ? 'Close Preview' : 'Preview' }}</span>
   </button>
@@ -9,6 +9,10 @@
     <!-- Mobile full-screen preview -->
     <transition name="slide">
       <div v-if="isPreviewOpen" class="scroll-area fixed top-0 left-0 z-40 size-full overflow-y-auto pb-12 md:hidden" :style="backgroundStyle">
+        <button class="btn fixed top-4 right-4 z-50 shadow-lg" aria-label="Close preview" @click="closePreview()">
+          <icon name="mdi:close" size="25" />
+        </button>
+
         <div v-if="user.banner?.url" class="relative h-36 w-full">
           <img :src="user.banner.url" alt="Profile Banner" class="size-full object-cover">
         </div>

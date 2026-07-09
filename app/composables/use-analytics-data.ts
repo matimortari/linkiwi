@@ -1,6 +1,9 @@
 export function useAnalyticsData() {
   const analyticsStore = useAnalyticsStore()
   const userStore = useUserStore()
+  const profileItemsStore = useProfileItemsStore()
+
+  const CHART_COLORS = ["#4a69b9", "#709775", "#d88c76", "#8b7d9b", "#cf9e55", "#5b9b9b", "#b87a84", "#768493"]
 
   // Helper function to format referrer source label
   function formatSourceLabel(source: string | null | undefined): string {
@@ -109,6 +112,33 @@ export function useAnalyticsData() {
   const linkClicksChartData = computed(() => buildChartFromGroupedCounts(linkClicksByDate.value, "Link Clicks"))
   const iconClicksChartData = computed(() => buildChartFromGroupedCounts(iconClicksByDate.value, "Social Icon Clicks"))
 
+  const clicksPerLinkChartData = computed(() => {
+    const counts: Record<string, number> = {}
+    for (const click of linkClicks.value) {
+      if (click.itemId) {
+        counts[click.itemId] = (counts[click.itemId] ?? 0) + 1
+      }
+    }
+
+    const entries = (profileItemsStore.items || []).filter((item: ProfileItem) => item.type === "LINK" && item.link).map((item: ProfileItem) => ({
+      label: item.link!.label,
+      count: counts[item.id] ?? 0,
+    })).filter(entry => entry.count > 0).sort((a, b) => b.count - a.count)
+
+    if (!entries.length) {
+      return null
+    }
+
+    return {
+      labels: entries.map(entry => entry.label),
+      datasets: [{
+        label: "Clicks",
+        data: entries.map(entry => entry.count),
+        backgroundColor: entries.map((_, index) => CHART_COLORS[index % CHART_COLORS.length]),
+      }],
+    }
+  })
+
   const topReferrers = computed(() => {
     if (!pageViews.value.length) {
       return []
@@ -154,7 +184,7 @@ export function useAnalyticsData() {
         {
           label: "Traffic Sources",
           data: topReferrers.value.map(r => r.count),
-          backgroundColor: ["#36a2eb", "#ff6384", "#4bc0c0", "#ff9f40", "#9966ff", "#ffcd56"],
+          backgroundColor: topReferrers.value.map((_, index) => CHART_COLORS[index % CHART_COLORS.length]),
         },
       ],
     }
@@ -169,6 +199,7 @@ export function useAnalyticsData() {
     pageViewsChartData,
     linkClicksChartData,
     iconClicksChartData,
+    clicksPerLinkChartData,
     topReferrers,
     referrerChartData,
   }

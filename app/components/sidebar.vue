@@ -84,7 +84,7 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   isOpen: boolean
 }>()
 
@@ -99,6 +99,16 @@ const dropdownOpen = ref(false)
 const avatarDropdownRef = ref<HTMLElement | null>(null)
 useClickOutside(avatarDropdownRef, () => dropdownOpen.value = false, { escapeKey: true })
 
+function scrollLock(locked: boolean) {
+  if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+    return
+  }
+  const isMobile = window.matchMedia("(max-width: 767px)").matches
+  const val = locked && isMobile ? "hidden" : ""
+  document.documentElement.style.overflow = val
+  document.body.style.overflow = val
+}
+
 async function handleDeleteUser() {
   dropdownOpen.value = false
   if (!confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
@@ -109,6 +119,10 @@ async function handleDeleteUser() {
   await clear()
   await navigateTo("/", { replace: true })
 }
+
+watch(() => props.isOpen, scrollLock, { immediate: true })
+
+onBeforeUnmount(() => scrollLock(false))
 </script>
 
 <style scoped>
