@@ -1,11 +1,11 @@
 <template>
-  <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4">
+  <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:p-8">
     <h4>
       Profile Options
     </h4>
 
-    <div class="card flex flex-col gap-4">
-      <div class="flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center">
+    <div class="card mx-4 flex flex-col gap-4">
+      <div class="flex flex-col items-start justify-between gap-2 md:flex-row md:items-center">
         <div class="flex flex-col gap-1">
           <span class="text-sm font-medium">Banner</span>
           <p class="text-caption">
@@ -13,7 +13,7 @@
           </p>
         </div>
 
-        <div class="navigation-group shrink-0 self-end sm:self-auto">
+        <div class="navigation-group shrink-0 self-end md:self-auto">
           <label class="btn-ghost cursor-pointer">
             <icon name="mdi:upload" size="20" />
             <span>{{ bannerPreview ? "Change" : "Upload" }}</span>
@@ -47,8 +47,8 @@
       <span class="text-xs text-muted-foreground">JPEG, PNG or WebP · max 5 MB</span>
     </div>
 
-    <div class="card flex flex-col gap-4">
-      <div class="flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center">
+    <div class="card mx-4 flex flex-col gap-4">
+      <div class="flex flex-col items-start justify-between gap-2 md:flex-row md:items-center">
         <div class="flex flex-col gap-1">
           <span class="text-sm font-medium">Guestbook</span>
           <p class="text-caption">
@@ -56,7 +56,7 @@
           </p>
         </div>
 
-        <div class="navigation-group self-end sm:self-auto">
+        <div class="navigation-group self-end md:self-auto">
           <label class="inline-flex cursor-pointer items-center gap-2">
             <input
               id="enableGuestbook" v-model="guestbookEnabled"
@@ -97,7 +97,7 @@
       </template>
     </div>
 
-    <div class="card flex flex-col gap-4">
+    <div class="card mx-4 flex flex-col gap-4">
       <button class="flex w-full items-center justify-between text-left" @click="assetsOpen = !assetsOpen">
         <div class="flex flex-col gap-1">
           <span class="text-sm font-medium">Assets</span>

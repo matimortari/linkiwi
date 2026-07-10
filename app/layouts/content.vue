@@ -15,7 +15,7 @@
         <nuxt-link
           v-for="heading in headings" :key="heading.id"
           :to="`#${heading.id}`" class="text-sm transition-colors hover:text-primary"
-          :class="activeId === heading.id ? 'font-semibold text-primary' : 'text-muted-foreground'" @click="isTocOpen = false"
+          :class="activeId === heading.id ? 'font-semibold text-primary' : 'text-muted-foreground'" @click="handleTocClick(heading.id)"
         >
           {{ heading.text }}
         </nuxt-link>
@@ -43,42 +43,47 @@ const route = useRoute()
 const isTocOpen = ref(false)
 const headings = ref<{ id: string, text: string }[]>([])
 const activeId = ref("")
-let observer: IntersectionObserver | null = null
+
+function extractHeadings() {
+  const domHeadings = document.querySelectorAll<HTMLElement>(".prose h2[id]")
+  headings.value = Array.from(domHeadings).map(el => ({ id: el.id, text: el.textContent || "" }))
+  updateActiveHeading()
+}
+
+function updateActiveHeading() {
+  const headingEls = Array.from(document.querySelectorAll<HTMLElement>(".prose h2[id]"))
+  if (!headingEls.length) {
+    return
+  }
+
+  let current = headingEls[0]!.id
+  for (const el of headingEls) {
+    if (el.getBoundingClientRect().top <= 104) {
+      current = el.id
+    }
+  }
+
+  activeId.value = current
+}
 
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: "smooth" })
 }
 
-function extractHeadings() {
-  const domHeadings = document.querySelectorAll(".prose h2")
-  headings.value = Array.from(domHeadings).map(el => ({ id: el.id, text: el.textContent || "" }))
-  initObserver()
+function handleTocClick(headingId: string) {
+  activeId.value = headingId
+  isTocOpen.value = false
 }
 
-function initObserver() {
-  if (observer) {
-    observer.disconnect()
-  }
+onMounted(() => {
+  nextTick(extractHeadings)
+  window.addEventListener("scroll", updateActiveHeading, { passive: true })
+})
 
-  observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        activeId.value = entry.target.id
-      }
-    })
-  }, { rootMargin: "-20% 0px -80% 0px" })
-
-  document.querySelectorAll(".prose h2").forEach(el => observer!.observe(el))
-}
-
-onMounted(() => nextTick(() => extractHeadings()))
-
-watch(() => route.path, () => nextTick(() => extractHeadings()))
+watch(() => route.path, () => nextTick(extractHeadings))
 
 onUnmounted(() => {
-  if (observer) {
-    observer.disconnect()
-  }
+  window.removeEventListener("scroll", updateActiveHeading)
 })
 </script>
 
@@ -90,6 +95,7 @@ onUnmounted(() => {
   padding-inline: 1rem;
   padding-bottom: 2.5rem;
 }
+
 @media (min-width: 768px) {
   .prose {
     border: 1px solid color-mix(in srgb, var(--muted) 65%, transparent);
@@ -98,6 +104,7 @@ onUnmounted(() => {
     padding-bottom: 3.5rem;
   }
 }
+
 @media (min-width: 1280px) {
   .prose {
     max-width: 100ch;
@@ -108,74 +115,77 @@ onUnmounted(() => {
   margin-top: 0;
 }
 
-:deep(.prose h1),
-:deep(.prose h2),
-:deep(.prose h3),
-:deep(.prose h4) {
+.prose :deep(h1),
+.prose :deep(h2),
+.prose :deep(h3),
+.prose :deep(h4) {
   font-weight: 700;
   letter-spacing: -0.015em;
   margin: 1rem 0;
 }
 
-:deep(.prose h1) {
+.prose :deep(h1) {
   font-size: clamp(1.875rem, 5vw, 2.25rem);
   line-height: 1.2;
 }
-:deep(.prose h2) {
+.prose :deep(h2) {
   font-size: clamp(1.25rem, 4vw, 1.5rem);
   line-height: 1.25;
+  scroll-margin-top: 6rem;
 }
-:deep(.prose h3) {
+.prose :deep(h3) {
   font-size: clamp(1.125rem, 3vw, 1.25rem);
   line-height: 1.5;
 }
-:deep(.prose h4) {
+.prose :deep(h4) {
   font-size: clamp(1rem, 2.5vw, 1.125rem);
   line-height: 1.25;
 }
 
-:deep(.prose) p,
-:deep(.prose) li {
+.prose :deep(p),
+.prose :deep(li) {
   margin: 0.5rem 0;
 }
 
-:deep(.prose) p a,
-:deep(.prose) li a {
+.prose :deep(p a),
+.prose :deep(li a) {
   color: var(--primary);
   font-weight: 600;
 }
-:deep(.prose) p a:hover,
-:deep(.prose) a:hover {
+.prose :deep(a:hover) {
   text-decoration: underline;
   text-decoration-thickness: 2px;
   text-underline-offset: 3px;
 }
 
-:deep(.prose) ul,
-:deep(.prose) ol {
+.prose :deep(ul),
+.prose :deep(ol) {
   margin: 0.5rem 0 1.4rem 0;
   padding-left: 1.35rem;
-  font-size: 0.95rem;
   line-height: 1.75;
 }
-:deep(.prose) ul {
+.prose :deep(ul) {
   list-style-type: disc;
 }
-:deep(.prose) ol {
+.prose :deep(ol) {
   list-style-type: decimal;
 }
+.prose :deep(li:has(.code-block)) {
+  list-style: none;
+  margin-left: -1.35rem;
+}
 
-:deep(.prose) li::marker {
+.prose :deep(li::marker) {
   color: var(--muted-foreground);
   font-weight: 600;
 }
-:deep(.prose) li ul,
-:deep(.prose) li ol {
+.prose :deep(li ul),
+.prose :deep(li ol) {
   margin-block: 0.25rem;
   padding-left: 1rem;
 }
 
-:deep(.prose) blockquote {
+.prose :deep(blockquote) {
   border-left: 4px solid var(--primary);
   background-color: #1b1e28;
   padding: 0.9rem;
@@ -183,27 +193,23 @@ onUnmounted(() => {
   font-style: italic;
   color: var(--foreground);
 }
-:deep(.prose) blockquote p {
+.prose :deep(blockquote p) {
   margin: 0;
 }
-:deep(.prose) blockquote code {
+.prose :deep(blockquote code) {
   font-size: 0.75rem;
 }
 
-:deep(.prose) code {
-  background-color: #1b1e28;
+.prose :deep(code) {
   color: var(--foreground);
   font-family: var(--font-mono);
   font-size: 0.8rem;
-  border-radius: calc(var(--border-radius) * 0.5);
-  padding: 0.18rem 0.42rem;
-  border: 1px solid var(--muted);
 }
-:deep(.prose) code * {
+.prose :deep(code *) {
   font-family: var(--font-mono);
 }
 
-:deep(.prose) pre {
+.prose :deep(pre) {
   background-color: #1b1e28;
   border: 1px solid var(--muted);
   border-radius: var(--border-radius);
@@ -212,11 +218,5 @@ onUnmounted(() => {
   overflow-x: auto;
   line-height: 1.6;
   white-space: pre;
-}
-:deep(.prose) pre code {
-  background: none;
-  border: none;
-  padding: 0;
-  font-size: 0.8rem;
 }
 </style>

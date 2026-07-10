@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4">
-    <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+  <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:p-8">
+    <div class="mx-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
       <div class="navigation-group overflow-x-auto">
         <button
           v-for="t in APPEARANCE_TABS" :key="t.value"

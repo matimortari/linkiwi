@@ -1,10 +1,10 @@
 <template>
-  <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4">
+  <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:p-8">
     <h4>
       Themes
     </h4>
 
-    <div class="scroll-area grid h-72 grid-cols-2 gap-2 overflow-auto pr-1 md:grid-cols-3 2xl:grid-cols-4 2xl:gap-4">
+    <div class="scroll-area card mx-4 grid h-72 grid-cols-2 gap-2 overflow-auto pr-1 md:grid-cols-3 2xl:grid-cols-4 2xl:gap-4">
       <div v-for="(theme, index) in THEMES" :key="theme.title" class="flex flex-col items-center gap-2">
         <button
           :aria-label="`Select ${theme.title} theme`" :aria-pressed="selectedTheme === theme.title"
@@ -31,7 +31,7 @@
       </div>
     </div>
 
-    <button class="btn-primary self-end" :disabled="!hasPendingChanges" @click="handleSaveTheme">
+    <button class="btn-primary mx-4 self-end" :disabled="!hasPendingChanges" @click="handleSaveTheme">
       <icon :name="saveAction.icon.value" size="20" />
       <span>Apply</span>
     </button>
@@ -42,15 +42,17 @@
 const props = defineProps<{
   preferences: UserPreferences
 }>()
+
 const emit = defineEmits<{ save: [value: UserPreferences] }>()
+
 const { createActionHandler } = useActionIcon()
 const saveAction = createActionHandler("mdi:content-save-check")
+const pendingThemeTitle = useState<string | null>("pendingThemeTitle", () => null)
 
 function findActiveThemeTitle(prefs: UserPreferences): string {
   return THEMES.find(theme => Object.entries(theme.preferences).every(([key, value]) => prefs[key as keyof UserPreferences] === value))?.title ?? ""
 }
 
-const pendingThemeTitle = useState<string | null>("pendingThemeTitle", () => null)
 const selectedTheme = ref(findActiveThemeTitle(props.preferences))
 const savedThemeTitle = computed(() => findActiveThemeTitle(props.preferences))
 const hasPendingChanges = computed(() => selectedTheme.value !== savedThemeTitle.value)

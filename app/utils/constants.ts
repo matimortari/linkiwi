@@ -1,5 +1,5 @@
-import SymbolMonoDark from "~/assets/symbol-mono-dark.png"
-import SymbolMonoLight from "~/assets/symbol-mono-light.png"
+import SymbolDark from "~/assets/symbol-dark.png"
+import SymbolLight from "~/assets/symbol-light.png"
 import Symbol from "~/assets/symbol.png"
 import WordmarkDark from "~/assets/wordmark-dark.png"
 import WordmarkLight from "~/assets/wordmark-light.png"
@@ -200,8 +200,8 @@ export const OAUTH_PROVIDERS: { name: string, label: string, icon: string }[] = 
 // Brand assets
 export const SYMBOLS: { name: string, image: any, bgClass: string }[] = [
   { name: "Symbol", image: Symbol, bgClass: "bg-neutral-100" },
-  { name: "Symbol Mono (dark)", image: SymbolMonoDark, bgClass: "bg-neutral-100" },
-  { name: "Symbol Mono (light)", image: SymbolMonoLight, bgClass: "bg-neutral-900" },
+  { name: "Symbol Mono (dark)", image: SymbolDark, bgClass: "bg-neutral-100" },
+  { name: "Symbol Mono (light)", image: SymbolLight, bgClass: "bg-neutral-900" },
 ]
 
 export const WORDMARKS: { name: string, image: any, bgClass: string }[] = [

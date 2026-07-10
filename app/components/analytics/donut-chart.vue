@@ -19,6 +19,11 @@ const chartOptions: ChartOptions<"doughnut"> = {
   responsive: true,
   maintainAspectRatio: false,
   cutout: "62%",
+  elements: {
+    arc: {
+      borderWidth: 0,
+    },
+  },
   plugins: {
     legend: {
       display: false,

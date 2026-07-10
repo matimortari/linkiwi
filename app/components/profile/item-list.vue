@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4">
-    <div class="card flex flex-col gap-4">
+  <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:p-8">
+    <div class="card mx-4 flex flex-col gap-4">
       <div v-if="user" class="flex items-start justify-between gap-2 px-8 text-start">
         <div class="flex min-w-0 items-start gap-2">
           <div class="group relative size-14 shrink-0 overflow-hidden rounded-full border">
@@ -51,7 +51,7 @@
       </div>
     </div>
 
-    <div class="card flex flex-col gap-4">
+    <div class="card mx-4 flex flex-col gap-4">
       <Loading v-if="loading" />
 
       <template v-else>
@@ -143,7 +143,7 @@
         </VueDraggable>
 
         <!-- Add Row -->
-        <div v-if="isPicking" class="flex flex-col gap-2 rounded-2xl border bg-card p-4">
+        <div v-if="isPicking" class="flex flex-col gap-2 rounded-2xl border bg-card p-4 md:p-8">
           <p class="text-sm font-medium">
             What do you want to add?
           </p>

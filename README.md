@@ -1,6 +1,6 @@
 <div align="center">
 <h1>
-    <img src="public/logo-light.png" alt="Logo" width="300"/>
+    <img src="public/banner.png" alt="LinKiwi" width="100%"/>
 </h1>
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=matimortari_linkiwi&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=matimortari_linkiwi)

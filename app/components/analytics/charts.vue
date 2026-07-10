@@ -1,7 +1,7 @@
 <template>
-  <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4">
+  <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:p-8">
     <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
-      <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:col-span-3">
+      <div class="card flex flex-col gap-4 md:col-span-3">
         <h4>
           Page Views Over Time
         </h4>
@@ -10,7 +10,7 @@
         <AnalyticsLineChart v-else :chart-data="pageViewsChartData" />
       </div>
 
-      <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:col-span-1">
+      <div class="card flex flex-col gap-4 md:col-span-1">
         <h4>
           Clicks per Link
         </h4>
@@ -21,7 +21,7 @@
     </div>
 
     <div class="grid grid-cols-1 gap-4 md:grid-cols-3 md:items-stretch">
-      <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:col-span-2">
+      <div class="card flex flex-col gap-4 md:col-span-2">
         <h4>
           Traffic Sources
         </h4>
@@ -52,7 +52,7 @@
                   </td>
                 </tr>
                 <template v-else>
-                  <tr v-for="stat in topReferrers" :key="stat.source" class="hover:bg-muted/20">
+                  <tr v-for="stat in topReferrers" :key="stat.source">
                     <td class="px-4 py-2 text-sm">
                       <div class="navigation-group">
                         <div class="rounded-full bg-muted p-1">
@@ -82,7 +82,7 @@
       </div>
 
       <div class="flex flex-col gap-4 md:col-span-1">
-        <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4">
+        <div class="card flex flex-col gap-4">
           <h4>
             Link Clicks
           </h4>
@@ -91,7 +91,7 @@
           <AnalyticsBarChart v-else :chart-data="linkClicksChartData" />
         </div>
 
-        <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4">
+        <div class="card flex flex-col gap-4">
           <h4>
             Social Icon Clicks
           </h4>

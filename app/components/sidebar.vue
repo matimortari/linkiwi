@@ -16,8 +16,8 @@
         <div v-if="user" class="flex w-full items-center gap-4">
           <div ref="avatarDropdownRef" class="relative size-12 shrink-0">
             <img :src="user.image" alt="Avatar" class="size-full cursor-pointer rounded-full border object-cover select-none" @click="dropdownOpen = !dropdownOpen">
-            <button class="btn-primary absolute -right-2 -bottom-2 p-1!" aria-label="Profile options" @click.stop="dropdownOpen = !dropdownOpen">
-              <icon name="mdi:chevron-down" size="15" />
+            <button class="btn-secondary absolute -right-2 -bottom-2 p-1!" aria-label="Profile options" @click.stop="dropdownOpen = !dropdownOpen">
+              <icon name="mdi:gear" size="15" />
             </button>
 
             <div v-if="dropdownOpen" class="absolute top-14 left-0 z-50 flex min-w-40 flex-col gap-1 rounded-xl border bg-card p-1 shadow-lg">
