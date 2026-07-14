@@ -1,6 +1,10 @@
 <template>
   <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:p-8">
-    <div class="mx-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <h4>
+      Appearance
+    </h4>
+
+    <div class="flex flex-col gap-4 md:mx-4 md:flex-row md:items-center md:justify-between">
       <div class="navigation-group overflow-x-auto">
         <button
           v-for="t in APPEARANCE_TABS" :key="t.value"
@@ -43,7 +47,7 @@ async function handleUpdatePreferences() {
 }
 
 async function handleResetPreferences() {
-  if (!confirm("Reset all appearance settings to default?")) {
+  if (!confirm("Are you sure you want to reset all appearance settings to default?")) {
     return
   }
 

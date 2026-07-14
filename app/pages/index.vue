@@ -7,12 +7,12 @@
     <img src="/assets/hero-backdrop.svg" alt="Hero background" class="hero-backdrop" aria-hidden="true">
 
     <div class="section-shell hero-shell">
-      <header class="z-1 flex flex-col items-center gap-6 text-center md:items-start md:text-start">
+      <header class="z-1 flex flex-col items-center gap-4 text-center md:items-start md:text-start">
         <h1>
           Keep all your stuff together!
         </h1>
         <p class="text-lead">
-          Welcome to <span class="font-semibold text-secondary">LinKiwi</span>! Your links, profiles, contact info, and more
+          Welcome to <span class="font-semibold text-secondary">LinKiwi!</span> Your links, profiles, contact info, and more
           in one place. Create and customize your page and share it with your audience.
         </p>
 
@@ -69,7 +69,7 @@
         </div>
       </div>
 
-      <div class="order-2 flex flex-col items-center gap-6 text-center md:items-start md:text-start">
+      <div class="order-2 flex flex-col items-center gap-4 text-center md:items-start md:text-start">
         <p class="text-lead">
           Customize your page with your own style and share your unique URL.
           Whether you're a creator, business, or influencer, LinKiwi makes it
@@ -123,7 +123,7 @@
           <div class="relative w-full max-w-md">
             <div class="overlay relative space-y-2 backdrop-blur-sm">
               <div class="grid grid-cols-2 gap-2">
-                <div v-for="item in MOCK_ANALYTICS" :key="item.label" class="card flex items-start gap-4">
+                <div v-for="item in MOCK_ANALYTICS" :key="item.label" class="card flex items-start gap-2">
                   <icon :name="item.icon" size="30" class="text-caption-info shrink-0" />
                   <div class="flex h-full flex-1 flex-col items-start text-start">
                     <p class="text-caption">

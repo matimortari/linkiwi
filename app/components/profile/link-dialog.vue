@@ -14,7 +14,7 @@
       <div class="flex flex-col gap-2">
         <div class="flex items-center gap-2">
           <img v-if="selectedAsset" :src="selectedAsset.url" alt="Selected link image" class="size-10 shrink-0 rounded-full object-cover">
-          <button type="button" class="btn-ghost" @click="toggleAssetPicker">
+          <button type="button" class="btn-ghost" :disabled="!showAssetPicker && !userStore.assets.length" @click="toggleAssetPicker">
             <icon :name="selectedAsset ? 'mdi:image-edit-outline' : 'mdi:image-plus-outline'" size="20" />
             <span>{{ selectedAsset ? "Change image" : "Add image" }}</span>
           </button>
@@ -24,14 +24,11 @@
         </div>
 
         <template v-if="showAssetPicker">
-          <Loading v-if="userStore.loading" />
-          <Empty v-else-if="!userStore.assets.length" message="No images uploaded yet. Upload some from the Asset Manager." icon-name="mdi:image-off-outline" />
-
-          <div v-else class="scroll-area flex max-h-32 flex-wrap gap-2 overflow-y-auto pr-1">
+          <div class="scroll-area flex max-h-32 flex-wrap gap-2 overflow-y-auto pr-1">
             <button
               v-for="asset in userStore.assets" :key="asset.id"
-              class="group relative size-10 shrink-0 overflow-hidden rounded-full border-2 transition-all" :class="selectedAsset?.id === asset.id ? 'border-primary' : 'border-transparent hover:border-muted-foreground'"
-              @click="selectAsset(asset)"
+              type="button" class="group relative size-10 shrink-0 overflow-hidden rounded-full border-2 transition-all"
+              :class="selectedAsset?.id === asset.id ? 'border-primary!' : 'border-transparent! hover:border-muted-foreground!'" @click="selectAsset(asset)"
             >
               <img :src="asset.url" :alt="asset.label ?? 'Asset'" class="size-full object-cover">
               <div v-if="selectedAsset?.id === asset.id" class="absolute inset-0 flex items-center justify-center bg-primary/30">
@@ -77,10 +74,10 @@ function buildLinkPayload() {
 }
 
 async function toggleAssetPicker() {
-  showAssetPicker.value = !showAssetPicker.value
-  if (showAssetPicker.value && !userStore.assets.length) {
-    await userStore.getAssets()
+  if (!showAssetPicker.value && !userStore.assets.length) {
+    return
   }
+  showAssetPicker.value = !showAssetPicker.value
 }
 
 function selectAsset(asset: { id: string, url: string }) {
@@ -127,9 +124,13 @@ function resetForm() {
   showAssetPicker.value = false
 }
 
-watch([() => isLinkDialogOpen.value, () => selectedLink.value], ([open, item]) => {
+watch([() => isLinkDialogOpen.value, () => selectedLink.value], async ([open, item]) => {
   if (!open) {
     return
+  }
+
+  if (!userStore.assets.length) {
+    await userStore.getAssets()
   }
 
   if (item?.link) {
@@ -145,4 +146,10 @@ watch([() => isLinkDialogOpen.value, () => selectedLink.value], ([open, item]) =
     resetForm()
   }
 }, { immediate: true })
+
+watch(() => userStore.assets.length, (length) => {
+  if (!length) {
+    showAssetPicker.value = false
+  }
+})
 </script>

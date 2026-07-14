@@ -8,35 +8,32 @@
   <div v-if="isOpen" class="fixed inset-0 z-20 bg-black/50 backdrop-blur-xs md:hidden" @click="closeSidebar()" />
 
   <aside
-    class="fixed top-0 left-0 z-30 size-full bg-card px-4 py-8 transition-transform ease-in-out md:static md:block md:w-56 md:translate-x-0 md:bg-transparent 2xl:w-64 2xl:py-12"
+    class="fixed top-0 left-0 z-30 size-full bg-card px-4 py-12 transition-transform md:static md:block md:w-56 md:translate-x-0 md:bg-transparent 2xl:w-64 2xl:py-12"
     :class="[isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0']"
   >
     <div class="flex h-full flex-col gap-8 px-12 md:px-0">
-      <div class="navigation-group w-full gap-4!">
-        <div v-if="user" class="flex w-full items-center gap-4">
-          <div ref="avatarDropdownRef" class="relative size-12 shrink-0">
-            <img :src="user.image" alt="Avatar" class="size-full cursor-pointer rounded-full border object-cover select-none" @click="dropdownOpen = !dropdownOpen">
-            <button class="btn-secondary absolute -right-2 -bottom-2 p-1!" aria-label="Profile options" @click.stop="dropdownOpen = !dropdownOpen">
-              <icon name="mdi:gear" size="15" />
-            </button>
-
-            <div v-if="dropdownOpen" class="absolute top-14 left-0 z-50 flex min-w-40 flex-col gap-1 rounded-xl border bg-card p-1 shadow-lg">
-              <button class="text-caption navigation-group rounded-lg p-2 whitespace-nowrap text-danger-foreground hover:bg-muted" @click="signOut">
-                <icon name="mdi:logout" size="15" />
-                <span>Sign Out</span>
-              </button>
-              <button class="text-caption navigation-group rounded-lg p-2 whitespace-nowrap text-danger-foreground hover:bg-danger/20" @click="handleDeleteUser">
-                <icon name="mdi:user-remove" size="15" class="text-caption-danger" />
-                <span>Delete Account</span>
-              </button>
-            </div>
-          </div>
-
+      <div class="navigation-group w-full">
+        <div v-if="user" ref="avatarDropdownRef" class="relative flex w-full items-center gap-2">
           <div class="flex w-full min-w-0 flex-col overflow-hidden">
-            <span class="text-sm font-semibold wrap-break-word">{{ user.name }}</span>
+            <button class="flex items-center gap-1 font-semibold hover:opacity-80" @click="dropdownOpen = !dropdownOpen">
+              <icon name="mdi:chevron-down" size="25" class="shrink-0 transition-transform duration-200" :class="{ 'rotate-180': dropdownOpen }" />
+              <span class="truncate text-sm wrap-break-word">{{ user.name }}</span>
+            </button>
             <nuxt-link :to="`/${user.slug}`" class="text-caption truncate hover:underline">
               @{{ user.slug }}
             </nuxt-link>
+          </div>
+
+          <!-- Dropdown Menu -->
+          <div v-if="dropdownOpen" class="absolute top-6 left-1/2 z-50 flex min-w-40 -translate-x-1/2 flex-col gap-1 rounded-xl border bg-card p-1 shadow-lg">
+            <button class="text-caption navigation-group rounded-lg p-2 whitespace-nowrap text-danger-foreground hover:bg-muted" @click="signOut">
+              <icon name="mdi:logout" size="15" />
+              <span>Sign Out</span>
+            </button>
+            <button class="text-caption navigation-group rounded-lg p-2 whitespace-nowrap text-danger-foreground hover:bg-danger/20" @click="handleDeleteUser">
+              <icon name="mdi:user-remove" size="15" class="text-caption-danger" />
+              <span>Delete Account</span>
+            </button>
           </div>
         </div>
 
@@ -75,7 +72,7 @@
       </nav>
     </div>
 
-    <div class="absolute bottom-16 left-1/2 -translate-x-1/2 select-none md:hidden">
+    <div class="absolute bottom-24 left-1/2 -translate-x-1/2 select-none md:hidden">
       <Logo />
     </div>
   </aside>

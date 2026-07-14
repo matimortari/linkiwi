@@ -9,11 +9,11 @@
     <Loading v-if="loading" class="absolute inset-0 flex items-center justify-center backdrop-blur-sm" />
     <Empty v-else-if="!userProfile && !loading" :message="`User @${slug} not found.`" icon-name="mdi:account-off" />
 
-    <div v-else-if="userProfile" class="flex w-full flex-1 flex-col items-center pb-20 text-center" :style="backgroundStyle">
+    <div v-else-if="userProfile" class="flex w-full flex-1 flex-col items-center text-center" :style="backgroundStyle">
       <UserSupportBanner v-if="profilePreferences.supportBanner !== 'NONE'" :preferences="profilePreferences" />
       <UserGuestbook v-if="profilePreferences?.enableGuestbook" :user-id="userProfile?.id" />
 
-      <div v-if="userProfile.banner?.url" class="w-full max-w-2xl px-4 pt-12">
+      <div v-if="userProfile.banner?.url" class="w-full max-w-2xl px-4 pt-8">
         <img :src="userProfile.banner.url" alt="Profile Banner" class="h-32 w-full rounded-xl object-cover md:h-40">
       </div>
 
@@ -40,31 +40,25 @@
           />
         </ul>
 
-        <div class="flex w-full max-w-md flex-col items-center">
-          <ul class="flex w-full flex-col items-center gap-4">
-            <template v-for="item in visibleItems" :key="item.id">
-              <UserLink v-if="item.type === 'LINK'" :item="item" :preferences="profilePreferences" @click="handleClick(item.id ?? '')" />
-              <UserPhotoGrid v-else-if="item.type === 'PHOTO_GRID'" :photos="item.photoGrid?.photos ?? []" :preferences="profilePreferences" />
-              <UserWidget v-else-if="item.type === 'WIDGET' && item.widget" :type="item.widget.type" :handle="item.widget.handle ?? ''" :preferences="profilePreferences" />
-              <span v-else-if="item.type === 'DIVIDER'" class="w-full" :style="dividerStyle" />
-            </template>
-          </ul>
-
-          <p v-if="!visibleItems.length && !visibleIcons.length" :style="descriptionStyle">
-            No content yet.
-          </p>
-        </div>
+        <ul class="flex w-full max-w-md flex-col items-center gap-4">
+          <template v-for="item in visibleItems" :key="item.id">
+            <UserLink v-if="item.type === 'LINK'" :item="item" :preferences="profilePreferences" @click="handleClick(item.id ?? '')" />
+            <UserPhotoGrid v-else-if="item.type === 'PHOTO_GRID'" :photos="item.photoGrid?.photos ?? []" :preferences="profilePreferences" />
+            <UserWidget v-else-if="item.type === 'WIDGET' && item.widget" :type="item.widget.type" :handle="item.widget.handle ?? ''" :preferences="profilePreferences" />
+            <span v-else-if="item.type === 'DIVIDER'" class="w-full" :style="dividerStyle" />
+          </template>
+        </ul>
       </div>
-    </div>
 
-    <div v-if="!loading" class="pointer-events-none fixed inset-x-0 bottom-4 z-20 flex justify-center px-4">
-      <nuxt-link to="/" class="pointer-events-auto navigation-group rounded-full border bg-card p-2.5 shadow-sm backdrop-blur-sm transition-transform hover:scale-105">
-        <span class="text-xs font-medium text-muted-foreground">Made with</span>
-        <ClientOnly>
-          <img src="/assets/symbol.png" alt="LinKiwi" width="20" class="size-5 shrink-0">
-          <img :src="themeTitle" alt="LinKiwi" width="72">
-        </ClientOnly>
-      </nuxt-link>
+      <div class="mt-auto flex justify-center px-4 pt-12" :class="profilePreferences.supportBanner !== 'NONE' ? 'pb-36 md:pb-28' : 'pb-8'">
+        <nuxt-link to="/" class="navigation-group transition-transform hover:scale-105">
+          <span class="text-xs font-medium" :style="{ color: profilePreferences.linkTextColor }">Made with</span>
+          <ClientOnly>
+            <img src="/assets/symbol.png" alt="LinKiwi" width="20" class="size-5 shrink-0">
+            <img :src="themeTitle" alt="LinKiwi" width="72">
+          </ClientOnly>
+        </nuxt-link>
+      </div>
     </div>
   </div>
 </template>

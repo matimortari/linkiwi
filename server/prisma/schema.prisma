@@ -125,18 +125,18 @@ model UserBanner {
 }
 
 model UserAsset {
-  id        String          @id @default(cuid())
+  id        String            @id @default(cuid())
   userId    String
   url       String
   key       String
   mimeType  String
   size      Int
   label     String?
-  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   banner    UserBanner?
   photos    PhotoGridItem[]
   links     ProfileItemLink[]
-  createdAt DateTime        @default(now())
+  createdAt DateTime          @default(now())
 
   @@index([userId])
 }

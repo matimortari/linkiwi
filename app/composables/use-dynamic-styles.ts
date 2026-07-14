@@ -87,13 +87,6 @@ export function useDynamicStyles(preferences: UserPreferences | null | Ref<UserP
     }
   })
 
-  const photoGridInnerStyle = computed(() => ({
-    display: "grid",
-    gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-    gap: "0.5rem",
-    width: "100%",
-  }))
-
   return {
     backgroundStyle,
     profilePictureStyle,
@@ -105,6 +98,5 @@ export function useDynamicStyles(preferences: UserPreferences | null | Ref<UserP
     linkStyle,
     linkInnerStyle,
     dividerStyle,
-    photoGridInnerStyle,
   }
 }

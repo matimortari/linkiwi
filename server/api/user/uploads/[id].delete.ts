@@ -16,13 +16,35 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 403, statusMessage: "You do not have permission to delete this asset" })
   }
 
-  await db.profileItemLink.updateMany({ where: { assetId }, data: { imageUrl: null } })
+  // Find all photo grids that reference the asset
+  const photoUsages = await db.photoGridItem.findMany({ where: { assetId }, select: { gridId: true } })
+  const affectedGridIds = [...new Set(photoUsages.map(photo => photo.gridId))]
+
+  // Remove the asset from all links, photo grids, and banners that reference it
+  await Promise.all([
+    db.profileItemLink.updateMany({ where: { assetId }, data: { imageUrl: null, assetId: null } }),
+    db.photoGridItem.deleteMany({ where: { assetId } }),
+    db.userBanner.deleteMany({ where: { assetId } }),
+  ])
+
+  // If any photo grids became empty as a result, delete them
+  if (affectedGridIds.length) {
+    const emptyGrids = await Promise.all(affectedGridIds.map(async (gridId) => {
+      const remaining = await db.photoGridItem.count({ where: { gridId } })
+      return remaining === 0 ? gridId : null
+    }),
+    )
+    const emptyGridIds = emptyGrids.filter((id): id is string => id !== null)
+    if (emptyGridIds.length) {
+      await db.profileItem.deleteMany({ where: { id: { in: emptyGridIds } } })
+    }
+  }
 
   await deleteFile(targetAsset.url)
   await db.userAsset.delete({ where: { id: assetId } })
 
   const user = await db.user.findUnique({ where: { id: sessionUser.id }, select: { slug: true } })
-  await deleteCached(CacheKeys.userAssets?.(sessionUser.id) || `user:assets:${sessionUser.id}`, CacheKeys.userItems(sessionUser.id), CacheKeys.userProfile(user?.slug || ""))
+  await deleteCached(CacheKeys.userAssets(sessionUser.id), CacheKeys.userItems(sessionUser.id), CacheKeys.userData(sessionUser.id), CacheKeys.userProfile(user?.slug || ""))
 
   return { success: true, message: "Media asset completely removed from cloud storage." }
 })
@@ -30,7 +52,7 @@ export default defineEventHandler(async (event) => {
 defineRouteMeta({
   openAPI: {
     summary: "Delete user asset",
-    description: "Deletes a user's uploaded asset.",
+    description: "Deletes a user's uploaded asset and removes it from any links, photo grids, or banners that reference it.",
     tags: ["User"],
     parameters: [
       { in: "path", name: "id", required: true, schema: { type: "string" }, description: "Asset ID" },

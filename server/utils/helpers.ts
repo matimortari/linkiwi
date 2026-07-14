@@ -56,8 +56,7 @@ export function categorizeReferrer(referrer: string | null | undefined): string 
   if (!normalized.includes(".") && !normalized.includes("://") && !normalized.includes("/")) {
     return normalized
   }
-  const baseUrl = process.env.NUXT_PUBLIC_BASE_URL?.toLowerCase()
-  if (baseUrl && normalized.includes(baseUrl)) {
+  if (normalized.includes(requireEnv("NUXT_PUBLIC_BASE_URL"))) {
     return "direct"
   }
 

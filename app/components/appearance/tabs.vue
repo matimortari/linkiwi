@@ -1,5 +1,5 @@
 <template>
-  <div v-if="props.activeTab === 'base'" class="card mx-4 grid grid-cols-1 gap-2 md:grid-cols-2">
+  <div v-if="props.activeTab === 'base'" class="card grid grid-cols-1 gap-2 md:mx-4 md:grid-cols-2">
     <RadioOptions v-model:value="localPrefs.backgroundType" name="backgroundType" label="Background Type" :options="BACKGROUND_TYPES" />
     <div class="flex flex-col gap-2 md:p-2">
       <h6 class="py-2">

@@ -1,11 +1,11 @@
 <template>
   <li class="flex w-full min-w-32">
     <div class="w-full overflow-hidden" :style="linkStyle()">
-      <div class="grid grid-cols-2 gap-2 md:grid-cols-3" :style="photoGridInnerStyle">
+      <div class="grid grid-cols-3 gap-2">
         <img
           v-for="photo in photos" :key="photo.id"
           :src="photo.url" :alt="photo.alt ?? `Photo ${photo.order}`"
-          class="aspect-square w-full object-cover"
+          class="aspect-square w-full object-cover" :style="photoStyle"
         >
       </div>
     </div>
@@ -18,5 +18,6 @@ const props = defineProps<{
   preferences: UserPreferences
 }>()
 
-const { linkStyle, photoGridInnerStyle } = useDynamicStyles(toRef(props, "preferences"))
+const { linkStyle } = useDynamicStyles(toRef(props, "preferences"))
+const photoStyle = computed(() => ({ borderRadius: props.preferences.linkBorderRadius }))
 </script>

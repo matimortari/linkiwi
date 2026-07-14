@@ -196,6 +196,9 @@ export const useUserStore = defineStore("user", () => {
     try {
       await $fetch(`/api/user/uploads/${id}`, { method: "DELETE", credentials: "include" })
       assets.value = assets.value.filter(asset => asset.id !== id)
+      if (user.value?.banner?.assetId === id) {
+        user.value.banner = null
+      }
       toast.success("Image deleted successfully")
     }
     catch (err) {

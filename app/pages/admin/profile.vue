@@ -5,11 +5,7 @@
       :visible="{ opacity: 1, x: 0 }" :duration="800"
       class="min-h-screen w-full space-y-4 border-b-0! p-4 md:w-2/3 md:rounded-t-2xl md:border md:p-8"
     >
-      <h3>
-        Profile
-      </h3>
-
-      <ProfileItemList />
+      <ProfileHeader />
       <ProfileOptions />
     </div>
 

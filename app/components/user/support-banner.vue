@@ -1,36 +1,31 @@
 <template>
-  <transition name="banner-slide-up">
-    <div v-if="showBanner && banner" class="fixed bottom-0 z-30 flex w-screen flex-col items-center justify-between gap-2 p-4 text-[#f9fafb] md:flex-row md:gap-2" :class="banner.class">
-      <div class="navigation-group w-full justify-between md:flex-col md:items-start">
-        <div class="flex w-full flex-col justify-between gap-2 text-start">
-          <div class="navigation-group">
-            <icon :name="banner.icon" size="35" class="hidden shrink-0 text-[#f9fafb] md:block" />
-            <h5>
-              {{ banner.message }}
-            </h5>
+  <div v-if="banner" class="fixed bottom-0 z-30 flex w-screen flex-col items-center justify-between gap-2 p-4 text-[#f9fafb] md:flex-row md:gap-2" :class="banner.class">
+    <div class="navigation-group w-full justify-between md:flex-col md:items-start">
+      <div class="flex w-full flex-col justify-between gap-2 text-start">
+        <div class="navigation-group">
+          <icon :name="banner.icon" size="35" class="hidden shrink-0 text-[#f9fafb] md:block" />
+          <h5>
+            {{ banner.message }}
+          </h5>
 
-            <nuxt-link :to="banner.link" class="btn ml-auto">
-              <span>Learn More</span>
-              <icon name="mdi:arrow-right" size="20" />
-            </nuxt-link>
-          </div>
-
-          <p class="text-xs/4 md:text-sm">
-            {{ banner.description }}
-          </p>
+          <nuxt-link :to="banner.link" class="btn ml-auto">
+            <span>Learn More</span>
+            <icon name="mdi:arrow-right" size="20" />
+          </nuxt-link>
         </div>
+
+        <p class="text-xs/4 md:text-sm">
+          {{ banner.description }}
+        </p>
       </div>
     </div>
-  </transition>
+  </div>
 </template>
 
 <script setup lang="ts">
 const props = defineProps<{
   preferences: UserPreferences
 }>()
-
-const showBanner = ref(true)
-let lastScrollY = 0
 
 const activeBanner = computed<Exclude<BannerOption, "NONE"> | null>(() => {
   const value = props.preferences.supportBanner
@@ -50,18 +45,6 @@ const banner = computed(() => {
     class: BANNER_STYLES[activeBanner.value],
   }
 })
-
-function handleScroll() {
-  showBanner.value = window.scrollY < lastScrollY || window.scrollY < 10
-  lastScrollY = window.scrollY
-}
-
-onMounted(() => {
-  lastScrollY = window.scrollY
-  window.addEventListener("scroll", handleScroll)
-})
-
-onBeforeUnmount(() => window.removeEventListener("scroll", handleScroll))
 </script>
 
 <style scoped>
@@ -76,17 +59,5 @@ onBeforeUnmount(() => window.removeEventListener("scroll", handleScroll))
 }
 .banner.climate-action {
   background-color: #287445;
-}
-
-.banner-slide-up-enter-active,
-.banner-slide-up-leave-active {
-  transition:
-    transform 0.8s,
-    opacity 0.8s;
-}
-.banner-slide-up-enter-from,
-.banner-slide-up-leave-to {
-  transform: translateY(100%);
-  opacity: 0;
 }
 </style>
