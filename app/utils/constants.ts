@@ -183,12 +183,26 @@ export const SCHEDULE_ACTION_OPTIONS: { value: ScheduleAction, label: string, ic
   { value: "DELETE", label: "Delete", icon: "mdi:trash-can-outline" },
 ]
 
-// Toast icons
+// Toasts
 export const TOAST_ICONS: { danger: string, success: string, warning: string, info: string } = {
-  danger: "ph:x-circle-bold",
-  success: "ph:check-circle-bold",
-  warning: "ph:warning-circle-bold",
-  info: "ph:info-bold",
+  danger: "mdi:close-circle-outline",
+  success: "mdi:check-circle-outline",
+  warning: "mdi:alert-circle-outline",
+  info: "mdi:information-slab-circle-outline",
+}
+
+export const TOAST_TEXT: { danger: string, success: string, warning: string, info: string } = {
+  danger: "text-danger",
+  success: "text-success",
+  warning: "text-warning",
+  info: "text-info",
+}
+
+export const TOAST_BG: { danger: string, success: string, warning: string, info: string } = {
+  danger: "bg-danger",
+  success: "bg-success",
+  warning: "bg-warning",
+  info: "bg-info",
 }
 
 // OAuth providers

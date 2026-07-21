@@ -114,12 +114,11 @@
 
 <script setup lang="ts">
 const { public: { baseURL } } = useRuntimeConfig()
-const { createActionHandler } = useActionIcon()
-const symbolActions = SYMBOLS.map(() => createActionHandler("ph:download-bold"))
-const wordmarkActions = WORDMARKS.map(() => createActionHandler("ph:download-bold"))
-const neutralActions = NEUTRAL_SCALE.map(() => createActionHandler("ph:copy-bold"))
-const brandActions = BRAND_COLORS.map(() => createActionHandler("ph:copy-bold"))
-const statusActions = Array.from({ length: STATUS_COLORS.length * 2 }, () => createActionHandler("ph:copy-bold"))
+const symbolActions = SYMBOLS.map(() => useActionIcon("ph:download-bold"))
+const wordmarkActions = WORDMARKS.map(() => useActionIcon("ph:download-bold"))
+const neutralActions = NEUTRAL_SCALE.map(() => useActionIcon("ph:copy-bold"))
+const brandActions = BRAND_COLORS.map(() => useActionIcon("ph:copy-bold"))
+const statusActions = Array.from({ length: STATUS_COLORS.length * 2 }, () => useActionIcon("ph:copy-bold"))
 
 function handleDownloadImage(logo: { name: string, image: string }, index: number, actions: any[]) {
   if (!actions[index]) {

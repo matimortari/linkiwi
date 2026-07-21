@@ -27,10 +27,9 @@ const props = defineProps<{
 
 const emit = defineEmits<{ click: [] }>()
 
-const { createActionHandler } = useActionIcon()
 const { linkStyle, linkInnerStyle } = useDynamicStyles(toRef(props, "preferences"))
 const isHovered = ref(false)
-const copyAction = createActionHandler("mdi:content-copy")
+const copyAction = useActionIcon("mdi:content-copy")
 
 async function handleClick(event: MouseEvent) {
   event.preventDefault()

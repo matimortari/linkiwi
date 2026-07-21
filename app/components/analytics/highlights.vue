@@ -8,22 +8,22 @@
       <div class="flex flex-col gap-2 md:flex-row md:items-end">
         <div class="flex flex-row gap-2">
           <div class="flex flex-col gap-1">
-            <label class="text-caption text-xs">Date: From</label>
+            <label for="analytics-date-from" class="text-caption">Date: From</label>
             <input
-              v-model="fromDisplay" v-maska="'####/##/##'"
-              type="text" placeholder="yyyy/mm/dd"
-              class="max-w-32 text-sm md:max-w-44" :class="{ 'border-danger!': fromDisplay && !dateFrom }"
-              @blur="fromDisplay = commitDate(fromDisplay, 'dateFrom')"
+              id="analytics-date-from" v-model="fromDisplay"
+              v-maska="'####/##/##'" type="text"
+              placeholder="yyyy/mm/dd" class="max-w-32 text-sm md:max-w-44"
+              :class="{ 'border-danger!': fromDisplay && !dateFrom }" @blur="fromDisplay = commitDate(fromDisplay, 'dateFrom')"
             >
           </div>
 
           <div class="flex flex-col gap-1">
-            <label class="text-caption text-xs">Date: To</label>
+            <label for="analytics-date-to" class="text-caption">Date: To</label>
             <input
-              v-model="toDisplay" v-maska="'####/##/##'"
-              type="text" placeholder="yyyy/mm/dd"
-              class="max-w-32 text-sm md:max-w-44" :class="{ 'border-danger!': toDisplay && !dateTo }"
-              @blur="toDisplay = commitDate(toDisplay, 'dateTo')"
+              id="analytics-date-to" v-model="toDisplay"
+              v-maska="'####/##/##'" type="text"
+              placeholder="yyyy/mm/dd" class="max-w-32 text-sm md:max-w-44"
+              :class="{ 'border-danger!': toDisplay && !dateTo }" @blur="toDisplay = commitDate(toDisplay, 'dateTo')"
             >
           </div>
         </div>
@@ -69,10 +69,9 @@
 <script setup lang="ts">
 import { vMaska } from "maska/vue"
 
-const { createActionHandler } = useActionIcon()
 const analyticsStore = useAnalyticsStore()
 const { totalViews, totalClicks, clickRate, joinedAt } = useAnalyticsData()
-const resetAction = createActionHandler("mdi:trash-can-outline")
+const resetAction = useActionIcon("mdi:trash-can-outline")
 const dateFrom = ref("")
 const dateTo = ref("")
 const fromDisplay = ref("")
@@ -83,7 +82,7 @@ function parseDate(raw: string): string {
   if (!cleaned) {
     return ""
   }
-  const match = cleaned.match(/^(\d{4})[/\-](\d{1,2})[/\-](\d{1,2})$/)
+  const match = cleaned.match(/^(\d{4})[/-](\d{1,2})[/-](\d{1,2})$/)
   if (!match) {
     return ""
   }

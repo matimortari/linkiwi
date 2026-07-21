@@ -13,7 +13,7 @@
 
       <div class="flex flex-col gap-2">
         <div class="flex items-center gap-2">
-          <img v-if="selectedAsset" :src="selectedAsset.url" alt="Selected link image" class="size-10 shrink-0 rounded-full object-cover">
+          <img v-if="selectedAsset" :src="selectedAsset.url" alt="Selected link" class="size-10 shrink-0 rounded-full object-cover">
           <button type="button" class="btn-ghost" :disabled="!showAssetPicker && !userStore.assets.length" @click="toggleAssetPicker">
             <icon :name="selectedAsset ? 'mdi:image-edit-outline' : 'mdi:image-plus-outline'" size="20" />
             <span>{{ selectedAsset ? "Change image" : "Add image" }}</span>

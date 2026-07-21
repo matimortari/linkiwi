@@ -2,37 +2,34 @@
   <Dialog :is-open="isOpen" title="Schedule Item" @update:is-open="emit('close')">
     <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
       <div class="flex flex-col gap-1">
-        <label class="text-caption">Start (optional)</label>
+        <label for="schedule-start" class="text-caption">Start (optional)</label>
         <input
-          v-model="startDisplay"
-          v-maska="'####/##/## ##:##'"
-          type="text"
-          placeholder="yyyy/mm/dd hh:mm"
-          :class="{ 'border-danger!': startDisplay && !form.scheduledStart }"
+          id="schedule-start" v-model="startDisplay"
+          v-maska="'####/##/## ##:##'" type="text"
+          placeholder="yyyy/mm/dd hh:mm" :class="{ 'border-danger!': startDisplay && !form.scheduledStart }"
           @blur="startDisplay = commitDisplay(startDisplay, 'scheduledStart')"
         >
       </div>
 
       <div class="flex flex-col gap-1">
-        <label class="text-caption">End (optional)</label>
+        <label for="schedule-end" class="text-caption">End (optional)</label>
         <input
-          v-model="endDisplay"
-          v-maska="'####/##/## ##:##'"
-          type="text"
-          placeholder="yyyy/mm/dd hh:mm"
-          :class="{ 'border-danger!': endDisplay && !form.scheduledEnd }"
+          id="schedule-end" v-model="endDisplay"
+          v-maska="'####/##/## ##:##'" type="text"
+          placeholder="yyyy/mm/dd hh:mm" :class="{ 'border-danger!': endDisplay && !form.scheduledEnd }"
           @blur="endDisplay = commitDisplay(endDisplay, 'scheduledEnd')"
         >
       </div>
 
-      <div class="flex flex-col gap-1">
-        <label class="text-caption">On End</label>
+      <fieldset class="m-0 flex min-w-0 flex-col gap-1 border-0 p-0">
+        <legend class="text-caption float-left w-full p-0">
+          On End
+        </legend>
         <div class="flex gap-2">
           <button
             v-for="opt in SCHEDULE_ACTION_OPTIONS" :key="opt.value"
-            type="button"
-            class="card navigation-group p-2! hover:bg-muted!" :class="{ 'bg-muted!': form.scheduleAction === opt.value }"
-            @click="form.scheduleAction = opt.value"
+            type="button" class="card navigation-group p-2! hover:bg-muted!"
+            :class="{ 'bg-muted!': form.scheduleAction === opt.value }" @click="form.scheduleAction = opt.value"
           >
             <icon :name="opt.icon" size="20" />
             <span class="text-sm">{{ opt.label }}</span>
@@ -41,7 +38,7 @@
         <p class="max-w-md text-xs text-muted-foreground">
           What happens to this item when the end date is reached. <span v-if="form.scheduleAction === 'DELETE'"> Deletion may take up to 15 minutes to complete.</span>
         </p>
-      </div>
+      </fieldset>
 
       <footer class="flex items-center justify-end">
         <div class="navigation-group">
@@ -94,7 +91,7 @@ function parseDisplay(raw: string): string {
     return ""
   }
 
-  const match = cleaned.match(/^(\d{4})[/\-](\d{1,2})[/\-](\d{1,2})[\sT](\d{1,2}):(\d{2})$/)
+  const match = cleaned.match(/^(\d{4})[/-](\d{1,2})[/-](\d{1,2})[\sT](\d{1,2}):(\d{2})$/)
   if (!match) {
     return ""
   }

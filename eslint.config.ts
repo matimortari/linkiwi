@@ -39,6 +39,7 @@ export default antfu({
     }],
     ...eslintPluginBetterTailwindcss.configs["recommended-warn"].rules,
     "better-tailwindcss/no-unregistered-classes": "off",
+    "better-tailwindcss/no-concatenated-classes": "off",
     "better-tailwindcss/no-unknown-classes": "off",
     "better-tailwindcss/enforce-consistent-line-wrapping": "off",
     "markdown/fenced-code-language": "off",

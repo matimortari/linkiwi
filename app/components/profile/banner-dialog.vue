@@ -80,10 +80,9 @@ const props = defineProps<{
 
 const emit = defineEmits<{ close: [] }>()
 
-const { createActionHandler } = useActionIcon()
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
-const saveAction = createActionHandler("mdi:content-save-check")
+const saveAction = useActionIcon("mdi:content-save-check")
 const fileInput = ref<HTMLInputElement | null>(null)
 const cropImage = ref<HTMLImageElement | null>(null)
 const cropper = shallowRef<Cropper | null>(null)

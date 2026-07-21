@@ -4,7 +4,7 @@
       <iframe
         :src="spotifyEmbedUrl" width="100%"
         height="152" loading="lazy"
-        style="border-radius: 12px"
+        title="Spotify Widget" :style="{ borderRadius: '12px' }"
         allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
       />
     </div>

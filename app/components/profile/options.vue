@@ -104,7 +104,6 @@
 </template>
 
 <script setup lang="ts">
-const { createActionHandler } = useActionIcon()
 const userStore = useUserStore()
 const profileItemsStore = useProfileItemsStore()
 const analyticsStore = useAnalyticsStore()
@@ -112,7 +111,7 @@ const { preferences } = storeToRefs(userStore)
 const { comments } = storeToRefs(analyticsStore)
 const assetsOpen = ref(false)
 const guestbookEnabled = ref(preferences.value?.enableGuestbook ?? false)
-const guestbookAction = createActionHandler("mdi:content-save-check")
+const guestbookAction = useActionIcon("mdi:content-save-check")
 
 async function handleSaveGuestbook() {
   await userStore.updatePreferences({ enableGuestbook: guestbookEnabled.value })

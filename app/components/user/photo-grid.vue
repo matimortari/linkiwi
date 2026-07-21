@@ -4,7 +4,7 @@
       <div class="grid grid-cols-3 gap-2">
         <img
           v-for="photo in photos" :key="photo.id"
-          :src="photo.url" :alt="photo.alt ?? `Photo ${photo.order}`"
+          :src="photo.url" :alt="photo.alt ?? `Item ${photo.order}`"
           class="aspect-square w-full object-cover" :style="photoStyle"
         >
       </div>

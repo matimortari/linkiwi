@@ -89,15 +89,14 @@ const emit = defineEmits<{ "close": [], "update:isOpen": [] }>()
 
 const { public: { baseURL } } = useRuntimeConfig()
 const { user } = storeToRefs(useUserStore())
-const { createActionHandler } = useActionIcon()
 const qrContainer = ref<HTMLElement | null>(null)
 const copySuccess = ref<string | null>(null)
 const logoBase64 = ref("")
 const customTag = ref("")
 const activeTab = ref("qr")
 const pageUrl = computed(() => `${baseURL}/${user.value?.slug}`)
-const downloadAction = createActionHandler("mdi:download")
-const copyAction = createActionHandler("mdi:content-copy")
+const downloadAction = useActionIcon("mdi:download")
+const copyAction = useActionIcon("mdi:content-copy")
 
 const SHARE_TABS = [{ label: "QR Code", value: "qr" }, { label: "Link Tracking", value: "tracking" }, { label: "Share to Socials", value: "social" }]
 const TRACKING_SOURCES = [

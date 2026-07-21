@@ -47,8 +47,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{ save: [value: UserPreferences] }>()
 
-const { createActionHandler } = useActionIcon()
-const saveAction = createActionHandler("mdi:content-save-check")
+const saveAction = useActionIcon("mdi:content-save-check")
 const pendingThemeTitle = useState<string | null>("pendingThemeTitle", () => null)
 
 function findActiveThemeTitle(prefs: UserPreferences): string {

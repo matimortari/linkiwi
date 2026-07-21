@@ -32,14 +32,13 @@
 </template>
 
 <script setup lang="ts">
-const { createActionHandler } = useActionIcon()
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
 const activeTab = ref("base")
 const preferences = ref<UserPreferences>({ ...DEFAULT_PREFERENCES })
 const localPreferences = useState<UserPreferences | null>("localPreferences", () => null)
-const saveAction = createActionHandler("mdi:content-save-check")
-const resetAction = createActionHandler("mdi:close")
+const saveAction = useActionIcon("mdi:content-save-check")
+const resetAction = useActionIcon("mdi:close")
 
 async function handleUpdatePreferences() {
   await userStore.updatePreferences(preferences.value)

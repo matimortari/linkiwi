@@ -39,11 +39,10 @@
 const props = defineProps<{ isOpen: boolean }>()
 const emit = defineEmits<{ close: [] }>()
 
-const { createActionHandler } = useActionIcon()
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
 const profileForm = ref({ name: "", slug: "", description: "", location: "" })
-const profileAction = createActionHandler("mdi:content-save-check")
+const profileAction = useActionIcon("mdi:content-save-check")
 
 async function handleSaveProfile() {
   if (!user.value?.id || !profileForm.value.name || !profileForm.value.slug) {
