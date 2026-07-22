@@ -8,6 +8,7 @@
       <div class="navigation-group overflow-x-auto">
         <button
           v-for="t in APPEARANCE_TABS" :key="t.value"
+          type="button"
           class="navigation-group justify-start rounded-lg rounded-b-none p-2 text-sm font-semibold whitespace-nowrap transition-all hover:bg-muted/30"
           :class="{ 'border-b-2 border-b-secondary!': activeTab === t.value }" @click="activeTab = t.value"
         >
@@ -16,11 +17,11 @@
       </div>
 
       <div class="navigation-group shrink-0 self-end">
-        <button class="btn-danger" @click="handleResetPreferences">
+        <button type="button" class="btn-danger" @click="handleResetPreferences">
           <icon :name="resetAction.icon.value" size="20" />
           <span>Reset All</span>
         </button>
-        <button class="btn-primary" @click="handleUpdatePreferences">
+        <button type="button" class="btn-primary" @click="handleUpdatePreferences">
           <icon :name="saveAction.icon.value" size="20" />
           <span>Save</span>
         </button>

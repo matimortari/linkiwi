@@ -6,19 +6,19 @@
       :animation="150" @end="reorderIcons"
     >
       <li v-for="icon in orderedIcons" :key="icon.id" class="relative flex size-12 shrink-0 items-center justify-center rounded-full" :class="{ 'opacity-60': !icon.isVisible }">
-        <button class="drag-handle btn-ghost absolute -top-3 -left-3 cursor-move p-0!" aria-label="Drag to reorder">
+        <button type="button" class="drag-handle btn-ghost absolute -top-3 -left-3 cursor-move p-0!" aria-label="Drag to reorder">
           <icon name="mdi:drag-vertical" size="25" class="text-muted" />
         </button>
         <nuxt-link :to="icon.url" class="btn-ghost" :aria-label="icon.platform" target="_blank">
           <icon :name="icon.logo" size="30" />
         </nuxt-link>
-        <button class="btn-ghost absolute -right-3 -bottom-3 p-0!" aria-label="Delete" @click="handleDelete(icon.id)">
+        <button type="button" class="btn-ghost absolute -right-3 -bottom-3 p-0!" aria-label="Delete" @click="handleDelete(icon.id)">
           <icon name="mdi:remove-circle-outline" size="20" class="text-caption-danger" />
         </button>
       </li>
     </VueDraggable>
 
-    <button class="btn-ghost" aria-label="Add social icon" @click="openDialog('icon')">
+    <button type="button" class="btn-ghost" aria-label="Add social icon" @click="openDialog('icon')">
       <icon name="mdi:plus" size="35" class="text-muted-foreground" />
     </button>
   </div>

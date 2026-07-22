@@ -25,7 +25,7 @@
 
           <ul class="space-y-2 text-sm text-muted-foreground">
             <li v-for="(link, linkIndex) in section.links" :key="linkIndex">
-              <button v-if="link.action" class="w-full text-left whitespace-nowrap transition-colors hover:text-foreground" @click="link.action">
+              <button v-if="link.action" type="button" class="w-full text-left whitespace-nowrap transition-colors hover:text-foreground" @click="link.action">
                 {{ link.label }}
               </button>
               <nuxt-link v-else :to="link.href" class="w-full text-left whitespace-nowrap transition-colors hover:text-foreground">

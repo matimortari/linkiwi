@@ -50,7 +50,7 @@
           <button type="button" class="btn-danger" @click="emit('close')">
             Cancel
           </button>
-          <button class="btn-success" type="submit">
+          <button type="submit" class="btn-success">
             Confirm
           </button>
         </div>

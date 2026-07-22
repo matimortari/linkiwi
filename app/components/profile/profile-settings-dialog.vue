@@ -25,7 +25,7 @@
           <button type="button" class="btn-danger" @click="emit('close')">
             Cancel
           </button>
-          <button class="btn-success" type="submit">
+          <button type="submit" class="btn-success">
             <icon :name="profileAction.icon.value" size="20" />
             <span>Save</span>
           </button>

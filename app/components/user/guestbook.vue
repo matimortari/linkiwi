@@ -6,7 +6,7 @@
           <h5>
             Leave a message
           </h5>
-          <button class="flex items-center transition-transform hover:scale-110" aria-label="Close guestbook" @click="isOpen = false">
+          <button type="button" class="flex items-center transition-transform hover:scale-110" aria-label="Close guestbook" @click="isOpen = false">
             <icon name="mdi:close" size="20" />
           </button>
         </div>
@@ -33,7 +33,11 @@
       </div>
     </transition>
 
-    <button class="btn" :class="{ 'bg-primary! text-background!': isOpen }" aria-label="Toggle guestbook" @click="isOpen = !isOpen">
+    <button
+      type="button" class="btn"
+      :class="{ 'bg-primary! text-background!': isOpen }" aria-label="Toggle guestbook"
+      @click="isOpen = !isOpen"
+    >
       <icon name="mdi:message-text" size="25" class="transition-transform" :class="{ 'rotate-12': isOpen }" />
     </button>
   </div>

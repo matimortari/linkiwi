@@ -6,10 +6,10 @@
       </div>
 
       <nav class="navigation-group" aria-label="User Actions">
-        <button class="btn" aria-label="Toggle Theme" @click="toggleTheme">
+        <button type="button" class="btn" aria-label="Toggle Theme" @click="toggleTheme">
           <icon :name="themeIcon" size="20" />
         </button>
-        <button v-if="loggedIn" class="btn" @click="signOut">
+        <button v-if="loggedIn" type="button" class="btn" @click="signOut">
           <icon name="mdi:logout" size="20" />
           <span class="hidden md:inline">Sign Out</span>
         </button>

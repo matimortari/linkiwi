@@ -77,5 +77,10 @@ export default antfu({
       singleline: { max: 4 },
       multiline: { max: 2 },
     }],
+    "vue/html-button-has-type": ["error", {
+      button: true,
+      submit: true,
+      reset: true,
+    }],
   },
 })

@@ -11,6 +11,7 @@
             <span class="text-caption wrap-break-word">{{ toast.message }}</span>
           </div>
           <button
+            type="button"
             class="flex shrink-0 items-center justify-center rounded-sm border-none bg-transparent p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             aria-label="Close notification" @click="dismiss(toast.id)"
           >

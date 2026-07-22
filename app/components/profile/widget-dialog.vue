@@ -33,7 +33,7 @@
           <button type="button" class="btn-danger" @click="handleCancel">
             Cancel
           </button>
-          <button class="btn-success" type="submit" :disabled="!form.type || !form.handle">
+          <button type="submit" class="btn-success" :disabled="!form.type || !form.handle">
             Confirm
           </button>
         </div>

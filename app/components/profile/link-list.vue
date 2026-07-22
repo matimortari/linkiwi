@@ -13,7 +13,7 @@
       <li v-for="item in orderedItems" :key="item.id">
         <div v-if="item.type === 'DIVIDER'" class="card navigation-group justify-between py-2!" :class="{ 'opacity-50': !item.isVisible }">
           <div class="navigation-group">
-            <button class="drag-handle btn-ghost cursor-move p-0!" aria-label="Drag to reorder">
+            <button type="button" class="drag-handle btn-ghost cursor-move p-0!" aria-label="Drag to reorder">
               <icon name="mdi:drag-vertical" size="25" class="text-muted" />
             </button>
             <icon name="mdi:minus" size="20" class="text-muted-foreground" />
@@ -30,7 +30,7 @@
         <div v-else-if="item.type === 'LINK' && item.link" class="card flex flex-col gap-1" :class="{ 'border-dashed! opacity-60': !item.isVisible }">
           <div class="flex items-center justify-between">
             <div class="navigation-group min-w-0">
-              <button class="drag-handle btn-ghost cursor-move p-0!" aria-label="Drag to reorder">
+              <button type="button" class="drag-handle btn-ghost cursor-move p-0!" aria-label="Drag to reorder">
                 <icon name="mdi:drag-vertical" size="25" class="text-muted" />
               </button>
               <img v-if="item.link.imageUrl" :src="item.link.imageUrl" :alt="item.link.label" class="size-6 shrink-0 rounded-full object-cover">
@@ -52,7 +52,7 @@
         <div v-else-if="item.type === 'WIDGET' && item.widget" class="card flex flex-col gap-0.5" :class="{ 'border-dashed! opacity-60': !item.isVisible }">
           <div class="flex items-center justify-between">
             <div class="navigation-group min-w-0">
-              <button class="drag-handle btn-ghost cursor-move p-0!" aria-label="Drag to reorder">
+              <button type="button" class="drag-handle btn-ghost cursor-move p-0!" aria-label="Drag to reorder">
                 <icon name="mdi:drag-vertical" size="25" class="text-muted" />
               </button>
               <icon :name="WIDGET_ICONS[item.widget.type]" size="20" class="shrink-0 text-muted-foreground" />
@@ -71,7 +71,7 @@
         <div v-else-if="item.type === 'PHOTO_GRID'" class="card flex flex-col gap-1" :class="{ 'border-dashed! opacity-60': !item.isVisible }">
           <div class="flex items-center justify-between">
             <div class="navigation-group min-w-0">
-              <button class="drag-handle btn-ghost cursor-move p-0!" aria-label="Drag to reorder">
+              <button type="button" class="drag-handle btn-ghost cursor-move p-0!" aria-label="Drag to reorder">
                 <icon name="mdi:drag-vertical" size="25" class="text-muted" />
               </button>
               <icon name="mdi:image-multiple-outline" size="20" class="shrink-0 text-muted-foreground" />
@@ -104,14 +104,14 @@
         </button>
       </div>
       <div class="flex justify-end">
-        <button class="btn-ghost" @click="isPicking = false">
+        <button type="button" class="btn-ghost" @click="isPicking = false">
           <icon name="mdi:close" size="20" />
           <span>Cancel</span>
         </button>
       </div>
     </div>
 
-    <button v-else class="btn-primary self-end" @click="isPicking = true">
+    <button v-else type="button" class="btn-primary self-end" @click="isPicking = true">
       <icon name="mdi:plus" size="20" />
       <span>Add Item</span>
     </button>

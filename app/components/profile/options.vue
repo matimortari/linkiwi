@@ -41,7 +41,7 @@
               </div>
               <div class="navigation-group shrink-0">
                 <span class="text-caption">{{ formatDate(new Date(comment.createdAt)) }}</span>
-                <button class="btn-ghost p-0!" aria-label="Delete comment" @click="handleDeleteComment(comment.id)">
+                <button type="button" class="btn-ghost p-0!" aria-label="Delete comment" @click="handleDeleteComment(comment.id)">
                   <icon name="mdi:delete-outline" size="15" />
                 </button>
               </div>
@@ -55,7 +55,7 @@
     </div>
 
     <div class="card flex flex-col gap-4 md:mx-4">
-      <button class="flex w-full items-center justify-between text-left" @click="assetsOpen = !assetsOpen">
+      <button type="button" class="flex w-full items-center justify-between text-left" @click="assetsOpen = !assetsOpen">
         <div class="flex flex-col gap-1">
           <span class="text-sm font-medium">Assets</span>
           <p class="text-caption">

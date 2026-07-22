@@ -6,13 +6,17 @@
       </nav>
 
       <nav class="navigation-group" aria-label="Content Actions">
-        <button class="btn-ghost md:hidden!" :aria-label="isTocOpen ? 'Close table of contents' : 'Open table of contents'" @click="emit('toggleToc')">
+        <button type="button" class="btn-ghost md:hidden!" :aria-label="isTocOpen ? 'Close table of contents' : 'Open table of contents'" @click="emit('toggleToc')">
           <icon :name="isTocOpen ? 'mdi:close' : 'mdi:menu'" size="20" />
         </button>
-        <button class="btn-ghost" aria-label="Toggle Theme" @click="toggleTheme">
+        <button type="button" class="btn-ghost" aria-label="Toggle Theme" @click="toggleTheme">
           <icon :name="themeIcon" size="20" />
         </button>
-        <button v-if="loggedIn" class="btn-ghost" aria-label="Sign Out" @click="signOut">
+        <button
+          v-if="loggedIn" type="button"
+          class="btn-ghost" aria-label="Sign Out"
+          @click="signOut"
+        >
           <icon name="mdi:logout" size="20" />
         </button>
         <nuxt-link v-else to="/sign-in" class="btn-ghost" aria-label="Sign In">

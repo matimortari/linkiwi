@@ -40,7 +40,7 @@
         </div>
       </div>
 
-      <button class="btn-danger self-end md:self-start" @click="handleDeleteAnalytics">
+      <button type="button" class="btn-danger self-end md:self-start" @click="handleDeleteAnalytics">
         <icon :name="resetAction.icon.value" size="20" />
         <span>Reset Analytics</span>
       </button>

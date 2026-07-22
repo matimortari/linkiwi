@@ -18,7 +18,7 @@
               {{ title }}
             </h4>
 
-            <button aria-label="Close Dialog" class="btn-ghost" @mousedown="emit('update:isOpen', false)">
+            <button type="button" aria-label="Close Dialog" class="btn-ghost" @mousedown="emit('update:isOpen', false)">
               <icon name="mdi:close" size="20" />
             </button>
           </header>

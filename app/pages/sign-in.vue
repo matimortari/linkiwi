@@ -15,7 +15,11 @@
         </header>
 
         <div class="flex flex-col items-start gap-2">
-          <button v-for="provider in OAUTH_PROVIDERS" :key="provider.name" class="btn-ghost gap-4!" @click="signIn(provider.name)">
+          <button
+            v-for="provider in OAUTH_PROVIDERS" :key="provider.name"
+            type="button" class="btn-ghost gap-4!"
+            @click="signIn(provider.name)"
+          >
             <icon :name="provider.icon" size="35" />
             <span>{{ provider.label }}</span>
             <icon name="mdi:arrow-right" size="20" class="text-muted-foreground!" />

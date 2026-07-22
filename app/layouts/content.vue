@@ -30,7 +30,7 @@
       <slot />
     </main>
 
-    <button class="btn fixed bottom-6 left-6 z-30" aria-label="Scroll to top" @click="scrollToTop">
+    <button type="button" class="btn fixed bottom-6 left-6 z-30" aria-label="Scroll to top" @click="scrollToTop">
       <icon name="mdi:arrow-up" size="25" />
     </button>
   </div>

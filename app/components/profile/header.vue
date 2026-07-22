@@ -48,7 +48,7 @@
             <p class="truncate text-sm font-semibold">
               @{{ user.slug }}
             </p>
-            <button class="btn-ghost shrink-0" aria-label="Edit profile settings" @click="isProfileSettingsOpen = true">
+            <button type="button" class="btn-ghost shrink-0" aria-label="Edit profile settings" @click="isProfileSettingsOpen = true">
               <icon name="mdi:circle-edit-outline" size="25" class="text-muted-foreground" />
             </button>
           </div>

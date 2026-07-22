@@ -1,6 +1,7 @@
 <template>
   <!-- Mobile toggle -->
   <button
+    type="button"
     class="btn fixed bottom-4 left-1/2 z-40 -translate-x-1/2 transition-[opacity,transform] duration-300 md:hidden!"
     :class="showMobileToggle ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-4 opacity-0'"
     aria-label="Toggle Mobile Preview" @click="isPreviewOpen ? closePreview() : openPreview()"
@@ -13,7 +14,7 @@
     <!-- Mobile full-screen preview -->
     <transition name="slide">
       <div v-if="isPreviewOpen" class="scroll-area fixed top-0 left-0 z-40 size-full overflow-y-auto pb-12 md:hidden" :style="backgroundStyle">
-        <button class="btn fixed top-4 right-4 z-50 shadow-lg" aria-label="Close preview" @click="closePreview()">
+        <button type="button" class="btn fixed top-4 right-4 z-50 shadow-lg" aria-label="Close preview" @click="closePreview()">
           <icon name="mdi:close" size="25" />
         </button>
 

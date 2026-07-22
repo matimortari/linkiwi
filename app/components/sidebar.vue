@@ -1,6 +1,6 @@
 <template>
   <!-- Mobile toggle -->
-  <button class="btn fixed top-4 right-4 z-40 md:hidden!" :aria-label="isOpen ? 'Close menu' : 'Open menu'" @click="isOpen ? closeSidebar() : openSidebar()">
+  <button type="button" class="btn fixed top-4 right-4 z-40 md:hidden!" :aria-label="isOpen ? 'Close menu' : 'Open menu'" @click="isOpen ? closeSidebar() : openSidebar()">
     <icon :name="isOpen ? 'mdi:close' : 'mdi:menu'" size="25" :class="isOpen ? 'text-muted-foreground' : ''" />
   </button>
 
@@ -15,7 +15,7 @@
       <div class="navigation-group w-full">
         <div v-if="user" ref="avatarDropdownRef" class="relative flex w-full items-center gap-2">
           <div class="flex w-full min-w-0 flex-col overflow-hidden">
-            <button class="flex items-center gap-1 font-semibold hover:opacity-80" @click="dropdownOpen = !dropdownOpen">
+            <button type="button" class="flex items-center gap-1 font-semibold hover:opacity-80" @click="dropdownOpen = !dropdownOpen">
               <icon name="mdi:chevron-down" size="25" class="shrink-0 transition-transform duration-200" :class="{ 'rotate-180': dropdownOpen }" />
               <span class="truncate text-sm wrap-break-word">{{ user.name }}</span>
             </button>
@@ -26,11 +26,11 @@
 
           <!-- Dropdown Menu -->
           <div v-if="dropdownOpen" class="absolute top-6 left-1/2 z-50 flex min-w-40 -translate-x-1/2 flex-col gap-1 rounded-xl border bg-card p-1 shadow-lg">
-            <button class="text-caption navigation-group rounded-lg p-2 whitespace-nowrap text-danger-foreground hover:bg-muted" @click="signOut">
+            <button type="button" class="text-caption navigation-group rounded-lg p-2 whitespace-nowrap text-danger-foreground hover:bg-muted" @click="signOut">
               <icon name="mdi:logout" size="15" />
               <span>Sign Out</span>
             </button>
-            <button class="text-caption navigation-group rounded-lg p-2 whitespace-nowrap text-danger-foreground hover:bg-danger/20" @click="handleDeleteUser">
+            <button type="button" class="text-caption navigation-group rounded-lg p-2 whitespace-nowrap text-danger-foreground hover:bg-danger/20" @click="handleDeleteUser">
               <icon name="mdi:user-remove" size="15" class="text-caption-danger" />
               <span>Delete Account</span>
             </button>
@@ -61,11 +61,11 @@
       <div class="border-t md:flex-1" />
 
       <nav class="flex flex-col gap-2" aria-label="Mobile Navigation Actions">
-        <button class="text-caption navigation-group justify-start rounded-lg rounded-l-none p-2 transition-all hover:bg-muted/30" @click="openDialog('share')">
+        <button type="button" class="text-caption navigation-group justify-start rounded-lg rounded-l-none p-2 transition-all hover:bg-muted/30" @click="openDialog('share')">
           <icon name="mdi:share-variant-outline" size="25" />
           <span>Share</span>
         </button>
-        <button class="text-caption navigation-group justify-start rounded-lg rounded-l-none p-2 transition-all hover:bg-muted/30" @click="toggleTheme">
+        <button type="button" class="text-caption navigation-group justify-start rounded-lg rounded-l-none p-2 transition-all hover:bg-muted/30" @click="toggleTheme">
           <icon :name="themeIcon" size="25" />
           <span>Toggle Theme</span>
         </button>

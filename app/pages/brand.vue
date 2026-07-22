@@ -19,7 +19,7 @@
 
         <div class="flex items-center justify-between border-t p-2">
           <span class="text-caption">{{ asset.name }}</span>
-          <button :aria-label="`Download ${asset.name}`" class="text-muted-foreground transition-colors" @click="handleDownloadImage(asset, index, symbolActions)">
+          <button type="button" :aria-label="`Download ${asset.name}`" class="text-muted-foreground transition-colors" @click="handleDownloadImage(asset, index, symbolActions)">
             <icon :name="symbolActions[index]!.icon.value" size="20" />
           </button>
         </div>
@@ -40,7 +40,7 @@
 
         <div class="flex items-center justify-between border-t p-2">
           <span class="text-caption">{{ asset.name }}</span>
-          <button :aria-label="`Download ${asset.name}`" class="text-muted-foreground transition-colors" @click="handleDownloadImage(asset, index, wordmarkActions)">
+          <button type="button" :aria-label="`Download ${asset.name}`" class="text-muted-foreground transition-colors" @click="handleDownloadImage(asset, index, wordmarkActions)">
             <icon :name="wordmarkActions[index]!.icon.value" size="20" />
           </button>
         </div>
@@ -55,10 +55,14 @@
 
     <div class="grid grid-cols-3 gap-2 md:grid-cols-3 xl:grid-cols-9">
       <div v-for="(color, index) in NEUTRAL_SCALE" :key="color.name" class="flex flex-col gap-2">
-        <button class="aspect-square w-full rounded-lg border" :style="{ backgroundColor: `var(${color.var})` }" :aria-label="`Copy ${color.value}`" @click="handleCopyColor(color.value, index, neutralActions)" />
+        <button
+          type="button" class="aspect-square w-full rounded-lg border"
+          :style="{ backgroundColor: `var(${color.var})` }" :aria-label="`Copy ${color.value}`"
+          @click="handleCopyColor(color.value, index, neutralActions)"
+        />
         <div class="flex flex-col px-1">
           <span class="truncate text-sm font-medium">{{ color.name }}</span>
-          <button class="text-caption flex items-center gap-1 font-mono" @click="handleCopyColor(color.value, index, neutralActions)">
+          <button type="button" class="text-caption flex items-center gap-1 font-mono" @click="handleCopyColor(color.value, index, neutralActions)">
             <span>{{ color.value }}</span>
             <icon :name="neutralActions[index]!.icon.value" size="15" class="shrink-0" />
           </button>
@@ -78,10 +82,14 @@
 
       <template v-for="(brand, rowIndex) in BRAND_COLORS" :key="brand.name">
         <div class="space-y-2">
-          <button class="h-24 w-full rounded-lg border" :style="{ backgroundColor: `var(${brand.var})` }" :aria-label="`Copy ${brand.value}`" @click="handleCopyColor(brand.value, rowIndex, brandActions)" />
+          <button
+            type="button" class="h-24 w-full rounded-lg border"
+            :style="{ backgroundColor: `var(${brand.var})` }" :aria-label="`Copy ${brand.value}`"
+            @click="handleCopyColor(brand.value, rowIndex, brandActions)"
+          />
           <div class="flex flex-col px-1">
             <span class="truncate text-sm font-medium">{{ brand.name }}</span>
-            <button class="text-caption flex items-center gap-1 font-mono" @click="handleCopyColor(brand.value, rowIndex, brandActions)">
+            <button type="button" class="text-caption flex items-center gap-1 font-mono" @click="handleCopyColor(brand.value, rowIndex, brandActions)">
               <span>{{ brand.value }}</span>
               <icon :name="brandActions[rowIndex]!.icon.value" size="15" />
             </button>
@@ -90,17 +98,25 @@
 
         <div v-for="statusIndex in [rowIndex * 2, (rowIndex * 2) + 1]" :key="statusIndex" class="space-y-2">
           <div class="flex gap-2">
-            <button class="size-24 rounded-lg border" :style="{ backgroundColor: `var(${STATUS_COLORS[statusIndex]!.darkVar})` }" :aria-label="`Copy ${STATUS_COLORS[statusIndex]!.darkVal}`" @click="handleCopyColor(STATUS_COLORS[statusIndex]!.darkVal, statusIndex * 2, statusActions)" />
-            <button class="size-24 rounded-lg border" :style="{ backgroundColor: `var(${STATUS_COLORS[statusIndex]!.lightVar})` }" :aria-label="`Copy ${STATUS_COLORS[statusIndex]!.lightVal}`" @click="handleCopyColor(STATUS_COLORS[statusIndex]!.lightVal, (statusIndex * 2) + 1, statusActions)" />
+            <button
+              type="button" class="size-24 rounded-lg border"
+              :style="{ backgroundColor: `var(${STATUS_COLORS[statusIndex]!.darkVar})` }" :aria-label="`Copy ${STATUS_COLORS[statusIndex]!.darkVal}`"
+              @click="handleCopyColor(STATUS_COLORS[statusIndex]!.darkVal, statusIndex * 2, statusActions)"
+            />
+            <button
+              type="button" class="size-24 rounded-lg border"
+              :style="{ backgroundColor: `var(${STATUS_COLORS[statusIndex]!.lightVar})` }" :aria-label="`Copy ${STATUS_COLORS[statusIndex]!.lightVal}`"
+              @click="handleCopyColor(STATUS_COLORS[statusIndex]!.lightVal, (statusIndex * 2) + 1, statusActions)"
+            />
           </div>
           <div class="flex flex-col px-1">
             <span class="truncate text-sm font-medium">{{ STATUS_COLORS[statusIndex]!.name }}</span>
             <div class="flex items-center gap-4">
-              <button class="text-caption flex items-center gap-1 font-mono" @click="handleCopyColor(STATUS_COLORS[statusIndex]!.darkVal, statusIndex * 2, statusActions)">
+              <button type="button" class="text-caption flex items-center gap-1 font-mono" @click="handleCopyColor(STATUS_COLORS[statusIndex]!.darkVal, statusIndex * 2, statusActions)">
                 <span>{{ STATUS_COLORS[statusIndex]!.darkVal }}</span>
                 <icon :name="statusActions[statusIndex * 2]!.icon.value" size="15" />
               </button>
-              <button class="text-caption flex items-center gap-1 font-mono" @click="handleCopyColor(STATUS_COLORS[statusIndex]!.lightVal, (statusIndex * 2) + 1, statusActions)">
+              <button type="button" class="text-caption flex items-center gap-1 font-mono" @click="handleCopyColor(STATUS_COLORS[statusIndex]!.lightVal, (statusIndex * 2) + 1, statusActions)">
                 <span>{{ STATUS_COLORS[statusIndex]!.lightVal }}</span>
                 <icon :name="statusActions[(statusIndex * 2) + 1]!.icon.value" size="15" />
               </button>

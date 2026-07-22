@@ -4,6 +4,7 @@
       <div class="navigation-group flex-wrap justify-center">
         <button
           v-for="tab in SHARE_TABS" :key="tab.value"
+          type="button"
           class="btn-ghost justify-start! text-muted-foreground!" :class="{ 'bg-muted!': activeTab === tab.value }"
           @click="activeTab = tab.value"
         >
@@ -14,7 +15,7 @@
       <div v-if="activeTab === 'qr'" class="flex flex-col items-center gap-2">
         <div ref="qrContainer" class="overflow-hidden rounded-2xl border shadow-sm" />
 
-        <button class="btn-ghost" @click="downloadQRCode()">
+        <button type="button" class="btn-ghost" @click="downloadQRCode()">
           <icon :name="downloadAction.icon.value" size="20" />
           <span>Download QR Code</span>
         </button>
@@ -26,7 +27,11 @@
         </p>
 
         <div class="card grid grid-cols-2 gap-2 md:grid-cols-5">
-          <button v-for="source in TRACKING_SOURCES" :key="source.id" class="btn-ghost justify-start!" @click="handleCopyWithTracking(source.id)">
+          <button
+            v-for="source in TRACKING_SOURCES" :key="source.id"
+            type="button" class="btn-ghost justify-start!"
+            @click="handleCopyWithTracking(source.id)"
+          >
             <icon :name="source.icon" size="25" class="shrink-0" />
             <span>{{ source.label }}</span>
           </button>
@@ -38,7 +43,7 @@
             placeholder="Custom tag (e.g., newsletter)" class="flex-1"
             @keyup.enter="handleCopyWithTracking(customTag)"
           >
-          <button class="btn" :disabled="!customTag.trim()" @click="handleCopyWithTracking(customTag)">
+          <button type="button" class="btn" :disabled="!customTag.trim()" @click="handleCopyWithTracking(customTag)">
             <icon :name="copyAction.icon.value" size="20" />
             <span>Copy</span>
           </button>
@@ -51,19 +56,19 @@
         </p>
 
         <div class="card grid grid-cols-2 gap-2">
-          <button class="btn-ghost justify-start!" @click="shareToSocial('twitter')">
+          <button type="button" class="btn-ghost justify-start!" @click="shareToSocial('twitter')">
             <icon name="simple-icons:x" size="25" class="shrink-0" />
             <span>X / Twitter</span>
           </button>
-          <button class="btn-ghost justify-start!" @click="shareToSocial('facebook')">
+          <button type="button" class="btn-ghost justify-start!" @click="shareToSocial('facebook')">
             <icon name="simple-icons:facebook" size="25" class="shrink-0" />
             <span>Facebook</span>
           </button>
-          <button class="btn-ghost justify-start!" @click="shareToSocial('linkedin')">
+          <button type="button" class="btn-ghost justify-start!" @click="shareToSocial('linkedin')">
             <icon name="simple-icons:linkedin" size="25" class="shrink-0" />
             <span>LinkedIn</span>
           </button>
-          <button class="btn-ghost justify-start!" @click="shareToSocial('whatsapp')">
+          <button type="button" class="btn-ghost justify-start!" @click="shareToSocial('whatsapp')">
             <icon name="simple-icons:whatsapp" size="25" class="shrink-0" />
             <span>WhatsApp</span>
           </button>
