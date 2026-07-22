@@ -42,7 +42,8 @@ export default defineEventHandler(async (event) => {
     nestedRelationData.widget = { create: result.data.widget }
   }
   else if (result.data.type === "PHOTO_GRID") {
-    nestedRelationData.photoGrid = { create: { photos: { createMany: { data: result.data.photoGrid.photos } } } }
+    const photos = await resolvePhotoGrid(result.data.photoGrid.photos, sessionUser.id)
+    nestedRelationData.photoGrid = { create: { photos: { createMany: { data: photos } } } }
   }
 
   // Atomically write the unified item and its nested relation in a single transaction to ensure data integrity

@@ -25,7 +25,7 @@ const widgetPayload = z.object({
 })
 
 const photoGridItemSchema = z.object({
-  assetId: z.string().nullable().optional(),
+  assetId: z.cuid2("Each photo must reference a valid uploaded asset"),
   url: z.url("Invalid URL").refine(url => url.startsWith("http://") || url.startsWith("https://"), { message: "URL must start with http:// or https://" }),
   order: z.number().int().min(0),
   alt: z.string().max(200).nullable().optional(),

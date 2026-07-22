@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 403, statusMessage: "You do not have permission to delete this asset" })
   }
 
-  // Find all photo grids that reference the asset
+  // Find all photo grids that reference the asset before removing them
   const photoUsages = await db.photoGridItem.findMany({ where: { assetId }, select: { gridId: true } })
   const affectedGridIds = [...new Set(photoUsages.map(photo => photo.gridId))]
 
@@ -27,16 +27,20 @@ export default defineEventHandler(async (event) => {
     db.userBanner.deleteMany({ where: { assetId } }),
   ])
 
-  // If any photo grids became empty as a result, delete them
+  // Re-pack remaining photo orders, and delete grids that became empty
+  const deletedGridIds: string[] = []
   if (affectedGridIds.length) {
-    const emptyGrids = await Promise.all(affectedGridIds.map(async (gridId) => {
-      const remaining = await db.photoGridItem.count({ where: { gridId } })
-      return remaining === 0 ? gridId : null
-    }),
-    )
-    const emptyGridIds = emptyGrids.filter((id): id is string => id !== null)
-    if (emptyGridIds.length) {
-      await db.profileItem.deleteMany({ where: { id: { in: emptyGridIds } } })
+    for (const gridId of affectedGridIds) {
+      const remaining = await db.photoGridItem.findMany({ where: { gridId }, orderBy: { order: "asc" }, select: { id: true } })
+      if (!remaining.length) {
+        deletedGridIds.push(gridId)
+        continue
+      }
+
+      await Promise.all(remaining.map((photo, order) => db.photoGridItem.update({ where: { id: photo.id }, data: { order } })))
+    }
+    if (deletedGridIds.length) {
+      await db.profileItem.deleteMany({ where: { id: { in: deletedGridIds } } })
     }
   }
 
@@ -46,7 +50,7 @@ export default defineEventHandler(async (event) => {
   const user = await db.user.findUnique({ where: { id: sessionUser.id }, select: { slug: true } })
   await deleteCached(CacheKeys.userAssets(sessionUser.id), CacheKeys.userItems(sessionUser.id), CacheKeys.userData(sessionUser.id), CacheKeys.userProfile(user?.slug || ""))
 
-  return { success: true, message: "Media asset completely removed from cloud storage." }
+  return { success: true, message: "Media asset deleted.", deletedGridIds }
 })
 
 defineRouteMeta({

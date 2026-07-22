@@ -81,21 +81,21 @@
         <Loading v-if="userStore.loading" />
         <Empty v-else-if="!userStore.assets.length" message="No images uploaded yet." icon-name="mdi:image-off-outline" />
 
-        <div v-else class="scroll-area grid max-h-72 grid-cols-3 gap-2 overflow-y-auto pr-1 md:grid-cols-6">
-          <div v-for="asset in userStore.assets" :key="asset.id" class="flex flex-col gap-1">
-            <div class="group relative aspect-square overflow-hidden rounded-xl border">
+        <div v-else class="scroll-area grid max-h-72 grid-cols-3 gap-1 overflow-y-auto pr-1 md:grid-cols-6 md:gap-2">
+          <div v-for="asset in userStore.assets" :key="asset.id" class="flex flex-col items-center gap-2">
+            <div class="group relative aspect-square w-[90%] overflow-hidden rounded-xl border">
               <img :src="asset.url" :alt="asset.label ?? 'Asset'" class="size-full object-cover">
               <div class="absolute inset-0 flex items-center justify-center bg-muted/30 opacity-0 backdrop-blur-xs transition-all group-hover:opacity-100">
-                <button class="btn-ghost" aria-label="Delete asset" @click="handleAssetDelete(asset.id)">
+                <button type="button" class="btn-ghost" aria-label="Delete asset" @click="handleAssetDelete(asset.id)">
                   <icon name="mdi:trash-can-outline" size="20" />
                 </button>
               </div>
             </div>
-            <span v-if="asset.label" class="text-caption truncate">{{ asset.label }}</span>
+            <span v-if="asset.label" class="w-full truncate text-center text-xs text-muted-foreground">{{ asset.label }}</span>
           </div>
         </div>
 
-        <p class="text-xs text-muted-foreground">
+        <p class="text-caption">
           JPEG, PNG, WebP or GIF · max 5 MB per file
         </p>
       </template>

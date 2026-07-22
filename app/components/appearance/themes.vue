@@ -5,11 +5,12 @@
     </h4>
 
     <div class="card flex flex-col gap-4 md:mx-4">
-      <div class="scroll-area grid h-72 grid-cols-2 gap-2 overflow-auto pr-1 md:grid-cols-3 2xl:grid-cols-4 2xl:gap-4">
+      <div class="scroll-area grid h-72 grid-cols-2 gap-1 overflow-auto pr-1 md:grid-cols-3 md:gap-2 2xl:grid-cols-4">
         <div v-for="(theme, index) in THEMES" :key="theme.title" class="flex flex-col items-center gap-2">
           <button
+            type="button" tabindex="0"
             :aria-label="`Select ${theme.title} theme`" :aria-pressed="selectedTheme === theme.title"
-            tabindex="0" class="relative flex w-full flex-col items-center justify-center gap-4 overflow-hidden rounded-2xl border-2 p-8 transition-all hover:border-dashed"
+            class="relative flex w-full flex-col items-center justify-center gap-4 overflow-hidden rounded-2xl border-2 p-8 transition-all hover:border-dashed"
             :class="selectedTheme !== theme.title && 'opacity-80 hover:opacity-100'" :style="themeStyles[index]?.backgroundStyle.value ?? {}"
             @click="selectedTheme = theme.title"
           >
@@ -28,11 +29,11 @@
             </div>
           </button>
 
-          <span class="text-caption text-sm">{{ theme.title }}</span>
+          <span class="w-full truncate text-center text-xs text-muted-foreground">{{ theme.title }}</span>
         </div>
       </div>
 
-      <button class="btn-primary self-end" :disabled="!hasPendingChanges" @click="handleSaveTheme">
+      <button type="button" class="btn-primary self-end" :disabled="!hasPendingChanges" @click="handleSaveTheme">
         <icon :name="saveAction.icon.value" size="20" />
         <span>Apply</span>
       </button>

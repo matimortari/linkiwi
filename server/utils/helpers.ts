@@ -104,3 +104,30 @@ export function categorizeReferrer(referrer: string | null | undefined): string 
 
   return "unknown"
 }
+
+/**
+ * Resolves photo grid entries to owned user assets, rewriting urls/order from the DB.
+ * Throws 400 if any selected asset is missing or not owned by the user.
+ */
+export async function resolvePhotoGrid(photos: { assetId?: string | null, url: string, order: number, alt?: string | null }[], userId: string) {
+  const assetIds = [...new Set(photos.map(photo => photo.assetId).filter((id): id is string => !!id))]
+  if (!assetIds.length) {
+    throw createError({ statusCode: 400, statusMessage: "Each photo must reference a valid uploaded asset" })
+  }
+
+  const assets = await db.userAsset.findMany({ where: { id: { in: assetIds }, userId }, select: { id: true, url: true } })
+  const assetMap = new Map(assets.map(asset => [asset.id, asset]))
+
+  const resolved = photos.filter(photo => photo.assetId && assetMap.has(photo.assetId)).map((photo, order) => {
+    const asset = assetMap.get(photo.assetId!)!
+    return { assetId: asset.id, url: asset.url, order, alt: photo.alt ?? null }
+  })
+  if (!resolved.length) {
+    throw createError({ statusCode: 400, statusMessage: "None of the selected photos are available. Re-select from your library." })
+  }
+  if (resolved.length !== photos.length) {
+    throw createError({ statusCode: 400, statusMessage: "One or more selected photos no longer exist. Re-select from your library." })
+  }
+
+  return resolved
+}

@@ -13,7 +13,8 @@
         <div v-else class="scroll-area flex max-h-40 flex-wrap gap-2 overflow-y-auto pr-1">
           <button
             v-for="asset in userStore.assets" :key="asset.id"
-            class="group relative size-14 shrink-0 overflow-hidden rounded-lg border-2 transition-all" :class="isSelected(asset.id) ? 'border-primary' : 'border-transparent hover:border-muted-foreground'"
+            type="button" class="group relative size-14 shrink-0 overflow-hidden rounded-lg border-2 transition-all"
+            :class="isSelected(asset.id) ? 'border-primary' : 'border-transparent hover:border-muted-foreground'"
             :disabled="!isSelected(asset.id) && selected.length >= 9" @click="toggleAsset(asset)"
           >
             <img :src="asset.url" :alt="asset.label ?? 'Asset'" class="size-full object-cover">
@@ -30,10 +31,10 @@
       <footer class="flex items-center justify-between">
         <span class="text-xs text-muted-foreground">Photos appear in selection order.</span>
         <div class="navigation-group">
-          <button class="btn-danger" @click="handleCancel">
+          <button type="button" class="btn-danger" @click="handleCancel">
             Cancel
           </button>
-          <button class="btn-success" :disabled="!selected.length" @click="handleSubmit">
+          <button type="button" class="btn-success" :disabled="!selected.length" @click="handleSubmit">
             Confirm
           </button>
         </div>
@@ -69,13 +70,45 @@ function toggleAsset(asset: { id: string, url: string }) {
   }
 }
 
+function pruneStaleSelection() {
+  const assetById = new Map(userStore.assets.map(asset => [asset.id, asset]))
+  selected.value = selected.value
+    .filter(photo => assetById.has(photo.id))
+    .map(photo => ({ id: photo.id, url: assetById.get(photo.id)!.url }))
+}
+
+function loadPhotoGrid(item: ProfileItem | null) {
+  if (item?.type === "PHOTO_GRID" && item.photoGrid?.photos?.length) {
+    editingId.value = item.id
+    const assetById = new Map(userStore.assets.map(asset => [asset.id, asset]))
+    selected.value = [...item.photoGrid.photos]
+      .sort((a, b) => a.order - b.order)
+      .filter(photo => !!photo.assetId && (assetById.size === 0 || assetById.has(photo.assetId)))
+      .map((photo) => {
+        const asset = photo.assetId ? assetById.get(photo.assetId) : undefined
+        return { id: photo.assetId!, url: asset?.url ?? photo.url }
+      })
+    return
+  }
+  resetForm()
+}
+
 async function handleSubmit() {
+  pruneStaleSelection()
   if (!selected.value.length) {
     return
   }
 
   const photoGrid = {
     photos: selected.value.map((a, i) => ({ assetId: a.id, url: a.url, order: i })),
+  }
+
+  if (isUpdateMode.value && editingId.value) {
+    // Grid may have been removed after its last asset was deleted
+    const stillExists = profileItemsStore.items.some(item => item.id === editingId.value)
+    if (!stillExists) {
+      editingId.value = null
+    }
   }
 
   if (isUpdateMode.value && editingId.value) {
@@ -103,26 +136,24 @@ function resetForm() {
   selected.value = []
 }
 
-function loadPhotoGrid(item: ProfileItem | null) {
-  if (item?.photoGrid?.photos?.length) {
-    editingId.value = item.id
-    selected.value = [...item.photoGrid.photos]
-      .sort((a, b) => a.order - b.order)
-      .map(photo => ({ id: photo.assetId ?? photo.id, url: photo.url }))
-  }
-  else {
-    resetForm()
-  }
-}
-
-watch(selectedPhotoGrid, loadPhotoGrid, { immediate: true })
+watch(selectedPhotoGrid, (item) => {
+  // Prefer the live store copy so deleted assets are already scrubbed
+  const fresh = item?.id ? profileItemsStore.items.find(i => i.id === item.id) ?? item : null
+  loadPhotoGrid(fresh)
+}, { immediate: true })
 
 watch(isPhotoGridDialogOpen, async (open) => {
-  if (open && !userStore.assets.length) {
-    await userStore.getAssets()
-  }
   if (!open) {
     resetForm()
+    return
   }
+
+  await userStore.getAssets()
+  const itemId = selectedPhotoGrid.value?.id ?? editingId.value
+  const fresh = itemId ? profileItemsStore.items.find(item => item.id === itemId) ?? null : null
+  if (fresh) {
+    loadPhotoGrid(fresh)
+  }
+  pruneStaleSelection()
 })
 </script>
