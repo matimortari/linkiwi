@@ -96,7 +96,7 @@
       <div class="flex flex-row flex-wrap gap-2">
         <button
           v-for="option in ITEM_TYPES" :key="option.type"
-          type="button" class="card navigation-group p-2! hover:bg-muted! disabled:pointer-events-none disabled:opacity-40"
+          type="button" class="btn"
           :disabled="option.type === 'PHOTO_GRID' && !userStore.assets.length" @click="handlePickType(option.type)"
         >
           <icon :name="option.icon" size="20" />

@@ -1,6 +1,10 @@
 <template>
   <!-- Mobile toggle -->
-  <button class="btn fixed bottom-4 left-1/2 z-40 -translate-x-1/2 md:hidden!" aria-label="Toggle Mobile Preview" @click="isPreviewOpen ? closePreview() : openPreview()">
+  <button
+    class="btn fixed bottom-4 left-1/2 z-40 -translate-x-1/2 transition-[opacity,transform] duration-300 md:hidden!"
+    :class="showMobileToggle ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-4 opacity-0'"
+    aria-label="Toggle Mobile Preview" @click="isPreviewOpen ? closePreview() : openPreview()"
+  >
     <icon :name="isPreviewOpen ? 'mdi:eye-off' : 'mdi:eye'" size="25" />
     <span>{{ isPreviewOpen ? 'Close Preview' : 'Preview' }}</span>
   </button>
@@ -132,6 +136,8 @@ const { items } = storeToRefs(useProfileItemsStore())
 const { isPreviewOpen, openPreview, closePreview } = useUIState()
 const localPreferences = useState<UserPreferences | null>("localPreferences", () => null)
 const pendingThemeTitle = useState<string | null>("pendingThemeTitle", () => null)
+const isScrolled = ref(false)
+const showMobileToggle = computed(() => isPreviewOpen.value || isScrolled.value)
 
 const preferences = computed(() => {
   const base = localPreferences.value || storePreferences.value
@@ -145,13 +151,19 @@ const preferences = computed(() => {
 
 const { profilePictureStyle, slugStyle, descriptionStyle, linkStyle, linkInnerStyle } = useDynamicStyles(computed(() => preferences.value))
 const { backgroundStyle, dividerStyle } = useDynamicStyles(preferences)
+
 const visibleIcons = computed(() => (items.value ?? []).filter(item => item.type === "ICON" && item.isVisible !== false))
+
 const visiblePreviewItems = computed(() => (items.value ?? []).filter(item => item.type !== "ICON" && item.isVisible !== false).sort((a, b) => {
   if (a.isPinned !== b.isPinned) {
     return a.isPinned ? -1 : 1
   }
   return a.order - b.order
 }))
+
+function onScroll() {
+  isScrolled.value = window.scrollY > 80
+}
 
 function scrollLock(locked: boolean) {
   const val = locked ? "hidden" : ""
@@ -161,7 +173,15 @@ function scrollLock(locked: boolean) {
 
 watch(isPreviewOpen, scrollLock)
 
-onBeforeUnmount(() => scrollLock(false))
+onMounted(() => {
+  onScroll()
+  window.addEventListener("scroll", onScroll, { passive: true })
+})
+
+onBeforeUnmount(() => {
+  scrollLock(false)
+  window.removeEventListener("scroll", onScroll)
+})
 </script>
 
 <style scoped>

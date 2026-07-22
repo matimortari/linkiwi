@@ -67,7 +67,7 @@
 
       <template v-if="assetsOpen">
         <div class="flex items-center justify-between gap-2">
-          <label class="btn-ghost">
+          <label class="btn-ghost cursor-pointer">
             <icon name="mdi:upload" size="20" />
             <span>Upload</span>
             <input
@@ -144,16 +144,16 @@ async function handleAssetDelete(id: string) {
   await profileItemsStore.getItems()
 }
 
-watch(() => preferences.value?.enableGuestbook, (val) => {
-  if (val !== undefined) {
-    guestbookEnabled.value = val ?? false
-  }
-})
-
 onMounted(async () => {
   await analyticsStore.getComments()
   if (!userStore.assets.length) {
     await userStore.getAssets()
+  }
+})
+
+watch(() => preferences.value?.enableGuestbook, (val) => {
+  if (val !== undefined) {
+    guestbookEnabled.value = val ?? false
   }
 })
 </script>

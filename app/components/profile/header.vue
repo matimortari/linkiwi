@@ -21,7 +21,7 @@
     <div class="flex flex-col gap-2 md:mx-4">
       <div v-if="user" class="flex items-start gap-2 md:gap-4">
         <div class="group relative -mt-10 ml-4 size-24 shrink-0">
-          <div class="size-full overflow-hidden rounded-full border-4 border-card">
+          <div class="relative size-full overflow-hidden rounded-full border-4 border-card">
             <img :src="user.image" alt="Avatar" class="size-full object-cover select-none">
             <button
               type="button" class="absolute inset-0 hidden cursor-pointer items-center justify-center bg-muted/30 opacity-0 backdrop-blur-xs transition-all md:flex md:group-hover:opacity-100"

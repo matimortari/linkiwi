@@ -3,7 +3,7 @@
     <div class="flex flex-col gap-4">
       <div v-if="cropSrc" class="flex flex-col gap-2">
         <div class="banner-cropper overflow-hidden rounded-xl bg-muted">
-          <img ref="cropImage" :src="cropSrc" alt="Crop banner" class="block max-w-full">
+          <img ref="cropImage" :src="cropSrc" alt="Crop banner" class="block max-w-none">
         </div>
         <div class="flex justify-end">
           <button type="button" class="btn-ghost" @click="clearCropSource">
@@ -17,6 +17,10 @@
         <img v-if="previewUrl" :src="previewUrl" alt="Banner preview" class="size-full object-cover">
         <span v-else class="text-caption flex size-full items-center justify-center">No banner selected</span>
       </div>
+
+      <p class="text-caption">
+        {{ cropSrc ? "Drag to reposition. " : "" }}Recommended size: 1500 x 500.
+      </p>
 
       <div class="flex flex-wrap items-center gap-2">
         <input
@@ -92,6 +96,70 @@ const showLibrary = ref(false)
 const previewUrl = computed(() => pendingAsset.value?.url ?? user.value?.banner?.url ?? null)
 const canSave = computed(() => !!cropSrc.value || !!pendingAsset.value)
 
+async function initCropper() {
+  await nextTick()
+  if (!import.meta.client || !cropImage.value) {
+    return
+  }
+
+  destroyCropper()
+  const { default: CropperCtor } = await import("cropperjs")
+  cropper.value = new CropperCtor(cropImage.value, {
+    template: [
+      "<cropper-canvas background>",
+      "<cropper-image initial-center-size=\"cover\" zoomable></cropper-image>",
+      "<cropper-shade></cropper-shade>",
+      "<cropper-selection initial-coverage=\"1\" aspect-ratio=\"3/1\" movable resizable>",
+      "<cropper-grid role=\"grid\" covered></cropper-grid>",
+      "<cropper-crosshair centered></cropper-crosshair>",
+      "<cropper-handle action=\"move\" theme-color=\"rgba(255, 255, 255, 0.35)\"></cropper-handle>",
+      "<cropper-handle action=\"n-resize\" plain></cropper-handle>",
+      "<cropper-handle action=\"e-resize\" plain></cropper-handle>",
+      "<cropper-handle action=\"s-resize\" plain></cropper-handle>",
+      "<cropper-handle action=\"w-resize\" plain></cropper-handle>",
+      "<cropper-handle action=\"ne-resize\" plain></cropper-handle>",
+      "<cropper-handle action=\"nw-resize\" plain></cropper-handle>",
+      "<cropper-handle action=\"se-resize\" plain></cropper-handle>",
+      "<cropper-handle action=\"sw-resize\" plain></cropper-handle>",
+      "</cropper-selection>",
+      "</cropper-canvas>",
+    ].join(""),
+  })
+
+  const canvas = cropper.value.getCropperCanvas()
+  const image = cropper.value.getCropperImage()
+  const selection = cropper.value.getCropperSelection()
+  if (!canvas || !image || !selection) {
+    return
+  }
+
+  image.addEventListener("transform", (event) => {
+    const e = event as CustomEvent<{ matrix: number[] }>
+    const canvasRect = canvas.getBoundingClientRect()
+    const clone = image.cloneNode() as HTMLElement
+    clone.style.cssText = `opacity:0;position:absolute;transform:matrix(${e.detail.matrix.join(",")})`
+    canvas.appendChild(clone)
+    const imageRect = clone.getBoundingClientRect()
+    canvas.removeChild(clone)
+
+    if (imageRect.top > canvasRect.top || imageRect.right < canvasRect.right || imageRect.bottom < canvasRect.bottom || imageRect.left > canvasRect.left) {
+      e.preventDefault()
+    }
+  })
+
+  selection.addEventListener("change", (event) => {
+    const e = event as CustomEvent<{ x: number, y: number, width: number, height: number }>
+    const { x, y, width, height } = e.detail
+    const canvasWidth = canvas.offsetWidth
+    const canvasHeight = canvas.offsetHeight
+    const minWidth = canvasWidth * 0.25
+    const minHeight = canvasHeight * 0.25
+    if (x < 0 || y < 0 || x + width > canvasWidth || y + height > canvasHeight || width < minWidth || height < minHeight) {
+      e.preventDefault()
+    }
+  })
+}
+
 function destroyCropper() {
   cropper.value?.destroy()
   cropper.value = null
@@ -118,38 +186,9 @@ function resetState() {
   showLibrary.value = false
 }
 
-async function initCropper() {
-  await nextTick()
-  if (!import.meta.client || !cropImage.value) {
-    return
-  }
-
-  destroyCropper()
-  const { default: CropperCtor } = await import("cropperjs")
-  cropper.value = new CropperCtor(cropImage.value, { template: [
-    "<cropper-canvas background>",
-    "<cropper-image initial-center-size=\"cover\" scalable translatable></cropper-image>",
-    "<cropper-shade hidden></cropper-shade>",
-    "<cropper-handle action=\"select\" plain></cropper-handle>",
-    `<cropper-selection initial-coverage="1" aspect-ratio="3/1" resizable>`,
-    "<cropper-grid role=\"grid\" bordered covered></cropper-grid>",
-    "<cropper-crosshair centered></cropper-crosshair>",
-    "<cropper-handle action=\"move\" theme-color=\"rgba(255, 255, 255, 0.35)\"></cropper-handle>",
-    "<cropper-handle action=\"n-resize\"></cropper-handle>",
-    "<cropper-handle action=\"e-resize\"></cropper-handle>",
-    "<cropper-handle action=\"s-resize\"></cropper-handle>",
-    "<cropper-handle action=\"w-resize\"></cropper-handle>",
-    "<cropper-handle action=\"ne-resize\"></cropper-handle>",
-    "<cropper-handle action=\"nw-resize\"></cropper-handle>",
-    "<cropper-handle action=\"se-resize\"></cropper-handle>",
-    "<cropper-handle action=\"sw-resize\"></cropper-handle>",
-    "</cropper-selection>",
-    "</cropper-canvas>",
-  ].join("") })
-}
-
 function handleFileChange(e: Event) {
-  const file = (e.target as HTMLInputElement).files?.[0]
+  const input = e.target as HTMLInputElement
+  const file = input.files?.[0]
   if (!file) {
     return
   }
@@ -183,7 +222,7 @@ async function getCroppedFile(): Promise<File | null> {
     return null
   }
 
-  const canvas = await selection.$toCanvas({ width: 1500 })
+  const canvas = await selection.$toCanvas({ width: 1500, height: 500 })
 
   return new Promise((resolve) => {
     canvas.toBlob((blob) => {
