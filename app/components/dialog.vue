@@ -77,18 +77,32 @@ onBeforeUnmount(() => {
 <style scoped>
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.3s ease;
+  transition: opacity var(--duration-base) var(--ease-standard);
+}
+.fade-enter-active > .overlay,
+.fade-leave-active > .overlay {
+  transition:
+    opacity var(--duration-base) var(--ease-standard),
+    transform var(--duration-base) var(--ease-emphasized);
 }
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
 }
+.fade-enter-from > .overlay {
+  opacity: 0;
+  transform: scale(0.97) translateY(4px);
+}
+.fade-leave-to > .overlay {
+  opacity: 0;
+  transform: scale(0.98);
+}
 
 .slide-up-enter-active,
 .slide-up-leave-active {
   transition:
-    opacity 0.3s ease,
-    transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+    opacity var(--duration-base) var(--ease-standard),
+    transform var(--duration-slow) var(--ease-emphasized);
 }
 .slide-up-enter-from,
 .slide-up-leave-to {
@@ -98,6 +112,6 @@ onBeforeUnmount(() => {
 
 .slide-up-enter-active > div:first-child,
 .slide-up-leave-active > div:first-child {
-  transition: opacity 0.3s ease;
+  transition: opacity var(--duration-base) var(--ease-standard);
 }
 </style>

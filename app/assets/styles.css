@@ -23,7 +23,12 @@
   --blue-light: #558ccd;
 
   --border-style: 1px solid var(--muted);
-  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-emphasized: cubic-bezier(0.32, 0.72, 0, 1);
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 400ms;
+  --transition: var(--duration-base) var(--ease-standard);
 
   /* Theme tokens derived from core primitives */
   --background: var(--neutral-100);
@@ -89,7 +94,7 @@ html.dark {
   --font-mono: "JetBrains Mono", monospace;
 
   --border-radius: 1rem;
-  --default-transition-duration: 300ms;
+  --default-transition-duration: 250ms;
   --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 

@@ -11,8 +11,7 @@
       <button
         v-if="preferences.showLinkCopyButton" type="button"
         class="absolute inset-y-0 right-2 flex shrink-0 items-center transition-transform hover:scale-110"
-        aria-label="Copy Link"
-        @click.stop.prevent="copyAction.triggerCopy(item.link?.url ?? '')"
+        aria-label="Copy Link" @click.stop.prevent="copyAction.triggerCopy(item.link?.url ?? '')"
       >
         <icon :name="copyAction.icon.value" size="15" :style="{ color: preferences.linkTextColor }" />
       </button>

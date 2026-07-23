@@ -25,16 +25,18 @@
           </div>
 
           <!-- Dropdown Menu -->
-          <div v-if="dropdownOpen" class="absolute top-6 left-1/2 z-50 flex min-w-40 -translate-x-1/2 flex-col gap-1 rounded-xl border bg-card p-1 shadow-lg">
-            <button type="button" class="text-caption navigation-group rounded-lg p-2 whitespace-nowrap text-danger-foreground hover:bg-muted" @click="signOut">
-              <icon name="mdi:logout" size="15" />
-              <span>Sign Out</span>
-            </button>
-            <button type="button" class="text-caption navigation-group rounded-lg p-2 whitespace-nowrap text-danger-foreground hover:bg-danger/20" @click="handleDeleteUser">
-              <icon name="mdi:user-remove" size="15" class="text-caption-danger" />
-              <span>Delete Account</span>
-            </button>
-          </div>
+          <transition name="dropdown">
+            <div v-if="dropdownOpen" class="absolute top-6 left-1/2 z-50 flex min-w-40 -translate-x-1/2 flex-col gap-1 rounded-xl border bg-card p-1 shadow-lg">
+              <button type="button" class="text-caption navigation-group rounded-lg p-2 whitespace-nowrap text-danger-foreground hover:bg-muted" @click="signOut">
+                <icon name="mdi:logout" size="15" />
+                <span>Sign Out</span>
+              </button>
+              <button type="button" class="text-caption navigation-group rounded-lg p-2 whitespace-nowrap text-danger-foreground hover:bg-danger/20" @click="handleDeleteUser">
+                <icon name="mdi:user-remove" size="15" class="text-caption-danger" />
+                <span>Delete Account</span>
+              </button>
+            </div>
+          </transition>
         </div>
 
         <div v-else class="flex w-full items-center gap-4">
@@ -123,6 +125,12 @@ onBeforeUnmount(() => scrollLock(false))
 </script>
 
 <style scoped>
+/* Override shared dropdown transform so the avatar dropdown's centering translate isn't clobbered */
+.dropdown-enter-from,
+.dropdown-leave-to {
+  transform: translateX(-50%) translateY(0.25rem) scale(0.98);
+}
+
 @media (max-width: 767px) {
   .slide-enter-from {
     transform: translateX(-100%);

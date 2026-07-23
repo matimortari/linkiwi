@@ -2,7 +2,7 @@
   <div v-if="user" class="flex w-full flex-col md:flex-row">
     <div
       v-motion :initial="{ opacity: 0, x: -20 }"
-      :visible="{ opacity: 1, x: 0 }" :duration="800"
+      :visible="{ opacity: 1, x: 0 }" :duration="1000"
       class="min-h-screen w-full space-y-4 border-b-0! p-4 md:w-2/3 md:rounded-t-2xl md:border md:p-8"
     >
       <AppearanceOptions />

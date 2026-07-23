@@ -1,7 +1,7 @@
 <template>
   <div
     v-motion :initial="{ opacity: 0, x: -20 }"
-    :visible="{ opacity: 1, x: 0 }" :duration="800"
+    :visible="{ opacity: 1, x: 0 }" :duration="1000"
     class="relative flex flex-col gap-2 rounded-2xl border bg-card p-4 md:p-8"
   >
     <button

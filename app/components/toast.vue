@@ -2,17 +2,13 @@
   <teleport to="body">
     <div class="pointer-events-none fixed right-6 bottom-6 z-60 flex max-w-96 flex-col gap-2" aria-live="polite" aria-atomic="true">
       <TransitionGroup name="toast">
-        <div
-          v-for="toast in toasts" :key="toast.id"
-          class="pointer-events-auto relative flex items-center justify-between gap-2 overflow-hidden rounded-(--border-radius) border border-muted bg-card px-5 py-4 text-foreground shadow-lg" role="alert"
-        >
+        <div v-for="toast in toasts" :key="toast.id" class="card pointer-events-auto relative flex items-center justify-between gap-2 overflow-hidden shadow-lg" role="alert">
           <div class="flex min-w-0 flex-1 flex-row items-center gap-4">
             <icon :name="TOAST_ICONS[toast.type]" size="20" :class="TOAST_TEXT[toast.type]" />
             <span class="text-caption wrap-break-word">{{ toast.message }}</span>
           </div>
           <button
-            type="button"
-            class="flex shrink-0 items-center justify-center rounded-sm border-none bg-transparent p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            type="button" class="flex shrink-0 items-center justify-center rounded-sm border-none bg-transparent p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             aria-label="Close notification" @click="dismiss(toast.id)"
           >
             <icon name="mdi:close" size="15" />
@@ -46,8 +42,8 @@ const { toasts, dismiss } = useToast()
 .toast-enter-active,
 .toast-leave-active {
   transition:
-    opacity 0.25s var(--transition),
-    transform 0.35s var(--transition);
+    opacity var(--duration-base) var(--ease-emphasized),
+    transform var(--duration-slow) var(--ease-emphasized);
 }
 .toast-enter-from {
   opacity: 0;
@@ -62,6 +58,6 @@ const { toasts, dismiss } = useToast()
   width: 100%;
 }
 .toast-move {
-  transition: transform 0.35s var(--transition);
+  transition: transform var(--duration-slow) var(--ease-emphasized);
 }
 </style>

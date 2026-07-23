@@ -2,7 +2,7 @@
   <section
     id="hero" v-motion
     :initial="{ opacity: 0 }" :visible-once="{ opacity: 1 }"
-    :duration="800" class="relative flex min-h-[75vh] w-full items-center justify-between gap-8 overflow-hidden border-b"
+    :duration="1000" class="relative flex min-h-[75vh] w-full items-center justify-between gap-8 overflow-hidden border-b"
   >
     <img src="/assets/hero-backdrop.svg" alt="Hero background" class="hero-backdrop" aria-hidden="true">
 
@@ -39,7 +39,7 @@
   <section
     id="product" v-motion
     :initial="{ opacity: 0, y: 20 }" :visible-once="{ opacity: 1, y: 0 }"
-    :duration="800" class="section-shell relative w-full py-24 text-center"
+    :duration="1000" class="section-shell relative w-full py-24 text-center"
   >
     <div class="section-header">
       <span class="section-badge">Sharing</span>
@@ -91,7 +91,7 @@
   <section
     id="analytics" v-motion
     :initial="{ opacity: 0, y: 20 }" :visible-once="{ opacity: 1, y: 0 }"
-    :duration="800" class="relative w-full border-y bg-muted/20 py-24 text-center"
+    :duration="1000" class="relative w-full border-y bg-muted/20 py-24 text-center"
   >
     <div class="section-shell">
       <div class="section-header">
@@ -151,7 +151,11 @@
     </div>
   </section>
 
-  <section id="cta" class="relative z-10 flex min-h-[50vh] w-full flex-col items-center justify-center gap-8 overflow-hidden bg-card px-4 py-24 text-center md:px-12">
+  <section
+    id="cta" v-motion
+    :initial="{ opacity: 0, y: 20 }" :visible-once="{ opacity: 1, y: 0 }"
+    :duration="1000" class="relative z-10 flex min-h-[50vh] w-full flex-col items-center justify-center gap-8 overflow-hidden bg-card px-4 py-24 text-center md:px-12"
+  >
     <div class="cta-wrapper-grid" />
     <div class="cta-wrapper-vignette" />
 

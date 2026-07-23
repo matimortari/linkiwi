@@ -24,7 +24,7 @@
 
     <main
       v-motion :initial="{ opacity: 0, y: 10 }"
-      :enter="{ opacity: 1, y: 0 }" :duration="600"
+      :enter="{ opacity: 1, y: 0 }" :duration="500"
       class="prose"
     >
       <slot />
