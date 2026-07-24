@@ -47,7 +47,7 @@
             <span>Clear Schedule</span>
           </button>
 
-          <button type="button" class="btn-danger" @click="emit('close')">
+          <button type="button" class="btn-ghost" @click="emit('close')">
             Cancel
           </button>
           <button type="submit" class="btn-success">

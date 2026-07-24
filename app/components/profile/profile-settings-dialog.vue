@@ -22,7 +22,7 @@
 
       <footer class="flex flex-row items-center justify-end">
         <div class="navigation-group">
-          <button type="button" class="btn-danger" @click="emit('close')">
+          <button type="button" class="btn-ghost" @click="emit('close')">
             Cancel
           </button>
           <button type="submit" class="btn-success">

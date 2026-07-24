@@ -31,7 +31,7 @@
       <footer class="flex items-center justify-between">
         <span class="text-xs text-muted-foreground">Photos appear in selection order.</span>
         <div class="navigation-group">
-          <button type="button" class="btn-danger" @click="handleCancel">
+          <button type="button" class="btn-ghost" @click="handleCancel">
             Cancel
           </button>
           <button type="button" class="btn-success" :disabled="!selected.length" @click="handleSubmit">

@@ -62,7 +62,7 @@
 
       <footer class="flex flex-row items-center justify-end">
         <div class="navigation-group">
-          <button type="button" class="btn-danger" @click="handleCancel">
+          <button type="button" class="btn-ghost" @click="handleCancel">
             Cancel
           </button>
           <button type="button" class="btn-success" :disabled="!canSave" @click="handleSave">
