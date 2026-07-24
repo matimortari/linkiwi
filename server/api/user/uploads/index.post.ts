@@ -1,3 +1,5 @@
+import sharp from "sharp"
+
 export default defineEventHandler(async (event) => {
   const sessionUser = await getUserFromSession(event)
 
@@ -10,7 +12,33 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: "No image file provided for upload" })
   }
 
-  const fileToUpload = new File([new Uint8Array(fileField.data)], fileField.filename || "upload.jpg", { type: fileField.type })
+  let compressedBuffer = fileField.data
+  let outputMimeType = fileField.type
+
+  const imagePipeline = sharp(fileField.data)
+  const metadata = await imagePipeline.metadata()
+
+  // Apply compression based on format (convert unknown/unsupported image formats to WebP)
+  switch (metadata.format) {
+    case "jpeg":
+      compressedBuffer = await imagePipeline.jpeg({ quality: 80, mozjpeg: true }).toBuffer()
+      break
+    case "png":
+      compressedBuffer = await imagePipeline.png({ quality: 80, compressionLevel: 8 }).toBuffer()
+      break
+    case "webp":
+      compressedBuffer = await imagePipeline.webp({ quality: 80 }).toBuffer()
+      break
+    case "gif":
+      compressedBuffer = await sharp(fileField.data, { animated: true }).gif({ colors: 128 }).toBuffer()
+      break
+    default:
+      compressedBuffer = await imagePipeline.webp({ quality: 80 }).toBuffer()
+      outputMimeType = "image/webp"
+      break
+  }
+
+  const fileToUpload = new File([new Uint8Array(compressedBuffer)], fileField.filename || "upload.jpg", { type: outputMimeType })
 
   const uploadedUrl = await uploadFile({
     path: `user-assets/${sessionUser.id}`,
@@ -55,7 +83,7 @@ defineRouteMeta({
       },
     },
     responses: {
-      200: { description: "User asset uploaded, returns" },
+      200: { description: "User asset uploaded" },
       400: { description: "Missing or invalid file" },
       401: { description: "Unauthenticated" },
       429: { description: "Rate limit exceeded" },
