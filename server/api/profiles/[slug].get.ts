@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
           ],
         },
         orderBy: { order: "asc" },
-        include: { link: true, widget: true, icon: true, photoGrid: { include: { photos: { orderBy: { order: "asc" } } } } },
+        include: { link: true, widget: true, icon: true, photoGrid: { include: { photos: { orderBy: { order: "asc" } } } }, location: true },
       },
     },
   })

@@ -45,6 +45,9 @@ export default defineEventHandler(async (event) => {
     const photos = await resolvePhotoGrid(result.data.photoGrid.photos, sessionUser.id)
     nestedRelationData.photoGrid = { create: { photos: { createMany: { data: photos } } } }
   }
+  else if (result.data.type === "LOCATION") {
+    nestedRelationData.location = { create: result.data.location }
+  }
 
   // Atomically write the unified item and its nested relation in a single transaction to ensure data integrity
   const newItem = await db.profileItem.create({
@@ -59,7 +62,7 @@ export default defineEventHandler(async (event) => {
       scheduleAction: result.data.scheduleAction,
       ...nestedRelationData,
     },
-    include: { link: true, icon: true, widget: true, photoGrid: { include: { photos: true } } },
+    include: { link: true, icon: true, widget: true, photoGrid: { include: { photos: true } }, location: true },
   })
 
   const user = await db.user.findUnique({ where: { id: sessionUser.id }, select: { slug: true } })
@@ -82,7 +85,7 @@ defineRouteMeta({
             type: "object",
             required: ["type"],
             properties: {
-              type: { type: "string", enum: ["LINK", "WIDGET", "ICON", "DIVIDER", "PHOTO_GRID"], description: "Type of profile item" },
+              type: { type: "string", enum: ["LINK", "WIDGET", "ICON", "DIVIDER", "PHOTO_GRID", "LOCATION"], description: "Type of profile item" },
               order: { type: "integer", description: "Position of the item in the profile" },
               isPinned: { type: "boolean", description: "Whether the item is pinned to the top of the profile (true/false)" },
               isVisible: { type: "boolean", description: "Whether the item is publicly visible (true/false)" },
@@ -112,6 +115,16 @@ defineRouteMeta({
                       },
                     },
                   },
+                },
+              },
+              location: {
+                type: "object",
+                required: ["lat", "lng"],
+                properties: {
+                  label: { type: "string", nullable: true, description: "Optional label for the location" },
+                  lat: { type: "number", description: "Latitude" },
+                  lng: { type: "number", description: "Longitude" },
+                  zoom: { type: "integer", minimum: 1, maximum: 19, description: "Map zoom level" },
                 },
               },
             },

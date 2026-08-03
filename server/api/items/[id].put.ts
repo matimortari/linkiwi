@@ -71,12 +71,15 @@ export default defineEventHandler(async (event) => {
     await db.photoGridItem.deleteMany({ where: { gridId: itemId } })
     updatePayload.photoGrid = { update: { photos: { createMany: { data: photos } } } }
   }
+  else if (existingItem.type === "LOCATION" && result.data.location) {
+    updatePayload.location = { update: result.data.location }
+  }
 
   // Fire the single transaction update statement down to PostgreSQL
   const updatedItem = await db.profileItem.update({
     where: { id: itemId },
     data: updatePayload,
-    include: { link: true, icon: true, widget: true, photoGrid: { include: { photos: { orderBy: { order: "asc" } } } } },
+    include: { link: true, icon: true, widget: true, photoGrid: { include: { photos: { orderBy: { order: "asc" } } } }, location: true },
   })
 
   const user = await db.user.findUnique({ where: { id: sessionUser.id }, select: { slug: true } })
@@ -129,6 +132,15 @@ defineRouteMeta({
                       },
                     },
                   },
+                },
+              },
+              location: {
+                type: "object",
+                properties: {
+                  label: { type: "string", nullable: true, description: "Optional label for the location" },
+                  lat: { type: "number", description: "Latitude" },
+                  lng: { type: "number", description: "Longitude" },
+                  zoom: { type: "integer", minimum: 1, maximum: 19, description: "Map zoom level" },
                 },
               },
             },

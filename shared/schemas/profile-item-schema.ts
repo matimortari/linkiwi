@@ -33,6 +33,13 @@ const photoGridItemSchema = z.object({
 
 const photoGridPayload = z.object({ photos: z.array(photoGridItemSchema).min(1, "Provide at least one photo").max(12) })
 
+const locationPayload = z.object({
+  label: z.string().max(100).nullable().optional(),
+  lat: z.number().min(-90).max(90),
+  lng: z.number().min(-180).max(180),
+  zoom: z.number().int().min(1).max(19),
+})
+
 const schedulingSchema = {
   order: z.number().int().min(0).optional(),
   isPinned: z.boolean().default(false),
@@ -48,6 +55,7 @@ export const createProfileItemSchema = z.discriminatedUnion("type", [
   z.object(schedulingSchema).extend({ type: z.literal("ICON"), icon: iconPayload }),
   z.object(schedulingSchema).extend({ type: z.literal("DIVIDER") }),
   z.object(schedulingSchema).extend({ type: z.literal("PHOTO_GRID"), photoGrid: photoGridPayload }),
+  z.object(schedulingSchema).extend({ type: z.literal("LOCATION"), location: locationPayload }),
 ]).refine(validateDates, { message: "End schedule must occur after start schedule", path: ["scheduledEnd"] })
 
 export const updateProfileItemSchema = z.object({
@@ -61,6 +69,7 @@ export const updateProfileItemSchema = z.object({
   widget: widgetPayload.partial().optional(),
   icon: iconPayload.partial().optional(),
   photoGrid: photoGridPayload.partial().optional(),
+  location: locationPayload.partial().optional(),
 }).refine(validateDates, { message: "End schedule must occur after start schedule", path: ["scheduledEnd"] })
 
 export type CreateProfileItemInput = z.infer<typeof createProfileItemSchema>

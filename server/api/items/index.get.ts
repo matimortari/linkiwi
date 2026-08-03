@@ -19,6 +19,7 @@ export default defineEventHandler(async (event) => {
       icon: true,
       widget: true,
       photoGrid: { include: { photos: { orderBy: { order: "asc" } } } },
+      location: true,
       _count: { select: { clicks: true } }, // Aggregates total clicks for each item on the fly
     },
   })
