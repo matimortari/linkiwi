@@ -86,6 +86,25 @@
           </div>
           <span class="truncate pl-8 text-xs text-muted-foreground">{{ getPhotoGridLabel(item) }}</span>
         </div>
+
+        <div v-else-if="item.type === 'LOCATION' && item.location" class="card flex flex-col gap-1" :class="{ 'border-dashed! opacity-60': !item.isVisible }">
+          <div class="flex items-center justify-between">
+            <div class="navigation-group min-w-0">
+              <button type="button" class="drag-handle btn-ghost cursor-move p-0!" aria-label="Drag to reorder">
+                <icon name="mdi:drag-vertical" size="25" class="text-muted" />
+              </button>
+              <icon name="mdi:map-marker-outline" size="20" class="shrink-0 text-muted-foreground" />
+              <span class="truncate text-sm font-semibold" :class="{ 'text-muted-foreground': !item.isVisible }">{{ item.location.label || "Location" }}</span>
+            </div>
+            <ProfileItemRowActions
+              :item="item" :is-scheduled="!!(item.scheduledStart || item.scheduledEnd)"
+              @toggle="toggleItemVisibility(item.id, item.isVisible)" @pin="togglePin(item.id, item.isPinned)"
+              @schedule="openSchedule(item)" @edit="handleEdit(item)"
+              @delete="handleDelete(item.id)"
+            />
+          </div>
+          <span class="truncate pl-8 text-xs text-muted-foreground">{{ item.location.lat.toFixed(4) }}, {{ item.location.lng.toFixed(4) }}</span>
+        </div>
       </li>
     </VueDraggable>
 
@@ -120,6 +139,7 @@
   <ProfileLinkDialog :is-open="isLinkDialogOpen" @close="closeDialog('link')" />
   <ProfileWidgetDialog :is-open="isWidgetDialogOpen" @close="closeDialog('widget')" />
   <ProfilePhotoGridDialog :is-open="uiState.dialogs.photoGrid.isOpen" @close="closeDialog('photoGrid')" />
+  <ProfileLocationDialog :is-open="isLocationDialogOpen" @close="closeDialog('location')" />
   <ProfileScheduleDialog :is-open="isScheduleDialogOpen" :item="schedulingItem" @close="closeScheduleDialog" />
 </template>
 
@@ -129,7 +149,7 @@ import { VueDraggable } from "vue-draggable-plus"
 const userStore = useUserStore()
 const profileItemsStore = useProfileItemsStore()
 const { loading } = storeToRefs(profileItemsStore)
-const { uiState, isLinkDialogOpen, isWidgetDialogOpen, openDialog, closeDialog } = useUIState()
+const { uiState, isLinkDialogOpen, isWidgetDialogOpen, isLocationDialogOpen, openDialog, closeDialog } = useUIState()
 const isPicking = ref(false)
 const isScheduleDialogOpen = ref(false)
 const schedulingItem = ref<ProfileItem | null>(null)
@@ -170,6 +190,10 @@ async function handlePickType(type: ProfileItemType) {
     openDialog("photoGrid")
     return
   }
+  if (type === "LOCATION") {
+    openDialog("location")
+    return
+  }
   if (type === "DIVIDER") {
     await profileItemsStore.createItem({ type: "DIVIDER", isPinned: false, isVisible: true })
   }
@@ -186,6 +210,10 @@ function handleEdit(item: ProfileItem) {
   }
   if (item.type === "PHOTO_GRID") {
     openDialog("photoGrid", { item })
+    return
+  }
+  if (item.type === "LOCATION") {
+    openDialog("location", { item })
   }
 }
 

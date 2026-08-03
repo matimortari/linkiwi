@@ -24,11 +24,17 @@ const uiState = reactive<UIState>({
       isOpen: false,
       selectedWidget: null as ProfileItem | null,
     },
+    location: {
+      isOpen: false,
+      selectedLocation: null as ProfileItem | null,
+    },
   },
 })
 
+type DialogType = "share" | "item" | "link" | "icon" | "photoGrid" | "widget" | "location"
+
 export function useUIState() {
-  const openDialog = (type: "share" | "item" | "link" | "icon" | "photoGrid" | "widget", payload?: { item?: ProfileItem | null, activeType?: ProfileItemType | null }) => {
+  const openDialog = (type: DialogType, payload?: { item?: ProfileItem | null, activeType?: ProfileItemType | null }) => {
     if (type === "item") {
       uiState.dialogs.item.isOpen = true
       uiState.dialogs.item.selectedItem = payload?.item ?? null
@@ -61,12 +67,21 @@ export function useUIState() {
         uiState.dialogs.widget.selectedWidget = payload.item
       }
     }
+    else if (type === "location") {
+      uiState.dialogs.location.isOpen = true
+      if (payload?.item !== undefined) {
+        uiState.dialogs.location.selectedLocation = payload.item
+      }
+      else {
+        uiState.dialogs.location.selectedLocation = null
+      }
+    }
     else {
       uiState.dialogs[type] = true
     }
   }
 
-  const closeDialog = (type: "share" | "item" | "link" | "icon" | "photoGrid" | "widget") => {
+  const closeDialog = (type: DialogType) => {
     if (type === "item") {
       uiState.dialogs.item.isOpen = false
       uiState.dialogs.item.selectedItem = null
@@ -88,6 +103,10 @@ export function useUIState() {
       uiState.dialogs.widget.isOpen = false
       uiState.dialogs.widget.selectedWidget = null
     }
+    else if (type === "location") {
+      uiState.dialogs.location.isOpen = false
+      uiState.dialogs.location.selectedLocation = null
+    }
     else {
       uiState.dialogs[type] = false
     }
@@ -104,11 +123,13 @@ export function useUIState() {
   const isIconDialogOpen = computed(() => uiState.dialogs.icon.isOpen)
   const isPhotoGridDialogOpen = computed(() => uiState.dialogs.photoGrid.isOpen)
   const isWidgetDialogOpen = computed(() => uiState.dialogs.widget.isOpen)
+  const isLocationDialogOpen = computed(() => uiState.dialogs.location.isOpen)
   const selectedItem = computed(() => uiState.dialogs.item.selectedItem)
   const selectedLink = computed(() => uiState.dialogs.link.selectedLink)
   const selectedIcon = computed(() => uiState.dialogs.icon.selectedIcon)
   const selectedPhotoGrid = computed(() => uiState.dialogs.photoGrid.selectedPhotoGrid)
   const selectedWidget = computed(() => uiState.dialogs.widget.selectedWidget)
+  const selectedLocation = computed(() => uiState.dialogs.location.selectedLocation)
   const activeItemType = computed(() => uiState.dialogs.item.activeType)
   const isSidebarOpen = computed(() => uiState.sidebar)
   const isPreviewOpen = computed(() => uiState.preview)
@@ -121,11 +142,13 @@ export function useUIState() {
     isIconDialogOpen,
     isPhotoGridDialogOpen,
     isWidgetDialogOpen,
+    isLocationDialogOpen,
     selectedItem,
     selectedLink,
     selectedIcon,
     selectedPhotoGrid,
     selectedWidget,
+    selectedLocation,
     activeItemType,
     isSidebarOpen,
     isPreviewOpen,

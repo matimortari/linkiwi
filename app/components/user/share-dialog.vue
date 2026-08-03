@@ -84,7 +84,7 @@
 
 <script setup lang="ts">
 import qrcode from "qrcode-generator"
-import logoImage from "~/assets/symbol.png"
+import logoBase64 from "~/assets/symbol.png?inline"
 
 defineProps<{
   isOpen: boolean
@@ -96,7 +96,6 @@ const { public: { baseURL } } = useRuntimeConfig()
 const { user } = storeToRefs(useUserStore())
 const qrContainer = ref<HTMLElement | null>(null)
 const copySuccess = ref<string | null>(null)
-const logoBase64 = ref("")
 const customTag = ref("")
 const activeTab = ref("qr")
 const pageUrl = computed(() => `${baseURL}/${user.value?.slug}`)
@@ -164,7 +163,7 @@ function shareToSocial(platform: "twitter" | "facebook" | "linkedin" | "whatsapp
 }
 
 watchEffect(() => {
-  if (!qrContainer.value || !logoBase64.value) {
+  if (!qrContainer.value) {
     return
   }
 
@@ -185,13 +184,6 @@ watchEffect(() => {
 
   const logoSize = moduleCount * 0.2 * 0.85
   const logoPos = moduleCount / 2 + 2 - logoSize / 2
-  qrContainer.value.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 ${viewBoxSize} ${viewBoxSize}"><rect width="100%" height="100%" fill="#ffffff"/>${circles}<image href="${logoBase64.value}" x="${logoPos}" y="${logoPos}" width="${logoSize}" height="${logoSize}"/></svg>`
-})
-
-onMounted(async () => {
-  const blob = await fetch(logoImage).then(r => r.blob())
-  const reader = new FileReader()
-  reader.onloadend = () => logoBase64.value = reader.result as string
-  reader.readAsDataURL(blob)
+  qrContainer.value.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 ${viewBoxSize} ${viewBoxSize}"><rect width="100%" height="100%" fill="#ffffff"/>${circles}<image href="${logoBase64}" x="${logoPos}" y="${logoPos}" width="${logoSize}" height="${logoSize}"/></svg>`
 })
 </script>

@@ -50,6 +50,7 @@
               <UserLink v-if="item.type === 'LINK'" :item="item" :preferences="profilePreferences" @click="handleClick(item.id ?? '')" />
               <UserPhotoGrid v-else-if="item.type === 'PHOTO_GRID'" :photos="item.photoGrid?.photos ?? []" :preferences="profilePreferences" />
               <UserWidget v-else-if="item.type === 'WIDGET' && item.widget" :type="item.widget.type" :handle="item.widget.handle ?? ''" :preferences="profilePreferences" />
+              <UserLocation v-else-if="item.type === 'LOCATION' && item.location" :location="item.location" :preferences="profilePreferences" />
               <span v-else-if="item.type === 'DIVIDER'" class="w-full" :style="dividerStyle" />
             </template>
           </ul>

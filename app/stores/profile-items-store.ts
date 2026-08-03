@@ -105,6 +105,19 @@ export const useProfileItemsStore = defineStore("profile-items", () => {
     }
   }
 
+  async function searchGeocode(q: string) {
+    try {
+      const res = await $fetch<{ results: { label: string, lat: number, lng: number }[] }>("/api/geocode", { query: { q } })
+      return res
+    }
+    catch (err: unknown) {
+      const message = getErrorMessage(err, "Failed to search places")
+      toast.error(message)
+      console.error("searchGeocode error:", err)
+      throw err
+    }
+  }
+
   return {
     items,
     loading,
@@ -115,5 +128,6 @@ export const useProfileItemsStore = defineStore("profile-items", () => {
     updateItem,
     deleteItem,
     getWidgetData,
+    searchGeocode,
   }
 })

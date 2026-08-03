@@ -46,6 +46,7 @@
               <UserLink v-if="item.type === 'LINK'" :item="item" :preferences="preferences" />
               <span v-else-if="item.type === 'DIVIDER'" class="w-full" :style="dividerStyle" />
               <UserPhotoGrid v-else-if="item.type === 'PHOTO_GRID' && item.photoGrid?.photos?.length" :photos="item.photoGrid.photos.slice(0, 9)" :preferences="preferences" />
+              <UserLocation v-else-if="item.type === 'LOCATION' && item.location" :location="item.location" :preferences="preferences" :interactive="false" />
 
               <li v-else-if="item.type === 'WIDGET' && item.widget" class="flex w-full min-w-32">
                 <div class="flex w-full items-center gap-2 overflow-hidden" :style="linkStyle()">
@@ -111,6 +112,7 @@
               <UserLink v-if="item.type === 'LINK'" :item="item" :preferences="preferences" />
               <span v-else-if="item.type === 'DIVIDER'" class="w-full" :style="dividerStyle" />
               <UserPhotoGrid v-else-if="item.type === 'PHOTO_GRID' && item.photoGrid?.photos?.length" :photos="item.photoGrid.photos.slice(0, 9)" :preferences="preferences" />
+              <UserLocation v-else-if="item.type === 'LOCATION' && item.location" :location="item.location" :preferences="preferences" :interactive="false" />
               <li v-else-if="item.type === 'WIDGET' && item.widget" class="flex w-full min-w-32">
                 <div class="flex w-full items-center gap-2 overflow-hidden" :style="linkStyle()">
                   <icon :name="WIDGET_ICONS[item.widget.type]" size="20" class="shrink-0" :style="linkInnerStyle" />

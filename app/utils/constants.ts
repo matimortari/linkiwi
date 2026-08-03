@@ -100,6 +100,7 @@ export const ITEM_TYPES: { type: ProfileItemType, label: string, icon: string }[
   { type: "WIDGET", label: "Widget", icon: "mdi:shape-outline" },
   { type: "DIVIDER", label: "Divider", icon: "mdi:minus" },
   { type: "PHOTO_GRID", label: "Photo Grid", icon: "mdi:image-multiple-outline" },
+  { type: "LOCATION", label: "Location", icon: "mdi:map-marker-outline" },
 ]
 
 // Supported platform options for social icons
