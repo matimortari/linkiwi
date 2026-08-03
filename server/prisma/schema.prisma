@@ -31,6 +31,7 @@ enum ProfileItemType {
   ICON
   DIVIDER
   PHOTO_GRID
+  LOCATION
 }
 
 enum WidgetType {
@@ -156,6 +157,7 @@ model ProfileItem {
   widget         ProfileItemWidget?
   icon           ProfileItemIcon?
   photoGrid      ProfileItemPhotoGrid?
+  location       ProfileItemLocation?
   clicks         ItemClick[]
   createdAt      DateTime              @default(now())
   updatedAt      DateTime              @updatedAt
@@ -193,6 +195,15 @@ model ProfileItemPhotoGrid {
   itemId String          @id
   item   ProfileItem     @relation(fields: [itemId], references: [id], onDelete: Cascade)
   photos PhotoGridItem[]
+}
+
+model ProfileItemLocation {
+  itemId String      @id
+  label  String?
+  lat    Float
+  lng    Float
+  zoom   Int         @default(14)
+  item   ProfileItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
 }
 
 model PhotoGridItem {

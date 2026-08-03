@@ -1,7 +1,7 @@
 type BackgroundType = "FLAT" | "GRADIENT"
 type SupportBanner = "NONE" | "LGBTQ_RIGHTS" | "ANTI_RACISM" | "MENTAL_HEALTH" | "CLIMATE_ACTION"
 type ScheduleAction = "HIDE" | "DELETE"
-type ProfileItemType = "LINK" | "WIDGET" | "ICON" | "DIVIDER" | "PHOTO_GRID"
+type ProfileItemType = "LINK" | "WIDGET" | "ICON" | "DIVIDER" | "PHOTO_GRID" | "LOCATION"
 type WidgetType = "GITHUB" | "YOUTUBE" | "SPOTIFY"
 
 interface User {
@@ -99,6 +99,7 @@ interface ProfileItem {
   widget?: ProfileItemWidget | null
   icon?: ProfileItemIcon | null
   photoGrid?: ProfileItemPhotoGrid | null
+  location?: ProfileItemLocation | null
   clicks?: ItemClick[]
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -131,6 +132,14 @@ interface ProfileItemIcon {
 interface ProfileItemPhotoGrid {
   itemId: string
   photos?: PhotoGridItem[]
+}
+
+interface ProfileItemLocation {
+  itemId: string
+  label?: string | null
+  lat: number
+  lng: number
+  zoom: number
 }
 
 interface PhotoGridItem {
@@ -215,6 +224,10 @@ interface UIState {
     widget: {
       isOpen: boolean
       selectedWidget: ProfileItem | null
+    }
+    location: {
+      isOpen: boolean
+      selectedLocation: ProfileItem | null
     }
   }
 }

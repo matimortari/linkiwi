@@ -23,6 +23,7 @@
     "@vueuse/motion": "3.0.3",
     "chart.js": "4.5.1",
     "cropperjs": "2.1.1",
+    "leaflet": "1.9.4",
     "maska": "3.2.0",
     "nuxt": "4.5.0",
     "nuxt-auth-utils": "0.5.29",
@@ -40,6 +41,7 @@
     "@nuxt/fonts": "0.14.0",
     "@nuxt/icon": "2.3.1",
     "@tailwindcss/vite": "4.3.3",
+    "@types/leaflet": "1.9.22",
     "@types/node": "26.0.0",
     "@typescript/native": "npm:typescript@7.0.2",
     "eslint": "10.7.0",
@@ -47,6 +49,6 @@
     "eslint-plugin-format": "2.0.0",
     "prisma": "7.9.0",
     "tailwindcss": "4.3.3",
-    "typescript": "7.0.2"
+    "typescript": "6.0.2"
   }
 }
