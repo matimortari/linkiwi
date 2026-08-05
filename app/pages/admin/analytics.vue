@@ -5,10 +5,8 @@
       :visible="{ opacity: 1, x: 0 }" :duration="1000"
       class="min-h-screen w-full space-y-4 border-r-0! border-b-0! p-4 md:rounded-tl-2xl md:border md:p-8"
     >
-      <div class="flex flex-col gap-4">
-        <AnalyticsHighlights />
-        <AnalyticsCharts />
-      </div>
+      <AnalyticsHighlights />
+      <AnalyticsCharts />
     </div>
   </div>
 

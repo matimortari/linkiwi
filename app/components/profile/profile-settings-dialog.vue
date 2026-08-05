@@ -60,6 +60,7 @@ async function handleSaveProfile() {
   emit("close")
 }
 
+// Prefill the profile form when the dialog opens
 watch(() => props.isOpen, (open) => {
   if (open && user.value) {
     profileForm.value = {

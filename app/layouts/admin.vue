@@ -19,17 +19,29 @@ const profileItemsStore = useProfileItemsStore()
 const { isSidebarOpen } = useUIState()
 const isLoading = ref(true)
 
+async function goTo(path: string) {
+  isLoading.value = false
+  await navigateTo(path)
+}
+
+async function settled<T>(task: () => Promise<T>) {
+  const [result] = await Promise.allSettled([task()])
+  return result
+}
+
 onMounted(async () => {
-  try {
-    await userStore.getUser()
-    await profileItemsStore.getItems()
+  const userResult = await settled(() => userStore.getUser())
+  if (userResult.status === "rejected") {
+    await goTo("/sign-in")
+    return
   }
-  catch (error) {
-    console.error("Layout initialization failed:", error)
-    await navigateTo("/sign-in")
+
+  const itemsResult = await settled(() => profileItemsStore.getItems())
+  if (itemsResult.status === "rejected") {
+    await goTo("/sign-in")
+    return
   }
-  finally {
-    isLoading.value = false
-  }
+
+  isLoading.value = false
 })
 </script>

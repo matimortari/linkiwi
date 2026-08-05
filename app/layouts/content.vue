@@ -5,17 +5,17 @@
     <div v-if="isTocOpen" aria-hidden="true" class="fixed inset-0 z-30 bg-black/50 backdrop-blur-xs xl:hidden" @click="isTocOpen = false" />
 
     <aside
-      id="table-of-contents" class="fixed top-16 left-0 z-30 h-[calc(100vh-4rem)] w-80 overflow-y-auto bg-background p-8 transition-transform md:z-20 xl:sticky xl:top-24 xl:h-[calc(100vh-6rem)] xl:translate-x-0"
+      id="table-of-contents" class="bg-background fixed top-16 left-0 z-30 h-[calc(100vh-4rem)] w-80 overflow-y-auto p-8 transition-transform md:z-20 xl:sticky xl:top-24 xl:h-[calc(100vh-6rem)] xl:translate-x-0"
       :class="isTocOpen ? 'translate-x-0' : '-translate-x-full'"
     >
-      <p class="mb-4 text-sm font-bold tracking-wider text-muted-foreground uppercase">
+      <p class="text-muted-foreground mb-4 text-sm font-bold tracking-wider uppercase">
         On this page
       </p>
       <nav class="flex flex-col gap-2">
         <nuxt-link
           v-for="heading in headings" :key="heading.id"
-          :to="`#${heading.id}`" class="text-sm transition-colors hover:text-primary"
-          :class="activeId === heading.id ? 'font-semibold text-primary' : 'text-muted-foreground'" @click="handleTocClick(heading.id)"
+          :to="`#${heading.id}`" class="hover:text-primary text-sm transition-colors"
+          :class="[heading.level === 3 ? 'pl-3' : '', activeId === heading.id ? 'text-primary font-semibold' : 'text-muted-foreground']" @click="handleTocClick(heading.id)"
         >
           {{ heading.text }}
         </nuxt-link>
@@ -41,17 +41,24 @@
 <script setup lang="ts">
 const route = useRoute()
 const isTocOpen = ref(false)
-const headings = ref<{ id: string, text: string }[]>([])
+const headings = ref<{ id: string, text: string, level: 2 | 3 }[]>([])
 const activeId = ref("")
 
+function collectHeadingEls() {
+  return Array.from(document.querySelectorAll<HTMLElement>(".prose :is(h2, h3)[id]"))
+}
+
 function extractHeadings() {
-  const domHeadings = document.querySelectorAll<HTMLElement>(".prose h2[id]")
-  headings.value = Array.from(domHeadings).map(el => ({ id: el.id, text: el.textContent || "" }))
+  headings.value = collectHeadingEls().map(el => ({
+    id: el.id,
+    text: el.textContent || "",
+    level: el.tagName === "H3" ? 3 : 2,
+  }))
   updateActiveHeading()
 }
 
 function updateActiveHeading() {
-  const headingEls = Array.from(document.querySelectorAll<HTMLElement>(".prose h2[id]"))
+  const headingEls = collectHeadingEls()
   if (!headingEls.length) {
     return
   }
@@ -82,9 +89,7 @@ onMounted(() => {
 
 watch(() => route.path, () => nextTick(extractHeadings))
 
-onUnmounted(() => {
-  window.removeEventListener("scroll", updateActiveHeading)
-})
+onUnmounted(() => window.removeEventListener("scroll", updateActiveHeading))
 </script>
 
 <style scoped>
@@ -136,6 +141,7 @@ onUnmounted(() => {
 .prose :deep(h3) {
   font-size: clamp(1.125rem, 3vw, 1.25rem);
   line-height: 1.5;
+  scroll-margin-top: 6rem;
 }
 .prose :deep(h4) {
   font-size: clamp(1rem, 2.5vw, 1.125rem);

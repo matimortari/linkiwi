@@ -13,7 +13,7 @@
           <!-- Drag handle (mobile only) -->
           <div v-if="isMobile" class="h-1 w-20 self-center rounded-full bg-current opacity-20" />
 
-          <header class="flex flex-row items-center justify-between gap-4 border-b pb-2">
+          <header class="flex flex-row items-center justify-between border-b pb-2">
             <h4 id="dialog-title">
               {{ title }}
             </h4>
@@ -56,8 +56,6 @@ function scrollLock(locked: boolean) {
   document.body.style.overflow = val
 }
 
-watch(() => props.isOpen, scrollLock)
-
 onMounted(() => {
   const mql = globalThis.matchMedia("(max-width: 767px)")
   isMobile.value = mql.matches
@@ -67,6 +65,8 @@ onMounted(() => {
     scrollLock(true)
   }
 })
+
+watch(() => props.isOpen, scrollLock)
 
 onBeforeUnmount(() => {
   document.removeEventListener("keydown", onEscape)

@@ -1,6 +1,6 @@
 export function useActionIcon(defaultIcon: string) {
   const success = ref(false)
-  const icon = computed(() => success.value ? "ph:check-bold" : defaultIcon)
+  const icon = computed(() => success.value ? "mdi:check" : defaultIcon)
 
   function triggerSuccess() {
     success.value = true

@@ -19,9 +19,6 @@
             <span>Search</span>
           </button>
         </div>
-        <p v-if="searchError" class="text-caption-danger text-xs">
-          {{ searchError }}
-        </p>
         <ul v-if="searchResults.length" class="scroll-area flex max-h-36 flex-col gap-1 overflow-y-auto rounded-lg border p-1">
           <li v-for="(result, index) in searchResults" :key="`${result.lat}-${result.lng}-${index}`">
             <button type="button" class="w-full rounded-md px-2 py-1.5 text-left text-xs hover:bg-muted" @click="selectResult(result)">
@@ -90,7 +87,6 @@ const form = ref({ label: "", lat: NaN, lng: NaN, zoom: 14 })
 const searchQuery = ref("")
 const searchResults = ref<{ label: string, lat: number, lng: number }[]>([])
 const searching = ref(false)
-const searchError = ref("")
 const editingId = ref<string | null>(null)
 const isUpdateMode = computed(() => !!editingId.value)
 const hasCoordinates = computed(() => Number.isFinite(form.value.lat) && Number.isFinite(form.value.lng))
@@ -109,20 +105,9 @@ async function searchPlaces() {
   }
 
   searching.value = true
-  searchError.value = ""
-  try {
-    const res = await profileItemsStore.searchGeocode(q)
-    searchResults.value = res.results || []
-    if (!searchResults.value.length) {
-      searchError.value = "No places found."
-    }
-  }
-  catch {
-    searchResults.value = []
-  }
-  finally {
-    searching.value = false
-  }
+  const searchResult = await Promise.allSettled([profileItemsStore.searchGeocode(q)])
+  searchResults.value = searchResult[0].status === "fulfilled" ? searchResult[0].value?.results ?? [] : []
+  searching.value = false
 }
 
 function selectResult(result: { label: string, lat: number, lng: number }) {
@@ -171,9 +156,9 @@ function resetForm() {
   form.value = { label: "", lat: NaN, lng: NaN, zoom: 14 }
   searchQuery.value = ""
   searchResults.value = []
-  searchError.value = ""
 }
 
+// Populate form from the selected location
 watch(() => selectedLocation.value, (item) => {
   if (item?.location) {
     editingId.value = item.id

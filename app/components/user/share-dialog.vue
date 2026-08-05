@@ -162,6 +162,7 @@ function shareToSocial(platform: "twitter" | "facebook" | "linkedin" | "whatsapp
   setTimeout(() => copySuccess.value = null, 3000)
 }
 
+// Render the share QR code whenever page URL or container changes
 watchEffect(() => {
   if (!qrContainer.value) {
     return

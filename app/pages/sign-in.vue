@@ -2,12 +2,12 @@
   <section class="auth-shell">
     <div class="auth-backdrop" aria-hidden="true" />
 
-    <div class="auth-grid">
-      <div
-        v-motion :initial="{ opacity: 0, y: 10 }"
-        :enter="{ opacity: 1, y: 0 }" :duration="1000"
-        class="flex flex-col justify-center gap-4 p-4 md:p-12"
-      >
+    <div
+      v-motion :initial="{ opacity: 0, y: 10 }"
+      :enter="{ opacity: 1, y: 0 }" :duration="1000"
+      class="auth-grid"
+    >
+      <div class="flex flex-col justify-center gap-4 p-4 md:p-12">
         <header class="flex flex-col gap-4">
           <h1>
             Sign In
