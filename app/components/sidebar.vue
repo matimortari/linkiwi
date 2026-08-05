@@ -16,7 +16,7 @@
         <div v-if="user" ref="avatarDropdownRef" class="relative flex w-full items-center gap-2">
           <div class="flex w-full min-w-0 flex-col overflow-hidden">
             <button type="button" class="flex items-center gap-1 font-semibold hover:opacity-80" @click="dropdownOpen = !dropdownOpen">
-              <icon name="mdi:chevron-down" size="25" class="shrink-0 transition-transform duration-200" :class="{ 'rotate-180': dropdownOpen }" />
+              <icon name="mdi:chevron-down" size="25" class="shrink-0 transition-transform" :class="{ 'rotate-180': dropdownOpen }" />
               <span class="truncate text-sm wrap-break-word">{{ user.name }}</span>
             </button>
             <nuxt-link :to="`/${user.slug}`" class="text-caption truncate hover:underline">

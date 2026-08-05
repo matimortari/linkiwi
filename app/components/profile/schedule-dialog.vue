@@ -114,23 +114,6 @@ function commitDisplay(raw: string, field: "scheduledStart" | "scheduledEnd"): s
   return internal ? toDisplay(internal) : raw
 }
 
-watch(() => props.item, (item) => {
-  if (item) {
-    const start = toDatetimeLocalValue(item.scheduledStart)
-    const end = toDatetimeLocalValue(item.scheduledEnd)
-    form.value.scheduledStart = start
-    form.value.scheduledEnd = end
-    form.value.scheduleAction = item.scheduleAction ?? null
-    startDisplay.value = toDisplay(start)
-    endDisplay.value = toDisplay(end)
-  }
-  else {
-    form.value = { scheduledStart: "", scheduledEnd: "", scheduleAction: null }
-    startDisplay.value = ""
-    endDisplay.value = ""
-  }
-}, { immediate: true })
-
 async function handleSubmit() {
   startDisplay.value = commitDisplay(startDisplay.value, "scheduledStart")
   endDisplay.value = commitDisplay(endDisplay.value, "scheduledEnd")
@@ -160,4 +143,22 @@ async function handleClear() {
   })
   emit("close")
 }
+
+// Populate schedule form from the selected item
+watch(() => props.item, (item) => {
+  if (item) {
+    const start = toDatetimeLocalValue(item.scheduledStart)
+    const end = toDatetimeLocalValue(item.scheduledEnd)
+    form.value.scheduledStart = start
+    form.value.scheduledEnd = end
+    form.value.scheduleAction = item.scheduleAction ?? null
+    startDisplay.value = toDisplay(start)
+    endDisplay.value = toDisplay(end)
+  }
+  else {
+    form.value = { scheduledStart: "", scheduledEnd: "", scheduleAction: null }
+    startDisplay.value = ""
+    endDisplay.value = ""
+  }
+}, { immediate: true })
 </script>

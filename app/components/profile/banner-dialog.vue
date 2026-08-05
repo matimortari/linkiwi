@@ -283,6 +283,7 @@ function handleCancel() {
   emit("close")
 }
 
+// Fetch assets when opened and reset state when closed
 watch(() => props.isOpen, async (open) => {
   if (open) {
     if (!userStore.assets.length) {
@@ -293,6 +294,7 @@ watch(() => props.isOpen, async (open) => {
   resetState()
 })
 
+// Initialize or destroy the cropper when the image source changes
 watch(cropSrc, async (src) => {
   if (!src) {
     destroyCropper()

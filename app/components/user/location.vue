@@ -128,7 +128,10 @@ function syncView() {
   map.invalidateSize()
 }
 
+// Keep map view in sync with location props
 watch(() => [props.location.lat, props.location.lng, props.location.zoom] as const, () => syncView())
+
+// Initialize map when the container is mounted
 watch(container, (el) => {
   if (el) {
     initMap()

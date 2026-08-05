@@ -57,5 +57,6 @@ async function handleDelete(id: string) {
   await profileItemsStore.deleteItem(id)
 }
 
+// Keep local ordered list in sync with icons
 watch(() => icons.value, newIcons => orderedIcons.value = [...newIcons], { immediate: true, deep: true })
 </script>

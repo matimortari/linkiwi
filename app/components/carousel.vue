@@ -75,13 +75,10 @@ function getPresetImage(filename: string): string {
 
 .carousel-enter-active,
 .carousel-leave-active {
-  /* Intentionally the one "hero" animation: a touch slower/more elaborate than the shared
-     duration-slow (400ms) token to sell the 3D depth effect, but tightened from the previous
-     0.55s so it doesn't feel sluggish next to the rest of the app. */
   transition:
-    transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
-    opacity 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
-    filter 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transform var(--duration-slow) var(--ease-standard),
+    opacity var(--duration-slow) var(--ease-standard),
+    filter var(--duration-slow) var(--ease-standard);
   transform-style: preserve-3d;
 }
 

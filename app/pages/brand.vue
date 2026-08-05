@@ -13,10 +13,11 @@
 
     <div class="grid gap-2 md:grid-cols-3">
       <div v-for="(asset, index) in SYMBOLS" :key="asset.name" class="card brand-card">
-        <div class="brand-preview brand-preview-logo" :class="asset.bgClass">
+        <div class="brand-preview brand-preview-logo group" :class="asset.bgClass">
           <img :src="asset.image" :alt="asset.name" class="h-24 w-auto object-contain">
-          <button type="button" class="brand-action" :aria-label="`Download ${asset.name}`" @click="handleDownloadImage(asset, index, symbolActions)">
+          <button type="button" class="brand-action bg-black/0 group-hover:bg-black/50 focus-visible:bg-black/50" :aria-label="`Download ${asset.name}`" @click="handleDownloadImage(asset, index, symbolActions)">
             <span class="brand-chip">
+              <span>Download</span>
               <icon :name="symbolActions[index]!.icon.value" size="20" />
             </span>
           </button>
@@ -35,10 +36,11 @@
 
     <div class="grid gap-2 md:grid-cols-2">
       <div v-for="(asset, index) in WORDMARKS" :key="asset.name" class="card brand-card">
-        <div class="brand-preview brand-preview-logo" :class="asset.bgClass">
+        <div class="brand-preview brand-preview-logo group" :class="asset.bgClass">
           <img :src="asset.image" :alt="asset.name" class="h-12 w-auto object-contain">
-          <button type="button" class="brand-action" :aria-label="`Download ${asset.name}`" @click="handleDownloadImage(asset, index, wordmarkActions)">
+          <button type="button" class="brand-action bg-black/0 group-hover:bg-black/50 focus-visible:bg-black/50" :aria-label="`Download ${asset.name}`" @click="handleDownloadImage(asset, index, wordmarkActions)">
             <span class="brand-chip">
+              <span>Download</span>
               <icon :name="wordmarkActions[index]!.icon.value" size="20" />
             </span>
           </button>
@@ -57,8 +59,8 @@
 
     <div class="grid gap-2 md:grid-cols-2">
       <div v-for="(color, index) in BRAND_COLORS" :key="color.name" class="card brand-card">
-        <div class="brand-preview brand-preview-brand" :style="{ backgroundColor: `var(${color.var})` }">
-          <button type="button" class="brand-action" :aria-label="`Copy ${color.value}`" @click="handleCopyColor(color.value, index, brandActions)">
+        <div class="brand-preview brand-preview-brand group" :style="{ backgroundColor: `var(${color.var})` }">
+          <button type="button" class="brand-action bg-black/0 group-hover:bg-black/50 focus-visible:bg-black/50" :aria-label="`Copy ${color.value}`" @click="handleCopyColor(color.value, index, brandActions)">
             <span class="brand-chip brand-chip-mono">
               <span>{{ color.value }}</span>
               <icon :name="brandActions[index]!.icon.value" size="15" />
@@ -79,8 +81,8 @@
 
     <div class="grid gap-2 md:grid-cols-2 xl:grid-cols-3">
       <div v-for="(color, index) in NEUTRAL_SCALE" :key="color.name" class="card brand-card">
-        <div class="brand-preview brand-preview-swatch" :style="{ backgroundColor: `var(${color.var})` }">
-          <button type="button" class="brand-action" :aria-label="`Copy ${color.value}`" @click="handleCopyColor(color.value, index, neutralActions)">
+        <div class="brand-preview brand-preview-swatch group" :style="{ backgroundColor: `var(${color.var})` }">
+          <button type="button" class="brand-action bg-black/0 group-hover:bg-black/50 focus-visible:bg-black/50" :aria-label="`Copy ${color.value}`" @click="handleCopyColor(color.value, index, neutralActions)">
             <span class="brand-chip brand-chip-mono">
               <span>{{ color.value }}</span>
               <icon :name="neutralActions[index]!.icon.value" size="15" />
@@ -102,16 +104,16 @@
     <div class="grid gap-2 md:grid-cols-2">
       <div v-for="(status, statusIndex) in STATUS_COLORS" :key="status.name" class="card brand-card">
         <div class="brand-preview-status-pair">
-          <div class="brand-preview-status-half" :style="{ backgroundColor: `var(${status.darkVar})` }">
-            <button type="button" class="brand-action" :aria-label="`Copy ${status.darkVal}`" @click="handleCopyColor(status.darkVal, statusIndex * 2, statusActions)">
+          <div class="brand-preview-status-half group" :style="{ backgroundColor: `var(${status.darkVar})` }">
+            <button type="button" class="brand-action bg-black/0 group-hover:bg-black/50 focus-visible:bg-black/50" :aria-label="`Copy ${status.darkVal}`" @click="handleCopyColor(status.darkVal, statusIndex * 2, statusActions)">
               <span class="brand-chip brand-chip-mono">
                 <span>{{ status.darkVal }}</span>
                 <icon :name="statusActions[statusIndex * 2]!.icon.value" size="15" />
               </span>
             </button>
           </div>
-          <div class="brand-preview-status-half" :style="{ backgroundColor: `var(${status.lightVar})` }">
-            <button type="button" class="brand-action" :aria-label="`Copy ${status.lightVal}`" @click="handleCopyColor(status.lightVal, (statusIndex * 2) + 1, statusActions)">
+          <div class="brand-preview-status-half group" :style="{ backgroundColor: `var(${status.lightVar})` }">
+            <button type="button" class="brand-action bg-black/0 group-hover:bg-black/50 focus-visible:bg-black/50" :aria-label="`Copy ${status.lightVal}`" @click="handleCopyColor(status.lightVal, (statusIndex * 2) + 1, statusActions)">
               <span class="brand-chip brand-chip-mono">
                 <span>{{ status.lightVal }}</span>
                 <icon :name="statusActions[(statusIndex * 2) + 1]!.icon.value" size="15" />
@@ -213,14 +215,7 @@ definePageMeta({ layout: "content" })
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0;
-  transition: opacity var(--transition);
-}
-
-.brand-preview:hover > .brand-action,
-.brand-preview-status-half:hover > .brand-action,
-.brand-action:focus-visible {
-  opacity: 1;
+  transition: background-color var(--transition);
 }
 
 .brand-chip {
@@ -235,6 +230,13 @@ definePageMeta({ layout: "content" })
   line-height: 1.25rem;
   font-weight: 500;
   color: var(--muted-foreground);
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.group:hover > .brand-action > .brand-chip,
+.brand-action:focus-visible > .brand-chip {
+  opacity: 1;
 }
 
 .brand-chip-mono {

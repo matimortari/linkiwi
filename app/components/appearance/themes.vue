@@ -74,7 +74,10 @@ function handleSaveTheme() {
   saveAction.triggerSuccess()
 }
 
+// Select the theme that matches current preferences
 watch(() => props.preferences, prefs => selectedTheme.value = findActiveThemeTitle(prefs), { deep: true })
+
+// Track an unsaved theme selection as pending
 watch([selectedTheme, savedThemeTitle], ([selected, saved]) => pendingThemeTitle.value = selected !== saved ? selected : null, { immediate: true })
 
 onBeforeUnmount(() => pendingThemeTitle.value = null)

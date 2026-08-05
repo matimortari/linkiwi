@@ -80,6 +80,7 @@ function resetForm() {
   form.value = { type: null, handle: "" }
 }
 
+// Populate form from the selected widget
 watch(() => selectedWidget.value, (item) => {
   if (item && item.widget) {
     editingId.value = item.id

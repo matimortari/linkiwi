@@ -136,12 +136,13 @@ function resetForm() {
   selected.value = []
 }
 
+// Load the selected photo grid into the form
 watch(selectedPhotoGrid, (item) => {
-  // Prefer the live store copy so deleted assets are already scrubbed
   const fresh = item?.id ? profileItemsStore.items.find(i => i.id === item.id) ?? item : null
   loadPhotoGrid(fresh)
 }, { immediate: true })
 
+// Fetch assets and refresh the form when the dialog opens
 watch(isPhotoGridDialogOpen, async (open) => {
   if (!open) {
     resetForm()

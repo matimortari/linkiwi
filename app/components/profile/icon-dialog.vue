@@ -6,8 +6,8 @@
       <div class="scroll-area grid max-h-64 grid-cols-3 gap-1 overflow-y-auto pr-1 md:grid-cols-6 2xl:grid-cols-8">
         <button
           v-for="[label, iconName] in socialIconEntries" :key="label"
-          type="button" class="card flex flex-col items-center justify-center gap-2 p-2! transition-all hover:bg-muted! active:bg-muted"
-          :class="{ 'bg-muted': form.platform === label }" @click="selectIcon(label, iconName)"
+          type="button" class="card flex flex-col items-center justify-center gap-2 p-2! transition-all hover:bg-muted! active:bg-muted!"
+          :class="{ 'bg-muted!': form.platform === label }" @click="selectIcon(label, iconName)"
         >
           <icon :name="iconName" size="25" />
           <span class="truncate text-xs">{{ label }}</span>
@@ -71,7 +71,7 @@ function resetForm() {
   form.value.url = ""
 }
 
-// Reset form when dialog is opened
+// Reset form when the dialog is closed
 watch(() => isIconDialogOpen.value, (open) => {
   if (!open) {
     resetForm()

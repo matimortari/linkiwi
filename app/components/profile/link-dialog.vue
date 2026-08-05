@@ -124,6 +124,7 @@ function resetForm() {
   showAssetPicker.value = false
 }
 
+// Load assets and populate form when the dialog opens
 watch([() => isLinkDialogOpen.value, () => selectedLink.value], async ([open, item]) => {
   if (!open) {
     return
@@ -137,9 +138,7 @@ watch([() => isLinkDialogOpen.value, () => selectedLink.value], async ([open, it
     editingLinkId.value = item.id
     form.value.title = item.link.label
     form.value.url = item.link.url
-    selectedAsset.value = item.link.assetId && item.link.imageUrl
-      ? { id: item.link.assetId, url: item.link.imageUrl }
-      : null
+    selectedAsset.value = item.link.assetId && item.link.imageUrl ? { id: item.link.assetId, url: item.link.imageUrl } : null
     showAssetPicker.value = false
   }
   else {
@@ -147,6 +146,7 @@ watch([() => isLinkDialogOpen.value, () => selectedLink.value], async ([open, it
   }
 }, { immediate: true })
 
+// Hide asset picker when there are no assets
 watch(() => userStore.assets.length, (length) => {
   if (!length) {
     showAssetPicker.value = false

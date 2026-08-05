@@ -82,9 +82,7 @@ onMounted(() => {
 
 watch(() => route.path, () => nextTick(extractHeadings))
 
-onUnmounted(() => {
-  window.removeEventListener("scroll", updateActiveHeading)
-})
+onUnmounted(() => window.removeEventListener("scroll", updateActiveHeading))
 </script>
 
 <style scoped>

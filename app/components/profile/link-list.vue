@@ -258,7 +258,10 @@ async function handleDelete(id: string) {
   await profileItemsStore.deleteItem(id)
 }
 
+// Keep local ordered list in sync with main items
 watch(() => mainItems.value, newItems => orderedItems.value = [...newItems], { immediate: true, deep: true })
+
+// Fetch assets when entering the picker
 watch(isPicking, async (picking) => {
   if (picking && !userStore.assets.length) {
     await userStore.getAssets()

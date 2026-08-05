@@ -151,6 +151,7 @@ onMounted(async () => {
   }
 })
 
+// Keep guestbook toggle in sync with user preferences
 watch(() => preferences.value?.enableGuestbook, (val) => {
   if (val !== undefined) {
     guestbookEnabled.value = val ?? false

@@ -1,8 +1,7 @@
 <template>
   <!-- Mobile toggle -->
   <button
-    type="button"
-    class="btn fixed bottom-4 left-1/2 z-40 -translate-x-1/2 transition-[opacity,transform] duration-300 md:hidden!"
+    type="button" class="btn fixed bottom-4 left-1/2 z-40 -translate-x-1/2 transition-all md:hidden!"
     :class="showMobileToggle ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-4 opacity-0'"
     aria-label="Toggle Mobile Preview" @click="isPreviewOpen ? closePreview() : openPreview()"
   >
@@ -174,12 +173,12 @@ function scrollLock(locked: boolean) {
   document.body.style.overflow = val
 }
 
-watch(isPreviewOpen, scrollLock)
-
 onMounted(() => {
   onScroll()
   window.addEventListener("scroll", onScroll, { passive: true })
 })
+
+watch(isPreviewOpen, scrollLock)
 
 onBeforeUnmount(() => {
   scrollLock(false)
