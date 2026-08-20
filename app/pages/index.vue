@@ -2,21 +2,26 @@
   <section
     id="hero" v-motion
     :initial="{ opacity: 0 }" :visible-once="{ opacity: 1 }"
-    :duration="1000" class="relative flex min-h-[75vh] w-full items-center justify-between gap-8 overflow-hidden border-b"
+    :duration="1000" class="relative flex min-h-[80vh] w-full items-center overflow-hidden border-b"
   >
-    <img src="/assets/hero-backdrop.svg" alt="Hero background" class="hero-backdrop" aria-hidden="true">
+    <div class="hero-carousel">
+      <Carousel />
+    </div>
+
+    <div class="hero-exposure" />
+    <div class="hero-vignette" />
 
     <div class="section-shell hero-shell">
-      <header class="z-1 flex flex-col items-center gap-4 text-center md:items-start md:text-start">
+      <header class="flex flex-col items-center gap-4 text-center">
         <h1>
           Keep all your stuff together!
         </h1>
-        <p class="text-lead">
+        <p class="text-lead mx-auto">
           Welcome to <span class="font-semibold text-secondary">LinKiwi!</span> Your links, profiles, contact info, and more
           in one place. Create and customize your page and share it with your audience.
         </p>
 
-        <div class="flex flex-wrap items-center justify-center gap-4 md:justify-start">
+        <div class="flex flex-wrap items-center justify-center gap-4">
           <nuxt-link to="/sign-in" class="btn-primary">
             <span>Get Started Now</span>
             <icon name="mdi:arrow-right" size="25" />
@@ -28,11 +33,6 @@
           </nuxt-link>
         </div>
       </header>
-
-      <!-- Controlled bleed wrapper for the carousel -->
-      <div class="flex w-full translate-y-24 justify-center md:translate-y-52">
-        <Carousel />
-      </div>
     </div>
   </section>
 
@@ -192,7 +192,7 @@ definePageMeta({ middleware: "guest" })
 h1 {
   font-family: var(--font-display);
   line-height: 1.2;
-  max-width: 28rem;
+  max-width: 32rem;
   font-size: clamp(2.5rem, 8vw, 3.75rem);
 }
 h2 {
@@ -208,12 +208,13 @@ h2 {
 }
 
 .hero-shell {
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3rem;
-  padding-top: 8rem;
-  padding-bottom: 0;
+  justify-content: center;
+  padding-block: 8rem 4rem;
 }
 
 .section-header {
@@ -261,10 +262,7 @@ h2 {
 
 @media (min-width: 768px) {
   .hero-shell {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(320px, 520px);
-    gap: 3rem;
-    padding-block: 1rem;
+    padding-block: 6rem;
   }
 
   .section-grid {
@@ -273,13 +271,33 @@ h2 {
   }
 }
 
-.hero-backdrop {
+.hero-carousel {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
+  z-index: 0;
+  display: flex;
+  align-items: center;
   pointer-events: none;
-  z-index: -10;
+  opacity: 0.55;
+  filter: brightness(0.65) saturate(0.8);
+}
+
+.hero-exposure {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--background) 45%, transparent);
+}
+
+.hero-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at center, transparent 10%, var(--background) 80%),
+    linear-gradient(to bottom, var(--background) 0%, transparent 60%, transparent 80%, var(--background) 100%);
 }
 
 .cta-wrapper-grid {
@@ -303,7 +321,7 @@ h2 {
 }
 
 .text-lead {
-  max-width: 28rem;
+  max-width: 32rem;
   color: var(--muted-foreground);
   line-height: 1.7;
   font-weight: 500;
