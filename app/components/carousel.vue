@@ -1,7 +1,7 @@
 <template>
-  <div class="carousel-viewport" aria-hidden="true">
-    <div class="carousel-track">
-      <div v-for="loop in 2" :key="loop" class="carousel-group">
+  <div ref="viewportRef" class="carousel-viewport" aria-hidden="true">
+    <div class="carousel-track" :style="{ '--copies': String(copies) }">
+      <div v-for="loop in copies" :key="loop" :ref="(el) => { if (loop === 1) setGroupRef(el) }" class="carousel-group">
         <div
           v-for="preset in CAROUSEL_PRESETS" :key="`${loop}-${preset.slug}`"
           class="phone-mockup relative flex flex-col overflow-hidden rounded-[2.5rem] border-4 shadow-xl"
@@ -44,6 +44,27 @@
 
 <script setup lang="ts">
 const images = import.meta.glob("/assets/presets/*", { eager: true, import: "default" })
+
+const viewportRef = ref<HTMLElement | null>(null)
+const groupRef = ref<HTMLElement | null>(null)
+const copies = ref(2)
+
+function setGroupRef(el: unknown) {
+  if (el instanceof HTMLElement) {
+    groupRef.value = el
+  }
+}
+
+function updateCopies() {
+  if (!viewportRef.value || !groupRef.value) {
+    return
+  }
+  if (groupRef.value.offsetWidth <= 0) {
+    return
+  }
+
+  copies.value = Math.max(2, Math.ceil(viewportRef.value.clientWidth / groupRef.value.offsetWidth) + 1)
+}
 
 function getPresetImage(filename: string) {
   return images[`/assets/presets/${filename}`] as string
@@ -120,6 +141,24 @@ function linkInnerStyle({ preferences: pref }: typeof CAROUSEL_PRESETS[number]) 
     fontSize: pref.linkTextSize,
   }
 }
+
+let resizeObserver: ResizeObserver | null = null
+
+onMounted(() => {
+  nextTick(() => {
+    updateCopies()
+    if (!viewportRef.value) {
+      return
+    }
+    resizeObserver = new ResizeObserver(() => updateCopies())
+    resizeObserver.observe(viewportRef.value)
+  })
+})
+
+onBeforeUnmount(() => {
+  resizeObserver?.disconnect()
+  resizeObserver = null
+})
 </script>
 
 <style scoped>
@@ -160,7 +199,7 @@ function linkInnerStyle({ preferences: pref }: typeof CAROUSEL_PRESETS[number]) 
     transform: translateX(0);
   }
   to {
-    transform: translateX(-50%);
+    transform: translateX(calc(-100% / var(--copies, 2)));
   }
 }
 </style>

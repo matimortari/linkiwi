@@ -42,11 +42,9 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
-  preferences: UserPreferences
-}>()
-
-const emit = defineEmits<{ save: [value: UserPreferences] }>()
+const userStore = useUserStore()
+const { user } = storeToRefs(userStore)
+const preferences = computed(() => user.value?.preferences ?? DEFAULT_PREFERENCES)
 
 const saveAction = useActionIcon("mdi:content-save-check")
 const pendingThemeTitle = useState<string | null>("pendingThemeTitle", () => null)
@@ -55,8 +53,8 @@ function findActiveThemeTitle(prefs: UserPreferences): string {
   return THEMES.find(theme => Object.entries(theme.preferences).every(([key, value]) => prefs[key as keyof UserPreferences] === value))?.title ?? ""
 }
 
-const selectedTheme = ref(findActiveThemeTitle(props.preferences))
-const savedThemeTitle = computed(() => findActiveThemeTitle(props.preferences))
+const selectedTheme = ref(findActiveThemeTitle(preferences.value))
+const savedThemeTitle = computed(() => findActiveThemeTitle(preferences.value))
 const hasPendingChanges = computed(() => selectedTheme.value !== savedThemeTitle.value)
 
 const themeStyles = THEMES.map((theme) => {
@@ -64,18 +62,18 @@ const themeStyles = THEMES.map((theme) => {
   return { backgroundStyle, iconStyle, linkStyle }
 })
 
-function handleSaveTheme() {
+async function handleSaveTheme() {
   const theme = THEMES.find(t => t.title === selectedTheme.value)
   if (!theme) {
     return
   }
 
-  emit("save", { ...props.preferences, ...theme.preferences })
+  await userStore.updatePreferences({ ...preferences.value, ...theme.preferences })
   saveAction.triggerSuccess()
 }
 
 // Select the theme that matches current preferences
-watch(() => props.preferences, prefs => selectedTheme.value = findActiveThemeTitle(prefs), { deep: true })
+watch(preferences, prefs => selectedTheme.value = findActiveThemeTitle(prefs), { deep: true })
 
 // Track an unsaved theme selection as pending
 watch([selectedTheme, savedThemeTitle], ([selected, saved]) => pendingThemeTitle.value = selected !== saved ? selected : null, { immediate: true })

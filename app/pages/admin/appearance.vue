@@ -1,12 +1,12 @@
 <template>
-  <div v-if="user" class="flex w-full flex-col md:flex-row">
+  <div v-if="user" class="flex w-full flex-col md:flex-row md:gap-4">
     <div
       v-motion :initial="{ opacity: 0, x: -20 }"
       :visible="{ opacity: 1, x: 0 }" :duration="1000"
-      class="min-h-screen w-full space-y-4 border-b-0! p-4 md:w-2/3 md:rounded-t-2xl md:border md:p-8"
+      class="min-h-screen w-full max-w-7xl space-y-4 border-b-0! p-4 md:rounded-t-2xl md:border md:p-8"
     >
       <AppearanceOptions />
-      <AppearanceThemes :preferences="themePreferences" @save="handleThemeSave" />
+      <AppearanceThemes />
     </div>
 
     <Preview />
@@ -19,13 +19,7 @@
 
 <script setup lang="ts">
 const { public: { baseURL } } = useRuntimeConfig()
-const userStore = useUserStore()
-const { user, loading } = storeToRefs(userStore)
-const themePreferences = computed(() => user.value?.preferences ?? DEFAULT_PREFERENCES)
-
-async function handleThemeSave(prefs: UserPreferences) {
-  await userStore.updatePreferences(prefs)
-}
+const { user, loading } = storeToRefs(useUserStore())
 
 useHead({
   title: "Appearance",

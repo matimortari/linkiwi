@@ -8,8 +8,7 @@
       <Carousel />
     </div>
 
-    <div class="hero-exposure" />
-    <div class="hero-vignette" />
+    <div class="hero-fade" />
 
     <div class="section-shell hero-shell">
       <header class="flex flex-col items-center gap-4 text-center">
@@ -123,13 +122,13 @@
           <div class="relative w-full max-w-md">
             <div class="overlay relative space-y-2 backdrop-blur-sm">
               <div class="grid grid-cols-2 gap-2">
-                <div v-for="item in MOCK_ANALYTICS" :key="item.label" class="card flex items-start gap-2">
+                <div v-for="item in MOCK_ANALYTICS" :key="item.label" class="card flex h-full items-start gap-2">
                   <icon :name="item.icon" size="30" class="text-caption-info shrink-0" />
-                  <div class="flex h-full flex-1 flex-col items-start text-start">
-                    <p class="text-caption">
+                  <div class="flex h-full min-w-0 flex-1 flex-col items-start text-start">
+                    <p class="text-caption line-clamp-2">
                       {{ item.label }}
                     </p>
-                    <span class="mt-auto w-full self-end text-end text-lg font-semibold">{{ item.value }}</span>
+                    <span class="mt-auto w-full text-lg font-semibold">{{ item.value }}</span>
                   </div>
                 </div>
               </div>
@@ -278,26 +277,23 @@ h2 {
   display: flex;
   align-items: center;
   pointer-events: none;
-  opacity: 0.55;
-  filter: brightness(0.65) saturate(0.8);
+  opacity: 0.35;
+  filter: saturate(0.7);
 }
 
-.hero-exposure {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background: color-mix(in srgb, var(--background) 45%, transparent);
-}
-
-.hero-vignette {
+.hero-fade {
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
   background:
-    radial-gradient(ellipse at center, transparent 10%, var(--background) 80%),
-    linear-gradient(to bottom, var(--background) 0%, transparent 60%, transparent 80%, var(--background) 100%);
+    radial-gradient(
+      ellipse 50% 45% at center,
+      color-mix(in srgb, var(--background) 85%, var(--foreground)) 0%,
+      transparent 70%
+    ),
+    linear-gradient(to bottom, var(--background) 0%, transparent 40%, transparent 70%, var(--background) 100%),
+    linear-gradient(to right, var(--background) 0%, transparent 15%, transparent 85%, var(--background) 100%);
 }
 
 .cta-wrapper-grid {

@@ -52,13 +52,13 @@
       </h4>
 
       <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
-        <div v-for="item in summaryItems" :key="item.label" class="flex size-full flex-row items-start justify-start gap-4 p-2">
-          <icon :name="item.icon" size="35" class="text-caption-info shrink-0" />
-          <div class="flex min-w-0 flex-1 flex-col items-start">
+        <div v-for="item in summaryItems" :key="item.label" class="flex h-full items-start gap-2 p-2">
+          <icon :name="item.icon" size="30" class="text-caption-info shrink-0" />
+          <div class="flex h-full min-w-0 flex-1 flex-col items-start text-start">
             <p class="text-caption line-clamp-2">
               {{ item.label }}
             </p>
-            <span class="font-semibold md:text-lg">{{ item.value }}</span>
+            <span class="mt-auto w-full text-lg font-semibold">{{ item.value }}</span>
           </div>
         </div>
       </div>

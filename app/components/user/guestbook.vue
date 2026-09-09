@@ -1,7 +1,7 @@
 <template>
   <div class="fixed right-4 bottom-4 z-40 flex flex-col items-end gap-2">
     <transition name="slide-fade">
-      <div v-if="isOpen" class="overlay absolute right-0 bottom-full mb-2 flex w-80 flex-col gap-2 md:w-96">
+      <div v-if="isOpen" class="overlay absolute right-0 bottom-full mb-2 flex w-80 flex-col gap-2 text-start md:w-96">
         <div class="flex items-center justify-between border-b pb-2">
           <h5>
             Leave a message

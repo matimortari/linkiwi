@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col items-center justify-center gap-4 py-12 text-center text-muted-foreground">
-    <div class="rounded-lg bg-muted p-4">
+    <div class="rounded-lg bg-card p-4">
       <icon :name="iconName || 'mdi:cancel'" size="30" />
     </div>
 
