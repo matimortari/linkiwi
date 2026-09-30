@@ -17,10 +17,6 @@
       </div>
 
       <div class="navigation-group shrink-0 self-end">
-        <button type="button" class="btn-danger" @click="handleResetPreferences">
-          <icon :name="resetAction.icon.value" size="20" />
-          <span>Reset All</span>
-        </button>
         <button type="button" class="btn-primary" @click="handleUpdatePreferences">
           <icon :name="saveAction.icon.value" size="20" />
           <span>Save</span>
@@ -39,21 +35,10 @@ const activeTab = ref("base")
 const preferences = ref<UserPreferences>({ ...DEFAULT_PREFERENCES })
 const localPreferences = useState<UserPreferences | null>("localPreferences", () => null)
 const saveAction = useActionIcon("mdi:content-save-check")
-const resetAction = useActionIcon("mdi:close")
 
 async function handleUpdatePreferences() {
   await userStore.updatePreferences(preferences.value)
   saveAction.triggerSuccess()
-}
-
-async function handleResetPreferences() {
-  if (!confirm("Are you sure you want to reset all appearance settings to default?")) {
-    return
-  }
-
-  preferences.value = { ...DEFAULT_PREFERENCES }
-  await userStore.updatePreferences(preferences.value)
-  resetAction.triggerSuccess()
 }
 
 // Watch for changes in user preferences and update local state accordingly

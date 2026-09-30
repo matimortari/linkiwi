@@ -13,30 +13,11 @@
   >
     <div class="flex h-full flex-col gap-8 px-12 md:px-0">
       <div class="navigation-group w-full">
-        <div v-if="user" ref="avatarDropdownRef" class="relative flex w-full items-center gap-2">
-          <div class="flex w-full min-w-0 flex-col overflow-hidden">
-            <button type="button" class="flex items-center gap-1 font-semibold hover:opacity-80" @click="dropdownOpen = !dropdownOpen">
-              <icon name="mdi:chevron-down" size="25" class="shrink-0 transition-transform" :class="{ 'rotate-180': dropdownOpen }" />
-              <span class="truncate text-sm wrap-break-word">{{ user.name }}</span>
-            </button>
-            <nuxt-link :to="`/${user.slug}`" class="text-caption truncate hover:underline">
-              @{{ user.slug }}
-            </nuxt-link>
-          </div>
-
-          <!-- Dropdown Menu -->
-          <transition name="dropdown">
-            <div v-if="dropdownOpen" class="absolute top-6 left-1/2 z-50 flex min-w-40 -translate-x-1/2 flex-col gap-1 rounded-xl border bg-card p-1 shadow-lg">
-              <button type="button" class="text-caption navigation-group rounded-lg p-2 whitespace-nowrap text-danger-foreground hover:bg-muted" @click="signOut">
-                <icon name="mdi:logout" size="15" />
-                <span>Sign Out</span>
-              </button>
-              <button type="button" class="text-caption navigation-group rounded-lg p-2 whitespace-nowrap text-danger-foreground hover:bg-danger/20" @click="handleDeleteUser">
-                <icon name="mdi:user-remove" size="15" class="text-caption-danger" />
-                <span>Delete Account</span>
-              </button>
-            </div>
-          </transition>
+        <div v-if="user" class="flex w-full min-w-0 flex-col overflow-hidden">
+          <span class="truncate text-sm font-semibold wrap-break-word">{{ user.name }}</span>
+          <nuxt-link :to="`/${user.slug}`" class="text-caption truncate hover:underline">
+            @{{ user.slug }}
+          </nuxt-link>
         </div>
 
         <div v-else class="flex w-full items-center gap-4">
@@ -71,6 +52,10 @@
           <icon :name="themeIcon" size="25" />
           <span>Toggle Theme</span>
         </button>
+        <button type="button" class="text-caption navigation-group justify-start rounded-lg rounded-l-none p-2 transition-all hover:bg-muted/30" @click="signOut">
+          <icon name="mdi:logout" size="25" />
+          <span>Sign Out</span>
+        </button>
       </nav>
     </div>
 
@@ -91,12 +76,7 @@ const route = useRoute()
 const { toggleTheme, themeIcon } = useTheme()
 const { signOut } = useSession()
 const { isShareDialogOpen, openDialog, closeDialog, closeSidebar, openSidebar } = useUIState()
-const userStore = useUserStore()
-const { user } = storeToRefs(userStore)
-const { clear } = useUserSession()
-const dropdownOpen = ref(false)
-const avatarDropdownRef = ref<HTMLElement | null>(null)
-useClickOutside(avatarDropdownRef, () => dropdownOpen.value = false, { escapeKey: true })
+const { user } = storeToRefs(useUserStore())
 
 function scrollLock(locked: boolean) {
   if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
@@ -108,29 +88,12 @@ function scrollLock(locked: boolean) {
   document.body.style.overflow = val
 }
 
-async function handleDeleteUser() {
-  dropdownOpen.value = false
-  if (!confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
-    return
-  }
-
-  await userStore.deleteUser()
-  await clear()
-  await navigateTo("/", { replace: true })
-}
-
 watch(() => props.isOpen, scrollLock, { immediate: true })
 
 onBeforeUnmount(() => scrollLock(false))
 </script>
 
 <style scoped>
-/* Override shared dropdown transform so the avatar dropdown's centering translate isn't clobbered */
-.dropdown-enter-from,
-.dropdown-leave-to {
-  transform: translateX(-50%) translateY(0.25rem) scale(0.98);
-}
-
 @media (max-width: 767px) {
   .slide-enter-from {
     transform: translateX(-100%);
