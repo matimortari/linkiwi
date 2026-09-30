@@ -4,46 +4,39 @@
       Analytics
     </h4>
 
-    <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-      <div class="flex flex-col gap-2 md:flex-row md:items-end">
-        <div class="flex flex-row gap-2">
-          <div class="flex flex-col gap-1">
-            <label for="analytics-date-from" class="text-caption">Date: From</label>
-            <input
-              id="analytics-date-from" v-model="fromDisplay"
-              v-maska="'####/##/##'" type="text"
-              placeholder="yyyy/mm/dd" class="max-w-32 text-sm md:max-w-44"
-              :class="{ 'border-danger!': fromDisplay && !dateFrom }" @blur="fromDisplay = commitDate(fromDisplay, 'dateFrom')"
-            >
-          </div>
-
-          <div class="flex flex-col gap-1">
-            <label for="analytics-date-to" class="text-caption">Date: To</label>
-            <input
-              id="analytics-date-to" v-model="toDisplay"
-              v-maska="'####/##/##'" type="text"
-              placeholder="yyyy/mm/dd" class="max-w-32 text-sm md:max-w-44"
-              :class="{ 'border-danger!': toDisplay && !dateTo }" @blur="toDisplay = commitDate(toDisplay, 'dateTo')"
-            >
-          </div>
+    <div class="flex flex-col gap-2 md:flex-row md:items-end">
+      <div class="flex flex-row gap-2">
+        <div class="flex flex-col gap-1">
+          <label for="analytics-date-from" class="text-caption">Date: From</label>
+          <input
+            id="analytics-date-from" v-model="fromDisplay"
+            v-maska="'####/##/##'" type="text"
+            placeholder="yyyy/mm/dd" class="max-w-32 text-sm md:max-w-44"
+            :class="{ 'border-danger!': fromDisplay && !dateFrom }" @blur="fromDisplay = commitDate(fromDisplay, 'dateFrom')"
+          >
         </div>
 
-        <div class="navigation-group">
-          <button type="button" class="btn-primary" @click="handleApplyFilter">
-            <icon name="mdi:filter-outline" size="20" />
-            <span>Apply</span>
-          </button>
-          <button type="button" class="btn-ghost" :disabled="!dateFrom && !dateTo" @click="handleClearFilter">
-            <icon name="mdi:filter-remove-outline" size="20" />
-            <span>Clear Filters</span>
-          </button>
+        <div class="flex flex-col gap-1">
+          <label for="analytics-date-to" class="text-caption">Date: To</label>
+          <input
+            id="analytics-date-to" v-model="toDisplay"
+            v-maska="'####/##/##'" type="text"
+            placeholder="yyyy/mm/dd" class="max-w-32 text-sm md:max-w-44"
+            :class="{ 'border-danger!': toDisplay && !dateTo }" @blur="toDisplay = commitDate(toDisplay, 'dateTo')"
+          >
         </div>
       </div>
 
-      <button type="button" class="btn-danger self-end md:self-start" @click="handleDeleteAnalytics">
-        <icon :name="resetAction.icon.value" size="20" />
-        <span>Reset Analytics</span>
-      </button>
+      <div class="navigation-group">
+        <button type="button" class="btn-primary" @click="handleApplyFilter">
+          <icon name="mdi:filter-outline" size="20" />
+          <span>Apply</span>
+        </button>
+        <button type="button" class="btn-ghost" :disabled="!dateFrom && !dateTo" @click="handleClearFilter">
+          <icon name="mdi:filter-remove-outline" size="20" />
+          <span>Clear Filters</span>
+        </button>
+      </div>
     </div>
 
     <div class="card flex flex-col gap-4">
@@ -71,7 +64,6 @@ import { vMaska } from "maska/vue"
 
 const analyticsStore = useAnalyticsStore()
 const { totalViews, totalClicks, clickRate, joinedAt } = useAnalyticsData()
-const resetAction = useActionIcon("mdi:trash-can-outline")
 const dateFrom = ref("")
 const dateTo = ref("")
 const fromDisplay = ref("")
@@ -135,15 +127,4 @@ const summaryItems = computed(() => [
   { label: "Click Rate", icon: "mdi:file-percent-outline", value: `${clickRate.value}%` },
   { label: "Joined On", icon: "mdi:calendar-clock-outline", value: joinedAt.value ? new Date(joinedAt.value).toLocaleDateString("en-US", { year: "2-digit", month: "short", day: "numeric" }) : "N/A" },
 ])
-
-async function handleDeleteAnalytics() {
-  const confirmed = confirm("Are you sure you want to reset all analytics data? This action cannot be undone.")
-  if (!confirmed) {
-    return
-  }
-
-  await analyticsStore.deleteAnalytics()
-  await analyticsStore.getAnalytics(dateFrom.value || undefined, dateTo.value || undefined)
-  resetAction.triggerSuccess()
-}
 </script>

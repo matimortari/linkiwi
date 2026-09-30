@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:p-8">
     <h4>
-      Layout Options
+      Profile Options
     </h4>
 
     <div class="card flex flex-col gap-4 md:mx-4">
@@ -57,7 +57,7 @@
     <div class="card flex flex-col gap-4 md:mx-4">
       <button type="button" class="flex w-full items-center justify-between text-left" @click="assetsOpen = !assetsOpen">
         <div class="flex flex-col gap-1">
-          <span class="text-sm font-medium">Assets</span>
+          <span class="text-sm font-medium">Asset Manager</span>
           <p class="text-caption">
             Images you've uploaded. Used for banners, links and photo grids.
           </p>
@@ -100,6 +100,59 @@
         </p>
       </template>
     </div>
+
+    <div class="card flex flex-col gap-4 border-danger/30 md:mx-4">
+      <button type="button" class="flex w-full items-center justify-between text-left" @click="dangerOpen = !dangerOpen">
+        <div class="flex flex-col gap-1">
+          <span class="text-sm font-medium text-danger-foreground">Danger Zone</span>
+          <p class="text-caption">
+            These actions cannot be undone. Proceed with caution.
+          </p>
+        </div>
+        <icon :name="dangerOpen ? 'mdi:chevron-up' : 'mdi:chevron-down'" size="20" class="shrink-0 text-muted-foreground" />
+      </button>
+
+      <template v-if="dangerOpen">
+        <div class="flex flex-col items-start justify-between gap-2 border-t pt-4 md:flex-row md:items-center">
+          <div class="flex flex-col gap-1">
+            <span class="text-sm font-medium">Reset Appearance</span>
+            <p class="text-caption">
+              Revert all appearance settings to the default values.
+            </p>
+          </div>
+          <button type="button" class="btn-danger self-end md:self-auto" @click="handleResetAppearance">
+            <icon name="mdi:restore" size="20" />
+            <span>Reset</span>
+          </button>
+        </div>
+
+        <div class="flex flex-col items-start justify-between gap-2 border-t pt-4 md:flex-row md:items-center">
+          <div class="flex flex-col gap-1">
+            <span class="text-sm font-medium">Delete Analytics</span>
+            <p class="text-caption">
+              Permanently remove all page view and click records.
+            </p>
+          </div>
+          <button type="button" class="btn-danger self-end md:self-auto" @click="handleDeleteAnalytics">
+            <icon name="mdi:trash-can-outline" size="20" />
+            <span>Delete</span>
+          </button>
+        </div>
+
+        <div class="flex flex-col items-start justify-between gap-2 border-t pt-4 md:flex-row md:items-center">
+          <div class="flex flex-col gap-1">
+            <span class="text-sm font-medium">Delete Account</span>
+            <p class="text-caption">
+              Permanently delete your account and all associated data.
+            </p>
+          </div>
+          <button type="button" class="btn-danger self-end md:self-auto" @click="handleDeleteAccount">
+            <icon name="mdi:user-remove" size="20" />
+            <span>Delete</span>
+          </button>
+        </div>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -107,9 +160,12 @@
 const userStore = useUserStore()
 const profileItemsStore = useProfileItemsStore()
 const analyticsStore = useAnalyticsStore()
+const { clear } = useUserSession()
+const localPreferences = useState<UserPreferences | null>("localPreferences", () => null)
 const { preferences } = storeToRefs(userStore)
 const { comments } = storeToRefs(analyticsStore)
 const assetsOpen = ref(false)
+const dangerOpen = ref(false)
 const guestbookEnabled = ref(preferences.value?.enableGuestbook ?? false)
 const guestbookAction = useActionIcon("mdi:content-save-check")
 
@@ -142,6 +198,34 @@ async function handleAssetDelete(id: string) {
   }
   await userStore.deleteAsset(id)
   await profileItemsStore.getItems()
+}
+
+async function handleResetAppearance() {
+  if (!confirm("Are you sure you want to reset all appearance settings to default?")) {
+    return
+  }
+
+  const defaults = { ...DEFAULT_PREFERENCES }
+  await userStore.updatePreferences(defaults)
+  localPreferences.value = { ...defaults }
+}
+
+async function handleDeleteAnalytics() {
+  if (!confirm("Are you sure you want to delete all analytics data? This action cannot be undone.")) {
+    return
+  }
+
+  await analyticsStore.deleteAnalytics()
+}
+
+async function handleDeleteAccount() {
+  if (!confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+    return
+  }
+
+  await userStore.deleteUser()
+  await clear()
+  await navigateTo("/", { replace: true })
 }
 
 onMounted(async () => {
