@@ -25,27 +25,17 @@ describe("updateUserSchema", () => {
 
 describe("updateUserPreferencesSchema", () => {
   it("accepts partial preferences with valid hex colors", () => {
-    expect(updateUserPreferencesSchema.parse({
-      backgroundType: "FLAT",
-      backgroundColor: "#fff",
-    })).toEqual({
-      backgroundType: "FLAT",
-      backgroundColor: "#fff",
-    })
+    expect(updateUserPreferencesSchema.parse({ backgroundType: "FLAT", backgroundColor: "#fff" })).toEqual({ backgroundType: "FLAT", backgroundColor: "#fff" })
   })
 
   it("rejects invalid hex colors", () => {
-    expect(updateUserPreferencesSchema.safeParse({
-      backgroundColor: "red",
-    }).success).toBe(false)
+    expect(updateUserPreferencesSchema.safeParse({ backgroundColor: "red" }).success).toBe(false)
   })
 })
 
 describe("userBannerSchema", () => {
   it("accepts a valid banner url", () => {
-    expect(userBannerSchema.parse({ url: "https://cdn.example.com/banner.png" })).toEqual({
-      url: "https://cdn.example.com/banner.png",
-    })
+    expect(userBannerSchema.parse({ url: "https://cdn.example.com/banner.png" })).toEqual({ url: "https://cdn.example.com/banner.png" })
   })
 
   it("rejects invalid urls", () => {
