@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+
+    env:
+      NODE_ENV: test
+      NUXT_PUBLIC_BASE_URL: http://localhost:3000
+      NUXT_SESSION_PASSWORD: ci-session-password-at-least-32-characters
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/ci?schema=public
+      REDIS_URL: redis://localhost:6379
+      ENCRYPTION_KEY: dGVzdC1lbmNyeXB0aW9uLWtleS0zMi1ieXRlcw==
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Lint
+        run: bun run lint
+
+      - name: Typecheck
+        run: bun run typecheck
+
+      - name: Test
+        run: bun run test
