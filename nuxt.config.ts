@@ -12,6 +12,7 @@ export default defineNuxtConfig({
       cookie: { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax" },
     },
   },
+  typescript: { tsConfig: { include: ["../tests/app/**/*"] } },
   routeRules: {
     "/**": {
       headers: {
