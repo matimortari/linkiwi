@@ -20,6 +20,22 @@ describe("analyticsRecordSchema", () => {
     })).toMatchObject({ type: "pageView", referrer: null })
   })
 
+  it("keeps plain referrer labels", () => {
+    expect(analyticsRecordSchema.parse({
+      type: "pageView",
+      slug: "ada-lovelace",
+      referrer: "twitter",
+    })).toMatchObject({ type: "pageView", referrer: "twitter" })
+  })
+
+  it("nulls referrers that look like urls but cannot be parsed", () => {
+    expect(analyticsRecordSchema.parse({
+      type: "pageView",
+      slug: "ada-lovelace",
+      referrer: "http://",
+    })).toMatchObject({ type: "pageView", referrer: null })
+  })
+
   it("rejects invalid pageView slugs", () => {
     expect(analyticsRecordSchema.safeParse({
       type: "pageView",

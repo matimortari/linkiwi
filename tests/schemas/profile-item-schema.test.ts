@@ -25,6 +25,46 @@ describe("createProfileItemSchema", () => {
     expect(createProfileItemSchema.parse({ type: "DIVIDER" })).toMatchObject({ type: "DIVIDER" })
   })
 
+  it("accepts ICON, WIDGET, and PHOTO_GRID items", () => {
+    const CUID2 = "tz4a98xxat96iws9zmbrgj3a"
+
+    expect(createProfileItemSchema.parse({
+      type: "ICON",
+      icon: { url: "https://example.com/me", platform: "github", logo: "simple-icons:github" },
+    })).toMatchObject({ type: "ICON" })
+
+    expect(createProfileItemSchema.parse({
+      type: "WIDGET",
+      widget: { type: "GITHUB", handle: "  octocat  " },
+    })).toMatchObject({
+      type: "WIDGET",
+      widget: { type: "GITHUB", handle: "octocat" },
+    })
+
+    expect(createProfileItemSchema.parse({
+      type: "PHOTO_GRID",
+      photoGrid: {
+        photos: [{ assetId: CUID2, url: "https://cdn.example.com/a.jpg", order: 0 }],
+      },
+    })).toMatchObject({ type: "PHOTO_GRID" })
+  })
+
+  it("rejects non-http ICON and PHOTO_GRID urls", () => {
+    const CUID2 = "tz4a98xxat96iws9zmbrgj3a"
+
+    expect(createProfileItemSchema.safeParse({
+      type: "ICON",
+      icon: { url: "ftp://example.com/me", platform: "github", logo: "simple-icons:github" },
+    }).success).toBe(false)
+
+    expect(createProfileItemSchema.safeParse({
+      type: "PHOTO_GRID",
+      photoGrid: {
+        photos: [{ assetId: CUID2, url: "ftp://cdn.example.com/a.jpg", order: 0 }],
+      },
+    }).success).toBe(false)
+  })
+
   it("rejects schedules where end is before start", () => {
     expect(createProfileItemSchema.safeParse({
       type: "DIVIDER",
