@@ -32,6 +32,7 @@
 - **TypeScript**.
 - **ESLint**.
 - **Tailwind CSS**.
+- **Vitest** and **@nuxt/test-utils** for testing.
 
 ## Contact
 

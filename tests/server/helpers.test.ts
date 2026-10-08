@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { categorizeReferrer, generateSlug, getUserFromSession, requireEnv, resolvePhotoGrid } from "../../server/utils/helpers"
-import { db, getUserSession, resetNitroMocks } from "./nitro-mocks"
+import { db, getUserSession, resetNitroMocks } from "../mocks/nitro-runtime"
 
 describe("requireEnv", () => {
   const key = "LINKIWI_TEST_REQUIRE_ENV"
