@@ -20,18 +20,8 @@ describe("useAnalyticsData", () => {
       { id: "v2", userId: "u1", createdAt: "2024-02-01T11:00:00.000Z", referrer: "https://www.twitter.com/x" },
     ]
     analytics.itemClicks = [
-      {
-        id: "c1",
-        itemId: "link-1",
-        createdAt: "2024-02-01T12:00:00.000Z",
-        item: { id: "link-1", type: "LINK", link: { label: "Site", url: "/" } } as ProfileItem,
-      },
-      {
-        id: "c2",
-        itemId: "icon-1",
-        createdAt: "2024-02-02T12:00:00.000Z",
-        item: { id: "icon-1", type: "ICON" } as ProfileItem,
-      },
+      { id: "c1", itemId: "link-1", createdAt: "2024-02-01T12:00:00.000Z", item: { id: "link-1", type: "LINK", link: { label: "Site", url: "/" } } as ProfileItem },
+      { id: "c2", itemId: "icon-1", createdAt: "2024-02-02T12:00:00.000Z", item: { id: "icon-1", type: "ICON" } as ProfileItem },
     ]
 
     const data = useAnalyticsData()
@@ -39,10 +29,7 @@ describe("useAnalyticsData", () => {
     expect(data.totalViews.value).toBe(2)
     expect(data.totalClicks.value).toBe(2)
     expect(data.clickRate.value).toBe("100.00")
-    expect(data.stats.value).toEqual([
-      { date: "2024-02-01", pageViews: 2, linkClicks: 1, iconClicks: 0, widgetClicks: 0 },
-      { date: "2024-02-02", pageViews: 0, linkClicks: 0, iconClicks: 1, widgetClicks: 0 },
-    ])
+    expect(data.stats.value).toEqual([{ date: "2024-02-01", pageViews: 2, linkClicks: 1, iconClicks: 0, widgetClicks: 0 }, { date: "2024-02-02", pageViews: 0, linkClicks: 0, iconClicks: 1, widgetClicks: 0 }])
     expect(data.pageViewsChartData.value?.datasets[0]?.data).toEqual([2, 0])
     expect(data.linkClicksChartData.value?.datasets[0]?.data).toEqual([1])
   })
@@ -57,18 +44,8 @@ describe("useAnalyticsData", () => {
       { id: "v3", userId: "u1", createdAt: "2024-02-01T12:00:00.000Z", referrer: "https://youtu.be/def" },
     ]
     analytics.itemClicks = [
-      {
-        id: "c1",
-        itemId: "link-1",
-        createdAt: "2024-02-01T12:00:00.000Z",
-        item: { id: "link-1", type: "LINK" } as ProfileItem,
-      },
-      {
-        id: "c2",
-        itemId: "link-1",
-        createdAt: "2024-02-01T13:00:00.000Z",
-        item: { id: "link-1", type: "LINK" } as ProfileItem,
-      },
+      { id: "c1", itemId: "link-1", createdAt: "2024-02-01T12:00:00.000Z", item: { id: "link-1", type: "LINK" } as ProfileItem },
+      { id: "c2", itemId: "link-1", createdAt: "2024-02-01T13:00:00.000Z", item: { id: "link-1", type: "LINK" } as ProfileItem },
     ]
     items.items = [
       { id: "link-1", type: "LINK", link: { label: "Portfolio", url: "/p" } } as ProfileItem,
@@ -79,10 +56,7 @@ describe("useAnalyticsData", () => {
 
     expect(data.topReferrers.value[0]).toMatchObject({ source: "youtube", label: "YouTube", count: 2 })
     expect(data.topReferrers.value.some(r => r.source === "direct")).toBe(true)
-    expect(data.clicksPerLinkChartData.value).toMatchObject({
-      labels: ["Portfolio"],
-      datasets: [{ data: [2] }],
-    })
+    expect(data.clicksPerLinkChartData.value).toMatchObject({ labels: ["Portfolio"], datasets: [{ data: [2] }] })
     expect(data.referrerChartData.value?.labels).toContain("YouTube")
   })
 })

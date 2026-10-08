@@ -80,17 +80,8 @@ describe("getUserFromSession", () => {
   })
 
   it("returns the session user when present", async () => {
-    getUserSession.mockResolvedValue({
-      user: { id: "u1", email: "a@b.c", name: "Ada", image: null, slug: "ada" },
-    })
-
-    await expect(getUserFromSession({} as any)).resolves.toEqual({
-      id: "u1",
-      email: "a@b.c",
-      name: "Ada",
-      image: "",
-      slug: "ada",
-    })
+    getUserSession.mockResolvedValue({ user: { id: "u1", email: "a@b.c", name: "Ada", image: null, slug: "ada" } })
+    await expect(getUserFromSession({} as any)).resolves.toEqual({ id: "u1", email: "a@b.c", name: "Ada", image: "", slug: "ada" })
   })
 
   it("throws when there is no session user", async () => {
@@ -111,9 +102,7 @@ describe("generateSlug", () => {
   })
 
   it("appends a suffix on collision and falls back after retries", async () => {
-    db.user.findUnique
-      .mockResolvedValueOnce({ id: "1" })
-      .mockResolvedValueOnce(null)
+    db.user.findUnique.mockResolvedValueOnce({ id: "1" }).mockResolvedValueOnce(null)
     const slug = await generateSlug("demo")
     expect(slug.startsWith("demo-")).toBe(true)
 
@@ -133,30 +122,16 @@ describe("resolvePhotoGrid", () => {
   })
 
   it("resolves owned assets in order", async () => {
-    db.userAsset.findMany.mockResolvedValue([
-      { id: "a1", url: "https://cdn/a1.jpg" },
-      { id: "a2", url: "https://cdn/a2.jpg" },
-    ])
+    db.userAsset.findMany.mockResolvedValue([{ id: "a1", url: "https://cdn/a1.jpg" }, { id: "a2", url: "https://cdn/a2.jpg" }])
 
-    await expect(resolvePhotoGrid([
-      { assetId: "a2", url: "ignored", order: 9, alt: "two" },
-      { assetId: "a1", url: "ignored", order: 1 },
-    ], "u1")).resolves.toEqual([
-      { assetId: "a2", url: "https://cdn/a2.jpg", order: 0, alt: "two" },
-      { assetId: "a1", url: "https://cdn/a1.jpg", order: 1, alt: null },
-    ])
+    await expect(resolvePhotoGrid([{ assetId: "a2", url: "ignored", order: 9, alt: "two" }, { assetId: "a1", url: "ignored", order: 1 }], "u1")).resolves.toEqual([{ assetId: "a2", url: "https://cdn/a2.jpg", order: 0, alt: "two" }, { assetId: "a1", url: "https://cdn/a1.jpg", order: 1, alt: null }])
   })
 
   it("rejects when none or only some assets are available", async () => {
     db.userAsset.findMany.mockResolvedValue([])
-    await expect(resolvePhotoGrid([
-      { assetId: "missing", url: "https://x", order: 0 },
-    ], "u1")).rejects.toMatchObject({ statusCode: 400 })
+    await expect(resolvePhotoGrid([{ assetId: "missing", url: "https://x", order: 0 }], "u1")).rejects.toMatchObject({ statusCode: 400 })
 
     db.userAsset.findMany.mockResolvedValue([{ id: "a1", url: "https://cdn/a1.jpg" }])
-    await expect(resolvePhotoGrid([
-      { assetId: "a1", url: "https://x", order: 0 },
-      { assetId: "missing", url: "https://y", order: 1 },
-    ], "u1")).rejects.toMatchObject({ statusCode: 400 })
+    await expect(resolvePhotoGrid([{ assetId: "a1", url: "https://x", order: 0 }, { assetId: "missing", url: "https://y", order: 1 }], "u1")).rejects.toMatchObject({ statusCode: 400 })
   })
 })
