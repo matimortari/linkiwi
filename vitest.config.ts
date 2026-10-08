@@ -9,7 +9,7 @@ for (const [key, value] of Object.entries(env)) {
   process.env[key] ??= value
 }
 
-const nitroMocks = fileURLToPath(new URL("./tests/server/nitro-mocks.ts", import.meta.url))
+const nitroMocks = fileURLToPath(new URL("./tests/mocks/nitro-runtime.ts", import.meta.url))
 
 export default defineConfig({
   test: {
@@ -17,7 +17,7 @@ export default defineConfig({
       provider: "v8",
       reporter: ["text", "html", "lcov"],
       reportsDirectory: "./coverage",
-      include: ["app/utils/**/*.{ts,js}", "shared/schemas/**/*.{ts,js}", "server/utils/**/*.{ts,js}"],
+      include: ["app/utils/**/*.{ts,js}", "app/composables/**/*.{ts,js}", "shared/schemas/**/*.{ts,js}", "server/utils/**/*.{ts,js}"],
       exclude: ["**/*.d.ts", "**/node_modules/**", "**/tests/**", "app/utils/constants.ts", "app/utils/preferences.ts", "app/utils/themes.ts", "app/utils/carousel-presets.ts"],
     },
     projects: [
