@@ -9,6 +9,13 @@ for (const [key, value] of Object.entries(env)) {
 
 export default defineConfig({
   test: {
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "html", "lcov"],
+      reportsDirectory: "./coverage",
+      include: ["app/utils/**/*.{ts,js}", "shared/schemas/**/*.{ts,js}", "server/utils/**/*.{ts,js}"],
+      exclude: ["**/*.d.ts", "**/node_modules/**", "**/tests/**"],
+    },
     projects: [
       {
         test: {
@@ -25,7 +32,6 @@ export default defineConfig({
           environment: "nuxt",
         },
       }),
-
     ],
   },
 })
