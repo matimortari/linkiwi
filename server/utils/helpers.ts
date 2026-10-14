@@ -29,6 +29,7 @@ export async function getUserFromSession(event: H3Event<EventHandlerRequest>): P
 
 /**
  * Generates a unique slug based on the provided base string.
+ * Falls back to a random slug when the base has no Latin alphanumeric characters.
  */
 export async function generateSlug(base: string = ""): Promise<string> {
   let cleaned = base.normalize("NFKD").replace(/[\u0300-\u036F]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-")
@@ -42,6 +43,10 @@ export async function generateSlug(base: string = ""): Promise<string> {
   }
 
   cleaned = cleaned.slice(start, end)
+  if (!cleaned) {
+    return crypto.randomUUID().replaceAll("-", "").slice(0, 12)
+  }
+
   for (let attempt = 0; attempt < 10; attempt++) {
     const slug = attempt === 0 ? cleaned : `${cleaned}-${crypto.randomUUID().slice(0, 6)}`
     const exists = await db.user.findUnique({ where: { slug }, select: { id: true } })

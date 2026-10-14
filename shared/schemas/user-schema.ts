@@ -1,5 +1,7 @@
 import { z } from "zod"
 
+export const RESERVED_SLUGS = new Set(["admin", "api", "brand", "legal", "sign-in"])
+
 const hexColorSchema = z.string().regex(/^#([A-F0-9]{6}|[A-F0-9]{3})$/i, "Invalid hex color")
 
 export const updateUserSchema = z.object({
@@ -15,6 +17,7 @@ export const updateUserSchema = z.object({
     .min(3, "Slug must be at least 3 characters")
     .max(50, "Slug must be at most 50 characters")
     .regex(/^[a-z0-9-]+$/, "Slug can only contain lowercase letters, numbers, and hyphens")
+    .refine(val => !RESERVED_SLUGS.has(val), { message: "This slug is reserved" })
     .optional(),
   description: z.string().max(300).optional(),
   location: z.string().max(100).optional(),

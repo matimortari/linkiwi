@@ -1,14 +1,24 @@
 export default defineEventHandler(async (event) => {
+  const ip = getRequestIP(event, { xForwardedFor: true }) || "unknown"
+  await enforceRateLimit(event, `widgets:${ip}`, 60)
+
   const platform = getRouterParam(event, "platform")?.toLowerCase()
-  const { handle } = getQuery(event)
-  if (!handle || typeof handle !== "string") {
+  const { handle: rawHandle } = getQuery(event)
+  if (!rawHandle || typeof rawHandle !== "string") {
     throw createError({ statusCode: 400, statusMessage: "Handle query parameter is required" })
   }
+
+  const handle = rawHandle.trim()
+  if (handle.length < 1 || handle.length > 100) {
+    throw createError({ statusCode: 400, statusMessage: "Handle must be between 1 and 100 characters" })
+  }
+
+  const cacheHandle = handle.toLowerCase()
 
   const handlers: Record<string, () => Promise<{ data: any }>> = {
     youtube: async () => {
       const youTubeApiKey = requireEnv("YOUTUBE_API_KEY")
-      const cacheKey = `widget:youtube:${handle}`
+      const cacheKey = CacheKeys.widget("youtube", cacheHandle)
       const cached = await getCached<any>(cacheKey)
       if (cached) {
         return { data: cached }
@@ -48,15 +58,15 @@ export default defineEventHandler(async (event) => {
     },
 
     github: async () => {
-      const cacheKey = `widget:github:${handle}`
+      const cacheKey = CacheKeys.widget("github", cacheHandle)
       const cached = await getCached<any>(cacheKey)
       if (cached) {
         return { data: cached }
       }
 
       const [userRes, reposRes] = await Promise.allSettled([
-        $fetch<any>(`https://api.github.com/users/${handle}`, { headers: { Accept: "application/vnd.github+json" } }),
-        $fetch<any[]>(`https://api.github.com/users/${handle}/repos`, { headers: { Accept: "application/vnd.github+json" }, query: { sort: "updated", per_page: 6, type: "owner" } }),
+        $fetch<any>(`https://api.github.com/users/${encodeURIComponent(handle)}`, { headers: { Accept: "application/vnd.github+json" } }),
+        $fetch<any[]>(`https://api.github.com/users/${encodeURIComponent(handle)}/repos`, { headers: { Accept: "application/vnd.github+json" }, query: { sort: "updated", per_page: 6, type: "owner" } }),
       ])
       if (userRes.status === "rejected") {
         throw createError({ statusCode: 404, statusMessage: `GitHub user '${handle}' not found` })

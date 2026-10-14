@@ -60,6 +60,8 @@ export const CacheKeys = {
   userAssets: (userId: string) => `user:assets:${userId}`,
   userComments: (userId: string) => `user:comments:${userId}`,
   analytics: (userId: string) => `user:analytics:${userId}`,
+  widget: (platform: string, handle: string) => `widget:${platform}:${handle}`,
+  geocode: (query: string) => `geocode:${query}`,
   rateLimit: (identifier: string) => `ratelimit:${identifier}`,
 }
 

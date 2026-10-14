@@ -107,7 +107,7 @@ export const useProfileItemsStore = defineStore("profile-items", () => {
 
   async function searchGeocode(q: string) {
     try {
-      const res = await $fetch<{ results: { label: string, lat: number, lng: number }[] }>("/api/geocode", { query: { q } })
+      const res = await $fetch<{ results: { label: string, lat: number, lng: number }[] }>("/api/geocode", { query: { q }, credentials: "include" })
       return res
     }
     catch (err: unknown) {

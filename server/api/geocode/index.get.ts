@@ -1,4 +1,7 @@
 export default defineEventHandler(async (event) => {
+  const sessionUser = await getUserFromSession(event)
+  await enforceRateLimit(event, `geocode:${sessionUser.id}`, 30)
+
   const query = getQuery(event)
   const q = typeof query.q === "string" ? query.q.trim() : ""
   if (!q || q.length < 2) {
@@ -8,8 +11,11 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: "Search query is too long" })
   }
 
-  const ip = getRequestIP(event, { xForwardedFor: true }) || "unknown"
-  await enforceRateLimit(event, `geocode:${ip}`, 60)
+  const cacheKey = CacheKeys.geocode(q.toLowerCase())
+  const cached = await getCached<{ results: { label: string, lat: number, lng: number }[] }>(cacheKey)
+  if (cached) {
+    return cached
+  }
 
   const results = await $fetch<any[]>("https://nominatim.openstreetmap.org/search", {
     query: { q, format: "json", limit: 5 },
@@ -18,7 +24,10 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 502, statusMessage: "Failed to look up location" })
   })
 
-  return { results: (results || []).map(result => ({ label: result.display_name, lat: Number(result.lat), lng: Number(result.lon) })) }
+  const payload = { results: (results || []).map(result => ({ label: result.display_name, lat: Number(result.lat), lng: Number(result.lon) })) }
+  await setCached(cacheKey, payload, 24 * 60 * 60)
+
+  return payload
 })
 
 defineRouteMeta({
@@ -32,6 +41,7 @@ defineRouteMeta({
     responses: {
       200: { description: "Matching places with coordinates" },
       400: { description: "Invalid query" },
+      401: { description: "Unauthorized" },
       429: { description: "Rate limit exceeded" },
       502: { description: "Upstream geocoding failed" },
     },
