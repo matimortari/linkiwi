@@ -98,7 +98,12 @@ describe("generateSlug", () => {
   it("slugifies and returns the first available slug", async () => {
     db.user.findUnique.mockResolvedValue(null)
     await expect(generateSlug("  Café App!! ")).resolves.toBe("cafe-app")
-    await expect(generateSlug()).resolves.toBe("")
+  })
+
+  it("falls back to a random slug when the base has no Latin characters", async () => {
+    db.user.findUnique.mockResolvedValue(null)
+    await expect(generateSlug()).resolves.toMatch(/^[a-f0-9]{12}$/)
+    await expect(generateSlug("山田太郎")).resolves.toMatch(/^[a-f0-9]{12}$/)
   })
 
   it("appends a suffix on collision and falls back after retries", async () => {

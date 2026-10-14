@@ -18,6 +18,12 @@ describe("updateUserSchema", () => {
     expect(updateUserSchema.safeParse({ slug: "Ada_Lovelace" }).success).toBe(false)
   })
 
+  it("rejects reserved slugs", () => {
+    for (const slug of ["admin", "api", "brand", "legal", "sign-in"]) {
+      expect(updateUserSchema.safeParse({ slug }).success).toBe(false)
+    }
+  })
+
   it("allows an empty object", () => {
     expect(updateUserSchema.parse({})).toEqual({})
   })
