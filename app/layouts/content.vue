@@ -5,17 +5,17 @@
     <div v-if="isTocOpen" aria-hidden="true" class="fixed inset-0 z-30 bg-black/50 backdrop-blur-xs xl:hidden" @click="isTocOpen = false" />
 
     <aside
-      id="table-of-contents" class="bg-background fixed top-16 left-0 z-30 h-[calc(100vh-4rem)] w-80 overflow-y-auto p-8 transition-transform md:z-20 xl:sticky xl:top-24 xl:h-[calc(100vh-6rem)] xl:translate-x-0"
+      id="table-of-contents" class="fixed top-16 left-0 z-30 h-[calc(100vh-4rem)] w-80 overflow-y-auto bg-background p-8 transition-transform md:z-20 xl:sticky xl:top-24 xl:h-[calc(100vh-6rem)] xl:translate-x-0"
       :class="isTocOpen ? 'translate-x-0' : '-translate-x-full'"
     >
-      <p class="text-muted-foreground mb-4 text-sm font-bold tracking-wider uppercase">
+      <p class="mb-4 text-sm font-bold tracking-wider text-muted-foreground uppercase">
         On this page
       </p>
       <nav class="flex flex-col gap-2">
         <nuxt-link
           v-for="heading in headings" :key="heading.id"
-          :to="`#${heading.id}`" class="hover:text-primary text-sm transition-colors"
-          :class="[heading.level === 3 ? 'pl-3' : '', activeId === heading.id ? 'text-primary font-semibold' : 'text-muted-foreground']" @click="handleTocClick(heading.id)"
+          :to="`#${heading.id}`" class="text-sm transition-colors hover:text-primary"
+          :class="[heading.level === 3 ? 'pl-3' : '', activeId === heading.id ? 'font-semibold text-primary' : 'text-muted-foreground']" @click="handleTocClick(heading.id)"
         >
           {{ heading.text }}
         </nuxt-link>

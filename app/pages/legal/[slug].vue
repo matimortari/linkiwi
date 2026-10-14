@@ -1,9 +1,9 @@
 <template>
   <h1>
-    {{ LEGAL_PAGES[slug]?.title }}
+    {{ page.title }}
   </h1>
 
-  <div v-for="(section, index) in LEGAL_PAGES[slug]?.content" :key="index">
+  <div v-for="(section, index) in page.content" :key="index">
     <h2 :id="slugify(section.title)">
       {{ section.title }}
     </h2>
@@ -25,74 +25,99 @@ const PRIVACY_POLICY: { title: string, paragraphs: string[], list?: string[] }[]
   {
     title: "Introduction",
     paragraphs: [
-      "This Privacy Policy explains how LinKiwi collects, uses, and protects your personal information when you access or use our services.",
-      "In this Policy, “we”, “us”, and “our” refer to LinKiwi and its affiliates, and “you” and “your” refer to users of our services.",
+      "This Privacy Policy explains how LinKiwi collects, uses, and protects your personal information when you access or use the LinKiwi web application.",
+      "In this Policy, “we”, “us”, and “our” refer to the controller identified below, and “you” and “your” refer to users of the service.",
+    ],
+  },
+  {
+    title: "Controller",
+    paragraphs: [
+      "The controller of personal data processed through LinKiwi is <strong>Matheus Mortari</strong>, a natural person operating the service.",
+      "Contact for privacy requests: <a href='mailto:matheus.felipe.19rt@gmail.com'>matheus.felipe.19rt@gmail.com</a>. The same contact acts as the channel for data-subject requests under the Brazilian General Data Protection Law (LGPD — Lei nº 13.709/2018).",
+    ],
+  },
+  {
+    title: "Legal Bases (LGPD)",
+    paragraphs: ["We process personal data only when a legal basis under LGPD Article 7 applies, including:"],
+    list: [
+      "<strong>Performance of a contract</strong> (Art. 7, V) — creating and maintaining your account, authenticating you, hosting your profile page and content, and providing the features you use.",
+      "<strong>Legitimate interest</strong> (Art. 7, IX) — security, fraud prevention, rate limiting, and product analytics that show you page views and click metrics for your own profile, balanced against your rights and visitors’ expectations.",
+      "<strong>Compliance with a legal obligation</strong> (Art. 7, II) — when we must retain or disclose data to meet applicable law.",
+      "<strong>Consent</strong> (Art. 7, I) — where an OAuth provider requires it, or where we ask for an optional permission that is not necessary for the core service.",
     ],
   },
   {
     title: "Information We Collect",
-    paragraphs: ["We collect information to provide and improve our services, including:"],
+    paragraphs: ["We collect information needed to operate and secure the service, including:"],
     list: [
-      "Account information from OAuth providers (Google, GitHub).",
-      "Content you create or share on your LinKiwi page.",
-      "Usage analytics such as page views, clicks, and interactions.",
-      "Technical data such as device type, browser, IP address, and cookies.",
+      "Account information received from OAuth providers (Google, GitHub), such as name, email, and profile image.",
+      "Content you create or share on your LinKiwi page (links, icons, widgets, photos, location blocks, guestbook entries, and appearance preferences).",
+      "Profile analytics such as page views, item clicks, and referrer information, so you can measure engagement with your page.",
+      "Technical data such as IP address, user agent, and authentication cookies.",
+      "Cloudflare Web Analytics on the production website.",
     ],
   },
   {
     title: "How We Use Your Information",
     paragraphs: ["We use the information we collect to:"],
     list: [
-      "Provide, maintain, and improve the service.",
+      "Provide, maintain, and secure the service.",
       "Authenticate users and secure accounts.",
-      "Analyze usage trends and generate analytics for users.",
-      "Communicate important updates, including policy changes.",
+      "Display your public profile and host the content you publish.",
+      "Generate profile analytics (views, clicks, referrers) for the account owner.",
+      "Communicate important updates, including security alerts and policy changes.",
+      "Comply with legal obligations and protect the platform and its users.",
     ],
   },
   {
     title: "Sharing and Disclosure",
-    paragraphs: ["We do not sell your personal information. We may share information in the following situations:"],
+    paragraphs: ["We do not sell your personal information. We may share data under the following circumstances:"],
     list: [
-      "With service providers that help us operate the platform.",
-      "When required by law, legal process, or governmental request.",
-      "To protect rights, safety, or property of LinKiwi and our users.",
+      "With infrastructure and service providers that help us host, secure, or deliver the platform (for example hosting, database, Redis, object storage, and Cloudflare).",
+      "With OAuth identity providers when you choose to sign in through them.",
+      "Publicly, when you publish content on your LinKiwi page — that content is visible to visitors of your profile URL.",
+      "When required by law, legal process, or a competent authority.",
+      "To protect the rights, safety, or property of LinKiwi, its users, or third parties.",
     ],
   },
   {
     title: "Cookies and Tracking",
-    paragraphs: ["LinKiwi uses cookies and similar technologies to enhance your experience, measure usage, and improve our services."],
+    paragraphs: ["LinKiwi uses cookies and similar technologies as follows:"],
     list: [
-      "Essential cookies to enable account login and security.",
-      "Analytics cookies to monitor traffic and feature usage.",
-      "Optional cookies for personalized preferences and improvements.",
+      "Essential cookies for authentication and session security.",
+      "Cloudflare Web Analytics on the production website.",
+      "Local preference storage for settings such as color theme.",
     ],
   },
   {
     title: "Data Retention and Security",
     paragraphs: [
-      "We retain personal data as long as necessary to provide our services or comply with legal obligations. We implement technical and organizational measures to protect data from unauthorized access, disclosure, or misuse.",
+      "We retain personal data only as long as necessary to provide the service or comply with legal obligations. You may delete your account from the admin interface. We apply technical and organizational measures intended to reduce unauthorized access, disclosure, or misuse.",
     ],
   },
   {
-    title: "Your Rights",
-    paragraphs: ["Depending on your jurisdiction, you may have rights regarding your personal data, including:"],
+    title: "Your Rights (LGPD)",
+    paragraphs: ["Under the LGPD, you may request:"],
     list: [
-      "Accessing or correcting your personal information.",
-      "Requesting deletion of your personal information.",
-      "Objecting to or restricting certain processing activities.",
-      "Withdrawing consent where applicable.",
+      "Confirmation of processing and access to your personal data.",
+      "Correction of incomplete, inaccurate, or outdated data.",
+      "Anonymization, blocking, or deletion of unnecessary or excessive data, or of data processed in noncompliance with the LGPD.",
+      "Portability of data to another service provider, subject to ANPD regulation and technical feasibility.",
+      "Information about public and private entities with which we shared data.",
+      "Information about the possibility of denying consent and the consequences of that denial.",
+      "Revocation of consent, where processing is based on consent.",
     ],
   },
   {
     title: "Changes to This Policy",
     paragraphs: [
-      "We may update this Privacy Policy from time to time. Continued use of LinKiwi constitutes acceptance of the updated policy. We encourage you to review this page periodically.",
+      "We may update this Privacy Policy from time to time. Material changes will be reflected on this page. Continued use of LinKiwi after an update constitutes acceptance of the revised policy.",
     ],
   },
   {
     title: "Contact",
     paragraphs: [
-      "If you have any questions about the Privacy Policy, email the maintainer at <a href='mailto:matheus.felipe.19rt@gmail.com'>matheus.felipe.19rt@gmail.com</a>.",
+      "Privacy and LGPD requests: <a href='mailto:matheus.felipe.19rt@gmail.com'>matheus.felipe.19rt@gmail.com</a>.",
     ],
   },
 ]
@@ -101,25 +126,25 @@ const TERMS_OF_SERVICE: { title: string, paragraphs: string[], list?: string[] }
   {
     title: "Introduction",
     paragraphs: [
-      "Welcome to LinKiwi! By accessing or using our service, you agree to comply with and be bound by these Terms of Service. If you do not agree, please do not use LinKiwi.",
-      "In these Terms, “we”, “us”, and “our” refer to LinKiwi and its affiliates, and “you” and “your” refer to users. These Terms govern your access to and use of LinKiwi, including all features, websites, and applications.",
+      "Welcome to LinKiwi. By accessing or using the service, you agree to these Terms of Service. If you do not agree, do not use LinKiwi.",
+      "In these Terms, “we”, “us”, and “our” refer to Matheus Mortari operating LinKiwi, and “you” and “your” refer to users of the service. These Terms govern access to and use of LinKiwi, including the website and API.",
     ],
   },
   {
     title: "Use of Service & Data",
     paragraphs: [
-      "LinKiwi helps users create and share a personal landing page. You agree not to misuse the service or engage in prohibited activities. You retain ownership of the content you add, while granting us a limited license to host and display it solely for service purposes. LinKiwi collects analytics and data required for authentication and functionality; see our Privacy Policy for details.",
+      "LinKiwi helps users create and share a personal landing page. You retain ownership of the content you add, and you grant LinKiwi a limited license to host, store, and display that content solely to provide the service. Authentication, analytics, and related processing are described in our Privacy Policy.",
     ],
     list: [
-      "Do not upload or link to illegal content.",
-      "Do not interfere with other users pages or the platform.",
+      "Do not upload or link to illegal, harmful, or malicious content.",
+      "Do not interfere with other users’ pages or the platform.",
       "Do not use LinKiwi for phishing, spamming, or distributing malware.",
     ],
   },
   {
     title: "Disclaimers & Termination",
     paragraphs: [
-      "LinKiwi is provided on an \"as-is\" basis. We do not guarantee uninterrupted access, error-free performance, or analytics accuracy. We may suspend or terminate your account if you violate these Terms or engage in harmful activity. You may also delete your account at any time.",
+      "LinKiwi is provided on an \"as-is\" basis. We do not guarantee uninterrupted access, error-free performance, or analytics accuracy. We may suspend or terminate your account if you violate these Terms, misuse the service, or engage in harmful activity. You may also delete your account at any time.",
       "Accounts may be suspended or terminated in cases including, but not limited to:",
     ],
     list: [
@@ -132,33 +157,38 @@ const TERMS_OF_SERVICE: { title: string, paragraphs: string[], list?: string[] }
   {
     title: "Governing Law",
     paragraphs: [
-      "These Terms are governed by the laws of the jurisdiction where LinKiwi operates. Any disputes will be resolved in the competent courts of that jurisdiction.",
+      "These Terms are governed by the laws of the Federative Republic of Brazil. Disputes shall be submitted to the courts of the controller's domicile in Brazil, without prejudice to mandatory consumer-protection venues where applicable.",
     ],
   },
   {
     title: "Changes to Terms",
     paragraphs: [
-      "We may update these Terms from time to time. Continued use of LinKiwi constitutes acceptance of the updated Terms. We encourage you to review the Terms periodically.",
+      "We may update these Terms from time to time. Continued use of LinKiwi after an update constitutes acceptance of the revised Terms. Review this page periodically.",
     ],
   },
   {
     title: "Contact",
     paragraphs: [
-      "If you have any questions about the Terms of Service, email the maintainer at <a href='mailto:matheus.felipe.19rt@gmail.com'>matheus.felipe.19rt@gmail.com</a>.",
+      "Questions about these Terms: <a href='mailto:matheus.felipe.19rt@gmail.com'>matheus.felipe.19rt@gmail.com</a>.",
     ],
   },
 ]
 
-const LEGAL_PAGES: Record<string, { title: string, description: string, content: { title: string, paragraphs: string[], list?: string[] }[] }> = {
+const LEGAL_PAGES = {
   privacy: { title: "Privacy Policy", description: "Read the privacy policy for LinKiwi.", content: PRIVACY_POLICY },
   terms: { title: "Terms of Service", description: "Read the terms of service for LinKiwi.", content: TERMS_OF_SERVICE },
-}
+} as const
+
+const page = LEGAL_PAGES[slug as keyof typeof LEGAL_PAGES]
 
 useHead({
-  title: LEGAL_PAGES[slug]?.title,
+  title: page.title,
   link: [{ rel: "canonical", href: `${baseURL}/legal/${slug}` }],
-  meta: [{ name: "description", content: LEGAL_PAGES[slug]?.description }],
+  meta: [{ name: "description", content: page.description }],
 })
 
-definePageMeta({ layout: "content" })
+definePageMeta({
+  layout: "content",
+  validate: route => typeof route.params.slug === "string" && ["privacy", "terms"].includes(route.params.slug),
+})
 </script>
