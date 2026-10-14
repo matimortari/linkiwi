@@ -36,7 +36,7 @@
   </section>
 
   <section
-    id="product" v-motion
+    id="features" v-motion
     :initial="{ opacity: 0, y: 20 }" :visible-once="{ opacity: 1, y: 0 }"
     :duration="1000" class="section-shell relative w-full py-24 text-center"
   >

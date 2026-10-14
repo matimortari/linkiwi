@@ -11,7 +11,7 @@
       <img v-if="user?.banner?.url" :src="user.banner.url" alt="Banner" class="size-full object-cover">
       <span v-else class="text-caption flex size-full items-center justify-center">No banner uploaded</span>
       <div class="absolute inset-0 hidden items-center justify-center bg-muted/30 opacity-0 backdrop-blur-xs transition-all md:flex md:group-hover:opacity-100">
-        <icon name="mdi:image-edit-outline" size="30" class="text-foreground" />
+        <icon name="mdi:image-edit-outline" size="30" class="text-[#f9fafb]" />
       </div>
       <span class="absolute top-2 right-2 flex size-8 items-center justify-center rounded-lg border bg-card/80 md:hidden">
         <icon name="mdi:image-edit-outline" size="20" />
@@ -27,7 +27,7 @@
               type="button" class="absolute inset-0 hidden cursor-pointer items-center justify-center bg-muted/30 opacity-0 backdrop-blur-xs transition-all md:flex md:group-hover:opacity-100"
               aria-label="Change picture" @click="avatarInput?.click()"
             >
-              <icon name="mdi:camera" size="20" />
+              <icon name="mdi:camera" size="20" class="text-[#f9fafb]" />
             </button>
           </div>
           <input

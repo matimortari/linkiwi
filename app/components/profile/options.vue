@@ -42,7 +42,7 @@
               <div class="navigation-group shrink-0">
                 <span class="text-caption">{{ formatDate(new Date(comment.createdAt)) }}</span>
                 <button type="button" class="btn-ghost p-0!" aria-label="Delete comment" @click="handleDeleteComment(comment.id)">
-                  <icon name="mdi:delete-outline" size="15" />
+                  <icon name="mdi:remove-circle-outline" size="20" class="text-caption-danger" />
                 </button>
               </div>
             </div>
