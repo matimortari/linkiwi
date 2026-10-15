@@ -73,7 +73,7 @@ export default defineNuxtConfig({
   },
   icon: {
     mode: "svg",
-    serverBundle: "remote",
+    serverBundle: { collections: ["mdi", "simple-icons"] },
     clientBundle: { scan: true },
   },
   ogImage: {

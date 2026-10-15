@@ -9,7 +9,7 @@ concurrency:
 
 jobs:
   quality:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     env:
       NODE_ENV: test
@@ -19,7 +19,7 @@ jobs:
       REDIS_URL: redis://localhost:6379
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: oven-sh/setup-bun@v2
         with:
