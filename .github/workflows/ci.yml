@@ -14,7 +14,7 @@ jobs:
     env:
       NODE_ENV: test
       NUXT_PUBLIC_BASE_URL: http://localhost:3000
-      NUXT_SESSION_PASSWORD: ci-session-password-at-least-32-characters
+      NUXT_APP_SECRET: ci-session-password-at-least-32-characters
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/ci?schema=public
       REDIS_URL: redis://localhost:6379
 

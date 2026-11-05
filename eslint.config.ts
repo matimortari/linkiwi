@@ -44,6 +44,7 @@ export default antfu({
     "better-tailwindcss/enforce-consistent-line-wrapping": "off",
     "markdown/fenced-code-language": "off",
     "e18e/prefer-static-regex": "off",
+    "antfu/reasonable-newline": "off",
   },
 }, {
   files: ["**/*.vue"],
