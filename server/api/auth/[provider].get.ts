@@ -1,4 +1,6 @@
 import type { EventHandlerRequest, H3Event } from "h3"
+import type { RequestEvent } from "nuxt/server"
+import { sendRedirect as redirectOAuthError } from "nuxt/server"
 
 function getOAuthConfig(provider: string) {
   const baseUrl = requireEnv("NUXT_PUBLIC_BASE_URL")
@@ -63,9 +65,9 @@ export default defineEventHandler(async (event: H3Event) => {
       }
 
       return handleOAuthUser(event, { ...userData, provider })
-    }, async onError(event: H3Event<EventHandlerRequest>) {
-      return sendRedirect(event, `/sign-in?error=${provider}_oauth_failed`)
-    } })(event)
+    }, async onError(event: RequestEvent) {
+      return redirectOAuthError(event, `/sign-in?error=${provider}_oauth_failed`)
+    } })(event as unknown as RequestEvent)
   }
   catch (err: unknown) {
     throw createError({ statusCode: 500, message: "OAuth processing failed", data: { provider, error: err instanceof Error ? err.message : String(err) } })
