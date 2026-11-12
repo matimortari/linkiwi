@@ -7,7 +7,7 @@ export const SESSION_ACTIVITY_TOUCH_MS = 60 * 1000
 /**
  * Registers a session id in Redis so logout can revoke sealed cookies.
  */
-export async function registerSession(sessionId: string, userId: string, expiresAt: Date): Promise<boolean> {
+export function registerSession(sessionId: string, userId: string, expiresAt: Date): Promise<boolean> {
   return setCached(CacheKeys.session(sessionId), { userId }, Math.max(1, Math.ceil((expiresAt.getTime() - Date.now()) / 1000)))
 }
 

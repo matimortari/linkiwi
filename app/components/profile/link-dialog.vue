@@ -73,7 +73,7 @@ function buildLinkPayload() {
   }
 }
 
-async function toggleAssetPicker() {
+function toggleAssetPicker() {
   if (!showAssetPicker.value && !userStore.assets.length) {
     return
   }
