@@ -3,6 +3,9 @@ name: Trigger Railway deploy
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   trigger-deploy:
     runs-on: ubuntu-24.04
@@ -11,17 +14,19 @@ jobs:
       - uses: actions/checkout@v5
 
       - name: Install Railway CLI
-        run: npm install -g @railway/cli
+        run: npm install -g @railway/cli@5.71.0
 
       - name: Push WindKeep secrets to Railway
         env:
           WINDKEEP_URL: ${{ secrets.WINDKEEP_URL }}
           WINDKEEP_PROJECT_ID: ${{ secrets.WINDKEEP_PROJECT_ID }}
           WINDKEEP_TOKEN: ${{ secrets.WINDKEEP_TOKEN }}
+          WINDKEEP_ENVIRONMENT: ${{ secrets.WINDKEEP_ENVIRONMENT }}
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_SERVICE: ${{ secrets.RAILWAY_SERVICE }}
         run: |
           set -euo pipefail
+          : "${WINDKEEP_ENVIRONMENT:?Set WINDKEEP_ENVIRONMENT (e.g. PRODUCTION)}"
 
           HTTP_CODE=$(curl -s -o /tmp/wk_response.json -w "%{http_code}" \
             -H "Authorization: Bearer ${WINDKEEP_TOKEN}" \
@@ -32,20 +37,38 @@ jobs:
             exit 1
           fi
 
-          RESPONSE=$(cat /tmp/wk_response.json)
           VARS_ARGS=()
-          while IFS=$'\t' read -r KEY VALUE; do
+          WK_KEYS=()
+          COUNT=0
+          while IFS= read -r -d '' KEY && IFS= read -r -d '' VALUE; do
             echo "::add-mask::${VALUE}"
             VARS_ARGS+=("${KEY}=${VALUE}")
-          done < <(echo "$RESPONSE" | jq -r '
-            .decryptedSecrets[] | . as $s | .values[] | [($s.key | ascii_upcase), .value] | @tsv
-          ')
+            WK_KEYS+=("${KEY}")
+            COUNT=$((COUNT + 1))
+          done < <(jq -rj --arg env "$WINDKEEP_ENVIRONMENT" '.decryptedSecrets[] as $s | $s.values[] | select(.environment == $env) | "\($s.key | ascii_upcase)\u0000\(.value)\u0000"' /tmp/wk_response.json)
 
-          if [ ${#VARS_ARGS[@]} -eq 0 ]; then
-            echo "No secrets returned." && exit 1
+          if [ "$COUNT" -eq 0 ]; then
+            echo "No secrets returned for environment $WINDKEEP_ENVIRONMENT." && exit 1
           fi
 
-          railway variables set "${VARS_ARGS[@]}" --service "$RAILWAY_SERVICE"
+          railway variables set "${VARS_ARGS[@]}" --skip-deploys --service "$RAILWAY_SERVICE"
+
+          # Remove keys this job previously synced that are no longer in WindKeep.
+          # Dashboard-only / Railway-injected vars are left alone.
+          SYNC_META=WINDKEEP_SYNCED_KEYS
+          mapfile -t PREV_KEYS < <(railway variables --json --service "$RAILWAY_SERVICE" | jq -r --arg k "$SYNC_META" '.[$k] // empty | split(",")[] | select(length > 0)')
+          for OLD in "${PREV_KEYS[@]}"; do
+            found=0
+            for K in "${WK_KEYS[@]}"; do
+              [ "$OLD" = "$K" ] && found=1 && break
+            done
+            if [ "$found" -eq 0 ]; then
+              railway variables delete "$OLD" --skip-deploys --service "$RAILWAY_SERVICE"
+            fi
+          done
+
+          JOINED=$(IFS=,; echo "${WK_KEYS[*]}")
+          railway variables set "${SYNC_META}=${JOINED}" --skip-deploys --service "$RAILWAY_SERVICE"
 
       - name: Trigger Railway deploy
         env:
