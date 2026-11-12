@@ -209,7 +209,7 @@ function selectAsset(asset: { id: string, url: string }) {
   pendingAsset.value = { id: asset.id, url: asset.url }
 }
 
-async function toggleLibrary() {
+function toggleLibrary() {
   if (!showLibrary.value && !userStore.assets.length) {
     return
   }

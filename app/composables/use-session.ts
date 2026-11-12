@@ -34,12 +34,6 @@ export function useSession() {
     initialized = true
     const { loggedIn } = useUserSession()
 
-    const handleStorageChange = async (e: StorageEvent) => {
-      if (e.key === "nuxt-session" && !e.newValue && loggedIn.value) {
-        await navigateTo("/")
-      }
-    }
-
     watch(loggedIn, (isLoggedIn) => {
       if (sessionCheckInterval) {
         clearInterval(sessionCheckInterval)
@@ -58,8 +52,6 @@ export function useSession() {
         }, 5 * 60 * 1000) // 5 minutes
       }
     }, { immediate: true })
-
-    globalThis.addEventListener("storage", handleStorageChange)
   }
 
   return { signIn, signOut }
