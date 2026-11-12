@@ -65,7 +65,7 @@ export default defineEventHandler(async (event: H3Event) => {
       }
 
       return handleOAuthUser(event, { ...userData, provider })
-    }, async onError(event: RequestEvent) {
+    }, onError(event: RequestEvent) {
       return redirectOAuthError(event, `/sign-in?error=${provider}_oauth_failed`)
     } })(event as unknown as RequestEvent)
   }
