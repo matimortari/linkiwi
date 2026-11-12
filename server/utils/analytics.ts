@@ -132,15 +132,16 @@ export async function fetchAnalyticsSummary(userId: string, dateFrom?: Date, dat
       ORDER BY 1
     `,
     db.$queryRaw<LinkClickCount[]>`
-      SELECT pil."itemId" AS "itemId", pil.label AS label, COUNT(*)::int AS count
+      SELECT pi.id AS "itemId", COALESCE(pil.label, pii.platform, 'Unknown') AS label, COUNT(*)::int AS count
       FROM "ItemClick" ic
       INNER JOIN "ProfileItem" pi ON pi.id = ic."itemId"
-      INNER JOIN "ProfileItemLink" pil ON pil."itemId" = pi.id
+      LEFT JOIN "ProfileItemLink" pil ON pil."itemId" = pi.id
+      LEFT JOIN "ProfileItemIcon" pii ON pii."itemId" = pi.id
       WHERE pi."userId" = ${userId}
-        AND pi.type = 'LINK'
+        AND pi.type IN ('LINK', 'ICON')
         AND ic."createdAt" >= ${from}
         AND ic."createdAt" <= ${to}
-      GROUP BY pil."itemId", pil.label
+      GROUP BY pi.id, COALESCE(pil.label, pii.platform, 'Unknown')
       ORDER BY count DESC
     `,
   ])

@@ -68,8 +68,8 @@ export function useAnalyticsData() {
   const linkClicksByDate = computed(() => Object.fromEntries(stats.value.filter(row => row.linkClicks > 0).map(row => [row.date, row.linkClicks])))
   const iconClicksByDate = computed(() => Object.fromEntries(stats.value.filter(row => row.iconClicks > 0).map(row => [row.date, row.iconClicks])))
   const pageViewsChartData = computed(() => stats.value.length ? buildChart(stats.value.map(s => s.pageViews), stats.value.map(s => s.date), "Page Views") : null)
-  const linkClicksChartData = computed(() => buildChartFromGroupedCounts(linkClicksByDate.value, "Link Clicks"))
-  const iconClicksChartData = computed(() => buildChartFromGroupedCounts(iconClicksByDate.value, "Social Icon Clicks"))
+  const linkClicksChartData = computed(() => buildChartFromGroupedCounts(linkClicksByDate.value, "Total Link Clicks"))
+  const iconClicksChartData = computed(() => buildChartFromGroupedCounts(iconClicksByDate.value, "Total Social Icon Clicks"))
 
   const clicksPerLinkChartData = computed(() => {
     const entries = analyticsStore.summary.clicksPerLink.filter(entry => entry.count > 0)

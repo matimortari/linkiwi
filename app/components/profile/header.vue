@@ -54,9 +54,9 @@
           </div>
           <div class="hidden flex-row items-center gap-4 md:flex">
             <span v-if="user.description" class="text-caption truncate">{{ user.description }}</span>
-            <p class="flex flex-row items-center gap-1">
+            <p v-if="user.location" class="flex flex-row items-center gap-1">
               <icon name="mdi:map-marker" size="15" class="text-muted-foreground" />
-              <span v-if="user.location" class="text-caption truncate">{{ user.location }}</span>
+              <span class="text-caption truncate">{{ user.location }}</span>
             </p>
           </div>
         </div>

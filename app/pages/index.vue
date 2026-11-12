@@ -125,10 +125,10 @@
                 <div v-for="item in MOCK_ANALYTICS" :key="item.label" class="card flex h-full items-start gap-2">
                   <icon :name="item.icon" size="30" class="text-caption-info shrink-0" />
                   <div class="flex h-full min-w-0 flex-1 flex-col items-start text-start">
-                    <p class="text-caption line-clamp-2">
+                    <p class="text-caption w-full truncate">
                       {{ item.label }}
                     </p>
-                    <span class="mt-auto w-full text-lg font-semibold">{{ item.value }}</span>
+                    <span class="mt-auto w-full truncate text-lg font-semibold">{{ item.value }}</span>
                   </div>
                 </div>
               </div>

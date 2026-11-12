@@ -11,9 +11,9 @@
     </div>
   </div>
 
-  <div v-if="props.activeTab === 'layout'" class="card grid grid-cols-1 gap-2 md:grid-cols-2">
-    <div class="flex flex-col gap-2 md:p-2">
-      <h6 class="py-2">
+  <div v-if="props.activeTab === 'layout'" class="card grid grid-cols-1 gap-6 md:mx-4 md:grid-cols-2">
+    <div class="flex flex-col gap-2">
+      <h6>
         Header & Profile
       </h6>
       <Selector id="supportBanner" v-model:value="localPrefs.supportBanner" label="Support Banner" :options="BANNER_OPTIONS" />
@@ -21,7 +21,7 @@
       <ColorPicker id="profilePictureBorderColor" v-model:value="localPrefs.profilePictureBorderColor" label="Profile Picture Border Color" />
       <Selector id="profilePictureBorderWidth" v-model:value="localPrefs.profilePictureBorderWidth" label="Profile Picture Border Width" :options="BORDER_WIDTHS" />
 
-      <h6 class="py-2">
+      <h6 class="pt-4">
         Dividers
       </h6>
       <ColorPicker id="dividerColor" v-model:value="localPrefs.dividerColor" label="Divider Color" />
@@ -29,8 +29,8 @@
       <Selector id="dividerStyle" v-model:value="localPrefs.dividerStyle" label="Style" :options="DIVIDER_STYLES" />
     </div>
 
-    <div class="flex flex-col gap-2 md:p-2">
-      <h6 class="py-2">
+    <div class="flex flex-col gap-2">
+      <h6>
         Username
       </h6>
       <Selector id="slugFontFamily" v-model:value="localPrefs.slugFontFamily" label="Font Family" :options="FONT_FAMILIES" />
@@ -40,9 +40,9 @@
     </div>
   </div>
 
-  <div v-if="props.activeTab === 'links'" class="card grid grid-cols-1 gap-2 md:grid-cols-2">
-    <div class="flex flex-col gap-2 md:p-2">
-      <h6 class="py-2">
+  <div v-if="props.activeTab === 'links'" class="card grid grid-cols-1 gap-6 md:mx-4 md:grid-cols-2">
+    <div class="flex flex-col gap-2">
+      <h6>
         Base Styles
       </h6>
       <ColorPicker id="linkBackgroundColor" v-model:value="localPrefs.linkBackgroundColor" label="Background Color" />
@@ -55,24 +55,24 @@
       <Checkbox id="showLinkCopyButton" v-model:value="localPrefs.showLinkCopyButton" label="Show 'Copy Link' Button" />
     </div>
 
-    <div class="flex flex-col gap-2 md:p-2">
-      <h6 class="py-2">
+    <div class="flex flex-col gap-2">
+      <h6>
         Shadows
       </h6>
       <ColorPicker id="linkHoverBackgroundColor" v-model:value="localPrefs.linkHoverBackgroundColor" label="Hover Background Color" />
       <Checkbox id="isLinkShadow" v-model:value="localPrefs.isLinkShadow" label="Enable Shadow" />
-      <ColorPicker id="linkShadowColor" v-model:value="localPrefs.linkShadowColor" label="Shadow Color" :disabled="isLinkShadowDisabled" />
+      <ColorPicker v-if="!isLinkShadowDisabled" id="linkShadowColor" v-model:value="localPrefs.linkShadowColor" label="Shadow Color" />
       <Selector
-        id="linkShadowWeight" v-model:value="localPrefs.linkShadowWeight"
-        label="Shadow Weight" :options="SHADOW_WEIGHTS"
-        :disabled="isLinkShadowDisabled"
+        v-if="!isLinkShadowDisabled" id="linkShadowWeight"
+        v-model:value="localPrefs.linkShadowWeight" label="Shadow Weight"
+        :options="SHADOW_WEIGHTS"
       />
     </div>
   </div>
 
-  <div v-if="props.activeTab === 'icons'" class="card grid grid-cols-1 gap-2 md:grid-cols-2">
-    <div class="flex flex-col gap-2 md:p-2">
-      <h6 class="py-2">
+  <div v-if="props.activeTab === 'icons'" class="card grid grid-cols-1 gap-6 md:mx-4 md:grid-cols-2">
+    <div class="flex flex-col gap-2">
+      <h6>
         Base Styles
       </h6>
       <ColorPicker id="iconBackgroundColor" v-model:value="localPrefs.iconBackgroundColor" label="Background Color" />
@@ -80,16 +80,16 @@
       <ColorPicker id="iconHoverBackgroundColor" v-model:value="localPrefs.iconHoverBackgroundColor" label="Hover Background Color" />
     </div>
 
-    <div class="flex flex-col gap-2 md:p-2">
-      <h6 class="py-2">
+    <div class="flex flex-col gap-2">
+      <h6>
         Shadows
       </h6>
       <Checkbox id="isIconShadow" v-model:value="localPrefs.isIconShadow" label="Enable Shadow" />
-      <ColorPicker id="iconShadowColor" v-model:value="localPrefs.iconShadowColor" label="Shadow Color" :disabled="isIconShadowDisabled" />
+      <ColorPicker v-if="!isIconShadowDisabled" id="iconShadowColor" v-model:value="localPrefs.iconShadowColor" label="Shadow Color" />
       <Selector
-        id="iconShadowWeight" v-model:value="localPrefs.iconShadowWeight"
-        label="Shadow Weight" :options="SHADOW_WEIGHTS"
-        :disabled="isIconShadowDisabled"
+        v-if="!isIconShadowDisabled" id="iconShadowWeight"
+        v-model:value="localPrefs.iconShadowWeight" label="Shadow Weight"
+        :options="SHADOW_WEIGHTS"
       />
     </div>
   </div>
