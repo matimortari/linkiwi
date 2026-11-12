@@ -7,7 +7,7 @@
     </ClientOnly>
 
     <Loading v-if="loading" class="absolute inset-0 flex items-center justify-center backdrop-blur-sm" />
-    <Empty v-else-if="!userProfile && !loading" :message="`User @${slug} not found.`" icon-name="mdi:account-off" />
+    <Empty v-else-if="!userProfile" :message="`User @${slug} not found.`" icon-name="mdi:account-off" />
 
     <div v-else-if="userProfile" class="flex w-full flex-1 flex-col items-center text-center" :style="backgroundStyle">
       <UserSupportBanner v-if="profilePreferences.supportBanner !== 'NONE'" :preferences="profilePreferences" />
@@ -81,6 +81,7 @@ const { userProfile, loading } = storeToRefs(userStore)
 const profilePreferences = computed(() => userProfile.value?.preferences ?? DEFAULT_PREFERENCES)
 const { backgroundStyle, profilePictureStyle, slugStyle, descriptionStyle, dividerStyle } = useDynamicStyles(profilePreferences)
 const visibleIcons = computed(() => (userProfile.value?.items ?? []).filter(i => i.type === "ICON" && i.isVisible !== false))
+
 const visibleItems = computed(() => (userProfile.value?.items ?? []).filter(i => i.type !== "ICON" && i.isVisible !== false).sort((a, b) => {
   if (a.isPinned !== b.isPinned) {
     return a.isPinned ? -1 : 1
@@ -95,20 +96,28 @@ async function handleClick(itemId: string) {
   await analyticsStore.recordItemClick(itemId)
 }
 
-onMounted(async () => {
-  if (!slug.value) {
-    return
+await useAsyncData(() => `profile:${slug.value}`, () => userStore.getUserProfile(slug.value), { watch: [slug] })
+
+useHead(() => {
+  const title = userProfile.value ? `@${userProfile.value.slug}` : "User not found"
+  const description = userProfile.value?.description?.trim() || `@${slug.value} profile on LinKiwi.`
+  return {
+    title,
+    link: [{ rel: "canonical", href: `${baseURL}/${slug.value}` }],
+    meta: [
+      { name: "description", content: description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:image", content: userProfile.value?.image || `${baseURL}/og-image.png` },
+      { property: "og:url", content: `${baseURL}/${slug.value}` },
+      { name: "robots", content: userProfile.value ? "index, follow" : "noindex" },
+    ],
   }
+})
 
-  await userStore.getUserProfile(slug.value)
+onMounted(() => {
   if (userProfile.value) {
-    useHead({
-      title: `@${userProfile.value.slug}`,
-      link: [{ rel: "canonical", href: `${baseURL}/${userProfile.value.slug}` }],
-      meta: [{ name: "description", content: `@${userProfile.value.slug} profile on LinKiwi.` }],
-    })
-
-    await analyticsStore.recordPageView(userProfile.value.slug, (route.query.ref as string) ?? "direct")
+    analyticsStore.recordPageView(userProfile.value.slug, (route.query.ref as string) ?? "direct")
   }
 })
 
