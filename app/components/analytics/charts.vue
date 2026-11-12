@@ -1,21 +1,21 @@
 <template>
   <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:p-8">
-    <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-4 md:items-stretch">
       <div class="card flex flex-col gap-4 md:col-span-3">
         <h4>
           Page Views Over Time
         </h4>
 
-        <Empty v-if="!pageViewsChartData" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
+        <Empty v-if="!pageViewsChartData" class="min-h-64 flex-1" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
         <AnalyticsLineChart v-else :chart-data="pageViewsChartData" />
       </div>
 
       <div class="card flex flex-col gap-4 md:col-span-1">
         <h4>
-          Clicks per Link
+          Clicks by Link
         </h4>
 
-        <Empty v-if="!clicksPerLinkChartData" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
+        <Empty v-if="!clicksPerLinkChartData" class="min-h-64 flex-1" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
         <AnalyticsDonutChart v-else :chart-data="clicksPerLinkChartData" />
       </div>
     </div>
@@ -29,9 +29,9 @@
         <div class="flex min-h-0 flex-1 flex-col gap-4">
           <AnalyticsBarChart v-if="referrerChartData" :chart-data="referrerChartData" />
 
-          <div class="card flex min-h-48 flex-1 flex-col overflow-hidden p-0! md:min-h-0">
-            <table class="referrer-table size-full">
-              <thead class="bg-muted text-sm font-semibold">
+          <div class="scroll-area card min-h-0 flex-1 overflow-y-auto p-0!">
+            <table class="referrer-table w-full">
+              <thead class="sticky top-0 z-10 bg-muted text-sm font-semibold">
                 <tr>
                   <th class="px-4 py-2 text-left">
                     Source
@@ -45,7 +45,7 @@
                 </tr>
               </thead>
 
-              <tbody class="divide-y [&>tr:last-child]:border-b">
+              <tbody class="divide-y">
                 <tr v-if="!topReferrers.length">
                   <td colspan="3" class="px-4 py-8 text-center text-sm text-muted-foreground">
                     Not enough data yet.
@@ -70,33 +70,27 @@
                   </tr>
                 </template>
               </tbody>
-
-              <tfoot v-if="topReferrers.length" class="h-full">
-                <tr class="h-full">
-                  <td colspan="3" class="h-full p-0" aria-hidden="true" />
-                </tr>
-              </tfoot>
             </table>
           </div>
         </div>
       </div>
 
-      <div class="flex flex-col gap-4 md:col-span-1">
-        <div class="card flex flex-col gap-4">
+      <div class="flex h-full min-h-0 flex-col gap-4 md:col-span-1">
+        <div class="card flex min-h-0 flex-1 flex-col gap-4">
           <h4>
-            Link Clicks
+            Total Link Clicks
           </h4>
 
-          <Empty v-if="!linkClicksChartData" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
+          <Empty v-if="!linkClicksChartData" class="min-h-64 flex-1" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
           <AnalyticsBarChart v-else :chart-data="linkClicksChartData" />
         </div>
 
-        <div class="card flex flex-col gap-4">
+        <div class="card flex min-h-0 flex-1 flex-col gap-4">
           <h4>
-            Social Icon Clicks
+            Total Social Icon Clicks
           </h4>
 
-          <Empty v-if="!iconClicksChartData" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
+          <Empty v-if="!iconClicksChartData" class="min-h-64 flex-1" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
           <AnalyticsBarChart v-else :chart-data="iconClicksChartData" />
         </div>
       </div>

@@ -44,11 +44,11 @@ export const SIDEBAR_NAV_LINKS: { label: string, url: string, icon: string }[] =
   { label: "Analytics", url: "/admin/analytics", icon: "mdi:chart-bell-curve-cumulative" },
 ]
 
-export const APPEARANCE_TABS: { label: string, value: string }[] = [
-  { label: "Base", value: "base" },
-  { label: "Layout", value: "layout" },
-  { label: "Links", value: "links" },
-  { label: "Social Icons", value: "icons" },
+export const APPEARANCE_TABS: { label: string, value: string, icon: string }[] = [
+  { label: "Base", value: "base", icon: "mdi:palette-outline" },
+  { label: "Layout", value: "layout", icon: "mdi:shape-outline" },
+  { label: "Links", value: "links", icon: "mdi:link-variant" },
+  { label: "Social Icons", value: "icons", icon: "mdi:star-outline" },
 ]
 
 // Default user preferences for new accounts or resets

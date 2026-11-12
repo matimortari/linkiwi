@@ -37,6 +37,7 @@
 
 <script setup lang="ts">
 const props = defineProps<{ isOpen: boolean }>()
+
 const emit = defineEmits<{ close: [] }>()
 
 const userStore = useUserStore()

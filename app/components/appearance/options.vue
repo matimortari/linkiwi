@@ -1,27 +1,25 @@
 <template>
   <div class="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:p-8">
-    <h4>
-      Appearance
-    </h4>
+    <div class="flex flex-wrap items-center gap-2 md:gap-4">
+      <h4 class="w-full">
+        Appearance
+      </h4>
 
-    <div class="flex flex-col gap-4 md:mx-4 md:flex-row md:items-center md:justify-between">
-      <div class="navigation-group overflow-x-auto">
+      <div class="scroll-area flex min-w-0 flex-1 gap-1 overflow-x-auto rounded-full border p-1">
         <button
           v-for="t in APPEARANCE_TABS" :key="t.value"
-          type="button"
-          class="navigation-group justify-start rounded-lg rounded-b-none p-2 text-sm font-semibold whitespace-nowrap transition-all hover:bg-muted/30"
-          :class="{ 'border-b-2 border-b-secondary!': activeTab === t.value }" @click="activeTab = t.value"
+          type="button" class="navigation-group flex-1 justify-center rounded-full px-3 py-2 text-sm font-semibold whitespace-nowrap transition-colors"
+          :class="activeTab === t.value ? 'bg-primary text-neutral-100' : 'text-muted-foreground hover:bg-muted/40 hover:text-foreground'" @click="activeTab = t.value"
         >
-          {{ t.label }}
+          <icon :name="t.icon" size="18" />
+          <span>{{ t.label }}</span>
         </button>
       </div>
 
-      <div class="navigation-group shrink-0 self-end">
-        <button type="button" class="btn-primary" @click="handleUpdatePreferences">
-          <icon :name="saveAction.icon.value" size="20" />
-          <span>Save</span>
-        </button>
-      </div>
+      <button type="button" class="btn-primary shrink-0" @click="handleUpdatePreferences">
+        <icon :name="saveAction.icon.value" size="20" />
+        <span>Save</span>
+      </button>
     </div>
 
     <AppearanceTabs v-model:preferences="preferences" v-model:active-tab="activeTab" />
