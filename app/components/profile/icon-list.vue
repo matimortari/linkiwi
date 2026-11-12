@@ -20,6 +20,7 @@
 
     <button type="button" class="btn-ghost" aria-label="Add social icon" @click="openDialog('icon')">
       <icon name="mdi:plus" size="35" class="text-muted-foreground" />
+      <span v-if="!orderedIcons.length" class="text-muted-foreground">Add Social Icon</span>
     </button>
   </div>
 

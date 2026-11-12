@@ -1,6 +1,8 @@
 <template>
-  <div class="h-64 w-full py-4">
-    <Bar :data="props.chartData" :options="chartOptions" />
+  <div class="relative min-h-64 w-full flex-1">
+    <div class="absolute inset-0 py-4">
+      <Bar :data="props.chartData" :options="chartOptions" />
+    </div>
   </div>
 </template>
 
@@ -9,9 +11,7 @@ import type { ChartData, ChartOptions } from "chart.js"
 import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from "chart.js"
 import { Bar } from "vue-chartjs"
 
-const props = defineProps<{
-  chartData: ChartData<"bar", (number | [number, number] | null)[]>
-}>()
+const props = defineProps<{ chartData: ChartData<"bar", (number | [number, number] | null)[]> }>()
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 

@@ -1,6 +1,8 @@
 <template>
-  <div class="h-64 w-full py-4">
-    <Line :data="props.chartData" :options="chartOptions" />
+  <div class="relative min-h-64 w-full flex-1">
+    <div class="absolute inset-0 py-4">
+      <Line :data="props.chartData" :options="chartOptions" />
+    </div>
   </div>
 </template>
 

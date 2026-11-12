@@ -44,14 +44,14 @@
         Highlights
       </h4>
 
-      <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+      <div class="grid grid-cols-2 gap-2 md:grid-cols-4 md:gap-4">
         <div v-for="item in summaryItems" :key="item.label" class="flex h-full items-start gap-2 p-2">
           <icon :name="item.icon" size="30" class="text-caption-info shrink-0" />
           <div class="flex h-full min-w-0 flex-1 flex-col items-start text-start">
-            <p class="text-caption line-clamp-2">
+            <p class="text-caption w-full truncate">
               {{ item.label }}
             </p>
-            <span class="mt-auto w-full text-lg font-semibold">{{ item.value }}</span>
+            <span class="mt-auto w-full truncate text-lg font-semibold">{{ item.value }}</span>
           </div>
         </div>
       </div>
@@ -68,6 +68,13 @@ const dateFrom = ref("")
 const dateTo = ref("")
 const fromDisplay = ref("")
 const toDisplay = ref("")
+
+const summaryItems = computed(() => [
+  { label: "Total Page Views", icon: "mdi:file-eye-outline", value: totalViews.value },
+  { label: "Total Clicks", icon: "mdi:cursor-default-click-outline", value: totalClicks.value },
+  { label: "Click Rate", icon: "mdi:file-percent-outline", value: `${clickRate.value}%` },
+  { label: "Joined On", icon: "mdi:calendar-clock-outline", value: joinedAt.value ? new Date(joinedAt.value).toLocaleDateString("en-US", { year: "2-digit", month: "short", day: "numeric" }) : "N/A" },
+])
 
 function parseDate(raw: string): string {
   const cleaned = raw.trim()
@@ -120,11 +127,4 @@ async function handleClearFilter() {
   toDisplay.value = ""
   await analyticsStore.getAnalytics()
 }
-
-const summaryItems = computed(() => [
-  { label: "Total Page Views", icon: "mdi:file-eye-outline", value: totalViews.value },
-  { label: "Total Clicks", icon: "mdi:cursor-default-click-outline", value: totalClicks.value },
-  { label: "Click Rate", icon: "mdi:file-percent-outline", value: `${clickRate.value}%` },
-  { label: "Joined On", icon: "mdi:calendar-clock-outline", value: joinedAt.value ? new Date(joinedAt.value).toLocaleDateString("en-US", { year: "2-digit", month: "short", day: "numeric" }) : "N/A" },
-])
 </script>
