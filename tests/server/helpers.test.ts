@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
-import { categorizeReferrer, generateSlug, getUserFromSession, requireEnv, resolvePhotoGrid } from "../../server/utils/helpers"
-import { db, getUserSession, resetNitroMocks } from "../mocks/nitro-runtime"
+import { categorizeReferrer, generateSlug, generateToken, getUserFromSession, requireEnv, resolvePhotoGrid } from "../../server/utils/helpers"
+import { assertValidUserSession, createError, db, getUserSession, resetNitroMocks } from "../mocks/nitro-runtime"
 
 describe("requireEnv", () => {
   const key = "LINKIWI_TEST_REQUIRE_ENV"
@@ -74,19 +74,47 @@ describe("categorizeReferrer", () => {
   })
 })
 
+describe("generateToken", () => {
+  it("returns hex of the requested byte length", () => {
+    expect(generateToken(12)).toMatch(/^[a-f0-9]{24}$/)
+    expect(generateToken(16)).toMatch(/^[a-f0-9]{32}$/)
+  })
+
+  it("returns unique values", () => {
+    expect(generateToken()).not.toBe(generateToken())
+  })
+})
+
 describe("getUserFromSession", () => {
   beforeEach(() => {
     resetNitroMocks()
   })
 
-  it("returns the session user when present", async () => {
-    getUserSession.mockResolvedValue({ user: { id: "u1", email: "a@b.c", name: "Ada", image: null, slug: "ada" } })
+  it("returns the session user after server-side session validation", async () => {
+    const session = {
+      user: { id: "u1", email: "a@b.c", name: "Ada", image: null, slug: "ada" },
+      loggedInAt: new Date(),
+      expiresAt: new Date(Date.now() + 60_000),
+      lastActivityAt: new Date(),
+      sessionId: "sid-1",
+    }
+    getUserSession.mockResolvedValue(session)
+    assertValidUserSession.mockResolvedValue(session)
+
     await expect(getUserFromSession({} as any)).resolves.toEqual({ id: "u1", email: "a@b.c", name: "Ada", image: "", slug: "ada" })
+    expect(assertValidUserSession).toHaveBeenCalled()
+  })
+
+  it("rejects when server-side session validation fails", async () => {
+    getUserSession.mockResolvedValue({ user: { id: "u1", email: "a@b.c", name: "Ada", image: null, slug: "ada" } })
+    assertValidUserSession.mockRejectedValue(createError({ statusCode: 401, statusMessage: "Session expired" }))
+    await expect(getUserFromSession({} as any)).rejects.toMatchObject({ statusCode: 401 })
   })
 
   it("throws when there is no session user", async () => {
     getUserSession.mockResolvedValue({})
     await expect(getUserFromSession({} as any)).rejects.toMatchObject({ statusCode: 401 })
+    expect(assertValidUserSession).not.toHaveBeenCalled()
   })
 })
 
@@ -104,6 +132,22 @@ describe("generateSlug", () => {
     db.user.findUnique.mockResolvedValue(null)
     await expect(generateSlug()).resolves.toMatch(/^[a-f0-9]{12}$/)
     await expect(generateSlug("山田太郎")).resolves.toMatch(/^[a-f0-9]{12}$/)
+  })
+
+  it("appends a suffix for reserved slugs like admin", async () => {
+    db.user.findUnique.mockResolvedValue(null)
+    const slug = await generateSlug("Admin")
+    expect(slug).not.toBe("admin")
+    expect(slug.startsWith("admin-")).toBe(true)
+    expect(slug.length).toBeGreaterThanOrEqual(3)
+  })
+
+  it("appends a suffix when the cleaned slug is shorter than 3 characters", async () => {
+    db.user.findUnique.mockResolvedValue(null)
+    const slug = await generateSlug("Al")
+    expect(slug).not.toBe("al")
+    expect(slug.startsWith("al-")).toBe(true)
+    expect(slug.length).toBeGreaterThanOrEqual(3)
   })
 
   it("appends a suffix on collision and falls back after retries", async () => {
