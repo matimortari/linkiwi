@@ -2,8 +2,7 @@ import type { CreateCommentInput } from "#shared/schemas/analytics-schema"
 
 export const useAnalyticsStore = defineStore("analytics", () => {
   const toast = useToast()
-  const pageViews = ref<PageView[]>([])
-  const itemClicks = ref<ItemClick[]>([])
+  const summary = ref<AnalyticsSummary>({ totalViews: 0, totalClicks: 0, stats: [], topReferrers: [], clicksPerLink: [] })
   const comments = ref<Comment[]>([])
   const loading = ref(false)
 
@@ -19,9 +18,8 @@ export const useAnalyticsStore = defineStore("analytics", () => {
         query.dateTo = dateTo
       }
 
-      const res = await $fetch<{ data: { pageViews: PageView[], itemClicks: ItemClick[] } }>("/api/analytics", { method: "GET", query, credentials: "include" })
-      pageViews.value = res.data.pageViews
-      itemClicks.value = res.data.itemClicks
+      const res = await $fetch<{ data: AnalyticsSummary }>("/api/analytics", { method: "GET", query, credentials: "include" })
+      summary.value = res.data
       return res
     }
     catch (err: unknown) {
@@ -142,8 +140,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
   }
 
   return {
-    pageViews,
-    itemClicks,
+    summary,
     comments,
     loading,
     getAnalytics,

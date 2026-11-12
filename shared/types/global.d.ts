@@ -166,6 +166,34 @@ interface ItemClick {
   item?: ProfileItem | null
 }
 
+interface AnalyticsDailyStat {
+  date: string
+  pageViews: number
+  linkClicks: number
+  iconClicks: number
+  widgetClicks: number
+}
+
+interface AnalyticsReferrer {
+  source: string
+  count: number
+  percentage: string
+}
+
+interface AnalyticsLinkClicks {
+  itemId: string
+  label: string
+  count: number
+}
+
+interface AnalyticsSummary {
+  totalViews: number
+  totalClicks: number
+  stats: AnalyticsDailyStat[]
+  topReferrers: AnalyticsReferrer[]
+  clicksPerLink: AnalyticsLinkClicks[]
+}
+
 interface Comment {
   id: string
   userId: string
