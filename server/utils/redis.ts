@@ -8,7 +8,7 @@ let connecting = false
 /**
  * Gets or creates the Redis client instance.
  */
-async function getRedisClient() {
+export async function getRedisClient() {
   if (redisClient?.isOpen) {
     return redisClient
   }
@@ -54,6 +54,8 @@ async function getRedisClient() {
  * Helper to generate cache keys for user-related data.
  */
 export const CacheKeys = {
+  session: (sessionId: string) => `session:${sessionId}`,
+  rateLimit: (identifier: string) => `ratelimit:${identifier}`,
   userData: (userId: string) => `user:data:${userId}`,
   userProfile: (userSlug: string) => `user:profile:${userSlug}`,
   userItems: (userId: string) => `user:items:${userId}`,
@@ -62,7 +64,6 @@ export const CacheKeys = {
   analytics: (userId: string) => `user:analytics:${userId}`,
   widget: (platform: string, handle: string) => `widget:${platform}:${handle}`,
   geocode: (query: string) => `geocode:${query}`,
-  rateLimit: (identifier: string) => `ratelimit:${identifier}`,
 }
 
 /**
@@ -94,11 +95,11 @@ export async function getCached<T>(key: string): Promise<T | null> {
 /**
  * Sets a value in cache with optional TTL.
  */
-export async function setCached(key: string, value: any, ttl?: number): Promise<void> {
+export async function setCached(key: string, value: any, ttl?: number): Promise<boolean> {
   try {
     const client = await getRedisClient()
     if (!client) {
-      return
+      return false
     }
 
     if (ttl) {
@@ -107,9 +108,10 @@ export async function setCached(key: string, value: any, ttl?: number): Promise<
     else {
       await client.set(key, JSON.stringify(value))
     }
+    return true
   }
   catch {
-    // Silently fail
+    return false
   }
 }
 

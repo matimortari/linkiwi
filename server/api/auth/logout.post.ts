@@ -4,11 +4,11 @@ export default defineEventHandler(async (event) => {
   await enforceRateLimit(event, `auth:logout:${ip}`, 20)
 
   const session = await getUserSession(event)
-  if (!session.user || !session.expiresAt || !session.lastActivityAt) {
+  if (!session.user) {
     throw createError({ statusCode: 401, message: "Not authenticated" })
   }
 
-  await clearUserSession(event)
+  await destroyAuthenticatedSession(event)
 
   return { success: true }
 })
