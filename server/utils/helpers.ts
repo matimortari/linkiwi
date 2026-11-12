@@ -1,5 +1,5 @@
 import type { EventHandlerRequest, H3Event } from "h3"
-import crypto from "node:crypto"
+import { randomBytes, randomUUID } from "node:crypto"
 
 /**
  * Ensure required environment variables are set, throwing an error if missing.
@@ -20,11 +20,20 @@ export function requireEnv(name: string): string {
 export async function getUserFromSession(event: H3Event<EventHandlerRequest>): Promise<User> {
   const session = await getUserSession(event)
   if (session?.user?.id) {
-    const { id, email, name, image, slug } = session.user
+    const validSession = await assertValidUserSession(event, session)
+    const { id, email, name, image, slug } = validSession.user
     return { id, email, name, image: image ?? "", slug }
   }
 
   throw createError({ statusCode: 401, statusMessage: "Unauthorized" })
+}
+
+/**
+ * Generates a secure random token as a hexadecimal string.
+ * Default length is 12 bytes (24 hex characters).
+ */
+export function generateToken(byteLength: number = 12): string {
+  return randomBytes(byteLength).toString("hex")
 }
 
 /**
@@ -42,20 +51,26 @@ export async function generateSlug(base: string = ""): Promise<string> {
     end--
   }
 
-  cleaned = cleaned.slice(start, end)
+  cleaned = cleaned.slice(start, end).substring(0, 50)
   if (!cleaned) {
-    return crypto.randomUUID().replaceAll("-", "").slice(0, 12)
+    return randomUUID().replaceAll("-", "").slice(0, 12)
   }
 
   for (let attempt = 0; attempt < 10; attempt++) {
-    const slug = attempt === 0 ? cleaned : `${cleaned}-${crypto.randomUUID().slice(0, 6)}`
+    const RESERVED_SLUGS = new Set(["admin", "api", "brand", "legal", "sign-in"])
+    const canUseBare = attempt === 0 && cleaned.length >= 3 && !RESERVED_SLUGS.has(cleaned)
+    const slug = canUseBare ? cleaned : `${cleaned.slice(0, 43)}-${randomUUID().slice(0, 6)}`
+    if (slug.length < 3 || RESERVED_SLUGS.has(slug)) {
+      continue
+    }
+
     const exists = await db.user.findUnique({ where: { slug }, select: { id: true } })
     if (!exists) {
       return slug
     }
   }
 
-  return crypto.randomUUID().replaceAll("-", "").slice(0, 12)
+  return randomUUID().replaceAll("-", "").slice(0, 12)
 }
 
 /**

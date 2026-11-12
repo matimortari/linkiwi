@@ -11,27 +11,26 @@ export default defineEventHandler(async (event) => {
   if (!result.success) {
     throw createError({ statusCode: 400, statusMessage: result.error.issues[0]?.message || "Invalid input" })
   }
-  if (result.data.assetId) {
-    const asset = await db.userAsset.findUnique({ where: { id: result.data.assetId }, select: { userId: true } })
-    if (!asset || asset.userId !== sessionUser.id) {
-      throw createError({ statusCode: 403, statusMessage: "Asset does not belong to this user" })
-    }
+
+  const asset = await db.userAsset.findUnique({ where: { id: result.data.assetId }, select: { id: true, userId: true, url: true } })
+  if (!asset || asset.userId !== sessionUser.id) {
+    throw createError({ statusCode: 403, statusMessage: "Asset does not belong to this user" })
   }
 
   // Find the existing banner to check if it's being replaced by a different asset
   const existingBanner = await db.userBanner.findUnique({ where: { userId: sessionUser.id }, select: { assetId: true } })
   const banner = await db.userBanner.upsert({
     where: { userId: sessionUser.id },
-    create: { userId: sessionUser.id, url: result.data.url, assetId: result.data.assetId },
-    update: { url: result.data.url, assetId: result.data.assetId },
+    create: { userId: sessionUser.id, url: asset.url, assetId: asset.id },
+    update: { url: asset.url, assetId: asset.id },
   })
-  if (existingBanner?.assetId && existingBanner.assetId !== result.data.assetId) {
+  if (existingBanner?.assetId && existingBanner.assetId !== asset.id) {
     const assetId = existingBanner.assetId
     const [photoCount, bannerCount] = await Promise.all([db.photoGridItem.count({ where: { assetId } }), db.userBanner.count({ where: { assetId } })])
     if (photoCount === 0 && bannerCount === 0) {
-      const asset = await db.userAsset.findUnique({ where: { id: assetId }, select: { url: true } })
-      if (asset) {
-        await deleteFile(asset.url).catch(() => {})
+      const orphaned = await db.userAsset.findUnique({ where: { id: assetId }, select: { url: true } })
+      if (orphaned) {
+        await deleteFile(orphaned.url).catch(() => {})
         await db.userAsset.delete({ where: { id: assetId } }).catch(() => {})
       }
     }
@@ -47,7 +46,7 @@ export default defineEventHandler(async (event) => {
 defineRouteMeta({
   openAPI: {
     summary: "Set user banner",
-    description: "Creates or replaces the user's banner. Can reference an existing user asset or provide a direct URL.",
+    description: "Creates or replaces the user's banner from an owned uploaded asset. The banner URL is always taken from the asset record, not the request body.",
     tags: ["User"],
     requestBody: {
       required: true,
@@ -55,10 +54,10 @@ defineRouteMeta({
         "application/json": {
           schema: {
             type: "object",
-            required: ["url"],
+            required: ["assetId"],
             properties: {
-              url: { type: "string", format: "uri", description: "Banner URL" },
-              assetId: { type: "string", description: "User asset ID" },
+              assetId: { type: "string", description: "Owned user asset ID" },
+              url: { type: "string", format: "uri", description: "Optional; ignored — URL is resolved from the asset" },
             },
           },
         },
