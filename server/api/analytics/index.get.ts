@@ -5,34 +5,21 @@ export default defineEventHandler(async (event) => {
   await enforceRateLimit(event, `analytics:get:${sessionUser.id}`, 100)
 
   const query = getQuery(event)
-  const dateFrom = query.dateFrom ? new Date(query.dateFrom as string) : undefined
-  const dateTo = query.dateTo ? new Date(query.dateTo as string) : undefined
-  const dateFilter = (dateFrom || dateTo) ? { createdAt: { ...(dateFrom && { gte: dateFrom }), ...(dateTo && { lte: dateTo }) } } : {}
+  const parsedFrom = query.dateFrom ? new Date(query.dateFrom as string) : undefined
+  const parsedTo = query.dateTo ? new Date(query.dateTo as string) : undefined
+  const dateFrom = parsedFrom && !Number.isNaN(parsedFrom.getTime()) ? parsedFrom : undefined
+  const dateTo = parsedTo && !Number.isNaN(parsedTo.getTime()) ? parsedTo : undefined
 
   // Dynamic cache key that changes when date ranges are applied
   const cacheKeySuffix = dateFrom || dateTo ? `:${dateFrom?.toISOString() ?? ""}:${dateTo?.toISOString() ?? ""}` : ""
   const cacheKey = `${CacheKeys.analytics(sessionUser.id)}${cacheKeySuffix}`
 
-  const cached = await getCached<any>(cacheKey)
+  const cached = await getCached<AnalyticsSummary>(cacheKey)
   if (cached) {
     return { data: cached }
   }
 
-  // Concurrently pull page views and item clicks with the same date filter
-  const [pageViews, itemClicks] = await Promise.all([
-    db.pageView.findMany({
-      where: { userId: sessionUser.id, ...dateFilter },
-      select: { id: true, createdAt: true, referrer: true, source: true },
-      orderBy: { createdAt: "desc" },
-    }),
-    db.itemClick.findMany({
-      where: { item: { userId: sessionUser.id }, ...dateFilter },
-      select: { id: true, itemId: true, createdAt: true, item: { select: { type: true, order: true } } },
-      orderBy: { createdAt: "desc" },
-    }),
-  ])
-
-  const data = { pageViews, itemClicks }
+  const data = await fetchAnalyticsSummary(sessionUser.id, dateFrom, dateTo)
 
   await setCached(cacheKey, data, 60)
 
@@ -42,14 +29,14 @@ export default defineEventHandler(async (event) => {
 defineRouteMeta({
   openAPI: {
     summary: "Get profile analytics",
-    description: "Returns the current user's page views and item clicks, with optional date range filtering.",
+    description: "Returns aggregated page-view and click metrics for the current user, with optional date range filtering. Totals and chart series are computed on the server.",
     tags: ["Analytics"],
     parameters: [
       { in: "query", name: "dateFrom", schema: { type: "string", format: "date-time" } },
       { in: "query", name: "dateTo", schema: { type: "string", format: "date-time" } },
     ],
     responses: {
-      200: { description: "Page views and item clicks within the given range" },
+      200: { description: "Aggregated analytics summary within the given range" },
       401: { description: "Unauthenticated" },
       429: { description: "Rate limit exceeded" },
     },

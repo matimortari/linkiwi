@@ -105,7 +105,6 @@
 </template>
 
 <script setup lang="ts">
-const profileItemsStore = useProfileItemsStore()
 const { pageViewsChartData, linkClicksChartData, iconClicksChartData, clicksPerLinkChartData, referrerChartData, topReferrers } = useAnalyticsData()
 
 function getSourceIcon(source: string): string {
@@ -130,12 +129,6 @@ function getSourceIcon(source: string): string {
 
   return icons[source] || "mdi:web"
 }
-
-onMounted(async () => {
-  if (!profileItemsStore.items.length) {
-    await profileItemsStore.getItems()
-  }
-})
 </script>
 
 <style scoped>

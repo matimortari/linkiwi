@@ -29,6 +29,7 @@ export const useUserStore = defineStore("user", () => {
 
   async function getUserProfile(slug: string) {
     loading.value = true
+    userProfile.value = null
 
     try {
       const res = await $fetch<{ profile: User }>(`/api/profiles/${slug}`, { method: "GET" })
@@ -36,6 +37,11 @@ export const useUserStore = defineStore("user", () => {
       return res
     }
     catch (err: unknown) {
+      userProfile.value = null
+      if (err && typeof err === "object" && "statusCode" in err && err.statusCode === 404) {
+        return null
+      }
+
       const message = getErrorMessage(err, "Failed to get user profile")
       toast.error(message)
       console.error("getUserProfile error:", err)
