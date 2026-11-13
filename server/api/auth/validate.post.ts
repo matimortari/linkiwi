@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
   await enforceRateLimit(event, `auth:validate:${ip}`, 120)
 
   const session = await getUserSession(event)
-  const validSession = await assertValidUserSession(event, session, { touch: "always" })
+  const validSession = await assertValidUserSession(event, session, { touch: false })
 
   return { valid: true, expiresAt: validSession.expiresAt }
 })
