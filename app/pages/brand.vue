@@ -12,10 +12,10 @@
     </h2>
 
     <div class="grid gap-2 md:grid-cols-3">
-      <div v-for="(asset, index) in SYMBOLS" :key="asset.name" class="flex flex-col gap-2 p-2">
+      <div v-for="(asset, index) in SYMBOLS" :key="asset.name" class="flex flex-col gap-1">
         <div class="group relative flex h-40 items-center justify-center overflow-hidden rounded-lg border" :class="asset.bgClass">
           <img :src="asset.image" :alt="asset.name" class="h-24 w-auto object-contain">
-          <button type="button" class="brand-action bg-black/0 group-hover:bg-black/50 focus-visible:bg-black/50" :aria-label="`Download ${asset.name}`" @click="handleDownloadImage(asset, index, symbolActions)">
+          <button type="button" class="brand-action" :aria-label="`Download ${asset.name}`" @click="handleDownloadImage(asset, index, symbolActions)">
             <span class="brand-chip">
               <span>Download</span>
               <icon :name="symbolActions[index]!.icon.value" size="20" />
@@ -33,10 +33,10 @@
     </h2>
 
     <div class="grid gap-2 md:grid-cols-2">
-      <div v-for="(asset, index) in WORDMARKS" :key="asset.name" class="flex flex-col gap-2 p-2">
+      <div v-for="(asset, index) in WORDMARKS" :key="asset.name" class="flex flex-col gap-1">
         <div class="group relative flex h-40 items-center justify-center overflow-hidden rounded-lg border" :class="asset.bgClass">
           <img :src="asset.image" :alt="asset.name" class="h-12 w-auto object-contain">
-          <button type="button" class="brand-action bg-black/0 group-hover:bg-black/50 focus-visible:bg-black/50" :aria-label="`Download ${asset.name}`" @click="handleDownloadImage(asset, index, wordmarkActions)">
+          <button type="button" class="brand-action" :aria-label="`Download ${asset.name}`" @click="handleDownloadImage(asset, index, wordmarkActions)">
             <span class="brand-chip">
               <span>Download</span>
               <icon :name="wordmarkActions[index]!.icon.value" size="20" />
@@ -58,10 +58,10 @@
         Brand Colors
       </h3>
 
-      <div class="grid gap-2 md:grid-cols-2">
-        <div v-for="(color, index) in BRAND_COLORS" :key="color.name" class="flex flex-col gap-2 p-2">
+      <div class="grid grid-cols-3 gap-2">
+        <div v-for="(color, index) in NEUTRAL_SCALE" :key="color.name" class="flex flex-col gap-1">
           <div class="group relative h-40 overflow-hidden rounded-lg border md:h-48" :style="{ backgroundColor: `var(${color.var})` }">
-            <button type="button" class="brand-action bg-black/0 group-hover:bg-black/50 focus-visible:bg-black/50" :aria-label="`Copy ${color.value}`" @click="handleCopyColor(color.value, index, brandActions)">
+            <button type="button" class="brand-action" :aria-label="`Copy ${color.value}`" @click="handleCopyColor(color.value, index, neutralActions)">
               <span class="brand-chip font-mono">
                 <span>{{ color.value }}</span>
                 <icon :name="brandActions[index]!.icon.value" size="15" />
@@ -99,10 +99,10 @@
       </h3>
 
       <div class="grid gap-2 md:grid-cols-2">
-        <div v-for="(status, statusIndex) in STATUS_COLORS" :key="status.name" class="flex flex-col gap-2 p-2">
+        <div v-for="(status, statusIndex) in STATUS_COLORS" :key="status.name" class="flex flex-col gap-1">
           <div class="flex h-28 overflow-hidden rounded-lg border md:h-32">
             <div class="group relative h-full w-1/2" :style="{ backgroundColor: `var(${status.darkVar})` }">
-              <button type="button" class="brand-action bg-black/0 group-hover:bg-black/50 focus-visible:bg-black/50" :aria-label="`Copy ${status.darkVal}`" @click="handleCopyColor(status.darkVal, statusIndex * 2, statusActions)">
+              <button type="button" class="brand-action" :aria-label="`Copy ${status.darkVal}`" @click="handleCopyColor(status.darkVal, statusIndex * 2, statusActions)">
                 <span class="brand-chip font-mono">
                   <span>{{ status.darkVal }}</span>
                   <icon :name="statusActions[statusIndex * 2]!.icon.value" size="15" />
@@ -110,7 +110,7 @@
               </button>
             </div>
             <div class="group relative h-full w-1/2" :style="{ backgroundColor: `var(${status.lightVar})` }">
-              <button type="button" class="brand-action bg-black/0 group-hover:bg-black/50 focus-visible:bg-black/50" :aria-label="`Copy ${status.lightVal}`" @click="handleCopyColor(status.lightVal, (statusIndex * 2) + 1, statusActions)">
+              <button type="button" class="brand-action" :aria-label="`Copy ${status.lightVal}`" @click="handleCopyColor(status.lightVal, (statusIndex * 2) + 1, statusActions)">
                 <span class="brand-chip font-mono">
                   <span>{{ status.lightVal }}</span>
                   <icon :name="statusActions[(statusIndex * 2) + 1]!.icon.value" size="15" />
@@ -169,6 +169,7 @@ definePageMeta({ layout: "content" })
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: transparent;
   transition: background-color var(--transition);
 }
 
@@ -177,19 +178,30 @@ definePageMeta({ layout: "content" })
   align-items: center;
   gap: 0.375rem;
   border-radius: 0.375rem;
-  background-color: color-mix(in srgb, var(--background) 90%, transparent);
+  background-color: var(--card);
   padding: 0.375rem 0.625rem;
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   font-size: 0.875rem;
-  line-height: 1.25rem;
   font-weight: 500;
   color: var(--muted-foreground);
   opacity: 0;
   transition: opacity var(--transition);
 }
 
-.group:hover > .brand-action > .brand-chip,
+.brand-action:focus-visible {
+  background-color: rgb(0 0 0 / 0.5);
+}
+
 .brand-action:focus-visible > .brand-chip {
   opacity: 1;
+}
+
+@media (hover: hover) {
+  .group:hover > .brand-action {
+    background-color: rgb(0 0 0 / 0.5);
+  }
+
+  .group:hover > .brand-action > .brand-chip {
+    opacity: 1;
+  }
 }
 </style>
