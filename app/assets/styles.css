@@ -299,10 +299,10 @@ input[type="radio"]:checked::after {
   transition: all var(--transition);
 }
 :is(.btn, .btn-primary, .btn-secondary, .btn-danger, .btn-success, .btn-warning, .btn-info, .btn-ghost):hover {
-  opacity: 0.8;
+  filter: brightness(0.9);
 }
 :is(.btn, .btn-primary, .btn-secondary, .btn-danger, .btn-success, .btn-warning, .btn-info, .btn-ghost):active {
-  opacity: 0.6;
+  filter: brightness(0.8);
 }
 :is(.btn, .btn-primary, .btn-secondary, .btn-danger, .btn-success, .btn-warning, .btn-info, .btn-ghost):disabled {
   opacity: 0.4;
