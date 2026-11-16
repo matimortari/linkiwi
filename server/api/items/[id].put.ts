@@ -68,8 +68,7 @@ export default defineEventHandler(async (event) => {
 
   else if (existingItem.type === "PHOTO_GRID" && result.data.photoGrid?.photos) {
     const photos = await resolvePhotoGrid(result.data.photoGrid.photos, sessionUser.id)
-    await db.photoGridItem.deleteMany({ where: { gridId: itemId } })
-    updatePayload.photoGrid = { update: { photos: { createMany: { data: photos } } } }
+    updatePayload.photoGrid = { update: { photos: { deleteMany: {}, createMany: { data: photos } } } }
   }
   else if (existingItem.type === "LOCATION" && result.data.location) {
     updatePayload.location = { update: result.data.location }

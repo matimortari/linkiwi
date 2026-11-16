@@ -17,28 +17,15 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 403, statusMessage: "Asset does not belong to this user" })
   }
 
-  // Find the existing banner to check if it's being replaced by a different asset
-  const existingBanner = await db.userBanner.findUnique({ where: { userId: sessionUser.id }, select: { assetId: true } })
   const banner = await db.userBanner.upsert({
     where: { userId: sessionUser.id },
     create: { userId: sessionUser.id, url: asset.url, assetId: asset.id },
     update: { url: asset.url, assetId: asset.id },
   })
-  if (existingBanner?.assetId && existingBanner.assetId !== asset.id) {
-    const assetId = existingBanner.assetId
-    const [photoCount, bannerCount] = await Promise.all([db.photoGridItem.count({ where: { assetId } }), db.userBanner.count({ where: { assetId } })])
-    if (photoCount === 0 && bannerCount === 0) {
-      const orphaned = await db.userAsset.findUnique({ where: { id: assetId }, select: { url: true } })
-      if (orphaned) {
-        await deleteFile(orphaned.url).catch(() => {})
-        await db.userAsset.delete({ where: { id: assetId } }).catch(() => {})
-      }
-    }
-  }
 
   const user = await db.user.findUnique({ where: { id: sessionUser.id }, select: { slug: true } })
 
-  await Promise.all([deleteCached(CacheKeys.userProfile(user?.slug || "")), deleteCached(CacheKeys.userData(sessionUser.id)), deleteCached(CacheKeys.userAssets(sessionUser.id))])
+  await Promise.all([deleteCached(CacheKeys.userProfile(user?.slug || "")), deleteCached(CacheKeys.userData(sessionUser.id))])
 
   return { banner }
 })
