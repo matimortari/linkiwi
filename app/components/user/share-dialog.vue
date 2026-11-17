@@ -1,19 +1,18 @@
 <template>
   <Dialog :is-open="isOpen" title="Share Profile" @update:is-open="emit('close')">
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-4">
       <div class="navigation-group flex-wrap justify-center">
         <button
           v-for="tab in SHARE_TABS" :key="tab.value"
-          type="button"
-          class="btn-ghost justify-start! text-muted-foreground!" :class="{ 'bg-muted!': activeTab === tab.value }"
-          @click="activeTab = tab.value"
+          type="button" class="btn-ghost justify-start! text-muted-foreground!"
+          :class="{ 'bg-muted!': activeTab === tab.value }" @click="activeTab = tab.value"
         >
           <span>{{ tab.label }}</span>
         </button>
       </div>
 
-      <div v-if="activeTab === 'qr'" class="flex flex-col items-center gap-2">
-        <div ref="qrContainer" class="overflow-hidden rounded-2xl border shadow-sm" />
+      <div v-if="activeTab === 'qr'" class="card flex flex-col items-center gap-4">
+        <div ref="qrContainer" class="overflow-hidden rounded-xl" />
 
         <button type="button" class="btn-ghost" @click="downloadQRCode()">
           <icon :name="downloadAction.icon.value" size="20" />
@@ -21,7 +20,7 @@
         </button>
       </div>
 
-      <div v-if="activeTab === 'tracking'" class="flex flex-col gap-2">
+      <div v-if="activeTab === 'tracking'" class="flex flex-col gap-4">
         <p class="text-caption text-center">
           Copy your profile link with tracking parameters to see where your visitors are coming from.
         </p>
@@ -37,20 +36,20 @@
           </button>
         </div>
 
-        <div class="flex gap-2">
+        <div class="navigation-group">
           <input
             v-model="customTag" type="text"
             placeholder="Custom tag (e.g., newsletter)" class="flex-1"
             @keyup.enter="handleCopyWithTracking(customTag)"
           >
-          <button type="button" class="btn" :disabled="!customTag.trim()" @click="handleCopyWithTracking(customTag)">
+          <button type="button" class="btn-ghost" :disabled="!customTag.trim()" @click="handleCopyWithTracking(customTag)">
             <icon :name="copyAction.icon.value" size="20" />
-            <span>Copy</span>
+            <span class="hidden md:inline">Copy</span>
           </button>
         </div>
       </div>
 
-      <div v-if="activeTab === 'social'" class="flex flex-col gap-2">
+      <div v-if="activeTab === 'social'" class="flex flex-col gap-4">
         <p class="text-caption text-center">
           Share your profile directly to social media platforms.
         </p>

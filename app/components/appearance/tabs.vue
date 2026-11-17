@@ -1,8 +1,8 @@
 <template>
-  <div v-if="props.activeTab === 'base'" class="card grid grid-cols-1 gap-2 md:mx-4 md:grid-cols-2">
+  <div v-if="props.activeTab === 'base'" class="card mx-1 grid grid-cols-1 gap-2 md:mx-4 md:grid-cols-2">
     <RadioOptions v-model:value="localPrefs.backgroundType" name="backgroundType" label="Background Type" :options="BACKGROUND_TYPES" />
     <div class="flex flex-col gap-2 md:p-2">
-      <h6 class="py-2">
+      <h6>
         Colors
       </h6>
       <ColorPicker id="backgroundColor" v-model:value="localPrefs.backgroundColor" label="Background Color" :disabled="isBackgroundGradient" />
@@ -11,7 +11,7 @@
     </div>
   </div>
 
-  <div v-if="props.activeTab === 'layout'" class="card grid grid-cols-1 gap-6 md:mx-4 md:grid-cols-2">
+  <div v-if="props.activeTab === 'layout'" class="card mx-1 grid grid-cols-1 gap-4 md:mx-4 md:grid-cols-2">
     <div class="flex flex-col gap-2">
       <h6>
         Header & Profile
@@ -40,7 +40,7 @@
     </div>
   </div>
 
-  <div v-if="props.activeTab === 'links'" class="card grid grid-cols-1 gap-6 md:mx-4 md:grid-cols-2">
+  <div v-if="props.activeTab === 'links'" class="card mx-1 grid grid-cols-1 gap-4 md:mx-4 md:grid-cols-2">
     <div class="flex flex-col gap-2">
       <h6>
         Base Styles
@@ -70,7 +70,7 @@
     </div>
   </div>
 
-  <div v-if="props.activeTab === 'icons'" class="card grid grid-cols-1 gap-6 md:mx-4 md:grid-cols-2">
+  <div v-if="props.activeTab === 'icons'" class="card mx-1 grid grid-cols-1 gap-4 md:mx-4 md:grid-cols-2">
     <div class="flex flex-col gap-2">
       <h6>
         Base Styles

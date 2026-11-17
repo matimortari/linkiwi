@@ -27,7 +27,7 @@
         </div>
       </div>
 
-      <div class="navigation-group">
+      <div class="navigation-group justify-end!">
         <button type="button" class="btn-primary" @click="handleApplyFilter">
           <icon name="mdi:filter-outline" size="20" />
           <span>Apply</span>
@@ -45,7 +45,7 @@
       </h4>
 
       <div class="grid grid-cols-2 gap-2 md:grid-cols-4 md:gap-4">
-        <div v-for="item in summaryItems" :key="item.label" class="flex h-full items-start gap-2 p-2">
+        <div v-for="item in summaryItems" :key="item.label" class="flex h-full items-start gap-2 p-2 md:gap-4">
           <icon :name="item.icon" size="30" class="text-caption-info shrink-0" />
           <div class="flex h-full min-w-0 flex-1 flex-col items-start text-start">
             <p class="text-caption w-full truncate">

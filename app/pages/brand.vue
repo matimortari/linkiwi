@@ -15,7 +15,7 @@
       <div v-for="(asset, index) in SYMBOLS" :key="asset.name" class="flex flex-col gap-1">
         <div class="group relative flex h-40 items-center justify-center overflow-hidden rounded-lg border" :class="asset.bgClass">
           <img :src="asset.image" :alt="asset.name" class="h-24 w-auto object-contain">
-          <button type="button" class="brand-action" :aria-label="`Download ${asset.name}`" @click="handleDownloadImage(asset, index, symbolActions)">
+          <button type="button" class="brand-action" :aria-label="`Download ${asset.name}`" @click="handleDownloadImage(asset, index, symbolActions, $event)">
             <span class="brand-chip">
               <span>Download</span>
               <icon :name="symbolActions[index]!.icon.value" size="20" />
@@ -36,7 +36,7 @@
       <div v-for="(asset, index) in WORDMARKS" :key="asset.name" class="flex flex-col gap-1">
         <div class="group relative flex h-40 items-center justify-center overflow-hidden rounded-lg border" :class="asset.bgClass">
           <img :src="asset.image" :alt="asset.name" class="h-12 w-auto object-contain">
-          <button type="button" class="brand-action" :aria-label="`Download ${asset.name}`" @click="handleDownloadImage(asset, index, wordmarkActions)">
+          <button type="button" class="brand-action" :aria-label="`Download ${asset.name}`" @click="handleDownloadImage(asset, index, wordmarkActions, $event)">
             <span class="brand-chip">
               <span>Download</span>
               <icon :name="wordmarkActions[index]!.icon.value" size="20" />
@@ -58,10 +58,10 @@
         Brand Colors
       </h3>
 
-      <div class="grid grid-cols-3 gap-2">
-        <div v-for="(color, index) in NEUTRAL_SCALE" :key="color.name" class="flex flex-col gap-1">
+      <div class="grid grid-cols-2 gap-2">
+        <div v-for="(color, index) in BRAND_COLORS" :key="color.name" class="flex flex-col gap-1">
           <div class="group relative h-40 overflow-hidden rounded-lg border md:h-48" :style="{ backgroundColor: `var(${color.var})` }">
-            <button type="button" class="brand-action" :aria-label="`Copy ${color.value}`" @click="handleCopyColor(color.value, index, neutralActions)">
+            <button type="button" class="brand-action" :aria-label="`Copy ${color.value}`" @click="handleCopyColor(color.value, index, brandActions, $event)">
               <span class="brand-chip font-mono">
                 <span>{{ color.value }}</span>
                 <icon :name="brandActions[index]!.icon.value" size="15" />
@@ -78,10 +78,10 @@
         Neutral Colors
       </h3>
 
-      <div class="grid gap-2 md:grid-cols-2 xl:grid-cols-3">
-        <div v-for="(color, index) in NEUTRAL_SCALE" :key="color.name" class="flex flex-col gap-2 p-2">
+      <div class="grid grid-cols-3 gap-2">
+        <div v-for="(color, index) in NEUTRAL_SCALE" :key="color.name" class="flex flex-col gap-1">
           <div class="group relative h-28 overflow-hidden rounded-lg border md:h-32" :style="{ backgroundColor: `var(${color.var})` }">
-            <button type="button" class="brand-action bg-black/0 group-hover:bg-black/50 focus-visible:bg-black/50" :aria-label="`Copy ${color.value}`" @click="handleCopyColor(color.value, index, neutralActions)">
+            <button type="button" class="brand-action" :aria-label="`Copy ${color.value}`" @click="handleCopyColor(color.value, index, neutralActions, $event)">
               <span class="brand-chip font-mono">
                 <span>{{ color.value }}</span>
                 <icon :name="neutralActions[index]!.icon.value" size="15" />
@@ -102,7 +102,7 @@
         <div v-for="(status, statusIndex) in STATUS_COLORS" :key="status.name" class="flex flex-col gap-1">
           <div class="flex h-28 overflow-hidden rounded-lg border md:h-32">
             <div class="group relative h-full w-1/2" :style="{ backgroundColor: `var(${status.darkVar})` }">
-              <button type="button" class="brand-action" :aria-label="`Copy ${status.darkVal}`" @click="handleCopyColor(status.darkVal, statusIndex * 2, statusActions)">
+              <button type="button" class="brand-action" :aria-label="`Copy ${status.darkVal}`" @click="handleCopyColor(status.darkVal, statusIndex * 2, statusActions, $event)">
                 <span class="brand-chip font-mono">
                   <span>{{ status.darkVal }}</span>
                   <icon :name="statusActions[statusIndex * 2]!.icon.value" size="15" />
@@ -110,7 +110,7 @@
               </button>
             </div>
             <div class="group relative h-full w-1/2" :style="{ backgroundColor: `var(${status.lightVar})` }">
-              <button type="button" class="brand-action" :aria-label="`Copy ${status.lightVal}`" @click="handleCopyColor(status.lightVal, (statusIndex * 2) + 1, statusActions)">
+              <button type="button" class="brand-action" :aria-label="`Copy ${status.lightVal}`" @click="handleCopyColor(status.lightVal, (statusIndex * 2) + 1, statusActions, $event)">
                 <span class="brand-chip font-mono">
                   <span>{{ status.lightVal }}</span>
                   <icon :name="statusActions[(statusIndex * 2) + 1]!.icon.value" size="15" />
@@ -132,25 +132,43 @@ const wordmarkActions = WORDMARKS.map(() => useActionIcon("mdi:download"))
 const neutralActions = NEUTRAL_SCALE.map(() => useActionIcon("mdi:content-copy"))
 const brandActions = BRAND_COLORS.map(() => useActionIcon("mdi:content-copy"))
 const statusActions = Array.from({ length: STATUS_COLORS.length * 2 }, () => useActionIcon("mdi:content-copy"))
+const revealedEl = ref<HTMLElement | null>(null)
+useClickOutside(revealedEl, () => {
+  revealedEl.value?.classList.remove("is-revealed")
+  revealedEl.value = null
+}, { escapeKey: true })
 
-function handleDownloadImage(logo: { name: string, image: string }, index: number, actions: any[]) {
-  if (!actions[index]) {
+function revealOrAct(event: MouseEvent, action: () => void) {
+  const group = (event.currentTarget as HTMLElement).closest(".group") as HTMLElement
+  if (!globalThis.matchMedia("(hover: hover)").matches && revealedEl.value !== group) {
+    revealedEl.value?.classList.remove("is-revealed")
+    group.classList.add("is-revealed")
+    revealedEl.value = group
     return
   }
-
-  const a = document.createElement("a")
-  a.href = logo.image
-  a.download = logo.name.replace(/\s+/g, "-").toLowerCase()
-  a.click()
-  actions[index].triggerSuccess()
+  action()
 }
 
-async function handleCopyColor(hex: string, index: number, actions: any[]) {
+function handleDownloadImage(logo: { name: string, image: string }, index: number, actions: any[], event: MouseEvent) {
   if (!actions[index]) {
     return
   }
 
-  await actions[index].triggerCopy(hex)
+  revealOrAct(event, () => {
+    const a = document.createElement("a")
+    a.href = logo.image
+    a.download = logo.name.replace(/\s+/g, "-").toLowerCase()
+    a.click()
+    actions[index].triggerSuccess()
+  })
+}
+
+function handleCopyColor(hex: string, index: number, actions: any[], event: MouseEvent) {
+  if (!actions[index]) {
+    return
+  }
+
+  revealOrAct(event, () => actions[index].triggerCopy(hex))
 }
 
 useHead({
@@ -187,11 +205,13 @@ definePageMeta({ layout: "content" })
   transition: opacity var(--transition);
 }
 
-.brand-action:focus-visible {
+.brand-action:focus-visible,
+.group.is-revealed > .brand-action {
   background-color: rgb(0 0 0 / 0.5);
 }
 
-.brand-action:focus-visible > .brand-chip {
+.brand-action:focus-visible > .brand-chip,
+.group.is-revealed > .brand-action > .brand-chip {
   opacity: 1;
 }
 

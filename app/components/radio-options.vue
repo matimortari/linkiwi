@@ -1,6 +1,6 @@
 <template>
   <div class="flex w-full flex-col gap-2 md:p-2">
-    <h6 class="py-2">
+    <h6>
       {{ label }}
     </h6>
 

@@ -182,9 +182,11 @@ h6 {
     box-shadow var(--transition),
     background-color var(--transition);
 }
-.card:hover {
-  box-shadow: 0 2px 4px 0px rgba(0, 0, 0, 0.2);
-  background-color: color-mix(in srgb, var(--card) 95%, var(--foreground));
+@media (hover: hover) {
+  .card:hover {
+    box-shadow: 0 2px 4px 0px rgba(0, 0, 0, 0.2);
+    background-color: color-mix(in srgb, var(--card) 95%, var(--foreground));
+  }
 }
 
 .overlay {
@@ -298,8 +300,13 @@ input[type="radio"]:checked::after {
   user-select: none;
   transition: all var(--transition);
 }
-:is(.btn, .btn-primary, .btn-secondary, .btn-danger, .btn-success, .btn-warning, .btn-info, .btn-ghost):hover {
-  filter: brightness(0.9);
+@media (hover: hover) {
+  :is(.btn, .btn-primary, .btn-secondary, .btn-danger, .btn-success, .btn-warning, .btn-info, .btn-ghost):hover {
+    filter: brightness(0.9);
+  }
+  .btn-ghost:hover {
+    background-color: color-mix(in srgb, var(--muted) 60%, transparent);
+  }
 }
 :is(.btn, .btn-primary, .btn-secondary, .btn-danger, .btn-success, .btn-warning, .btn-info, .btn-ghost):active {
   filter: brightness(0.8);
@@ -336,9 +343,6 @@ input[type="radio"]:checked::after {
   background-color: transparent;
   color: var(--foreground);
   border-color: transparent;
-}
-.btn-ghost:hover {
-  background-color: color-mix(in srgb, var(--muted) 60%, transparent);
 }
 
 /* Utilities */

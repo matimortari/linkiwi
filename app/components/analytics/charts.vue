@@ -6,7 +6,7 @@
           Page Views Over Time
         </h4>
 
-        <Empty v-if="!pageViewsChartData" class="min-h-64 flex-1" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
+        <Empty v-if="!pageViewsChartData" class="min-h-52 flex-1 md:min-h-64" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
         <AnalyticsLineChart v-else :chart-data="pageViewsChartData" />
       </div>
 
@@ -15,7 +15,7 @@
           Clicks by Link
         </h4>
 
-        <Empty v-if="!clicksPerLinkChartData" class="min-h-64 flex-1" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
+        <Empty v-if="!clicksPerLinkChartData" class="min-h-52 flex-1 md:min-h-64" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
         <AnalyticsDonutChart v-else :chart-data="clicksPerLinkChartData" />
       </div>
     </div>
@@ -29,17 +29,17 @@
         <div class="flex min-h-0 flex-1 flex-col gap-4">
           <AnalyticsBarChart v-if="referrerChartData" :chart-data="referrerChartData" />
 
-          <div class="scroll-area card min-h-0 flex-1 overflow-y-auto p-0!">
+          <div class="scroll-area card min-h-0 flex-1 overflow-x-hidden overflow-y-auto p-0!">
             <table class="referrer-table w-full">
-              <thead class="sticky top-0 z-10 bg-muted text-sm font-semibold">
+              <thead class="sticky top-0 z-10 text-xs font-semibold md:text-sm">
                 <tr>
-                  <th class="px-4 py-2 text-left">
+                  <th class="bg-muted p-2 text-left md:px-4">
                     Source
                   </th>
-                  <th class="px-4 py-2 text-right">
+                  <th class="bg-muted p-2 text-right md:px-4">
                     Views
                   </th>
-                  <th class="px-4 py-2 text-right">
+                  <th class="bg-muted p-2 text-right md:px-4">
                     Percentage
                   </th>
                 </tr>
@@ -47,25 +47,25 @@
 
               <tbody class="divide-y">
                 <tr v-if="!topReferrers.length">
-                  <td colspan="3" class="px-4 py-8 text-center text-sm text-muted-foreground">
+                  <td colspan="3" class="px-2 py-8 text-center text-xs text-muted-foreground md:px-4 md:text-sm">
                     Not enough data yet.
                   </td>
                 </tr>
                 <template v-else>
                   <tr v-for="stat in topReferrers" :key="stat.source">
-                    <td class="px-4 py-2 text-sm">
+                    <td class="p-2 text-xs md:px-4 md:text-sm">
                       <div class="navigation-group">
                         <div class="rounded-full bg-muted p-1">
-                          <icon :name="getSourceIcon(stat.source)" size="20" />
+                          <icon :name="getSourceIcon(stat.source)" size="15" />
                         </div>
                         <span class="font-semibold">{{ stat.label }}</span>
                       </div>
                     </td>
-                    <td class="px-4 py-2 text-right text-sm font-medium">
+                    <td class="p-2 text-right text-xs font-medium md:px-4">
                       {{ stat.count }}
                     </td>
-                    <td class="px-4 py-2 text-right text-sm">
-                      <span class="text-caption-info inline-flex items-center rounded-full border bg-primary/20 px-2 py-1 text-xs font-medium">{{ stat.percentage }}%</span>
+                    <td class="p-2 text-right text-xs md:px-4 md:text-sm">
+                      <span class="text-caption-info inline-flex items-center rounded-full border bg-primary/20 p-1 text-xs!">{{ stat.percentage }}%</span>
                     </td>
                   </tr>
                 </template>
@@ -81,7 +81,7 @@
             Total Link Clicks
           </h4>
 
-          <Empty v-if="!linkClicksChartData" class="min-h-64 flex-1" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
+          <Empty v-if="!linkClicksChartData" class="min-h-52 flex-1 md:min-h-64" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
           <AnalyticsBarChart v-else :chart-data="linkClicksChartData" />
         </div>
 
@@ -90,7 +90,7 @@
             Total Social Icon Clicks
           </h4>
 
-          <Empty v-if="!iconClicksChartData" class="min-h-64 flex-1" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
+          <Empty v-if="!iconClicksChartData" class="min-h-52 flex-1 md:min-h-64" message="Not enough data yet." icon-name="mdi:toy-brick-minus-outline" />
           <AnalyticsBarChart v-else :chart-data="iconClicksChartData" />
         </div>
       </div>
@@ -129,6 +129,22 @@ function getSourceIcon(source: string): string {
 .referrer-table {
   border-collapse: collapse;
   table-layout: fixed;
+  width: 100%;
+}
+
+.referrer-table th:nth-child(1),
+.referrer-table td:nth-child(1) {
+  width: 48%;
+}
+
+.referrer-table th:nth-child(2),
+.referrer-table td:nth-child(2) {
+  width: 22%;
+}
+
+.referrer-table th:nth-child(3),
+.referrer-table td:nth-child(3) {
+  width: 30%;
 }
 
 .referrer-table tbody {
