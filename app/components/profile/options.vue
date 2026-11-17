@@ -17,11 +17,11 @@
           <label class="inline-flex cursor-pointer items-center gap-2">
             <input
               id="enableGuestbook" v-model="guestbookEnabled"
-              type="checkbox" class="peer sr-only"
+              type="checkbox" class="peer hidden"
               @change="handleSaveGuestbook"
             >
-            <span class="relative h-6 w-11 shrink-0 rounded-full bg-muted transition-colors peer-checked:bg-primary peer-focus-visible:ring-2 peer-focus-visible:ring-primary/50 after:absolute after:top-0.5 after:left-0.5 after:size-5 after:rounded-full after:bg-[#f9fafb] after:shadow-sm after:transition-transform peer-checked:after:translate-x-5" />
-            <span class="text-sm font-medium">{{ guestbookEnabled ? "Enabled" : "Disabled" }}</span>
+            <span class="relative h-5 w-9 shrink-0 rounded-full bg-muted transition-colors peer-checked:bg-primary peer-focus-visible:ring-2 peer-focus-visible:ring-primary/50 after:absolute after:top-0.5 after:left-0.5 after:size-4 after:rounded-full after:bg-[#f9fafb] after:shadow-sm after:transition-transform peer-checked:after:translate-x-4" />
+            <span class="text-xs font-medium">{{ guestbookEnabled ? "Enabled" : "Disabled" }}</span>
           </label>
         </div>
       </div>

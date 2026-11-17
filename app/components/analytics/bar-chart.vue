@@ -1,6 +1,6 @@
 <template>
-  <div class="relative min-h-64 w-full flex-1">
-    <div class="absolute inset-0 py-4">
+  <div class="relative min-h-52 w-full flex-1 md:min-h-64">
+    <div class="absolute inset-0 py-2 md:py-4">
       <Bar :data="props.chartData" :options="chartOptions" />
     </div>
   </div>
@@ -24,9 +24,10 @@ const chartOptions: ChartOptions<"bar"> = {
     tooltip: {
       enabled: true,
       backgroundColor: "rgba(0, 0, 0, 0.8)",
-      padding: 12,
+      padding: 10,
       cornerRadius: 8,
-      titleFont: { size: 14 },
+      titleFont: { size: 12 },
+      bodyFont: { size: 11 },
       callbacks: {
         label(context: any) {
           return `Count: ${context.parsed.y}`
@@ -37,12 +38,12 @@ const chartOptions: ChartOptions<"bar"> = {
   scales: {
     x: {
       grid: { display: false },
-      ticks: { font: { size: 10 }, maxRotation: 45, minRotation: 0 },
+      ticks: { font: { size: 9 }, maxRotation: 45, minRotation: 0, autoSkip: true, maxTicksLimit: 6 },
     },
     y: {
       beginAtZero: true,
       grid: { color: "rgba(0, 0, 0, 0.05)" },
-      ticks: { font: { size: 10 }, precision: 0, padding: 8 },
+      ticks: { font: { size: 9 }, precision: 0, padding: 6, maxTicksLimit: 6 },
     },
   },
   elements: { bar: { borderSkipped: false, backgroundColor: "#eab308" } },
