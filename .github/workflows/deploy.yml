@@ -53,8 +53,6 @@ jobs:
 
           railway variables set "${VARS_ARGS[@]}" --skip-deploys --service "$RAILWAY_SERVICE"
 
-          # Remove keys this job previously synced that are no longer in WindKeep.
-          # Dashboard-only / Railway-injected vars are left alone.
           SYNC_META=WINDKEEP_SYNCED_KEYS
           mapfile -t PREV_KEYS < <(railway variables --json --service "$RAILWAY_SERVICE" | jq -r --arg k "$SYNC_META" '.[$k] // empty | split(",")[] | select(length > 0)')
           for OLD in "${PREV_KEYS[@]}"; do
@@ -63,7 +61,7 @@ jobs:
               [ "$OLD" = "$K" ] && found=1 && break
             done
             if [ "$found" -eq 0 ]; then
-              railway variables delete "$OLD" --skip-deploys --service "$RAILWAY_SERVICE"
+              railway variables delete "$OLD" --service "$RAILWAY_SERVICE"
             fi
           done
 
