@@ -18,7 +18,6 @@ jobs:
 
       - name: Push WindKeep secrets to Railway
         env:
-          WINDKEEP_URL: ${{ secrets.WINDKEEP_URL }}
           WINDKEEP_PROJECT_ID: ${{ secrets.WINDKEEP_PROJECT_ID }}
           WINDKEEP_TOKEN: ${{ secrets.WINDKEEP_TOKEN }}
           WINDKEEP_ENVIRONMENT: ${{ secrets.WINDKEEP_ENVIRONMENT }}
@@ -30,7 +29,7 @@ jobs:
 
           HTTP_CODE=$(curl -s -o /tmp/wk_response.json -w "%{http_code}" \
             -H "Authorization: Bearer ${WINDKEEP_TOKEN}" \
-            "${WINDKEEP_URL}/api/projects/${WINDKEEP_PROJECT_ID}/secrets")
+            "https://windkeep.up.railway.app/api/projects/${WINDKEEP_PROJECT_ID}/secrets")
 
           if [ "$HTTP_CODE" != "200" ]; then
             echo "HTTP ${HTTP_CODE}:" && cat /tmp/wk_response.json
