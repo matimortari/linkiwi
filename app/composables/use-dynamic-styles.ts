@@ -1,11 +1,7 @@
 export function useDynamicStyles(preferences: UserPreferences | null | Ref<UserPreferences | null | undefined>) {
   const pref = computed(() => unref(preferences))
 
-  const backgroundStyle = computed(() =>
-    pref.value?.backgroundType === "GRADIENT"
-      ? { background: `linear-gradient(to bottom, ${pref.value.backgroundGradientStart}, ${pref.value.backgroundGradientEnd})` }
-      : { backgroundColor: pref.value?.backgroundColor },
-  )
+  const backgroundStyle = computed(() => pref.value?.backgroundType === "GRADIENT" ? { background: `linear-gradient(to bottom, ${pref.value.backgroundGradientStart}, ${pref.value.backgroundGradientEnd})` } : { backgroundColor: pref.value?.backgroundColor })
 
   const profilePictureStyle = computed(() => ({
     borderRadius: pref.value?.profilePictureRadius,

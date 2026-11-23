@@ -1,5 +1,5 @@
 <template>
-  <Dialog :is-open="isWidgetDialogOpen" :title="isUpdateMode ? 'Edit Widget' : 'Add Widget'" @update:is-open="emit('close')">
+  <Dialog :is-open="dialog.isOpen('widget')" :title="isUpdateMode ? 'Edit Widget' : 'Add Widget'" @update:is-open="emit('close')">
     <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
       <div class="flex flex-col gap-2">
         <span class="text-sm font-medium">Select Platform</span>
@@ -46,7 +46,7 @@
 const emit = defineEmits<{ close: [] }>()
 
 const profileItemsStore = useProfileItemsStore()
-const { isWidgetDialogOpen, selectedWidget } = useUIState()
+const { dialog } = useUI()
 const form = ref<{ type: WidgetType | null, handle: string }>({ type: null, handle: "" })
 const editingId = ref<string | null>(null)
 const isUpdateMode = computed(() => !!editingId.value)
@@ -81,7 +81,7 @@ function resetForm() {
 }
 
 // Populate form from the selected widget
-watch(() => selectedWidget.value, (item) => {
+watch(() => dialog.data("widget"), (item) => {
   if (item?.widget) {
     editingId.value = item.id
     form.value.type = item.widget.type

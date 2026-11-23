@@ -86,6 +86,7 @@ const emit = defineEmits<{ close: [] }>()
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
+const { confirm } = useUI()
 const saveAction = useActionIcon("mdi:content-save-check")
 const fileInput = ref<HTMLInputElement | null>(null)
 const cropImage = ref<HTMLImageElement | null>(null)
@@ -270,7 +271,7 @@ async function handleRemove() {
   if (!user.value?.banner) {
     return
   }
-  if (!confirm("Are you sure you want to remove your profile banner?")) {
+  if (!await confirm({ title: "Remove Banner", message: "Are you sure you want to remove your profile banner?", confirmLabel: "Remove", variant: "danger" })) {
     return
   }
 

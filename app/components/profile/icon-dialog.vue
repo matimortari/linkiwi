@@ -1,5 +1,5 @@
 <template>
-  <Dialog :is-open="isIconDialogOpen" title="Add Social Icon" @update:is-open="emit('close')">
+  <Dialog :is-open="dialog.isOpen('icon')" title="Add Social Icon" @update:is-open="emit('close')">
     <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
       <span class="text-sm font-medium">Select Platform</span>
 
@@ -37,7 +37,7 @@
 const emit = defineEmits<{ close: [] }>()
 
 const profileItemsStore = useProfileItemsStore()
-const { isIconDialogOpen } = useUIState()
+const { dialog } = useUI()
 const form = ref({ platform: "", logo: "", url: "" })
 const socialIconEntries = computed(() => Object.entries(SOCIAL_ICONS) as [string, string][])
 
@@ -72,7 +72,7 @@ function resetForm() {
 }
 
 // Reset form when the dialog is closed
-watch(() => isIconDialogOpen.value, (open) => {
+watch(() => dialog.isOpen("icon"), (open) => {
   if (!open) {
     resetForm()
   }

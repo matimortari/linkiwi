@@ -136,10 +136,10 @@
     </button>
   </template>
 
-  <ProfileLinkDialog :is-open="isLinkDialogOpen" @close="closeDialog('link')" />
-  <ProfileWidgetDialog :is-open="isWidgetDialogOpen" @close="closeDialog('widget')" />
-  <ProfilePhotoGridDialog :is-open="uiState.dialogs.photoGrid.isOpen" @close="closeDialog('photoGrid')" />
-  <ProfileLocationDialog :is-open="isLocationDialogOpen" @close="closeDialog('location')" />
+  <ProfileLinkDialog :is-open="dialog.isOpen('link')" @close="dialog.close('link')" />
+  <ProfileWidgetDialog :is-open="dialog.isOpen('widget')" @close="dialog.close('widget')" />
+  <ProfilePhotoGridDialog :is-open="dialog.isOpen('photoGrid')" @close="dialog.close('photoGrid')" />
+  <ProfileLocationDialog :is-open="dialog.isOpen('location')" @close="dialog.close('location')" />
   <ProfileScheduleDialog :is-open="isScheduleDialogOpen" :item="schedulingItem" @close="closeScheduleDialog" />
 </template>
 
@@ -149,7 +149,7 @@ import { VueDraggable } from "vue-draggable-plus"
 const userStore = useUserStore()
 const profileItemsStore = useProfileItemsStore()
 const { loading } = storeToRefs(profileItemsStore)
-const { uiState, isLinkDialogOpen, isWidgetDialogOpen, isLocationDialogOpen, openDialog, closeDialog } = useUIState()
+const { dialog, confirm } = useUI()
 const isPicking = ref(false)
 const isScheduleDialogOpen = ref(false)
 const schedulingItem = ref<ProfileItem | null>(null)
@@ -173,25 +173,23 @@ async function handlePickType(type: ProfileItemType) {
   }
   isPicking.value = false
   if (type === "LINK") {
-    uiState.dialogs.link.selectedLink = null
-    openDialog("link")
+    dialog.open("link")
     return
   }
   if (type === "ICON") {
-    openDialog("icon")
+    dialog.open("icon")
     return
   }
   if (type === "WIDGET") {
-    uiState.dialogs.widget.selectedWidget = null
-    openDialog("widget")
+    dialog.open("widget")
     return
   }
   if (type === "PHOTO_GRID") {
-    openDialog("photoGrid")
+    dialog.open("photoGrid")
     return
   }
   if (type === "LOCATION") {
-    openDialog("location")
+    dialog.open("location")
     return
   }
   if (type === "DIVIDER") {
@@ -201,19 +199,19 @@ async function handlePickType(type: ProfileItemType) {
 
 function handleEdit(item: ProfileItem) {
   if (item.type === "LINK") {
-    openDialog("link", { item })
+    dialog.open("link", item)
     return
   }
   if (item.type === "WIDGET") {
-    openDialog("widget", { item })
+    dialog.open("widget", item)
     return
   }
   if (item.type === "PHOTO_GRID") {
-    openDialog("photoGrid", { item })
+    dialog.open("photoGrid", item)
     return
   }
   if (item.type === "LOCATION") {
-    openDialog("location", { item })
+    dialog.open("location", item)
   }
 }
 
@@ -252,7 +250,7 @@ function closeScheduleDialog() {
 }
 
 async function handleDelete(id: string) {
-  if (!confirm("Are you sure you want to delete this item?")) {
+  if (!await confirm({ title: "Delete Item", message: "Are you sure you want to delete this item?", confirmLabel: "Delete", variant: "danger" })) {
     return
   }
   await profileItemsStore.deleteItem(id)

@@ -1,5 +1,5 @@
 <template>
-  <Dialog :is-open="isPhotoGridDialogOpen" :title="isUpdateMode ? 'Edit Photo Grid' : 'Add Photo Grid'" @update:is-open="emit('close')">
+  <Dialog :is-open="dialog.isOpen('photoGrid')" :title="isUpdateMode ? 'Edit Photo Grid' : 'Add Photo Grid'" @update:is-open="emit('close')">
     <div class="flex flex-col gap-4">
       <div class="flex flex-col gap-2">
         <div class="flex items-center justify-between">
@@ -48,7 +48,8 @@ const emit = defineEmits<{ close: [] }>()
 
 const profileItemsStore = useProfileItemsStore()
 const userStore = useUserStore()
-const { isPhotoGridDialogOpen, selectedPhotoGrid } = useUIState()
+const { dialog } = useUI()
+const selectedPhotoGrid = computed(() => dialog.data("photoGrid"))
 const selected = ref<{ id: string, url: string }[]>([])
 const editingId = ref<string | null>(null)
 const isUpdateMode = computed(() => !!editingId.value)
@@ -143,7 +144,7 @@ watch(selectedPhotoGrid, (item) => {
 }, { immediate: true })
 
 // Fetch assets and refresh the form when the dialog opens
-watch(isPhotoGridDialogOpen, async (open) => {
+watch(() => dialog.isOpen("photoGrid"), async (open) => {
   if (!open) {
     resetForm()
     return

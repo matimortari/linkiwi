@@ -1,7 +1,7 @@
 import type { UpdateUserInput, UpdateUserPreferencesInput, UserBannerInput } from "#shared/schemas/user-schema"
 
 export const useUserStore = defineStore("user", () => {
-  const toast = useToast()
+  const { toast } = useUI()
   const user = ref<User | null>(null)
   const userProfile = ref<User | null>(null)
   const preferences = computed(() => user.value?.preferences ?? DEFAULT_PREFERENCES)

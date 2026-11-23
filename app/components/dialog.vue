@@ -6,12 +6,12 @@
         :class="isMobile ? 'items-end justify-center' : 'items-center justify-center'" @mousedown.self="emit('update:isOpen', false)"
       >
         <div
-          class="overlay space-y-4" :class="isMobile ? 'flex max-h-dvh w-full flex-col' : 'min-w-120'"
+          class="overlay" :class="isMobile ? 'flex max-h-dvh w-full flex-col' : 'min-w-120'"
           role="dialog" aria-modal="true"
           aria-labelledby="dialog-title"
         >
           <!-- Drag handle (mobile only) -->
-          <div v-if="isMobile" class="h-1 w-20 self-center rounded-full bg-current opacity-20" />
+          <div v-if="isMobile" class="mb-4 h-1 w-20 self-center rounded-full bg-current opacity-20" />
 
           <header class="flex flex-row items-center justify-between border-b pb-2">
             <h4 id="dialog-title">
@@ -66,6 +66,7 @@ onMounted(() => {
   }
 })
 
+// Lock page scroll while the dialog is open
 watch(() => props.isOpen, scrollLock)
 
 onBeforeUnmount(() => {

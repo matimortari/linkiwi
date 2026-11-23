@@ -22,7 +22,8 @@
 </template>
 
 <script setup lang="ts">
-const { toasts, dismiss } = useToast()
+const { toast: { list, dismiss } } = useUI()
+const toasts = computed(list)
 </script>
 
 <style scoped>

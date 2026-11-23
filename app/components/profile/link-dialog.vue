@@ -1,5 +1,5 @@
 <template>
-  <Dialog :is-open="isLinkDialogOpen" :title="isUpdateMode ? 'Edit Link' : 'Add Link'" @update:is-open="emit('close')">
+  <Dialog :is-open="dialog.isOpen('link')" :title="isUpdateMode ? 'Edit Link' : 'Add Link'" @update:is-open="emit('close')">
     <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
       <div class="flex max-w-md flex-col gap-2">
         <label for="title" class="text-sm font-medium">Title</label>
@@ -58,7 +58,7 @@ const emit = defineEmits<{ close: [] }>()
 
 const profileItemsStore = useProfileItemsStore()
 const userStore = useUserStore()
-const { isLinkDialogOpen, selectedLink } = useUIState()
+const { dialog } = useUI()
 const form = ref({ title: "", url: "" })
 const selectedAsset = ref<{ id: string, url: string } | null>(null)
 const showAssetPicker = ref(false)
@@ -125,7 +125,7 @@ function resetForm() {
 }
 
 // Load assets and populate form when the dialog opens
-watch([() => isLinkDialogOpen.value, () => selectedLink.value], async ([open, item]) => {
+watch([() => dialog.isOpen("link"), () => dialog.data("link")], async ([open, item]) => {
   if (!open) {
     return
   }

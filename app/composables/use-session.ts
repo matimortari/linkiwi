@@ -34,6 +34,7 @@ export function useSession() {
     initialized = true
     const { loggedIn } = useUserSession()
 
+    // Periodically validate the session while logged in and sign out when it expires
     watch(loggedIn, (isLoggedIn) => {
       if (sessionCheckInterval) {
         clearInterval(sessionCheckInterval)

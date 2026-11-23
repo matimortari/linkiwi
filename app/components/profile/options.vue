@@ -161,6 +161,7 @@ const userStore = useUserStore()
 const profileItemsStore = useProfileItemsStore()
 const analyticsStore = useAnalyticsStore()
 const { clear } = useUserSession()
+const { confirm } = useUI()
 const localPreferences = useState<UserPreferences | null>("localPreferences", () => null)
 const { preferences } = storeToRefs(userStore)
 const { comments } = storeToRefs(analyticsStore)
@@ -175,7 +176,7 @@ async function handleSaveGuestbook() {
 }
 
 async function handleDeleteComment(id: string) {
-  if (!confirm("Are you sure you want to delete this comment?")) {
+  if (!await confirm({ title: "Delete Comment", message: "Are you sure you want to delete this comment?", confirmLabel: "Delete", variant: "danger" })) {
     return
   }
 
@@ -193,7 +194,7 @@ async function handleAssetUpload(e: Event) {
 }
 
 async function handleAssetDelete(id: string) {
-  if (!confirm("Are you sure you want to delete this image? It will be removed from any photo grids, links, or banners using it.")) {
+  if (!await confirm({ title: "Delete Image", message: "Are you sure you want to delete this image? It will be removed from any photo grids, links, or banners using it.", confirmLabel: "Delete", variant: "danger" })) {
     return
   }
   await userStore.deleteAsset(id)
@@ -201,7 +202,7 @@ async function handleAssetDelete(id: string) {
 }
 
 async function handleResetAppearance() {
-  if (!confirm("Are you sure you want to reset all appearance settings to default?")) {
+  if (!await confirm({ title: "Reset Appearance", message: "Are you sure you want to reset all appearance settings to default?", confirmLabel: "Reset", variant: "warning" })) {
     return
   }
 
@@ -211,7 +212,7 @@ async function handleResetAppearance() {
 }
 
 async function handleDeleteAnalytics() {
-  if (!confirm("Are you sure you want to delete all analytics data? This action cannot be undone.")) {
+  if (!await confirm({ title: "Delete Analytics", message: "Are you sure you want to delete all analytics data? This action cannot be undone.", confirmLabel: "Delete", variant: "danger" })) {
     return
   }
 
@@ -219,7 +220,7 @@ async function handleDeleteAnalytics() {
 }
 
 async function handleDeleteAccount() {
-  if (!confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+  if (!await confirm({ title: "Delete Account", message: "Are you sure you want to delete your account? This action cannot be undone.", confirmLabel: "Delete", variant: "danger" })) {
     return
   }
 

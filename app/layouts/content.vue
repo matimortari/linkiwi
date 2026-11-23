@@ -87,6 +87,7 @@ onMounted(() => {
   window.addEventListener("scroll", updateActiveHeading, { passive: true })
 })
 
+// Rebuild the table of contents after navigating to another page
 watch(() => route.path, () => nextTick(extractHeadings))
 
 onUnmounted(() => window.removeEventListener("scroll", updateActiveHeading))

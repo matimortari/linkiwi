@@ -18,20 +18,20 @@
       </li>
     </VueDraggable>
 
-    <button type="button" class="btn-ghost" aria-label="Add social icon" @click="openDialog('icon')">
+    <button type="button" class="btn-ghost" aria-label="Add social icon" @click="dialog.open('icon')">
       <icon name="mdi:plus" size="35" class="text-muted-foreground" />
       <span v-if="!orderedIcons.length" class="text-muted-foreground">Add Social Icon</span>
     </button>
   </div>
 
-  <ProfileIconDialog :is-open="isIconDialogOpen" @close="closeDialog('icon')" />
+  <ProfileIconDialog :is-open="dialog.isOpen('icon')" @close="dialog.close('icon')" />
 </template>
 
 <script setup lang="ts">
 import { VueDraggable } from "vue-draggable-plus"
 
 const profileItemsStore = useProfileItemsStore()
-const { isIconDialogOpen, openDialog, closeDialog } = useUIState()
+const { dialog, confirm } = useUI()
 const orderedIcons = ref<NormalizedIcon[]>([])
 
 const icons = computed<NormalizedIcon[]>(() => (profileItemsStore.items || []).filter((item: ProfileItem) => item.type === "ICON" && item.icon).map((item: ProfileItem) => ({
@@ -52,7 +52,7 @@ async function reorderIcons() {
 }
 
 async function handleDelete(id: string) {
-  if (!confirm("Are you sure you want to delete this social icon?")) {
+  if (!await confirm({ title: "Delete Social Icon", message: "Are you sure you want to delete this social icon?", confirmLabel: "Delete", variant: "danger" })) {
     return
   }
   await profileItemsStore.deleteItem(id)

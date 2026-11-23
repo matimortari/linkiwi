@@ -1,5 +1,5 @@
 <template>
-  <Dialog :is-open="isLocationDialogOpen" :title="isUpdateMode ? 'Edit Location' : 'Add Location'" @update:is-open="emit('close')">
+  <Dialog :is-open="dialog.isOpen('location')" :title="isUpdateMode ? 'Edit Location' : 'Add Location'" @update:is-open="emit('close')">
     <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
       <div class="flex max-w-md flex-col gap-2">
         <label for="location-label" class="text-sm font-medium">Label</label>
@@ -82,7 +82,7 @@
 const emit = defineEmits<{ close: [] }>()
 
 const profileItemsStore = useProfileItemsStore()
-const { isLocationDialogOpen, selectedLocation } = useUIState()
+const { dialog } = useUI()
 const form = ref({ label: "", lat: NaN, lng: NaN, zoom: 14 })
 const searchQuery = ref("")
 const searchResults = ref<{ label: string, lat: number, lng: number }[]>([])
@@ -159,7 +159,7 @@ function resetForm() {
 }
 
 // Populate form from the selected location
-watch(() => selectedLocation.value, (item) => {
+watch(() => dialog.data("location"), (item) => {
   if (item?.location) {
     editingId.value = item.id
     form.value = {

@@ -1,7 +1,7 @@
 import type { CreateCommentInput } from "#shared/schemas/analytics-schema"
 
 export const useAnalyticsStore = defineStore("analytics", () => {
-  const toast = useToast()
+  const { toast } = useUI()
   const summary = ref<AnalyticsSummary>({ totalViews: 0, totalClicks: 0, stats: [], topReferrers: [], clicksPerLink: [] })
   const comments = ref<Comment[]>([])
   const loading = ref(false)

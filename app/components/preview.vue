@@ -3,17 +3,17 @@
   <button
     type="button" class="btn fixed bottom-4 left-1/2 z-40 -translate-x-1/2 transition-all md:hidden!"
     :class="showMobileToggle ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-4 opacity-0'"
-    aria-label="Toggle Mobile Preview" @click="isPreviewOpen ? closePreview() : openPreview()"
+    aria-label="Toggle Mobile Preview" @click="preview.toggle()"
   >
-    <icon :name="isPreviewOpen ? 'mdi:eye-off' : 'mdi:eye'" size="25" />
-    <span>{{ isPreviewOpen ? 'Close Preview' : 'Preview' }}</span>
+    <icon :name="preview.isOpen() ? 'mdi:eye-off' : 'mdi:eye'" size="25" />
+    <span>{{ preview.isOpen() ? 'Close Preview' : 'Preview' }}</span>
   </button>
 
-  <div v-if="user" class="mx-auto flex justify-center select-none">
+  <div v-if="user" class="mx-auto flex shrink-0 justify-center select-none md:px-4">
     <!-- Mobile full-screen preview -->
     <transition name="slide">
-      <div v-if="isPreviewOpen" class="scroll-area fixed top-0 left-0 z-40 size-full overflow-y-auto pb-12 md:hidden" :style="backgroundStyle">
-        <button type="button" class="btn fixed top-4 right-4 z-50 shadow-lg" aria-label="Close preview" @click="closePreview()">
+      <div v-if="preview.isOpen()" class="scroll-area fixed top-0 left-0 z-40 size-full overflow-y-auto pb-12 md:hidden" :style="backgroundStyle">
+        <button type="button" class="btn fixed top-4 right-4 z-50 shadow-lg" aria-label="Close preview" @click="preview.close()">
           <icon name="mdi:close" size="25" />
         </button>
 
@@ -135,11 +135,11 @@
 <script setup lang="ts">
 const { user, preferences: storePreferences } = storeToRefs(useUserStore())
 const { items } = storeToRefs(useProfileItemsStore())
-const { isPreviewOpen, openPreview, closePreview } = useUIState()
+const { preview } = useUI()
 const localPreferences = useState<UserPreferences | null>("localPreferences", () => null)
 const pendingThemeTitle = useState<string | null>("pendingThemeTitle", () => null)
 const isScrolled = ref(false)
-const showMobileToggle = computed(() => isPreviewOpen.value || isScrolled.value)
+const showMobileToggle = computed(() => preview.isOpen() || isScrolled.value)
 
 const preferences = computed(() => {
   const base = localPreferences.value || storePreferences.value
@@ -178,7 +178,8 @@ onMounted(() => {
   window.addEventListener("scroll", onScroll, { passive: true })
 })
 
-watch(isPreviewOpen, scrollLock)
+// Lock page scroll while the preview is open
+watch(preview.isOpen, scrollLock)
 
 onBeforeUnmount(() => {
   scrollLock(false)

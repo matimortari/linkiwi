@@ -227,37 +227,13 @@ interface NormalizedWidget {
   handle: string
 }
 
-interface UIState {
-  sidebar: boolean
-  preview: boolean
-  dialogs: {
-    share: boolean
-    item: {
-      isOpen: boolean
-      selectedItem: ProfileItem | null
-      activeType: ProfileItemType | null
-    }
-    link: {
-      isOpen: boolean
-      selectedLink: ProfileItem | null
-    }
-    icon: {
-      isOpen: boolean
-      selectedIcon: ProfileItem | null
-    }
-    photoGrid: {
-      isOpen: boolean
-      selectedPhotoGrid: ProfileItem | null
-    }
-    widget: {
-      isOpen: boolean
-      selectedWidget: ProfileItem | null
-    }
-    location: {
-      isOpen: boolean
-      selectedLocation: ProfileItem | null
-    }
-  }
+interface DialogPayloads {
+  share: null
+  link: ProfileItem | null
+  icon: null
+  photoGrid: ProfileItem | null
+  widget: ProfileItem | null
+  location: ProfileItem | null
 }
 
 interface Toast {
@@ -265,4 +241,20 @@ interface Toast {
   message: string
   type: "danger" | "success" | "warning" | "info"
   duration?: number
+}
+
+interface ConfirmOptions {
+  title: string
+  message: string
+  confirmLabel?: string
+  cancelLabel?: string
+  variant?: "primary" | "danger" | "warning"
+}
+
+interface UIState {
+  sidebar: boolean
+  preview: boolean
+  dialogs: { [K in keyof DialogPayloads]: { isOpen: boolean, data: DialogPayloads[K] } }
+  toasts: Toast[]
+  confirmation: { isOpen: boolean, options: ConfirmOptions | null }
 }

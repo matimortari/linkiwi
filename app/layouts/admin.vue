@@ -2,7 +2,7 @@
   <Toolbar />
 
   <div class="flex flex-col items-center gap-4 overflow-x-hidden md:flex-row md:items-start">
-    <Sidebar :is-open="isSidebarOpen" />
+    <Sidebar :is-open="sidebar.isOpen()" />
 
     <main class="w-full flex-1 overflow-x-hidden">
       <Loading v-if="isLoading" class="flex min-h-screen items-center justify-center" />
@@ -16,7 +16,7 @@
 <script setup lang="ts">
 const userStore = useUserStore()
 const profileItemsStore = useProfileItemsStore()
-const { isSidebarOpen } = useUIState()
+const { sidebar } = useUI()
 const isLoading = ref(true)
 
 async function goTo(path: string) {

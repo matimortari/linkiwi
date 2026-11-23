@@ -1,11 +1,11 @@
 <template>
   <!-- Mobile toggle -->
-  <button type="button" class="btn fixed top-4 right-4 z-40 md:hidden!" :aria-label="isOpen ? 'Close menu' : 'Open menu'" @click="isOpen ? closeSidebar() : openSidebar()">
+  <button type="button" class="btn fixed top-4 right-4 z-40 md:hidden!" :aria-label="isOpen ? 'Close menu' : 'Open menu'" @click="sidebar.toggle()">
     <icon :name="isOpen ? 'mdi:close' : 'mdi:menu'" size="25" :class="isOpen ? 'text-muted-foreground' : ''" />
   </button>
 
   <!-- Mobile overlay -->
-  <div v-if="isOpen" class="fixed inset-0 z-20 bg-black/50 backdrop-blur-xs md:hidden" @click="closeSidebar()" />
+  <div v-if="isOpen" class="fixed inset-0 z-20 bg-black/50 backdrop-blur-xs md:hidden" @click="sidebar.close()" />
 
   <aside
     class="fixed top-0 left-0 z-30 size-full bg-card px-4 py-12 transition-transform md:static md:block md:w-56 md:translate-x-0 md:bg-transparent 2xl:w-64 2xl:py-12"
@@ -34,7 +34,7 @@
           v-for="link in SIDEBAR_NAV_LINKS" :key="link.url"
           :to="link.url" class="text-caption navigation-group justify-start rounded-lg rounded-l-none p-2 transition-all hover:bg-muted/30"
           :class="{ 'border-l-2 border-l-secondary!': route.path === link.url }"
-          @click="closeSidebar()"
+          @click="sidebar.close()"
         >
           <icon :name="link.icon" :class="{ 'text-secondary!': route.path === link.url }" size="25" />
           <span>{{ link.label }}</span>
@@ -44,7 +44,7 @@
       <div class="border-t md:flex-1" />
 
       <nav class="flex flex-col gap-2" aria-label="Mobile Navigation Actions">
-        <button type="button" class="text-caption navigation-group justify-start rounded-lg rounded-l-none p-2 transition-all hover:bg-muted/30" @click="openDialog('share')">
+        <button type="button" class="text-caption navigation-group justify-start rounded-lg rounded-l-none p-2 transition-all hover:bg-muted/30" @click="dialog.open('share')">
           <icon name="mdi:share-variant-outline" size="25" />
           <span>Share</span>
         </button>
@@ -64,7 +64,7 @@
     </div>
   </aside>
 
-  <UserShareDialog :is-open="isShareDialogOpen" @close="closeDialog('share')" />
+  <UserShareDialog :is-open="dialog.isOpen('share')" @close="dialog.close('share')" />
 </template>
 
 <script setup lang="ts">
@@ -75,7 +75,7 @@ const props = defineProps<{
 const route = useRoute()
 const { toggleTheme, themeIcon } = useTheme()
 const { signOut } = useSession()
-const { isShareDialogOpen, openDialog, closeDialog, closeSidebar, openSidebar } = useUIState()
+const { sidebar, dialog } = useUI()
 const { user } = storeToRefs(useUserStore())
 
 function scrollLock(locked: boolean) {
@@ -88,6 +88,7 @@ function scrollLock(locked: boolean) {
   document.body.style.overflow = val
 }
 
+// Lock page scroll while the sidebar is open
 watch(() => props.isOpen, scrollLock, { immediate: true })
 
 onBeforeUnmount(() => scrollLock(false))
