@@ -63,6 +63,7 @@ const errorMessage = computed(() => {
   const messages: Record<string, string> = {
     google_oauth_failed: "Google sign in failed. Please try again.",
     github_oauth_failed: "GitHub sign in failed. Please try again.",
+    email_unverified: "Your email must be verified with the provider before signing in.",
     session_expired: "Your session has expired. Please sign in again.",
     session_timeout: "You were signed out due to inactivity.",
   }

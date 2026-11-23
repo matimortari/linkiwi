@@ -29,6 +29,7 @@ declare module "#auth-utils" {
 interface OAuthUserData {
   id: string
   email: string
+  emailVerified: boolean
   name: string
   image: string | null
   provider: "google" | "github"

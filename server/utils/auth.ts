@@ -1,7 +1,8 @@
 import type { H3Event } from "h3"
 
 export async function handleOAuthUser(event: H3Event, userData: OAuthUserData) {
-  const { id: providerAccountId, name, email, image, provider } = userData
+  const { id: providerAccountId, name, image, provider, emailVerified } = userData
+  const email = userData.email.trim().toLowerCase()
   const r2PublicUrl = requireEnv("R2_PUBLIC_URL")
   const defaultAvatar = `${r2PublicUrl}/defaults/avatar.png`
 
@@ -12,8 +13,12 @@ export async function handleOAuthUser(event: H3Event, userData: OAuthUserData) {
 
   let sessionUser: User | null = account?.user ? { ...account.user, image: account.user.image ?? defaultAvatar } : null
   if (!sessionUser) {
-    const existingUser = await db.user.findUnique({
-      where: { email },
+    if (!emailVerified) {
+      return sendRedirect(event, "/sign-in?error=email_unverified")
+    }
+
+    const existingUser = await db.user.findFirst({
+      where: { email: { equals: email, mode: "insensitive" } },
       select: { id: true, email: true, name: true, image: true, slug: true },
     })
     if (existingUser) {

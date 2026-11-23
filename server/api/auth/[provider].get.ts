@@ -23,9 +23,21 @@ function getOAuthConfig(provider: string) {
   return null
 }
 
-const extractUserData: Record<string, (user: any) => any> = {
-  google: user => ({ id: user.id?.toString() || user.sub?.toString(), name: user.name || user.given_name, email: user.email, image: user.picture }),
-  github: user => ({ id: user.id?.toString(), name: user.name, email: user.email, image: user.avatar_url }),
+const extractUserData: Record<string, (user: any) => Omit<OAuthUserData, "provider">> = {
+  google: user => ({
+    id: user.id?.toString() || user.sub?.toString(),
+    name: user.name || user.given_name,
+    email: user.email,
+    emailVerified: user.email_verified === true,
+    image: user.picture ?? null,
+  }),
+  github: user => ({
+    id: user.id?.toString(),
+    name: user.name,
+    email: user.email,
+    emailVerified: user.email_verified !== false,
+    image: user.avatar_url ?? null,
+  }),
 }
 
 export default defineEventHandler(async (event: H3Event) => {
@@ -64,7 +76,7 @@ export default defineEventHandler(async (event: H3Event) => {
         throw createError({ statusCode: 400, message: `Missing required user data from ${provider}` })
       }
 
-      return handleOAuthUser(event, { ...userData, provider })
+      return handleOAuthUser(event, { ...userData, provider: provider as OAuthUserData["provider"] })
     }, onError(event: RequestEvent) {
       return redirectOAuthError(event, `/sign-in?error=${provider}_oauth_failed`)
     } })(event as unknown as RequestEvent)
