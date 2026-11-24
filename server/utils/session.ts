@@ -1,7 +1,7 @@
 import type { H3Event } from "h3"
 
 export const SESSION_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000
-export const SESSION_INACTIVITY_MS = 30 * 60 * 1000
+export const SESSION_INACTIVITY_MS = 24 * 60 * 60 * 1000
 export const SESSION_ACTIVITY_TOUCH_MS = 60 * 1000
 
 /**
