@@ -33,7 +33,7 @@ export default defineEventHandler(async (event) => {
 defineRouteMeta({
   openAPI: {
     summary: "Set user banner",
-    description: "Creates or replaces the user's banner from an owned uploaded asset. The banner URL is always taken from the asset record, not the request body.",
+    description: "Creates or replaces the user's banner from an owned uploaded asset.",
     tags: ["User"],
     requestBody: {
       required: true,
@@ -44,7 +44,6 @@ defineRouteMeta({
             required: ["assetId"],
             properties: {
               assetId: { type: "string", description: "Owned user asset ID" },
-              url: { type: "string", format: "uri", description: "Optional; ignored — URL is resolved from the asset" },
             },
           },
         },

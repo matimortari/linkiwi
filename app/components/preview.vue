@@ -164,7 +164,7 @@ const visiblePreviewItems = computed(() => (items.value ?? []).filter(item => it
 }))
 
 function onScroll() {
-  isScrolled.value = window.scrollY > 80
+  isScrolled.value = globalThis.scrollY > 80
 }
 
 function scrollLock(locked: boolean) {
@@ -175,7 +175,7 @@ function scrollLock(locked: boolean) {
 
 onMounted(() => {
   onScroll()
-  window.addEventListener("scroll", onScroll, { passive: true })
+  globalThis.addEventListener("scroll", onScroll, { passive: true })
 })
 
 // Lock page scroll while the preview is open
@@ -183,7 +183,7 @@ watch(preview.isOpen, scrollLock)
 
 onBeforeUnmount(() => {
   scrollLock(false)
-  window.removeEventListener("scroll", onScroll)
+  globalThis.removeEventListener("scroll", onScroll)
 })
 </script>
 

@@ -33,17 +33,17 @@ const PRIVACY_POLICY: { title: string, paragraphs: string[], list?: string[] }[]
     title: "Controller",
     paragraphs: [
       "The controller of personal data processed through LinKiwi is <strong>Matheus Mortari</strong>, a natural person operating the service.",
-      "Contact for privacy requests: <a href='mailto:matheus.felipe.19rt@gmail.com'>matheus.felipe.19rt@gmail.com</a>. The same contact acts as the channel for data-subject requests under the Brazilian General Data Protection Law (LGPD — Lei nº 13.709/2018).",
+      "Contact for privacy requests: <a href='mailto:matheus.felipe.19rt@gmail.com'>matheus.felipe.19rt@gmail.com</a>. The same contact acts as the channel for data-subject requests under the Brazilian General Data Protection Law (LGPD – Lei nº 13.709/2018).",
     ],
   },
   {
     title: "Legal Bases (LGPD)",
     paragraphs: ["We process personal data only when a legal basis under LGPD Article 7 applies, including:"],
     list: [
-      "<strong>Performance of a contract</strong> (Art. 7, V) — creating and maintaining your account, authenticating you, hosting your profile page and content, and providing the features you use.",
-      "<strong>Legitimate interest</strong> (Art. 7, IX) — security, fraud prevention, rate limiting, and product analytics that show you page views and click metrics for your own profile, balanced against your rights and visitors’ expectations.",
-      "<strong>Compliance with a legal obligation</strong> (Art. 7, II) — when we must retain or disclose data to meet applicable law.",
-      "<strong>Consent</strong> (Art. 7, I) — where an OAuth provider requires it, or where we ask for an optional permission that is not necessary for the core service.",
+      "<strong>Performance of a contract</strong> (Art. 7, V) – creating and maintaining your account, authenticating you, hosting your profile page and content, and providing the features you use.",
+      "<strong>Legitimate interest</strong> (Art. 7, IX) – security, fraud prevention, rate limiting, and product analytics that show you page views and click metrics for your own profile, balanced against your rights and visitors’ expectations.",
+      "<strong>Compliance with a legal obligation</strong> (Art. 7, II) – when we must retain or disclose data to meet applicable law.",
+      "<strong>Consent</strong> (Art. 7, I) – where an OAuth provider requires it, or where we ask for an optional permission that is not necessary for the core service.",
     ],
   },
   {
@@ -75,7 +75,7 @@ const PRIVACY_POLICY: { title: string, paragraphs: string[], list?: string[] }[]
     list: [
       "With infrastructure and service providers that help us host, secure, or deliver the platform (for example hosting, database, Redis, object storage, and Cloudflare).",
       "With OAuth identity providers when you choose to sign in through them.",
-      "Publicly, when you publish content on your LinKiwi page — that content is visible to visitors of your profile URL.",
+      "Publicly, when you publish content on your LinKiwi page – that content is visible to visitors of your profile URL.",
       "When required by law, legal process, or a competent authority.",
       "To protect the rights, safety, or property of LinKiwi, its users, or third parties.",
     ],

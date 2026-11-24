@@ -36,7 +36,7 @@ async function handleClick(event: MouseEvent) {
   emit("click")
   await nextTick()
   if (props.item.link?.url) {
-    window.open(props.item.link.url, "_blank", "noopener,noreferrer")
+    globalThis.open(props.item.link.url, "_blank", "noopener,noreferrer")
   }
 }
 </script>

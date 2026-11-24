@@ -156,7 +156,7 @@ function shareToSocial(platform: "twitter" | "facebook" | "linkedin" | "whatsapp
     whatsapp: `https://wa.me/?text=${encodeURIComponent(`Check out my LinKiwi profile: ${trackedUrl}`)}`,
   }
 
-  window.open(shareUrls[platform], "_blank")
+  globalThis.open(shareUrls[platform], "_blank")
   copySuccess.value = "Opening share dialog..."
   setTimeout(() => copySuccess.value = null, 3000)
 }

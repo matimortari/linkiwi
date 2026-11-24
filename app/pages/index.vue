@@ -2,7 +2,7 @@
   <section
     id="hero" v-motion
     :initial="{ opacity: 0 }" :visible-once="{ opacity: 1 }"
-    :duration="1000" class="relative flex min-h-[80vh] w-full items-center overflow-hidden border-b"
+    :duration="1000" class="relative flex min-h-screen w-full items-center overflow-hidden border-b"
   >
     <div class="hero-carousel">
       <Carousel />

@@ -245,7 +245,7 @@ async function handleSave() {
 
     const uploaded = await userStore.uploadAsset(file)
     if (uploaded?.newAsset) {
-      await userStore.updateUserBanner({ url: uploaded.newAsset.url, assetId: uploaded.newAsset.id })
+      await userStore.updateUserBanner({ assetId: uploaded.newAsset.id })
       saveAction.triggerSuccess()
       resetState()
       emit("close")
@@ -254,7 +254,7 @@ async function handleSave() {
   }
 
   if (pendingAsset.value) {
-    await userStore.updateUserBanner({ url: pendingAsset.value.url, assetId: pendingAsset.value.id })
+    await userStore.updateUserBanner({ assetId: pendingAsset.value.id })
     saveAction.triggerSuccess()
     resetState()
     emit("close")

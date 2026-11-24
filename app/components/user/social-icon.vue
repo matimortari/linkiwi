@@ -25,7 +25,7 @@ async function handleClick(event: MouseEvent) {
   emit("click")
   await nextTick()
   if (props.item.icon?.url) {
-    window.open(props.item.icon.url, "_blank", "noopener,noreferrer")
+    globalThis.open(props.item.icon.url, "_blank", "noopener,noreferrer")
   }
 }
 

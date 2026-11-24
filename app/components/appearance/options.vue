@@ -55,7 +55,7 @@ function toggleTooltip(key: string, event: MouseEvent) {
 
 function handleTabClick(value: string, event: MouseEvent) {
   activeTab.value = value
-  if (import.meta.client && window.matchMedia("(max-width: 639px)").matches) {
+  if (import.meta.client && globalThis.matchMedia("(max-width: 639px)").matches) {
     event.stopPropagation()
     toggleTooltip(value, event)
   }

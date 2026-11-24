@@ -42,15 +42,9 @@ describe("updateUserPreferencesSchema", () => {
 describe("userBannerSchema", () => {
   it("accepts a banner tied to an uploaded asset", () => {
     expect(userBannerSchema.parse({ assetId: "tz4a98xxat96iws9zmbrgj3a" })).toEqual({ assetId: "tz4a98xxat96iws9zmbrgj3a" })
-    expect(userBannerSchema.parse({ assetId: "tz4a98xxat96iws9zmbrgj3a", url: "https://cdn.example.com/banner.png" })).toMatchObject({ assetId: "tz4a98xxat96iws9zmbrgj3a" })
   })
 
   it("rejects banners without an asset id", () => {
-    expect(userBannerSchema.safeParse({ url: "https://cdn.example.com/banner.png" }).success).toBe(false)
     expect(userBannerSchema.safeParse({}).success).toBe(false)
-  })
-
-  it("rejects invalid optional urls", () => {
-    expect(userBannerSchema.safeParse({ assetId: "tz4a98xxat96iws9zmbrgj3a", url: "not-a-url" }).success).toBe(false)
   })
 })

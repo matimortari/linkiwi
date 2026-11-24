@@ -66,8 +66,6 @@ export const updateUserPreferencesSchema = z.object({
 
 export const userBannerSchema = z.object({
   assetId: z.cuid2("Banner must reference a valid uploaded asset"),
-  /** Ignored server-side — the banner URL is always taken from the owned asset. */
-  url: z.url("Invalid URL").optional(),
 })
 
 export type UpdateUserInput = z.infer<typeof updateUserSchema>

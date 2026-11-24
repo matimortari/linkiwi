@@ -74,7 +74,7 @@ function updateActiveHeading() {
 }
 
 function scrollToTop() {
-  window.scrollTo({ top: 0, behavior: "smooth" })
+  globalThis.scrollTo({ top: 0, behavior: "smooth" })
 }
 
 function handleTocClick(headingId: string) {
@@ -84,13 +84,13 @@ function handleTocClick(headingId: string) {
 
 onMounted(() => {
   nextTick(extractHeadings)
-  window.addEventListener("scroll", updateActiveHeading, { passive: true })
+  globalThis.addEventListener("scroll", updateActiveHeading, { passive: true })
 })
 
 // Rebuild the table of contents after navigating to another page
 watch(() => route.path, () => nextTick(extractHeadings))
 
-onUnmounted(() => window.removeEventListener("scroll", updateActiveHeading))
+onUnmounted(() => globalThis.removeEventListener("scroll", updateActiveHeading))
 </script>
 
 <style scoped>

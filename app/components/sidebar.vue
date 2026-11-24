@@ -79,10 +79,10 @@ const { sidebar, dialog } = useUI()
 const { user } = storeToRefs(useUserStore())
 
 function scrollLock(locked: boolean) {
-  if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+  if (typeof globalThis.matchMedia !== "function") {
     return
   }
-  const isMobile = window.matchMedia("(max-width: 767px)").matches
+  const isMobile = globalThis.matchMedia("(max-width: 767px)").matches
   const val = locked && isMobile ? "hidden" : ""
   document.documentElement.style.overflow = val
   document.body.style.overflow = val
