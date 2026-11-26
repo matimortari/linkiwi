@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
   let compressedBuffer = fileField.data
   let outputMimeType = fileField.type
 
-  const imagePipeline = sharp(fileField.data)
+  const imagePipeline = sharp(fileField.data).rotate() // Applies EXIF orientation before stripping metadata on encode
   const metadata = await imagePipeline.metadata()
 
   // Apply compression based on format (convert unknown/unsupported image formats to WebP)

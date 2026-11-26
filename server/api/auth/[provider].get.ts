@@ -77,7 +77,7 @@ export default defineEventHandler(async (event: H3Event) => {
       return redirectOAuthError(event, `/sign-in?error=${provider}_oauth_failed`)
     } })(event as unknown as RequestEvent)
   }
-  catch (err: unknown) {
-    throw createError({ statusCode: 500, statusMessage: "OAuth processing failed", data: { provider, error: err instanceof Error ? err.message : String(err) } })
+  catch {
+    return redirectOAuthError(event as unknown as RequestEvent, `/sign-in?error=${provider}_oauth_failed`)
   }
 })

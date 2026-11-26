@@ -37,9 +37,9 @@ export default defineEventHandler(async (event) => {
     await Promise.allSettled(deadFiles.map(url => deleteFile(url)))
   }
 
-  // Delete the user (cascade will handle related records) and clear session cookies
+  // Delete the user (cascade will handle related records) and revoke the session
   await db.user.delete({ where: { id: sessionUser.id } })
-  await clearUserSession(event)
+  await destroyAuthenticatedSession(event)
   await deleteCached(CacheKeys.userData(sessionUser.id), CacheKeys.userProfile(accountData.slug))
 
   return { success: true, message: "Your account and all associated data have been deleted." }
