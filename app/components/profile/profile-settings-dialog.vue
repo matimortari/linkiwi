@@ -36,7 +36,9 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{ isOpen: boolean }>()
+const props = defineProps<{
+  isOpen: boolean
+}>()
 
 const emit = defineEmits<{ close: [] }>()
 

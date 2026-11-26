@@ -1,25 +1,20 @@
 <template>
   <Dialog :is-open="isOpen" title="Edit Banner" @update:is-open="emit('close')">
-    <div class="flex flex-col gap-4">
-      <div v-if="cropSrc" class="flex flex-col gap-2">
-        <div class="banner-cropper overflow-hidden rounded-xl bg-muted">
-          <img ref="cropImage" :src="cropSrc" alt="Crop banner" class="block max-w-none">
-        </div>
-        <div class="flex justify-end">
-          <button type="button" class="btn-ghost" @click="clearCropSource">
-            <icon name="mdi:close" size="20" />
-            <span>Clear</span>
-          </button>
-        </div>
+    <div class="flex w-full flex-col gap-4 sm:w-lg">
+      <div v-if="cropSrc" class="banner-frame overflow-hidden rounded-xl">
+        <img ref="cropImage" :src="cropSrc" alt="Crop banner" class="block max-w-none">
       </div>
 
-      <div v-else class="relative h-28 w-full overflow-hidden rounded-xl bg-muted md:h-36">
+      <div v-else class="banner-frame relative overflow-hidden rounded-xl bg-muted">
         <img v-if="previewUrl" :src="previewUrl" alt="Banner preview" class="size-full object-cover">
         <span v-else class="text-caption flex size-full items-center justify-center">No banner selected</span>
       </div>
 
-      <p class="text-caption">
-        {{ cropSrc ? "Drag to reposition. " : "" }}Recommended size: 1500 x 500.
+      <p v-if="isRemoving" class="text-caption-danger">
+        Remove your profile banner?
+      </p>
+      <p v-else class="text-caption">
+        {{ cropSrc ? "Drag to reposition, scroll to zoom. Recommended size: 1500 × 500." : "Recommended size: 1500 × 500." }}
       </p>
 
       <div class="flex flex-wrap items-center gap-2">
@@ -28,19 +23,37 @@
           class="hidden" accept="image/jpeg,image/png,image/webp"
           @change="handleFileChange"
         >
-        <button type="button" class="btn-ghost" @click="fileInput?.click()">
+
+        <button type="button" class="btn-ghost" :disabled="isRemoving" @click="fileInput?.click()">
           <icon name="mdi:upload" size="20" />
-          <span>Upload & Crop</span>
+          <span>{{ cropSrc ? "Choose Another" : "Upload & Crop" }}</span>
         </button>
 
-        <button type="button" class="btn-ghost" :disabled="!showLibrary && !userStore.assets.length" @click="toggleLibrary">
+        <button
+          type="button" class="btn-ghost"
+          :disabled="isRemoving || (!showLibrary && !userStore.assets.length)"
+          @click="toggleLibrary"
+        >
           <icon :name="showLibrary ? 'mdi:close' : 'mdi:image-multiple-outline'" size="20" />
           <span>{{ showLibrary ? "Close Library" : "Pick from Library" }}</span>
         </button>
 
-        <button v-if="user?.banner || pendingAsset" type="button" class="btn-ghost text-danger-foreground!" @click="handleRemove">
-          <icon name="mdi:trash-can-outline" size="20" />
-          <span>{{ pendingAsset ? "Clear Selection" : "Remove Banner" }}</span>
+        <button
+          v-if="cropSrc || libraryAssetId" type="button"
+          class="btn-ghost" :disabled="isRemoving"
+          @click="clearDraft"
+        >
+          <icon name="mdi:image-remove-outline" size="20" />
+          <span>Clear</span>
+        </button>
+
+        <button
+          v-if="!cropSrc && !libraryAssetId && user?.banner" type="button"
+          class="btn-ghost" :disabled="isRemoving"
+          @click="isRemoving = true"
+        >
+          <icon name="mdi:trash-can-outline" size="20" class="text-caption-danger" />
+          <span>Remove Banner</span>
         </button>
       </div>
 
@@ -50,11 +63,11 @@
         <button
           v-for="asset in userStore.assets" :key="asset.id"
           type="button" class="group relative size-14 shrink-0 overflow-hidden rounded-lg border-2 transition-all"
-          :class="(pendingAsset?.id ?? user?.banner?.assetId) === asset.id ? 'border-primary' : 'border-transparent hover:border-muted-foreground'"
-          @click="selectAsset(asset)"
+          :class="selectedAssetId === asset.id ? 'border-primary' : 'border-transparent hover:border-muted-foreground'"
+          :disabled="isRemoving" @click="selectAsset(asset)"
         >
           <img :src="asset.url" :alt="asset.label ?? 'Asset'" class="size-full object-cover">
-          <div v-if="(pendingAsset?.id ?? user?.banner?.assetId) === asset.id" class="absolute inset-0 flex items-center justify-center bg-primary/30">
+          <div v-if="selectedAssetId === asset.id" class="absolute inset-0 flex items-center justify-center bg-primary/30">
             <icon name="mdi:check" size="15" class="text-primary-foreground" />
           </div>
         </button>
@@ -62,10 +75,18 @@
 
       <footer class="flex flex-row items-center justify-end">
         <div class="navigation-group">
-          <button type="button" class="btn-ghost" @click="handleCancel">
+          <button type="button" class="btn-ghost" @click="handleFooterCancel">
             Cancel
           </button>
-          <button type="button" class="btn-success" :disabled="!canSave" @click="handleSave">
+          <button v-if="isRemoving" type="button" class="btn-danger" @click="confirmRemoveBanner">
+            <icon name="mdi:trash-can-outline" size="20" />
+            <span>Remove</span>
+          </button>
+          <button
+            v-else type="button"
+            class="btn-success" :disabled="!canSave"
+            @click="handleSave"
+          >
             <icon :name="saveAction.icon.value" size="20" />
             <span>Save</span>
           </button>
@@ -86,80 +107,23 @@ const emit = defineEmits<{ close: [] }>()
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
-const { confirm } = useUI()
 const saveAction = useActionIcon("mdi:content-save-check")
 const fileInput = ref<HTMLInputElement | null>(null)
 const cropImage = ref<HTMLImageElement | null>(null)
 const cropper = shallowRef<Cropper | null>(null)
 const cropSrc = ref<string | null>(null)
-const pendingAsset = ref<{ id: string, url: string } | null>(null)
+const libraryAssetId = ref<string | null>(null)
 const showLibrary = ref(false)
-const previewUrl = computed(() => pendingAsset.value?.url ?? user.value?.banner?.url ?? null)
-const canSave = computed(() => !!cropSrc.value || !!pendingAsset.value)
-
-async function initCropper() {
-  await nextTick()
-  if (!import.meta.client || !cropImage.value) {
-    return
+const isRemoving = ref(false)
+const libraryPreviewUrl = computed(() => {
+  if (!libraryAssetId.value) {
+    return null
   }
-
-  destroyCropper()
-  const { default: CropperCtor } = await import("cropperjs")
-  cropper.value = new CropperCtor(cropImage.value, {
-    template: [
-      "<cropper-canvas background>",
-      "<cropper-image initial-center-size=\"cover\" zoomable></cropper-image>",
-      "<cropper-shade></cropper-shade>",
-      "<cropper-selection initial-coverage=\"1\" aspect-ratio=\"3/1\" movable resizable>",
-      "<cropper-grid role=\"grid\" covered></cropper-grid>",
-      "<cropper-crosshair centered></cropper-crosshair>",
-      "<cropper-handle action=\"move\" theme-color=\"rgba(255, 255, 255, 0.35)\"></cropper-handle>",
-      "<cropper-handle action=\"n-resize\" plain></cropper-handle>",
-      "<cropper-handle action=\"e-resize\" plain></cropper-handle>",
-      "<cropper-handle action=\"s-resize\" plain></cropper-handle>",
-      "<cropper-handle action=\"w-resize\" plain></cropper-handle>",
-      "<cropper-handle action=\"ne-resize\" plain></cropper-handle>",
-      "<cropper-handle action=\"nw-resize\" plain></cropper-handle>",
-      "<cropper-handle action=\"se-resize\" plain></cropper-handle>",
-      "<cropper-handle action=\"sw-resize\" plain></cropper-handle>",
-      "</cropper-selection>",
-      "</cropper-canvas>",
-    ].join(""),
-  })
-
-  const canvas = cropper.value.getCropperCanvas()
-  const image = cropper.value.getCropperImage()
-  const selection = cropper.value.getCropperSelection()
-  if (!canvas || !image || !selection) {
-    return
-  }
-
-  image.addEventListener("transform", (event) => {
-    const e = event as CustomEvent<{ matrix: number[] }>
-    const canvasRect = canvas.getBoundingClientRect()
-    const clone = image.cloneNode() as HTMLElement
-    clone.style.cssText = `opacity:0;position:absolute;transform:matrix(${e.detail.matrix.join(",")})`
-    canvas.appendChild(clone)
-    const imageRect = clone.getBoundingClientRect()
-    canvas.removeChild(clone)
-
-    if (imageRect.top > canvasRect.top || imageRect.right < canvasRect.right || imageRect.bottom < canvasRect.bottom || imageRect.left > canvasRect.left) {
-      e.preventDefault()
-    }
-  })
-
-  selection.addEventListener("change", (event) => {
-    const e = event as CustomEvent<{ x: number, y: number, width: number, height: number }>
-    const { x, y, width, height } = e.detail
-    const canvasWidth = canvas.offsetWidth
-    const canvasHeight = canvas.offsetHeight
-    const minWidth = canvasWidth * 0.25
-    const minHeight = canvasHeight * 0.25
-    if (x < 0 || y < 0 || x + width > canvasWidth || y + height > canvasHeight || width < minWidth || height < minHeight) {
-      e.preventDefault()
-    }
-  })
-}
+  return userStore.assets.find(asset => asset.id === libraryAssetId.value)?.url ?? null
+})
+const previewUrl = computed(() => libraryPreviewUrl.value ?? user.value?.banner?.url ?? null)
+const selectedAssetId = computed(() => libraryAssetId.value ?? user.value?.banner?.assetId ?? null)
+const canSave = computed(() => !!cropSrc.value || (!!libraryAssetId.value && libraryAssetId.value !== user.value?.banner?.assetId))
 
 function destroyCropper() {
   cropper.value?.destroy()
@@ -173,7 +137,7 @@ function revokeCropSrc() {
   cropSrc.value = null
 }
 
-function clearCropSource() {
+function clearCrop() {
   destroyCropper()
   revokeCropSrc()
   if (fileInput.value) {
@@ -181,10 +145,37 @@ function clearCropSource() {
   }
 }
 
+function clearDraft() {
+  clearCrop()
+  libraryAssetId.value = null
+  isRemoving.value = false
+}
+
 function resetState() {
-  clearCropSource()
-  pendingAsset.value = null
+  clearDraft()
   showLibrary.value = false
+}
+
+async function initCropper() {
+  await nextTick()
+  await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())))
+  if (!import.meta.client || !cropImage.value || !cropSrc.value) {
+    return
+  }
+
+  destroyCropper()
+  const { default: CropperCtor } = await import("cropperjs")
+  cropper.value = new CropperCtor(cropImage.value, {
+    template: [
+      "<cropper-canvas>",
+      "<cropper-image initial-fit=\"cover\" min-fit=\"cover\" scalable translatable></cropper-image>",
+      `<cropper-selection initial-coverage="1" aspect-ratio="${1500 / 500}">`,
+      "<cropper-grid role=\"grid\" covered></cropper-grid>",
+      "</cropper-selection>",
+      "<cropper-handle action=\"move\" plain></cropper-handle>",
+      "</cropper-canvas>",
+    ].join(""),
+  })
 }
 
 function handleFileChange(e: Event) {
@@ -194,20 +185,19 @@ function handleFileChange(e: Event) {
     return
   }
 
-  pendingAsset.value = null
+  libraryAssetId.value = null
   showLibrary.value = false
+  isRemoving.value = false
   destroyCropper()
   revokeCropSrc()
   cropSrc.value = URL.createObjectURL(file)
 }
 
 function selectAsset(asset: { id: string, url: string }) {
-  clearCropSource()
-  if (user.value?.banner?.assetId === asset.id) {
-    pendingAsset.value = null
-    return
-  }
-  pendingAsset.value = { id: asset.id, url: asset.url }
+  showLibrary.value = false
+  isRemoving.value = false
+  clearCrop()
+  libraryAssetId.value = asset.id
 }
 
 function toggleLibrary() {
@@ -217,14 +207,51 @@ function toggleLibrary() {
   showLibrary.value = !showLibrary.value
 }
 
+function ensureImageCoversCanvas() {
+  const image = cropper.value?.getCropperImage()
+  const canvasEl = cropper.value?.getCropperCanvas()
+  if (!image || !canvasEl) {
+    return
+  }
+
+  const canvasRect = canvasEl.getBoundingClientRect()
+  let imageRect = image.getBoundingClientRect()
+
+  // Zoom in if the image is smaller than the crop area on either axis
+  const scale = Math.max(canvasRect.width / Math.max(imageRect.width, 1), canvasRect.height / Math.max(imageRect.height, 1), 1)
+  if (scale > 1.0001) {
+    image.$scale(scale)
+    imageRect = image.getBoundingClientRect()
+  }
+
+  // Pull the image back so no empty edges remain in the crop
+  let dx = 0
+  let dy = 0
+  if (imageRect.left > canvasRect.left) {
+    dx = canvasRect.left - imageRect.left
+  }
+  else if (imageRect.right < canvasRect.right) {
+    dx = canvasRect.right - imageRect.right
+  }
+  if (imageRect.top > canvasRect.top) {
+    dy = canvasRect.top - imageRect.top
+  }
+  else if (imageRect.bottom < canvasRect.bottom) {
+    dy = canvasRect.bottom - imageRect.bottom
+  }
+  if (dx || dy) {
+    image.$move(dx, dy)
+  }
+}
+
 async function getCroppedFile(): Promise<File | null> {
   const selection = cropper.value?.getCropperSelection()
   if (!selection) {
     return null
   }
 
+  ensureImageCoversCanvas()
   const canvas = await selection.$toCanvas({ width: 1500, height: 500 })
-
   return new Promise((resolve) => {
     canvas.toBlob((blob) => {
       if (!blob) {
@@ -244,38 +271,38 @@ async function handleSave() {
     }
 
     const uploaded = await userStore.uploadAsset(file)
-    if (uploaded?.newAsset) {
-      await userStore.updateUserBanner({ assetId: uploaded.newAsset.id })
-      saveAction.triggerSuccess()
-      resetState()
-      emit("close")
+    if (!uploaded?.newAsset) {
+      return
     }
+    await userStore.updateUserBanner({ assetId: uploaded.newAsset.id })
+  }
+  else if (libraryAssetId.value) {
+    await userStore.updateUserBanner({ assetId: libraryAssetId.value })
+  }
+  else {
     return
   }
 
-  if (pendingAsset.value) {
-    await userStore.updateUserBanner({ assetId: pendingAsset.value.id })
-    saveAction.triggerSuccess()
-    resetState()
-    emit("close")
-  }
+  saveAction.triggerSuccess()
+  resetState()
+  emit("close")
 }
 
-async function handleRemove() {
-  if (pendingAsset.value || cropSrc.value) {
-    clearCropSource()
-    pendingAsset.value = null
-    return
-  }
-
+async function confirmRemoveBanner() {
   if (!user.value?.banner) {
-    return
-  }
-  if (!await confirm({ title: "Remove Banner", message: "Are you sure you want to remove your profile banner?", confirmLabel: "Remove", variant: "danger" })) {
+    isRemoving.value = false
     return
   }
 
   await userStore.deleteUserBanner()
+  handleCancel()
+}
+
+function handleFooterCancel() {
+  if (isRemoving.value) {
+    isRemoving.value = false
+    return
+  }
   handleCancel()
 }
 
@@ -284,7 +311,7 @@ function handleCancel() {
   emit("close")
 }
 
-// Fetch assets when opened and reset state when closed
+// Fetch assets when the dialog opens, reset when it closes
 watch(() => props.isOpen, async (open) => {
   if (open) {
     if (!userStore.assets.length) {
@@ -295,23 +322,25 @@ watch(() => props.isOpen, async (open) => {
   resetState()
 })
 
-// Initialize or destroy the cropper when the image source changes
+// Initialize cropper when a new image is selected for cropping
 watch(cropSrc, async (src) => {
   if (!src) {
     destroyCropper()
     return
   }
+
   await nextTick()
   const img = cropImage.value
   if (!img) {
     return
   }
-  if (img.complete) {
+
+  if (img.complete && img.naturalWidth > 0) {
     await initCropper()
+    return
   }
-  else {
-    img.addEventListener("load", () => initCropper(), { once: true })
-  }
+
+  img.addEventListener("load", () => initCropper(), { once: true })
 })
 
 onBeforeUnmount(() => {
@@ -321,13 +350,15 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-.banner-cropper {
+.banner-frame {
   aspect-ratio: 3 / 1;
   width: 100%;
+  overflow: hidden;
 }
 
-.banner-cropper :deep(cropper-canvas) {
+.banner-frame :deep(cropper-canvas) {
   width: 100%;
   height: 100%;
+  background: transparent;
 }
 </style>
