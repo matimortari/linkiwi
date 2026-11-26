@@ -1,3 +1,5 @@
+import { Prisma } from "../../.data/prisma/client"
+
 interface DailyCount {
   date: string
   count: number
@@ -90,19 +92,39 @@ export function summarizeReferrers(sources: SourceCount[], totalViews: number, l
   })).sort((a, b) => b.count - a.count).slice(0, limit)
 }
 
-function dateBounds(dateFrom?: Date, dateTo?: Date) {
-  const from = dateFrom && !Number.isNaN(dateFrom.getTime()) ? dateFrom : new Date(0)
-  const to = dateTo && !Number.isNaN(dateTo.getTime()) ? dateTo : new Date("9999-12-31T23:59:59.999Z")
-  return { from, to }
+/**
+ * Parses a dateFrom/dateTo query value.
+ * Returns undefined for missing or invalid values.
+ */
+export function parseAnalyticsDate(value: unknown, bound: "start" | "end"): Date | undefined {
+  if (typeof value !== "string" || !value) {
+    return undefined
+  }
+
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) {
+    return undefined
+  }
+
+  if (bound === "end") {
+    if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+      date.setUTCDate(date.getUTCDate() + 1)
+    }
+    else {
+      date.setTime(date.getTime() + 1)
+    }
+  }
+  return date
 }
 
 /**
- * Aggregates page views and item clicks in the database. Returns chart-ready totals
- * instead of every analytics row.
+ * Aggregates page views and item clicks in the database.
  */
 export async function fetchAnalyticsSummary(userId: string, dateFrom?: Date, dateTo?: Date): Promise<AnalyticsSummary> {
-  const { from, to } = dateBounds(dateFrom, dateTo)
-  const createdAt = { gte: from, lte: to }
+  const from = dateFrom ?? new Date(0)
+  const createdAt = { gte: from, lt: dateTo }
+  const viewsBefore = dateTo ? Prisma.sql`AND pv."createdAt" < ${dateTo}` : Prisma.empty
+  const clicksBefore = dateTo ? Prisma.sql`AND ic."createdAt" < ${dateTo}` : Prisma.empty
 
   const [totalViews, totalClicks, sourceGroups, viewsByDate, clicksByDate, clicksPerLink] = await Promise.all([
     db.pageView.count({ where: { userId, createdAt } }),
@@ -117,7 +139,7 @@ export async function fetchAnalyticsSummary(userId: string, dateFrom?: Date, dat
       FROM "PageView" pv
       WHERE pv."userId" = ${userId}
         AND pv."createdAt" >= ${from}
-        AND pv."createdAt" <= ${to}
+        ${viewsBefore}
       GROUP BY 1
       ORDER BY 1
     `,
@@ -127,7 +149,7 @@ export async function fetchAnalyticsSummary(userId: string, dateFrom?: Date, dat
       INNER JOIN "ProfileItem" pi ON pi.id = ic."itemId"
       WHERE pi."userId" = ${userId}
         AND ic."createdAt" >= ${from}
-        AND ic."createdAt" <= ${to}
+        ${clicksBefore}
       GROUP BY 1, 2
       ORDER BY 1
     `,
@@ -140,7 +162,7 @@ export async function fetchAnalyticsSummary(userId: string, dateFrom?: Date, dat
       WHERE pi."userId" = ${userId}
         AND pi.type IN ('LINK', 'ICON')
         AND ic."createdAt" >= ${from}
-        AND ic."createdAt" <= ${to}
+        ${clicksBefore}
       GROUP BY pi.id, COALESCE(pil.label, pii.platform, 'Unknown')
       ORDER BY count DESC
     `,

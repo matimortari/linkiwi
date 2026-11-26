@@ -8,8 +8,12 @@
       <icon :name="props.isScheduled ? 'mdi:calendar-clock' : 'mdi:calendar-clock-outline'" size="20" :class="props.isScheduled ? 'text-caption-info' : 'text-muted-foreground'" />
     </button>
 
-    <button type="button" :aria-label="props.item?.isVisible ? 'Hide' : 'Show'" class="btn-ghost p-0!" @click="emit('toggle')">
-      <icon :name="props.item?.isVisible ? 'mdi:eye-outline' : 'mdi:eye-off-outline'" size="20" :class="visibilityControlledBySchedule ? 'text-caption-info' : 'text-muted-foreground'" :disabled="visibilityControlledBySchedule" />
+    <button
+      type="button" :aria-label="props.item?.isVisible ? 'Hide' : 'Show'"
+      class="btn-ghost p-0!" :disabled="visibilityControlledBySchedule"
+      @click="emit('toggle')"
+    >
+      <icon :name="props.item?.isVisible ? 'mdi:eye-outline' : 'mdi:eye-off-outline'" size="20" :class="visibilityControlledBySchedule ? 'text-caption-info' : 'text-muted-foreground'" />
     </button>
 
     <button
@@ -43,5 +47,5 @@ const emit = defineEmits<{
   delete: []
 }>()
 
-const visibilityControlledBySchedule = computed(() => props.item?.scheduledStart && props.item?.scheduledEnd)
+const visibilityControlledBySchedule = computed(() => !!(props.item?.scheduledStart && props.item?.scheduledEnd))
 </script>

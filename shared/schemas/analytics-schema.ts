@@ -1,16 +1,21 @@
 import { z } from "zod"
 
 const referrerSchema = z.string().nullable().optional().transform((val) => {
-  if (!val || val.trim() === "") {
+  const normalized = val?.trim()
+  if (!normalized) {
     return null
   }
 
-  const normalized = val.trim()
-  if (!normalized.includes("://") && !normalized.includes(".")) {
-    return normalized
+  if (/^[\w-]{1,50}$/.test(normalized)) {
+    return normalized.toLowerCase()
   }
 
-  return URL.canParse(normalized) ? normalized : null
+  if (normalized.length > 2048 || !URL.canParse(normalized)) {
+    return null
+  }
+
+  const { protocol } = new URL(normalized)
+  return protocol === "http:" || protocol === "https:" ? normalized : null
 })
 
 export const analyticsRecordSchema = z.discriminatedUnion("type", [

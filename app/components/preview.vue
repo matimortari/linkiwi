@@ -80,9 +80,7 @@
         </div>
       </div>
 
-      <div
-        class="scroll-hide flex h-full flex-col items-center justify-start gap-4 overflow-y-auto text-center"
-      >
+      <div class="scroll-hide flex h-full flex-col items-center justify-start gap-4 overflow-y-auto text-center">
         <div v-if="user.banner?.url" class="h-32 w-full shrink-0">
           <img :src="user.banner.url" alt="Profile Banner" class="size-full object-cover">
         </div>

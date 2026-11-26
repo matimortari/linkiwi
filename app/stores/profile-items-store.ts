@@ -27,8 +27,6 @@ export const useProfileItemsStore = defineStore("profile-items", () => {
   }
 
   async function createItem(data: CreateProfileItemInput) {
-    loading.value = true
-
     try {
       const res = await $fetch<{ newItem: ProfileItem }>("/api/items", { method: "POST", body: data, credentials: "include" })
       items.value.push(res.newItem)
@@ -40,14 +38,9 @@ export const useProfileItemsStore = defineStore("profile-items", () => {
       console.error("createItem error:", err)
       throw err
     }
-    finally {
-      loading.value = false
-    }
   }
 
   async function updateItem(id: string, data: UpdateProfileItemInput) {
-    loading.value = true
-
     try {
       const res = await $fetch<{ updatedItem: ProfileItem }>(`/api/items/${id}`, { method: "PUT", body: data, credentials: "include" })
       const index = items.value.findIndex(item => item.id === id)
@@ -62,14 +55,9 @@ export const useProfileItemsStore = defineStore("profile-items", () => {
       console.error("updateItem error:", err)
       throw err
     }
-    finally {
-      loading.value = false
-    }
   }
 
   async function deleteItem(id: string) {
-    loading.value = true
-
     try {
       await $fetch(`/api/items/${id}`, { method: "DELETE", credentials: "include" })
       items.value = items.value.filter(item => item.id !== id)
@@ -79,9 +67,6 @@ export const useProfileItemsStore = defineStore("profile-items", () => {
       toast.error(message)
       console.error("deleteItem error:", err)
       throw err
-    }
-    finally {
-      loading.value = false
     }
   }
 

@@ -9,20 +9,18 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: "Invalid analytics data collection type" })
   }
 
-  const dateFilter: { gte?: Date, lte?: Date } = {}
+  const dateFilter: { gte?: Date, lt?: Date } = {}
   if (query.dateFrom) {
-    const dateFrom = new Date(query.dateFrom as string)
-    if (Number.isNaN(dateFrom.getTime())) {
+    dateFilter.gte = parseAnalyticsDate(query.dateFrom, "start")
+    if (!dateFilter.gte) {
       throw createError({ statusCode: 400, statusMessage: "Invalid date" })
     }
-    dateFilter.gte = dateFrom
   }
   if (query.dateTo) {
-    const dateTo = new Date(query.dateTo as string)
-    if (Number.isNaN(dateTo.getTime())) {
+    dateFilter.lt = parseAnalyticsDate(query.dateTo, "end")
+    if (!dateFilter.lt) {
       throw createError({ statusCode: 400, statusMessage: "Invalid date" })
     }
-    dateFilter.lte = dateTo
   }
 
   const hasDateFilter = Object.keys(dateFilter).length > 0
@@ -36,9 +34,7 @@ export default defineEventHandler(async (event) => {
     }
 
     if (!query.type || query.type === "itemClick") {
-      const result = await tx.itemClick.deleteMany({
-        where: { item: { userId: sessionUser.id }, ...prismaDateWhere },
-      })
+      const result = await tx.itemClick.deleteMany({ where: { item: { userId: sessionUser.id }, ...prismaDateWhere } })
       purgedCount += result.count
     }
   })

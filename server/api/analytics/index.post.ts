@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
     return { message: "Self-view ignored" }
   }
 
-  const referrer = result.data.referrer || getHeader(event, "referer") || null
+  const referrer = result.data.referrer ?? null
   const source = categorizeReferrer(referrer)
   await db.pageView.create({ data: { userId: targetUser.id, referrer, source } })
 

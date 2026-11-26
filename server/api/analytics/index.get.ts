@@ -5,10 +5,8 @@ export default defineEventHandler(async (event) => {
   await enforceRateLimit(event, `analytics:get:${sessionUser.id}`, 100)
 
   const query = getQuery(event)
-  const parsedFrom = query.dateFrom ? new Date(query.dateFrom as string) : undefined
-  const parsedTo = query.dateTo ? new Date(query.dateTo as string) : undefined
-  const dateFrom = parsedFrom && !Number.isNaN(parsedFrom.getTime()) ? parsedFrom : undefined
-  const dateTo = parsedTo && !Number.isNaN(parsedTo.getTime()) ? parsedTo : undefined
+  const dateFrom = parseAnalyticsDate(query.dateFrom, "start")
+  const dateTo = parseAnalyticsDate(query.dateTo, "end")
 
   // Dynamic cache key that changes when date ranges are applied
   const cacheKeySuffix = dateFrom || dateTo ? `:${dateFrom?.toISOString() ?? ""}:${dateTo?.toISOString() ?? ""}` : ""

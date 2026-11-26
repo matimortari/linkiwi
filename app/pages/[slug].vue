@@ -117,7 +117,8 @@ useHead(() => {
 
 onMounted(() => {
   if (userProfile.value) {
-    analyticsStore.recordPageView(userProfile.value.slug, (route.query.ref as string) ?? "direct")
+    const ref = typeof route.query.ref === "string" ? route.query.ref : ""
+    analyticsStore.recordPageView(userProfile.value.slug, ref || document.referrer || undefined)
   }
 })
 

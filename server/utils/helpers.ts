@@ -86,43 +86,46 @@ export function categorizeReferrer(referrer: string | null | undefined): string 
   if (!normalized.includes(".") && !normalized.includes("://") && !normalized.includes("/")) {
     return normalized
   }
-  if (normalized.includes(requireEnv("NUXT_PUBLIC_BASE_URL"))) {
+
+  const url = normalized.includes("://") ? normalized : `https://${normalized}`
+  if (!URL.canParse(url)) {
+    return "unknown"
+  }
+
+  const host = new URL(url).hostname.replace(/^www\./, "")
+  if (host === new URL(requireEnv("NUXT_PUBLIC_BASE_URL")).hostname.replace(/^www\./, "")) {
     return "direct"
   }
 
-  const sources: [string[], string][] = [
-    [["facebook.com", "fb.com", "fb.me", "fbcdn.net"], "facebook"],
-    [["twitter.com", "x.com", "t.co"], "twitter"],
-    [["instagram.com", "ig.me"], "instagram"],
-    [["linkedin.com", "lnkd.in"], "linkedin"],
-    [["reddit.com", "redd.it"], "reddit"],
-    [["tiktok.com"], "tiktok"],
-    [["pinterest.com", "pin.it"], "pinterest"],
-    [["youtube.com", "youtu.be"], "youtube"],
-    [["whatsapp.com", "wa.me"], "whatsapp"],
-    [["telegram.org", "t.me"], "telegram"],
-    [["discord.com", "discord.gg"], "discord"],
-    [["mastodon"], "mastodon"],
-    [["bluesky.social", "bsky.app"], "bluesky"],
-    [["google."], "google"],
-    [["bing.com", "bing."], "bing"],
-    [["yahoo.com", "yahoo."], "yahoo"],
-    [["duckduckgo.com"], "duckduckgo"],
-    [["yandex.com", "yandex.ru", "yandex."], "yandex"],
-    [["slack.com"], "slack"],
-    [["teams.microsoft.com"], "teams"],
-    [["github.com"], "github"],
-    [["gitlab.com"], "gitlab"],
-    [["medium.com"], "medium"],
-    [["substack.com"], "substack"],
+  const sources: { name: string, domains?: string[], hostLabels?: string[] }[] = [
+    { name: "facebook", domains: ["facebook.com", "fb.com", "fb.me", "fbcdn.net"] },
+    { name: "twitter", domains: ["twitter.com", "x.com", "t.co"] },
+    { name: "instagram", domains: ["instagram.com", "ig.me"] },
+    { name: "linkedin", domains: ["linkedin.com", "lnkd.in"] },
+    { name: "reddit", domains: ["reddit.com", "redd.it"] },
+    { name: "tiktok", domains: ["tiktok.com"] },
+    { name: "pinterest", domains: ["pinterest.com", "pin.it"] },
+    { name: "youtube", domains: ["youtube.com", "youtu.be"] },
+    { name: "whatsapp", domains: ["whatsapp.com", "wa.me"] },
+    { name: "telegram", domains: ["telegram.org", "t.me"] },
+    { name: "discord", domains: ["discord.com", "discord.gg"] },
+    { name: "mastodon", hostLabels: ["mastodon"] },
+    { name: "bluesky", domains: ["bluesky.social", "bsky.app"] },
+    { name: "google", hostLabels: ["google"] },
+    { name: "bing", hostLabels: ["bing"] },
+    { name: "yahoo", hostLabels: ["yahoo"] },
+    { name: "duckduckgo", domains: ["duckduckgo.com"] },
+    { name: "yandex", hostLabels: ["yandex"] },
+    { name: "slack", domains: ["slack.com"] },
+    { name: "teams", domains: ["teams.microsoft.com", "teams.live.com"] },
+    { name: "github", domains: ["github.com"] },
+    { name: "gitlab", domains: ["gitlab.com"] },
+    { name: "medium", domains: ["medium.com"] },
+    { name: "substack", domains: ["substack.com"] },
   ]
-  for (const [patterns, name] of sources) {
-    if (patterns.some(pattern => normalized.includes(pattern))) {
-      return name
-    }
-  }
 
-  return "unknown"
+  const source = sources.find(({ domains = [], hostLabels = [] }) => domains.some(domain => host === domain || host.endsWith(`.${domain}`)) || hostLabels.some(label => host.split(".").includes(label)))
+  return source?.name ?? "unknown"
 }
 
 /**
