@@ -50,7 +50,7 @@ describe("categorizeReferrer", () => {
     expect(categorizeReferrer("https://wa.me/1")).toBe("whatsapp")
     expect(categorizeReferrer("https://telegram.org/x")).toBe("telegram")
     expect(categorizeReferrer("https://discord.gg/x")).toBe("discord")
-    expect(categorizeReferrer("https://example.com/mastodon/x")).toBe("mastodon")
+    expect(categorizeReferrer("https://mastodon.social/@x")).toBe("mastodon")
     expect(categorizeReferrer("https://bsky.app/profile/x")).toBe("bluesky")
     expect(categorizeReferrer("https://bing.com/search")).toBe("bing")
     expect(categorizeReferrer("https://search.yahoo.com")).toBe("yahoo")
@@ -61,6 +61,22 @@ describe("categorizeReferrer", () => {
     expect(categorizeReferrer("https://medium.com/@x")).toBe("medium")
     expect(categorizeReferrer("https://substack.com/@x")).toBe("substack")
     expect(categorizeReferrer("https://ig.me/x")).toBe("instagram")
+  })
+
+  it("matches subdomains and country domains", () => {
+    expect(categorizeReferrer("https://l.facebook.com/l.php")).toBe("facebook")
+    expect(categorizeReferrer("https://mobile.twitter.com/x")).toBe("twitter")
+    expect(categorizeReferrer("https://www.google.co.uk/")).toBe("google")
+  })
+
+  it("does not match platform names inside other hostnames, paths, or queries", () => {
+    vi.stubEnv("NUXT_PUBLIC_BASE_URL", "https://linkiwi.example.com")
+    expect(categorizeReferrer("https://teams.microsoft.com/l/message")).toBe("teams")
+    expect(categorizeReferrer("https://www.microsoft.com/")).toBe("unknown")
+    expect(categorizeReferrer("https://www.dropbox.com/s/x")).toBe("unknown")
+    expect(categorizeReferrer("https://chat.meta.ai/")).toBe("unknown")
+    expect(categorizeReferrer("https://example.com/mastodon/x")).toBe("unknown")
+    expect(categorizeReferrer("https://example.com/?from=google.com")).toBe("unknown")
   })
 
   it("treats the app base URL as direct", () => {

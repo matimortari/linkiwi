@@ -18,6 +18,20 @@ describe("analyticsRecordSchema", () => {
     expect(analyticsRecordSchema.parse({ type: "pageView", slug: "ada-lovelace", referrer: "http://" })).toMatchObject({ type: "pageView", referrer: null })
   })
 
+  it("lowercases ref tags and drops ones that are too long or contain invalid characters", () => {
+    const parseReferrer = (referrer: string) => analyticsRecordSchema.parse({ type: "pageView", slug: "ada-lovelace", referrer })
+    expect(parseReferrer("Newsletter_2026")).toMatchObject({ referrer: "newsletter_2026" })
+    expect(parseReferrer("a".repeat(51))).toMatchObject({ referrer: null })
+    expect(parseReferrer("<script>")).toMatchObject({ referrer: null })
+    expect(parseReferrer("hello world")).toMatchObject({ referrer: null })
+  })
+
+  it("drops non-http and oversized referrer urls", () => {
+    const parseReferrer = (referrer: string) => analyticsRecordSchema.parse({ type: "pageView", slug: "ada-lovelace", referrer })
+    expect(parseReferrer("javascript:alert(1)")).toMatchObject({ referrer: null })
+    expect(parseReferrer(`https://example.com/${"a".repeat(2048)}`)).toMatchObject({ referrer: null })
+  })
+
   it("rejects invalid pageView slugs", () => {
     expect(analyticsRecordSchema.safeParse({ type: "pageView", slug: "Ada_Lovelace", referrer: null }).success).toBe(false)
   })
