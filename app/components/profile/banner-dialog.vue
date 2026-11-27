@@ -1,6 +1,6 @@
 <template>
   <Dialog :is-open="isOpen" title="Edit Banner" @update:is-open="emit('close')">
-    <div class="flex w-full flex-col gap-4 sm:w-lg">
+    <div class="flex w-full flex-col gap-4 md:w-lg">
       <div v-if="cropSrc" class="banner-frame overflow-hidden rounded-xl">
         <img ref="cropImage" :src="cropSrc" alt="Crop banner" class="block max-w-none">
       </div>

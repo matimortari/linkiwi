@@ -12,7 +12,7 @@
             :disabled="!isUpdateMode && existingTypes.includes(option.type)"
             @click="form.type = option.type"
           >
-            <icon :name="option.icon" size="22" class="shrink-0" />
+            <icon :name="option.icon" size="20" class="shrink-0" />
             <span class="text-sm font-medium">{{ option.label }}</span>
           </button>
         </div>

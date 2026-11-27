@@ -158,13 +158,13 @@
     <div class="cta-wrapper-grid" />
     <div class="cta-wrapper-vignette" />
 
-    <div class="flex flex-col items-center gap-4 rounded-3xl border border-muted/60 bg-background/80 p-8 shadow-lg backdrop-blur-sm md:p-12">
+    <div class="flex w-full max-w-2xl flex-col items-center gap-4 rounded-3xl border border-muted/60 bg-background/80 p-8 shadow-lg backdrop-blur-sm md:p-12">
       <h2>
-        Ready to Build Your Page?
+        Claim Your Online Space
       </h2>
 
-      <p class="text-caption max-w-sm">
-        Create an account for free and get started in minutes!
+      <p class="text-caption w-full md:whitespace-nowrap">
+        Create your page in minutes, customize and share it anytime.
       </p>
 
       <nuxt-link to="/sign-in" class="btn-primary">
@@ -277,8 +277,8 @@ h2 {
   display: flex;
   align-items: center;
   pointer-events: none;
-  opacity: 0.35;
-  filter: saturate(0.7);
+  opacity: 0.28;
+  filter: saturate(0.65) brightness(0.8);
 }
 
 .hero-fade {
@@ -288,12 +288,12 @@ h2 {
   pointer-events: none;
   background:
     radial-gradient(
-      ellipse 50% 45% at center,
-      color-mix(in srgb, var(--background) 85%, var(--foreground)) 0%,
-      transparent 70%
+      ellipse 60% 55% at center,
+      color-mix(in srgb, var(--background) 96%, var(--foreground)) 0%,
+      transparent 72%
     ),
-    linear-gradient(to bottom, var(--background) 0%, transparent 40%, transparent 70%, var(--background) 100%),
-    linear-gradient(to right, var(--background) 0%, transparent 15%, transparent 85%, var(--background) 100%);
+    linear-gradient(to bottom, var(--background) 0%, transparent 32%, transparent 68%, var(--background) 100%),
+    linear-gradient(to right, var(--background) 0%, transparent 10%, transparent 90%, var(--background) 100%);
 }
 
 .cta-wrapper-grid {

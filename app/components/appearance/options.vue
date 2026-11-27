@@ -5,16 +5,16 @@
     </h4>
 
     <div class="flex items-center gap-2 px-1 md:mx-4 md:gap-4 md:px-0">
-      <div class="scroll-area flex min-w-0 flex-1 gap-1 rounded-full border p-1 max-sm:overflow-visible sm:overflow-x-auto">
+      <div class="scroll-area flex min-w-0 flex-1 gap-1 rounded-full border p-1 max-md:overflow-visible md:overflow-x-auto">
         <button
           v-for="t in APPEARANCE_TABS" :key="t.value"
-          type="button" class="group/tooltip relative navigation-group flex-1 justify-center rounded-full px-2.5 py-2 text-sm font-semibold whitespace-nowrap transition-colors sm:px-3"
+          type="button" class="group/tooltip relative navigation-group flex-1 justify-center rounded-full p-2 text-sm font-semibold whitespace-nowrap transition-colors"
           :class="activeTab === t.value ? 'bg-primary text-neutral-100' : 'text-muted-foreground hover:bg-muted/40 hover:text-foreground'" :aria-expanded="openTooltipKey === t.value"
           :aria-label="t.label" @click="handleTabClick(t.value, $event)"
         >
           <icon :name="t.icon" size="20" />
-          <span class="max-sm:hidden">{{ t.label }}</span>
-          <span class="card pointer-events-none absolute top-full right-0 z-10 -mt-1 w-max p-1! text-xs! font-normal transition-opacity group-hover/tooltip:opacity-100 sm:hidden" :class="openTooltipKey === t.value ? 'opacity-100' : 'opacity-0'">{{ t.label }}</span>
+          <span class="max-md:hidden">{{ t.label }}</span>
+          <span class="card pointer-events-none absolute top-full right-0 z-10 -mt-1 w-max p-1! text-xs! font-normal transition-opacity group-hover/tooltip:opacity-100 md:hidden" :class="openTooltipKey === t.value ? 'opacity-100' : 'opacity-0'">{{ t.label }}</span>
         </button>
       </div>
 

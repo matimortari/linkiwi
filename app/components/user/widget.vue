@@ -59,7 +59,7 @@
           <img v-if="data.videos[0].thumbnail" :src="data.videos[0].thumbnail" :alt="data.videos[0].title" class="aspect-video w-full rounded-xl object-cover transition-all group-hover:brightness-75">
           <div class="pointer-events-none absolute inset-0 flex items-center justify-center">
             <div class="flex size-10 items-center justify-center rounded-full bg-black/50 transition-transform group-hover:scale-110">
-              <icon name="mdi:play" size="28" class="text-[#f9fafb]" />
+              <icon name="mdi:play" size="30" class="text-[#f9fafb]" />
             </div>
           </div>
           <div class="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/50 to-transparent p-2">

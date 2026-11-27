@@ -19,7 +19,7 @@
           >
             <img :src="asset.url" :alt="asset.label ?? 'Asset'" class="size-full object-cover">
             <div v-if="isSelected(asset.id)" class="absolute inset-0 flex items-center justify-center bg-primary/30">
-              <span class="text-primary-foreground flex size-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold">
+              <span class="text-primary-foreground flex size-5 items-center justify-center rounded-full bg-primary text-xs font-semibold">
                 {{ selectedIndex(asset.id) + 1 }}
               </span>
             </div>

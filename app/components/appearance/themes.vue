@@ -11,7 +11,7 @@
       </button>
     </div>
 
-    <div class="scroll-area mx-1 grid max-h-128 grid-cols-2 gap-2 overflow-auto pr-1 sm:grid-cols-3 md:mx-4 md:grid-cols-4 md:gap-4">
+    <div class="scroll-area mx-1 grid max-h-128 grid-cols-2 gap-2 overflow-auto pr-1 md:mx-4 md:grid-cols-3 md:gap-4 xl:grid-cols-4">
       <div v-for="(theme, index) in THEMES" :key="theme.title" class="flex flex-col items-center gap-2">
         <button
           type="button" tabindex="0"

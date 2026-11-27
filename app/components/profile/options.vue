@@ -31,7 +31,7 @@
           No comments yet.
         </p>
         <div v-else class="scroll-area flex max-h-56 flex-col gap-2 overflow-y-auto pr-1">
-          <div v-for="comment in comments" :key="comment.id" class="rounded-lg border bg-card p-3">
+          <div v-for="comment in comments" :key="comment.id" class="rounded-lg border bg-card p-2">
             <div class="flex items-start justify-between gap-2">
               <div class="navigation-group min-w-0">
                 <p class="text-sm font-semibold">
